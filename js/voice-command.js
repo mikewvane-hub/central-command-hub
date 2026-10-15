@@ -276,8 +276,8 @@ export class VoiceCommandEngine {
     console.log(`[Voice Command Recognized]: "${originalText}"`);
     sfx.playSuccess();
 
-    // 1. Strip optional Wake Words ("Antigravity", "Computer", "Hub", "Central Command", "Jarvis")
-    const wakeWordRegex = /^(hey\s+|ok\s+|okay\s+)?(antigravity|computer|hub|central\s+command|jarvis)[,\s:]*/i;
+    // 1. Strip optional Wake Words ("Antigravity", "Computer", "Hub", "Central Command")
+    const wakeWordRegex = /^(hey\s+|ok\s+|okay\s+)?(antigravity|computer|hub|central\s+command)[,\s:]*/i;
     const hasWakeWord = wakeWordRegex.test(text);
     text = text.replace(wakeWordRegex, '').trim();
 
@@ -286,7 +286,7 @@ export class VoiceCommandEngine {
 
     // If the user ONLY said the wake word ("Antigravity" or "Computer")
     if (hasWakeWord && (text === '' || text === 'hello' || text === 'hi' || text === 'are you there')) {
-      this.speak("Antigravity online. Commander, what dashboard shall I open?");
+      this.speak("Antigravity online. Ready for command.");
       return;
     }
 
