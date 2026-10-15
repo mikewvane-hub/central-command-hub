@@ -70,6 +70,17 @@ export class AtomicCoreVisualizer {
         inclination: { x: -0.5, y: -0.4, z: 0.6 },
         color: 0x10b981,
         glowHex: '#10b981'
+      },
+      {
+        id: 'mackie',
+        name: "MACKIE'S DAILY BOARD",
+        code: 'CALENDAR & MEALS',
+        orbitRadius: 9.6,
+        speed: 0.18,
+        angle: 1.4,
+        inclination: { x: 0.8, y: -0.3, z: -0.7 },
+        color: 0xf43f5e,
+        glowHex: '#f43f5e'
       }
     ];
 
@@ -139,10 +150,10 @@ export class AtomicCoreVisualizer {
   adjustCameraForAspect(aspect) {
     if (aspect < 1.1) {
       // Square or tall aspect ratio (Z Fold 8 Inner unfolded or mobile)
-      this.camera.position.set(0, 2.6, 20.0);
+      this.camera.position.set(0, 3.0, 23.0);
     } else {
       // Laptop widescreen
-      this.camera.position.set(0, 2.0, 16.8);
+      this.camera.position.set(0, 2.2, 19.2);
     }
     this.camera.lookAt(0, 0, 0);
   }

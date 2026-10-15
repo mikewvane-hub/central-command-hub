@@ -959,9 +959,15 @@ body::after {
 /* ==================================================================== */
 
 /* Laptop widescreen standard (aspect ratio ~16:9 or 16:10) */
-@media screen and (min-width: 1100px) {
+@media screen and (min-width: 1300px) {
   .orbital-launchpad-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media screen and (min-width: 900px) and (max-width: 1299px) {
+  .orbital-launchpad-grid {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   }
 }
 

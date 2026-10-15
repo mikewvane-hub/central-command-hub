@@ -68,6 +68,11 @@
           <span class="tab-badge" data-status-badge="trip">LIVE</span>
         </button>
 
+        <button class="nav-tab-btn" data-deck="mackie">
+          <span>🗓️ MACKIE'S BOARD</span>
+          <span class="tab-badge" data-status-badge="mackie">LIVE</span>
+        </button>
+
         <button class="nav-tab-btn" data-deck="telemetry">
           <span>📡 TELEMETRY &amp; 24/7</span>
           <span class="tab-badge">SHARE</span>
@@ -146,7 +151,7 @@
           <div class="telemetry-row">
             <div class="tactical-box overlay-interactive">
               <div class="tactical-title">QUANTUM ORBITAL TELEMETRY</div>
-              <div class="tactical-metric">4 ACTIVE CORES</div>
+              <div class="tactical-metric">5 ACTIVE CORES</div>
               <div class="tactical-sub" id="telemetry-aspect-ratio">VIEWPORT: OPTIMIZED</div>
             </div>
 
@@ -237,6 +242,24 @@
               <div class="card-footer-actions">
                 <div class="card-voice-hint">Voice: <span>"Open Trip Planner"</span></div>
                 <button class="launch-btn" data-deck="trip">DOCK CORE &rarr;</button>
+              </div>
+            </article>
+
+            <!-- Card 5: Mackie's Daily Board -->
+            <article class="launchpad-card" data-deck="mackie">
+              <div>
+                <div class="card-header-row">
+                  <span class="card-orbit-tag">ORBIT 05 // FAMILY COMMAND</span>
+                  <div class="card-ping-badge" data-status-badge="mackie">
+                    <span class="status-beacon"></span> LIVE
+                  </div>
+                </div>
+                <h3 class="card-title">MACKIE'S DAILY BOARD</h3>
+                <p class="card-desc">Family calendar sync, weekly meal planning, dynamic grocery lists, and daily schedule coordination dashboard.</p>
+              </div>
+              <div class="card-footer-actions">
+                <div class="card-voice-hint">Voice: <span>"Open Mackie's Board"</span></div>
+                <button class="launch-btn" data-deck="mackie">DOCK CORE &rarr;</button>
               </div>
             </article>
 
@@ -369,7 +392,30 @@
       </section>
 
       <!-- ========================================== -->
-      <!-- DECK 5: SYSTEM TELEMETRY & 24/7 CLOUD HOST -->
+      <!-- DECK 5: MACKIE'S DAILY BOARD              -->
+      <!-- ========================================== -->
+      <section class="deck-view" id="deck-mackie">
+        <div class="dashboard-subnav">
+          <div class="subnav-left">
+            <span class="subnav-status" data-status-badge="mackie">
+              <span class="status-beacon"></span> ONLINE
+            </span>
+            <strong>MACKIE'S DAILY BOARD // CALENDAR, MEAL PLANNER &amp; GROCERY LIST</strong>
+            <span class="subnav-url">daily-executive-dashboard.onrender.com/mackie/</span>
+          </div>
+          <div class="subnav-actions">
+            <button class="subnav-btn" data-action="refresh-frame" data-deck="mackie">🔄 Refresh</button>
+            <button class="subnav-btn" data-action="popout-tab" data-deck="mackie">↗️ Open in New Tab</button>
+            <button class="subnav-btn" data-action="return-core">⚛️ Return to Core</button>
+          </div>
+        </div>
+        <div class="dashboard-iframe-container">
+          <iframe id="iframe-mackie" class="dashboard-iframe" src="about:blank" title="Mackie's Daily Board"></iframe>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- DECK 6: SYSTEM TELEMETRY & 24/7 CLOUD HOST -->
       <!-- ========================================== -->
       <section class="deck-view" id="deck-telemetry">
         <div class="telemetry-dashboard-container">
@@ -380,7 +426,7 @@
             <div class="matrix-card">
               <div class="matrix-card-title">
                 <span>🛰️ ACTIVE DASHBOARD FLEET</span>
-                <span class="card-ping-badge"><span class="status-beacon"></span> 4 SYNCHRONIZED</span>
+                <span class="card-ping-badge"><span class="status-beacon"></span> 5 SYNCHRONIZED</span>
               </div>
               <div class="matrix-item">
                 <span class="matrix-label">Executive Briefing (Render)</span>
@@ -397,6 +443,10 @@
               <div class="matrix-item">
                 <span class="matrix-label">Rainier Overland Basecamp</span>
                 <span class="matrix-value live" id="telemetry-status-trip">ONLINE (200 OK)</span>
+              </div>
+              <div class="matrix-item">
+                <span class="matrix-label">Mackie's Daily Board</span>
+                <span class="matrix-value live" id="telemetry-status-mackie">ONLINE (200 OK)</span>
               </div>
               <div class="matrix-item">
                 <span class="matrix-label">Voice Neural Assistant</span>
@@ -474,6 +524,10 @@
                 <p style="font-size:0.78rem;color:#94a3b8;margin-top:4px;">Switches to Rainier Basecamp &amp; Family Overland Expedition Planner.</p>
               </div>
               <div style="background:rgba(3,7,18,0.6);padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);">
+                <strong style="color:#f43f5e;">"Open Mackie's Board"</strong>
+                <p style="font-size:0.78rem;color:#94a3b8;margin-top:4px;">Switches to Mackie's Daily Board, Meal Planner &amp; Grocery List.</p>
+              </div>
+              <div style="background:rgba(3,7,18,0.6);padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);">
                 <strong style="color:var(--cyan-glow);">"Show Atomic Core" / "Home"</strong>
                 <p style="font-size:0.78rem;color:#94a3b8;margin-top:4px;">Returns to the 3D atomic orbital structure.</p>
               </div>
@@ -525,6 +579,11 @@
           <label style="display:flex;flex-direction:column;gap:4px;">
             <span style="color:var(--emerald-core);">Rainier Basecamp &amp; Trip Planner URL:</span>
             <input type="text" id="setting-url-trip" style="background:#030712;border:1px solid var(--border-cyan);color:#fff;padding:8px 12px;border-radius:6px;font-family:inherit;" />
+          </label>
+
+          <label style="display:flex;flex-direction:column;gap:4px;">
+            <span style="color:#f43f5e;">Mackie's Daily Board URL:</span>
+            <input type="text" id="setting-url-mackie" style="background:#030712;border:1px solid var(--border-cyan);color:#fff;padding:8px 12px;border-radius:6px;font-family:inherit;" />
           </label>
 
           <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:10px;">

@@ -165,6 +165,9 @@ class CentralCommandHubApp {
           this.dashboardMgr.switchDeck('trip');
           break;
         case '5':
+          this.dashboardMgr.switchDeck('mackie');
+          break;
+        case '6':
           this.dashboardMgr.switchDeck('telemetry');
           break;
         case 'f':
@@ -207,11 +210,13 @@ class CentralCommandHubApp {
     const inputRent = document.getElementById('setting-url-rental');
     const inputFin = document.getElementById('setting-url-financial');
     const inputTrip = document.getElementById('setting-url-trip');
+    const inputMackie = document.getElementById('setting-url-mackie');
 
     if (inputExec) inputExec.value = this.dashboardMgr.urls.executive;
     if (inputRent) inputRent.value = this.dashboardMgr.urls.rental;
     if (inputFin) inputFin.value = this.dashboardMgr.urls.financial;
     if (inputTrip) inputTrip.value = this.dashboardMgr.urls.trip;
+    if (inputMackie) inputMackie.value = this.dashboardMgr.urls.mackie;
   }
 
   saveSettingsForm() {
@@ -219,11 +224,13 @@ class CentralCommandHubApp {
     const inputRent = document.getElementById('setting-url-rental');
     const inputFin = document.getElementById('setting-url-financial');
     const inputTrip = document.getElementById('setting-url-trip');
+    const inputMackie = document.getElementById('setting-url-mackie');
 
     if (inputExec) this.dashboardMgr.saveCustomUrl('executive', inputExec.value.trim());
     if (inputRent) this.dashboardMgr.saveCustomUrl('rental', inputRent.value.trim());
     if (inputFin) this.dashboardMgr.saveCustomUrl('financial', inputFin.value.trim());
     if (inputTrip) this.dashboardMgr.saveCustomUrl('trip', inputTrip.value.trim());
+    if (inputMackie) this.dashboardMgr.saveCustomUrl('mackie', inputMackie.value.trim());
 
     sfx.playSuccess();
     this.voiceEngine.speak("System configuration updated.");
@@ -247,9 +254,10 @@ class CentralCommandHubApp {
     const rentStatus = this.dashboardMgr.statusMap.rental || 'ONLINE';
     const finStatus = this.dashboardMgr.statusMap.financial || 'ONLINE';
     const tripStatus = this.dashboardMgr.statusMap.trip || 'ONLINE';
+    const mackieStatus = this.dashboardMgr.statusMap.mackie || 'ONLINE';
 
     this.voiceEngine.speak(
-      `Central Command Hub operational status: Executive Briefing is ${execStatus}. Rental Operations is ${rentStatus}. Wealth console is ${finStatus}. Rainier Basecamp is ${tripStatus}. Display ratio calibrated.`
+      `Central Command Hub operational status: Executive Briefing is ${execStatus}. Rental Operations is ${rentStatus}. Wealth console is ${finStatus}. Rainier Basecamp is ${tripStatus}. Mackie's Daily Board is ${mackieStatus}. Display ratio calibrated.`
     );
   }
 }

@@ -264,6 +264,23 @@ export class VoiceCommandEngine {
       return;
     }
 
+    // 5. Mackie's Daily Board Command
+    if (
+      text.includes('mackie') ||
+      text.includes('mom board') ||
+      text.includes('meal planner') ||
+      text.includes('grocery') ||
+      text.includes('calendar') ||
+      text.includes('family calendar') ||
+      text.includes('schedule')
+    ) {
+      this.speak("Opening Mackie's Daily Board, Meal Planner and Grocery List.");
+      if (this.handlers.onSelectDeck) {
+        this.handlers.onSelectDeck('mackie');
+      }
+      return;
+    }
+
     // 4. Return to Atomic Orbital Core
     if (
       text.includes('core') ||

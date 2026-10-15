@@ -59,6 +59,12 @@ app.get('/api/telemetry', async (req, res) => {
       name: 'Rainier Basecamp // Overland & Trip Planner',
       url: 'https://daily-executive-dashboard.onrender.com/trip-planner/',
       type: 'cloud'
+    },
+    {
+      id: 'mackie',
+      name: "Mackie's Daily Board • Calendar & Meal Planner",
+      url: 'https://daily-executive-dashboard.onrender.com/mackie/',
+      type: 'cloud'
     }
   ];
 
