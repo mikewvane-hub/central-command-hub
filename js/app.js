@@ -281,4 +281,4 @@ class CentralCommandHubApp {
 }
 
 // Boot Central Command Hub
-new CentralCommandHubApp();
+window.appInstance = new CentralCommandHubApp();

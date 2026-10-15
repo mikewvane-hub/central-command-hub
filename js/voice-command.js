@@ -8,6 +8,172 @@
 
 import { sfx } from './sound-effects.js';
 
+export function levenshteinDistance(a, b) {
+  if (a.length === 0) return b.length;
+  if (b.length === 0) return a.length;
+  const matrix = [];
+  for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+  for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+  for (let i = 1; i <= b.length; i++) {
+    for (let j = 1; j <= a.length; j++) {
+      matrix[i][j] = b.charAt(i - 1) === a.charAt(j - 1)
+        ? matrix[i - 1][j - 1]
+        : Math.min(matrix[i - 1][j - 1] + 1, matrix[i][j - 1] + 1, matrix[i - 1][j] + 1);
+    }
+  }
+  return matrix[b.length][a.length];
+}
+
+export function normalizePhonetic(str) {
+  if (!str) return '';
+  return str
+    .toLowerCase()
+    .replace(/['’]s\b/g, '')
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .replace(/\b(the|a|an|my|our|open|show|go\s+to|switch\s+to|display|take\s+me\s+to)\b/g, ' ')
+    .replace(/ies\b/g, 'y')
+    .replace(/\bmc/g, 'mak')
+    .replace(/ck|ch(?=[aeiou])/g, 'k')
+    .replace(/ph/g, 'f')
+    .replace(/ee|ea|ey|ie|y\b/g, 'i')
+    .replace(/c(?=[eiy])/g, 's')
+    .replace(/c/g, 'k')
+    .replace(/qu/g, 'kw')
+    .replace(/x/g, 'ks')
+    .replace(/([a-z])\1+/g, '$1')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+export function maxAllowedDistance(len) {
+  if (len <= 3) return 0;
+  if (len <= 5) return 1;
+  return 2;
+}
+
+export const VOICE_TARGETS = {
+  mackie: {
+    category: 'deck',
+    target: 'mackie',
+    speech: "Opening Mackie's Daily Board, Meal Planner and Grocery List.",
+    keywords: [
+      'mackie', 'mackey', 'macky', 'maki', 'makie', 'maggie', 'mickey', 'micki', 'micky', 'maxie',
+      'mckee', 'mckie', 'mackay', 'makey', 'makee', 'maggy',
+      'mom board', 'moms board', 'meal planner', 'meal plan', 'meal', 'meals',
+      'dinner', 'lunch', 'grocery', 'groceries', 'calendar', 'calender', 'schedule', 'family calendar'
+    ],
+    phonetic: ['maki', 'magi', 'miki', 'makk', 'kalendar', 'grosri', 'milplan', 'mom bord']
+  },
+  executive: {
+    category: 'deck',
+    target: 'executive',
+    speech: "Accessing Chief of Staff Executive Briefing.",
+    keywords: [
+      'executive', 'exec', 'exective', 'exacutive', 'excecutif', 'excecutive',
+      'daily brief', 'daily briefing', 'briefing', 'chief of staff', 'cos', 'war room'
+    ],
+    phonetic: ['eksekutiv', 'eksek', 'brifing', 'chif of staf', 'war rum']
+  },
+  rental: {
+    category: 'deck',
+    target: 'rental',
+    speech: "Opening Antigravity Dual-Engine Rental and Acquisition Terminal.",
+    keywords: [
+      'rental', 'rentals', 'reantal', 'jblm', 'jb lm', 'jay bee el em', 'joint base',
+      'lewis mcchord', 'acquisition', 'antigravity rental', 'house hunting', 'sierra pines',
+      'property', 'landlord', 'tenant', 'tenants', 'terminal'
+    ],
+    phonetic: ['rental', 'jblm', 'akwisishon', 'siera pins', 'properti', 'tenant']
+  },
+  financial: {
+    category: 'deck',
+    target: 'financial',
+    speech: "Opening Financial Command Center and Wealth Console.",
+    keywords: [
+      'financial', 'finances', 'finance', 'financials', 'wealth', 'welth', 'console',
+      'money', 'budget', 'portfolio', 'investments', 'rebalance', 'bank', 'net worth'
+    ],
+    phonetic: ['finanshal', 'welth', 'konsol', 'moni', 'bujet', 'portfolio']
+  },
+  trip: {
+    category: 'deck',
+    target: 'trip',
+    speech: "Opening Rainier Basecamp Family Overland and Trip Planner.",
+    keywords: [
+      'trip', 'trips', 'trip planner', 'planner', 'planning', 'rainier', 'ranier', 'raynier',
+      'mount rainier', 'basecamp', 'base camp', 'overland', 'overlanding', 'expedition',
+      'camping', 'camper', 'hike', 'hiking'
+    ],
+    phonetic: ['ranir', 'baskamp', 'oferland', 'trip', 'planer', 'kamping']
+  },
+  bns3: {
+    category: 'deck',
+    target: 'bns3',
+    speech: "Opening 110th Chemical Battalion S3 Readiness and METL Proficiency Matrix.",
+    keywords: [
+      's3', 's-3', 's 3', 's three', 'battalion', 'batallion', '110th', '110', 'one ten',
+      'one tenth', 'iron dragon', 'iron dragons', 'readiness', 'metl', 'train pro',
+      'train-pro', 'cbrn', 'chemical', 'synergy'
+    ],
+    phonetic: ['estri', 'bataliun', 'wanten', 'irondragon', 'redines', 'trenpro', 'sinergi']
+  },
+  core: {
+    category: 'deck',
+    target: 'core',
+    speech: "Returning to Atomic Command Core.",
+    keywords: [
+      'core', 'atomic', 'orbit', 'orbitals', 'home', 'main menu', 'return',
+      'back to orbit', 'center', 'atomic core', 'reset view'
+    ],
+    phonetic: ['kor', 'atomik', 'orbit', 'hom', 'riturn']
+  },
+  telemetry: {
+    category: 'deck',
+    target: 'telemetry',
+    speech: "Opening Quantum Telemetry Matrix. All orbital systems online.",
+    keywords: [
+      'telemetry', 'telemetri', 'quantum telemetry', 'diagnostics', 'health',
+      'system status', 'status report', 'all systems', 'orbit health'
+    ],
+    phonetic: ['telemetri', 'diagnostiks', 'kwantum', 'helth']
+  },
+  device_zfold: {
+    category: 'device',
+    target: 'zfold',
+    speech: "Optimizing display layout for Galaxy Z Fold 8 inner screen.",
+    keywords: ['z fold', 'zfold', 'fold 8', 'galaxy fold', 'inner screen', 'tablet mode', 'fold'],
+    phonetic: ['zfold', 'fold', 'iner skrin']
+  },
+  device_laptop: {
+    category: 'device',
+    target: 'laptop',
+    speech: "Switching to Laptop Widescreen display ratio.",
+    keywords: ['laptop', 'desktop', 'widescreen', 'wide screen', 'monitor mode', 'wide'],
+    phonetic: ['laptop', 'desktop', 'waidskrin']
+  },
+  device_auto: {
+    category: 'device',
+    target: 'auto',
+    speech: "Display ratio set to auto-detect.",
+    keywords: ['auto detect', 'auto mode', 'responsive mode', 'reset aspect', 'auto', 'responsive'],
+    phonetic: ['oto', 'responsiv']
+  },
+  fullscreen: {
+    category: 'action',
+    target: 'fullscreen',
+    speech: "Toggling fullscreen display.",
+    keywords: ['full screen', 'fullscreen', 'maximize', 'toggle fullscreen'],
+    phonetic: ['fulskrin', 'maksimais']
+  },
+  help: {
+    category: 'help',
+    target: 'help',
+    speech: "You can say: Open Executive, Open Rental Ops, Open Wealth Console, Open Rainier Basecamp, Open Mackie's Board, or Open S3 Readiness.",
+    keywords: ['help', 'what can i say', 'voice commands', 'show commands', 'list commands'],
+    phonetic: ['help', 'komands']
+  }
+};
+
 export class VoiceCommandEngine {
   constructor(handlers) {
     this.handlers = handlers || {}; // { onSelectDeck, onSetDeviceMode, onToggleFullscreen, onGetStatusReport }
@@ -270,199 +436,88 @@ export class VoiceCommandEngine {
     this.synth.speak(utterance);
   }
 
-  processCommand(rawText) {
-    const originalText = rawText.trim();
-    let text = originalText.toLowerCase();
-    console.log(`[Voice Command Recognized]: "${originalText}"`);
-    sfx.playSuccess();
+  classifyCommand(transcript) {
+    if (!transcript || typeof transcript !== 'string') return null;
 
+    let text = transcript.toLowerCase().trim();
     // 1. Strip optional Wake Words ("Antigravity", "Computer", "Hub", "Central Command")
     const wakeWordRegex = /^(hey\s+|ok\s+|okay\s+)?(antigravity|computer|hub|central\s+command)[,\s:]*/i;
     const hasWakeWord = wakeWordRegex.test(text);
-    text = text.replace(wakeWordRegex, '').trim();
+    const strippedText = text.replace(wakeWordRegex, '').trim();
 
-    // 2. Strip common conversational prefixes ("can you", "please", "could you", "open my", "show me my")
-    text = text.replace(/^(can\s+you\s+|could\s+you\s+|please\s+|open\s+my\s+|show\s+me\s+my\s+|show\s+my\s+|open\s+the\s+|show\s+the\s+)/i, '').trim();
-
-    // If the user ONLY said the wake word ("Antigravity" or "Computer")
-    if (hasWakeWord && (text === '' || text === 'hello' || text === 'hi' || text === 'are you there')) {
-      this.speak("Antigravity online. Ready for command.");
-      return;
+    // If user ONLY said wake word
+    if (hasWakeWord && (strippedText === '' || strippedText === 'hello' || strippedText === 'hi' || strippedText === 'are you there')) {
+      return {
+        category: 'wake',
+        target: 'wake',
+        speech: "Antigravity online. Ready for command."
+      };
     }
 
-    // 1. Executive Dashboard Command
-    if (
-      text.includes('executive') ||
-      text.includes('daily brief') ||
-      text.includes('chief of staff') ||
-      text.includes('briefing')
-    ) {
-      this.speak("Accessing Chief of Staff Executive Briefing.");
-      if (this.handlers.onSelectDeck) {
-        this.handlers.onSelectDeck('executive');
+    const queryText = strippedText || text;
+
+    // Phase 1: Direct Substring / Keyword Match
+    for (const [key, cmd] of Object.entries(VOICE_TARGETS)) {
+      for (const kw of cmd.keywords) {
+        if (queryText.includes(kw)) {
+          return cmd;
+        }
       }
-      return;
     }
 
-    // 2. Rental Operations & JBLM Acquisition Terminal Command
-    if (
-      text.includes('rental') ||
-      text.includes('jblm') ||
-      text.includes('acquisition') ||
-      text.includes('antigravity') ||
-      text.includes('house hunting') ||
-      text.includes('sierra pines') ||
-      text.includes('engine')
-    ) {
-      this.speak("Opening Antigravity Dual-Engine Rental and Acquisition Terminal.");
-      if (this.handlers.onSelectDeck) {
-        this.handlers.onSelectDeck('rental');
+    // Phase 2: Phonetic Substring Match
+    const norm = normalizePhonetic(queryText);
+    for (const [key, cmd] of Object.entries(VOICE_TARGETS)) {
+      for (const pt of cmd.phonetic) {
+        if (norm.includes(pt)) {
+          return cmd;
+        }
       }
-      return;
     }
 
-    // 3. Financial Wealth Command Center Command
-    if (
-      text.includes('financial') ||
-      text.includes('wealth') ||
-      text.includes('console') ||
-      text.includes('money') ||
-      text.includes('portfolio') ||
-      text.includes('budget') ||
-      text.includes('finance')
-    ) {
-      this.speak("Opening Financial Command Center and Wealth Console.");
-      if (this.handlers.onSelectDeck) {
-        this.handlers.onSelectDeck('financial');
+    // Phase 3: Length-sensitive fuzzy word-by-word match
+    const words = queryText.replace(/[^a-z0-9\s]/g, ' ').split(/\s+/).filter(w => w.length >= 3);
+    for (const word of words) {
+      const stem = word.endsWith('s') && !word.endsWith('ss') ? word.slice(0, -1) : word;
+      for (const [key, cmd] of Object.entries(VOICE_TARGETS)) {
+        for (const kw of cmd.keywords) {
+          if (kw.includes(' ')) continue;
+          const maxDist = maxAllowedDistance(Math.min(stem.length, kw.length));
+          if (Math.abs(stem.length - kw.length) <= maxDist && levenshteinDistance(stem, kw) <= maxDist) {
+            return cmd;
+          }
+        }
+        const normWord = normalizePhonetic(word);
+        for (const pt of cmd.phonetic) {
+          if (pt.includes(' ')) continue;
+          const maxDist = maxAllowedDistance(Math.min(normWord.length, pt.length));
+          if (Math.abs(normWord.length - pt.length) <= maxDist && levenshteinDistance(normWord, pt) <= maxDist) {
+            return cmd;
+          }
+        }
       }
-      return;
     }
 
-    // 4. Rainier Basecamp // Overland & Trip Planner Command
-    if (
-      text.includes('trip') ||
-      text.includes('planner') ||
-      text.includes('rainier') ||
-      text.includes('basecamp') ||
-      text.includes('overland') ||
-      text.includes('expedition') ||
-      text.includes('camping')
-    ) {
-      this.speak("Opening Rainier Basecamp Family Overland and Trip Planner.");
-      if (this.handlers.onSelectDeck) {
-        this.handlers.onSelectDeck('trip');
-      }
-      return;
-    }
+    return null;
+  }
 
-    // 5. Mackie's Daily Board Command
-    if (
-      text.includes('mackie') ||
-      text.includes('mom board') ||
-      text.includes('meal planner') ||
-      text.includes('meals') ||
-      text.includes('grocery') ||
-      text.includes('calendar') ||
-      text.includes('family calendar') ||
-      text.includes('schedule')
-    ) {
-      this.speak("Opening Mackie's Daily Board, Meal Planner and Grocery List.");
-      if (this.handlers.onSelectDeck) {
-        this.handlers.onSelectDeck('mackie');
-      }
-      return;
-    }
+  processCommand(rawText) {
+    const originalText = rawText.trim();
+    console.log(`[Voice Command Recognized]: "${originalText}"`);
+    sfx.playSuccess();
 
-    // 6. 110th Chemical Battalion S3 Readiness & METL Matrix
-    if (
-      text.includes('s3') ||
-      text.includes('battalion') ||
-      text.includes('110th') ||
-      text.includes('iron dragon') ||
-      text.includes('readiness') ||
-      text.includes('metl') ||
-      text.includes('train pro') ||
-      text.includes('training') ||
-      text.includes('synergy')
-    ) {
-      this.speak("Opening 110th Chemical Battalion S3 Readiness and METL Proficiency Matrix.");
-      if (this.handlers.onSelectDeck) {
-        this.handlers.onSelectDeck('bns3');
-      }
-      return;
-    }
+    const cmd = this.classifyCommand(originalText);
 
-    // 7. Return to Atomic Orbital Core
-    if (
-      text.includes('core') ||
-      text.includes('atomic') ||
-      text.includes('orbit') ||
-      text.includes('hub') ||
-      text.includes('home') ||
-      text.includes('return') ||
-      text.includes('back') ||
-      text.includes('main menu')
-    ) {
-      this.speak("Returning to Atomic Command Core.");
-      if (this.handlers.onSelectDeck) {
-        this.handlers.onSelectDeck('core');
-      }
-      return;
-    }
+    if (cmd) {
+      this.speak(cmd.speech);
 
-    // 8. System Status / Telemetry
-    if (
-      text.includes('status') ||
-      text.includes('telemetry') ||
-      text.includes('diagnostics') ||
-      text.includes('health') ||
-      text.includes('system') ||
-      text.includes('report')
-    ) {
-      this.speak("Opening Quantum Telemetry Matrix. All orbital systems online.");
-      if (this.handlers.onSelectDeck) {
-        this.handlers.onSelectDeck('telemetry');
-      }
-      return;
-    }
-
-    // 9. Device Aspect Ratio Presets
-    if (text.includes('fold') || text.includes('z fold') || text.includes('tablet') || text.includes('inner screen')) {
-      this.speak("Optimizing display layout for Galaxy Z Fold 8 inner screen.");
-      if (this.handlers.onSetDeviceMode) {
-        this.handlers.onSetDeviceMode('zfold');
-      }
-      return;
-    }
-
-    if (text.includes('laptop') || text.includes('desktop') || text.includes('wide')) {
-      this.speak("Switching to Laptop Widescreen display ratio.");
-      if (this.handlers.onSetDeviceMode) {
-        this.handlers.onSetDeviceMode('laptop');
-      }
-      return;
-    }
-
-    if (text.includes('auto') || text.includes('responsive')) {
-      this.speak("Display ratio set to auto-detect.");
-      if (this.handlers.onSetDeviceMode) {
-        this.handlers.onSetDeviceMode('auto');
-      }
-      return;
-    }
-
-    // 10. Fullscreen Toggle
-    if (text.includes('full screen') || text.includes('fullscreen')) {
-      this.speak("Toggling fullscreen display.");
-      if (this.handlers.onToggleFullscreen) {
+      if (cmd.category === 'deck' && this.handlers.onSelectDeck) {
+        this.handlers.onSelectDeck(cmd.target);
+      } else if (cmd.category === 'device' && this.handlers.onSetDeviceMode) {
+        this.handlers.onSetDeviceMode(cmd.target);
+      } else if (cmd.category === 'action' && cmd.target === 'fullscreen' && this.handlers.onToggleFullscreen) {
         this.handlers.onToggleFullscreen();
       }
-      return;
-    }
-
-    // 11. Help / What can I say
-    if (text.includes('help') || text.includes('command') || text.includes('what can i say')) {
-      this.speak("You can say: Open Executive, Open Rental Ops, Open Wealth Console, Open Rainier Basecamp, Open Mackie's Board, or Open S3 Readiness.");
       return;
     }
 
