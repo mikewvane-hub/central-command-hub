@@ -38,6 +38,14 @@ class CentralCommandHubApp {
       this.dashboardMgr.switchDeck(selectedDeckId);
     });
 
+    // Wire dynamic Alert/Notification syncing to 3D visual spheres
+    this.dashboardMgr.onAlertChange = (deckId, alertInfo) => {
+      if (this.visualizer) {
+        this.visualizer.setDeckAlert(deckId, alertInfo);
+      }
+    };
+    this.dashboardMgr.syncAllAlertsToVisualizer();
+
     // 3. Initialize Adaptive Device Optimizer (Z Fold 8 vs Laptop)
     this.deviceOptimizer = new DeviceOptimizer((mode) => {
       if (this.visualizer) {

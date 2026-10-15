@@ -382,6 +382,10 @@ export class AtomicCoreVisualizer {
             <span class="status-beacon"></span>
             <span class="circle-title-text">${dash.shortTitle}</span>
           </div>
+          <div class="circle-alert-pill" style="display: none;">
+            <span class="alert-icon">⚠️</span>
+            <span class="alert-count">0</span>
+          </div>
         </div>
       `;
 
@@ -419,6 +423,40 @@ export class AtomicCoreVisualizer {
       overlay.appendChild(circleEl);
       el.domElement = circleEl;
     });
+  }
+
+  setDeckAlert(deckId, alertInfo) {
+    const el = this.electrons.find(e => e.dash.id === deckId);
+    if (!el) return;
+
+    const count = (alertInfo && typeof alertInfo.count === 'number') ? alertInfo.count : 0;
+    const severity = (alertInfo && alertInfo.severity) ? alertInfo.severity : 'warning';
+    const title = (alertInfo && alertInfo.title) ? alertInfo.title : '';
+
+    el.hasAlert = count > 0;
+    el.alertCount = count;
+    el.alertSeverity = severity;
+
+    if (el.domElement) {
+      const alertPill = el.domElement.querySelector('.circle-alert-pill');
+      if (count > 0) {
+        el.domElement.classList.add('has-alert');
+        el.domElement.classList.remove('alert-severity-critical', 'alert-severity-warning', 'alert-severity-info');
+        el.domElement.classList.add(`alert-severity-${severity}`);
+        if (alertPill) {
+          alertPill.style.display = 'flex';
+          alertPill.className = `circle-alert-pill severity-${severity}`;
+          const countSpan = alertPill.querySelector('.alert-count');
+          if (countSpan) countSpan.textContent = count;
+          alertPill.setAttribute('title', `${count} active notification(s): ${title}`);
+        }
+      } else {
+        el.domElement.classList.remove('has-alert', 'alert-severity-critical', 'alert-severity-warning', 'alert-severity-info');
+        if (alertPill) {
+          alertPill.style.display = 'none';
+        }
+      }
+    }
   }
 
   setupInteractions() {
@@ -575,6 +613,15 @@ export class AtomicCoreVisualizer {
       // Spin the glow
       el.glowMesh.rotation.y += 0.04;
       el.glowMesh.rotation.x += 0.02;
+
+      // Subtle 3D pulsating quantum glow if sphere has active alerts/notifications
+      if (el.hasAlert && el.glowMesh) {
+        const pulse = 1.0 + Math.sin(time * 2.6) * 0.22;
+        el.glowMesh.scale.set(pulse, pulse, pulse);
+        if (el.glowMesh.material) {
+          el.glowMesh.material.opacity = 0.52 + Math.sin(time * 2.6) * 0.24;
+        }
+      }
 
       // Project 3D coordinates to 2D screen coordinates
       if (el.domElement) {

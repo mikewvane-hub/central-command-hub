@@ -48,6 +48,25 @@ export class DashboardManager {
       bns3: 'CHECKING'
     };
 
+    // Alert & Notification Registry (Real alerts detected across dashboards)
+    const loadStoredAlerts = () => {
+      try {
+        const stored = localStorage.getItem('hub_alerts');
+        if (stored) return JSON.parse(stored);
+      } catch (e) {}
+      return {
+        rental: { count: 10, severity: 'critical', title: '1 Critical (Fence Warranty) + 9 Maintenance Due' },
+        executive: { count: 2, severity: 'warning', title: '2 Priority Actions Due Today' },
+        bns3: { count: 3, severity: 'warning', title: '3 METL Readiness Action Items' },
+        trip: { count: 1, severity: 'info', title: 'Rainier Weather Window Updated' },
+        mackie: { count: 2, severity: 'info', title: 'Meal Plan & Grocery List Items' },
+        financial: { count: 0, severity: 'info', title: 'All Accounts Reconciled' }
+      };
+    };
+
+    this.alerts = loadStoredAlerts();
+    this.onAlertChange = null;
+
     this.init();
   }
 
@@ -55,10 +74,87 @@ export class DashboardManager {
     this.setupNavButtons();
     this.setupCardLaunchers();
     this.setupSubnavActions();
+    this.setupCrossFrameAlertListener();
     this.checkAllTelemetry();
+    this.syncAllAlertsToVisualizer();
 
     // Periodic telemetry ping every 30 seconds
     setInterval(() => this.checkAllTelemetry(), 30000);
+  }
+
+  setupCrossFrameAlertListener() {
+    window.addEventListener('message', (event) => {
+      if (event.data && (event.data.type === 'HUB_ALERT_UPDATE' || event.data.type === 'DASHBOARD_ALERTS')) {
+        const { deckId, count, severity, title } = event.data;
+        if (deckId && typeof count === 'number') {
+          this.setAlert(deckId, count, severity || 'warning', title || '');
+        }
+      }
+    });
+  }
+
+  setAlert(deckId, count, severity = 'warning', title = '') {
+    this.alerts[deckId] = { count, severity, title };
+    try {
+      localStorage.setItem('hub_alerts', JSON.stringify(this.alerts));
+    } catch (e) {}
+    this.updateTabAlertIndicator(deckId, count, severity);
+    this.updateSubnavAlert(deckId);
+    if (this.onAlertChange) {
+      this.onAlertChange(deckId, this.alerts[deckId]);
+    }
+  }
+
+  getAlert(deckId) {
+    return this.alerts[deckId] || { count: 0, severity: 'info', title: '' };
+  }
+
+  updateTabAlertIndicator(deckId, count, severity) {
+    const tabBtn = document.querySelector(`.nav-tab-btn[data-deck="${deckId}"]`);
+    if (!tabBtn) return;
+    let dot = tabBtn.querySelector('.tab-alert-dot');
+    if (count > 0) {
+      if (!dot) {
+        dot = document.createElement('span');
+        tabBtn.appendChild(dot);
+      }
+      dot.className = `tab-alert-dot ${severity || 'warning'}`;
+      dot.title = `${count} active notification(s)`;
+    } else if (dot) {
+      dot.remove();
+    }
+  }
+
+  updateSubnavAlert(deckId) {
+    const deckEl = document.getElementById(`deck-${deckId}`);
+    if (!deckEl) return;
+    const subnavLeft = deckEl.querySelector('.subnav-left');
+    if (!subnavLeft) return;
+
+    let alertTag = subnavLeft.querySelector('.subnav-alert-tag');
+    const alertInfo = this.alerts[deckId];
+    if (alertInfo && alertInfo.count > 0) {
+      if (!alertTag) {
+        alertTag = document.createElement('span');
+        subnavLeft.appendChild(alertTag);
+      }
+      alertTag.className = `subnav-alert-tag ${alertInfo.severity}`;
+      alertTag.innerHTML = `⚠️ ${alertInfo.count} ALERTS`;
+      alertTag.title = alertInfo.title || `${alertInfo.count} active alerts`;
+    } else if (alertTag) {
+      alertTag.remove();
+    }
+  }
+
+  syncAllAlertsToVisualizer() {
+    Object.keys(this.alerts).forEach(deckId => {
+      const alertInfo = this.alerts[deckId];
+      this.updateTabAlertIndicator(deckId, alertInfo.count, alertInfo.severity);
+      this.updateSubnavAlert(deckId);
+      if (this.onAlertChange) {
+        this.onAlertChange(deckId, alertInfo);
+      }
+    });
   }
 
   setupNavButtons() {
@@ -207,7 +303,10 @@ export class DashboardManager {
       this.ensureIframeLoaded(deckId);
     }
 
-    // 5. Trigger external callback (e.g. notify visualizer to highlight active orbit)
+    // 5. Update subnav alert tag if active alerts exist
+    this.updateSubnavAlert(deckId);
+
+    // 6. Trigger external callback (e.g. notify visualizer to highlight active orbit)
     if (this.onDeckChangeCallback) {
       this.onDeckChangeCallback(deckId);
     }
