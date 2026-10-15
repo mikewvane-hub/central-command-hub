@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>ANTIGRAVITY // CENTRAL COMMAND HUB</title>
+  
+  <!-- Futuristic Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@500;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Core Stylesheets -->
+  <link rel="stylesheet" href="css/hub-style.css" />
+  <link rel="stylesheet" href="css/atomic-theme.css" />
+
+  <!-- Three.js 3D Engine for Atomic Simulation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+
+  <!-- Root Tactical Shell -->
+  <div id="command-hub-root">
+
+    <!-- TOP TACTICAL NAVIGATION HUD -->
+    <header class="tactical-header">
+      
+      <!-- Brand & Orbital Status -->
+      <div class="brand-group" title="Return to Atomic Core Orbit">
+        <div class="brand-emblem">
+          <div class="emblem-ring"></div>
+          <div class="emblem-ring-2"></div>
+          <div class="emblem-core"></div>
+        </div>
+        <div class="brand-text-block">
+          <div class="brand-title">CENTRAL COMMAND HUB</div>
+          <div class="brand-subtitle">
+            <span class="status-beacon"></span>
+            <span id="system-clock-display">00:00:00 LOCAL // UTC</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Orbital Deck Navigation Selector -->
+      <nav class="nav-deck" aria-label="Dashboard Navigation">
+        <button class="nav-tab-btn active" data-deck="core">
+          <span>⚛️ CORE ORBIT</span>
+          <span class="tab-badge">3D</span>
+        </button>
+
+        <button class="nav-tab-btn" data-deck="executive">
+          <span>🎖️ EXECUTIVE BRIEFING</span>
+          <span class="tab-badge" data-status-badge="executive">LIVE</span>
+        </button>
+
+        <button class="nav-tab-btn" data-deck="rental">
+          <span>🏡 RENTAL &amp; JBLM OPS</span>
+          <span class="tab-badge" data-status-badge="rental">8000</span>
+        </button>
+
+        <button class="nav-tab-btn" data-deck="financial">
+          <span>📈 WEALTH CONSOLE</span>
+          <span class="tab-badge" data-status-badge="financial">3008</span>
+        </button>
+
+        <button class="nav-tab-btn" data-deck="telemetry">
+          <span>📡 TELEMETRY &amp; 24/7</span>
+          <span class="tab-badge">SHARE</span>
+        </button>
+      </nav>
+
+      <!-- Right Tactical Actions & Voice Command -->
+      <div class="tactical-controls">
+        
+        <!-- Voice Command Interaction Pill -->
+        <div class="voice-hud-pill" id="voice-hud-pill" title="Click or Press SPACE to Speak Command">
+          <div class="voice-mic-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+              <line x1="12" y1="19" x2="12" y2="22"></line>
+            </svg>
+          </div>
+          <div class="voice-wave-bars">
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+          </div>
+          <span class="voice-label" id="voice-label">VOICE: READY</span>
+        </div>
+
+        <!-- Aspect Ratio / Hardware Screen Preset Switcher -->
+        <div class="device-selector" title="Hardware Aspect Ratio Calibration">
+          <button class="device-btn active" data-device-mode="auto" title="Auto-detect screen">AUTO</button>
+          <button class="device-btn" data-device-mode="laptop" title="Laptop Widescreen (16:9)">LAPTOP</button>
+          <button class="device-btn" data-device-mode="zfold" title="Galaxy Z Fold 8 Inner Display (~1:1)">Z FOLD 8</button>
+        </div>
+
+        <!-- Mute SFX Toggle -->
+        <button class="hud-icon-btn" id="btn-toggle-sound" title="Toggle Sound FX">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          </svg>
+        </button>
+
+        <!-- Fullscreen Toggle -->
+        <button class="hud-icon-btn" id="btn-toggle-fullscreen" title="Toggle Fullscreen (F)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+          </svg>
+        </button>
+
+        <!-- Hub Settings / Deploy Gear -->
+        <button class="hud-icon-btn" id="btn-open-settings" title="Hub Settings &amp; Endpoints">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+        </button>
+
+      </div>
+    </header>
+
+    <!-- VIEWPORT DECK CONTAINER -->
+    <main class="viewport-workspace">
+
+      <!-- ========================================== -->
+      <!-- DECK 0: ATOMIC ORBITAL 3D CORE VIEW       -->
+      <!-- ========================================== -->
+      <section class="deck-view active" id="deck-atomic-core">
+        
+        <!-- 3D Canvas Mount -->
+        <div id="atomic-canvas-container"></div>
+
+        <!-- Holographic HUD Overlays on top of 3D Universe -->
+        <div class="atomic-hud-overlay">
+          
+          <!-- Top Telemetry Row -->
+          <div class="telemetry-row">
+            <div class="tactical-box overlay-interactive">
+              <div class="tactical-title">QUANTUM ORBITAL TELEMETRY</div>
+              <div class="tactical-metric">3 ACTIVE CORES</div>
+              <div class="tactical-sub" id="telemetry-aspect-ratio">VIEWPORT: OPTIMIZED</div>
+            </div>
+
+            <!-- Voice Teleprompter -->
+            <div class="voice-teleprompter-box overlay-interactive">
+              <div class="prompt-icon">⚡</div>
+              <div class="prompt-text">
+                VOICE COMMAND ACTIVE: Say <strong>"Open Executive Dashboard"</strong>, <strong>"Open Rental Ops"</strong>, or <strong>"Wealth Console"</strong>
+              </div>
+            </div>
+
+            <div class="tactical-box overlay-interactive">
+              <div class="tactical-title">CENTRAL SECURITY LINK</div>
+              <div class="tactical-metric" style="color:var(--emerald-core);">ALL SECURE</div>
+              <div class="tactical-sub">ENCRYPTED GATEWAY // 24/7</div>
+            </div>
+          </div>
+
+          <!-- Bottom Orbital Launchpad Grid -->
+          <div class="orbital-launchpad-grid overlay-interactive">
+            
+            <!-- Card 1: Executive Briefing -->
+            <article class="launchpad-card" data-deck="executive">
+              <div>
+                <div class="card-header-row">
+                  <span class="card-orbit-tag">ORBIT 01 // RENDER CLOUD</span>
+                  <div class="card-ping-badge" data-status-badge="executive">
+                    <span class="status-beacon"></span> ONLINE
+                  </div>
+                </div>
+                <h3 class="card-title">EXECUTIVE DAILY BRIEFING</h3>
+                <p class="card-desc">Chief of Staff Command center, strategic morning briefing, priority tasks, and military intelligence telemetry.</p>
+              </div>
+              <div class="card-footer-actions">
+                <div class="card-voice-hint">Voice: <span>"Open Executive"</span></div>
+                <button class="launch-btn" data-deck="executive">DOCK CORE &rarr;</button>
+              </div>
+            </article>
+
+            <!-- Card 2: Rental Ops & JBLM -->
+            <article class="launchpad-card" data-deck="rental">
+              <div>
+                <div class="card-header-row">
+                  <span class="card-orbit-tag">ORBIT 02 // DUAL-ENGINE</span>
+                  <div class="card-ping-badge" data-status-badge="rental">
+                    <span class="status-beacon"></span> PORT 8000
+                  </div>
+                </div>
+                <h3 class="card-title">ANTIGRAVITY RENTAL &amp; JBLM</h3>
+                <p class="card-desc">Sierra Pines property management, automated tenant ledger, IRS Schedule E receipts, and VA assumable loan pipeline.</p>
+              </div>
+              <div class="card-footer-actions">
+                <div class="card-voice-hint">Voice: <span>"Open Rental Ops"</span></div>
+                <button class="launch-btn" data-deck="rental">DOCK CORE &rarr;</button>
+              </div>
+            </article>
+
+            <!-- Card 3: Financial Wealth -->
+            <article class="launchpad-card" data-deck="financial">
+              <div>
+                <div class="card-header-row">
+                  <span class="card-orbit-tag">ORBIT 03 // WEALTH CONSOLE</span>
+                  <div class="card-ping-badge" data-status-badge="financial">
+                    <span class="status-beacon"></span> PORT 3008
+                  </div>
+                </div>
+                <h3 class="card-title">FINANCIAL COMMAND CENTER</h3>
+                <p class="card-desc">Executive net worth analytics, asset allocation, capital distribution, emergency reserves, and portfolio growth tracker.</p>
+              </div>
+              <div class="card-footer-actions">
+                <div class="card-voice-hint">Voice: <span>"Wealth Console"</span></div>
+                <button class="launch-btn" data-deck="financial">DOCK CORE &rarr;</button>
+              </div>
+            </article>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ========================================== -->
+      <!-- DECK 1: EXECUTIVE BRIEFING                -->
+      <!-- ========================================== -->
+      <section class="deck-view" id="deck-executive">
+        <div class="dashboard-subnav">
+          <div class="subnav-left">
+            <span class="subnav-status" data-status-badge="executive">
+              <span class="status-beacon"></span> ONLINE
+            </span>
+            <strong>EXECUTIVE DAILY BRIEFING // CHIEF OF STAFF COMMAND</strong>
+            <span class="subnav-url">daily-executive-dashboard.onrender.com</span>
+          </div>
+          <div class="subnav-actions">
+            <button class="subnav-btn" data-action="refresh-frame" data-deck="executive">🔄 Refresh</button>
+            <button class="subnav-btn" data-action="popout-tab" data-deck="executive">↗️ Open in New Tab</button>
+            <button class="subnav-btn" data-action="return-core">⚛️ Return to Core</button>
+          </div>
+        </div>
+        <div class="dashboard-iframe-container">
+          <iframe id="iframe-executive" class="dashboard-iframe" src="about:blank" title="Executive Briefing"></iframe>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- DECK 2: ANTIGRAVITY RENTAL & JBLM TERMINAL -->
+      <!-- ========================================== -->
+      <section class="deck-view" id="deck-rental">
+        <div class="dashboard-subnav">
+          <div class="subnav-left">
+            <span class="subnav-status" data-status-badge="rental">
+              <span class="status-beacon"></span> ONLINE
+            </span>
+            <strong>ANTIGRAVITY // DUAL-ENGINE WA RENTAL &amp; JBLM ACQUISITION</strong>
+            <span class="subnav-url">http://127.0.0.1:8000/</span>
+          </div>
+          <div class="subnav-actions">
+            <button class="subnav-btn" data-action="refresh-frame" data-deck="rental">🔄 Refresh</button>
+            <button class="subnav-btn" data-action="popout-tab" data-deck="rental">↗️ Open in New Tab</button>
+            <button class="subnav-btn" data-action="return-core">⚛️ Return to Core</button>
+          </div>
+        </div>
+        <div class="dashboard-iframe-container">
+          <iframe id="iframe-rental" class="dashboard-iframe" src="about:blank" title="Antigravity Rental Operations"></iframe>
+
+          <!-- Smart Fallback Mirror for External Guests -->
+          <div class="fallback-mirror-container" id="fallback-rental">
+            <div class="mirror-card">
+              <div class="mirror-icon">🏡</div>
+              <h3 class="mirror-title">ANTIGRAVITY DUAL-ENGINE TERMINAL</h3>
+              <p class="mirror-body">
+                This dashboard is linked to your local engine on port <code>8000</code>. When viewing remotely from your phone or sharing this link with colleagues, you can connect your free Cloudflare Tunnel or launch your local engine.
+              </p>
+              <div class="mirror-actions">
+                <button class="launch-btn" onclick="window.open('http://127.0.0.1:8000/', '_blank')">Open Local Port 8000</button>
+                <button class="launch-btn" onclick="document.getElementById('deck-telemetry').classList.add('active');document.getElementById('deck-rental').classList.remove('active');">Setup 24/7 Cloud Tunnel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- DECK 3: FINANCIAL COMMAND CENTER           -->
+      <!-- ========================================== -->
+      <section class="deck-view" id="deck-financial">
+        <div class="dashboard-subnav">
+          <div class="subnav-left">
+            <span class="subnav-status" data-status-badge="financial">
+              <span class="status-beacon"></span> ONLINE
+            </span>
+            <strong>FINANCIAL COMMAND CENTER // EXECUTIVE WEALTH CONSOLE</strong>
+            <span class="subnav-url">http://localhost:3008/</span>
+          </div>
+          <div class="subnav-actions">
+            <button class="subnav-btn" data-action="refresh-frame" data-deck="financial">🔄 Refresh</button>
+            <button class="subnav-btn" data-action="popout-tab" data-deck="financial">↗️ Open in New Tab</button>
+            <button class="subnav-btn" data-action="return-core">⚛️ Return to Core</button>
+          </div>
+        </div>
+        <div class="dashboard-iframe-container">
+          <iframe id="iframe-financial" class="dashboard-iframe" src="about:blank" title="Financial Wealth Console"></iframe>
+
+          <!-- Smart Fallback Mirror for External Guests -->
+          <div class="fallback-mirror-container" id="fallback-financial">
+            <div class="mirror-card">
+              <div class="mirror-icon">📈</div>
+              <h3 class="mirror-title">EXECUTIVE WEALTH CONSOLE</h3>
+              <p class="mirror-body">
+                This dashboard is linked to your local Next.js wealth engine on port <code>3008</code>. When accessing on local Wi-Fi or directly on this PC, the dashboard streams live automatically.
+              </p>
+              <div class="mirror-actions">
+                <button class="launch-btn" onclick="window.open('http://localhost:3008/', '_blank')">Open Local Port 3008</button>
+                <button class="launch-btn" onclick="document.getElementById('deck-telemetry').classList.add('active');document.getElementById('deck-financial').classList.remove('active');">Setup 24/7 Cloud Tunnel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- DECK 4: SYSTEM TELEMETRY & 24/7 CLOUD HOST -->
+      <!-- ========================================== -->
+      <section class="deck-view" id="deck-telemetry">
+        <div class="telemetry-dashboard-container">
+          
+          <div class="matrix-grid">
+            
+            <!-- Card 1: Live Fleet Telemetry -->
+            <div class="matrix-card">
+              <div class="matrix-card-title">
+                <span>🛰️ ACTIVE DASHBOARD FLEET</span>
+                <span class="card-ping-badge"><span class="status-beacon"></span> 3 SYNCHRONIZED</span>
+              </div>
+              <div class="matrix-item">
+                <span class="matrix-label">Executive Briefing (Render)</span>
+                <span class="matrix-value live" id="telemetry-status-executive">ONLINE (200 OK)</span>
+              </div>
+              <div class="matrix-item">
+                <span class="matrix-label">WA Rental &amp; JBLM Terminal</span>
+                <span class="matrix-value live" id="telemetry-status-rental">PORT 8000 ONLINE</span>
+              </div>
+              <div class="matrix-item">
+                <span class="matrix-label">Wealth Command Center</span>
+                <span class="matrix-value live" id="telemetry-status-financial">PORT 3008 ONLINE</span>
+              </div>
+              <div class="matrix-item">
+                <span class="matrix-label">Voice Neural Assistant</span>
+                <span class="matrix-value live">SPEECH API READY</span>
+              </div>
+            </div>
+
+            <!-- Card 2: Samsung Galaxy Z Fold 8 Handoff & Share -->
+            <div class="matrix-card">
+              <div class="matrix-card-title">
+                <span>📱 GALAXY Z FOLD 8 MOBILE PASS</span>
+                <span class="card-orbit-tag">QR SYNC</span>
+              </div>
+              <p style="font-size:0.85rem;color:#94a3b8;margin-bottom:0.75rem;">
+                Scan with your Android Galaxy Z Fold 8 camera to instantly open the Central Command Hub. Layout automatically conforms to the unfolded inner display.
+              </p>
+              
+              <div class="qr-code-box">
+                <canvas id="qr-code-canvas"></canvas>
+                <span class="qr-subtext">Scan to Open on Z Fold 8</span>
+              </div>
+
+              <div class="deploy-command-box">
+                <input type="text" id="share-hub-url" readonly style="background:transparent;border:none;color:#fff;width:75%;font-family:inherit;font-size:0.75rem;" />
+                <button class="copy-btn" id="btn-copy-share-url">COPY URL</button>
+              </div>
+            </div>
+
+            <!-- Card 3: Permanent 24/7 Hosting Options -->
+            <div class="matrix-card">
+              <div class="matrix-card-title">
+                <span>🌐 PERMANENT 24/7 CLOUD HOSTING</span>
+                <span class="card-orbit-tag">DEPLOY</span>
+              </div>
+              <p style="font-size:0.85rem;color:#94a3b8;margin-bottom:0.75rem;">
+                This Central Command Hub is 100% self-contained and pre-configured for instant zero-cost permanent hosting with global SSL:
+              </p>
+
+              <div style="display:flex;flex-direction:column;gap:8px;">
+                <div class="deploy-command-box">
+                  <span><strong>Vercel (Instant Deploy):</strong> <code>npx vercel deploy</code></span>
+                </div>
+                <div class="deploy-command-box">
+                  <span><strong>Render Static / Web:</strong> <code>git push render main</code></span>
+                </div>
+                <div class="deploy-command-box">
+                  <span><strong>GitHub Pages / Netlify:</strong> Drop folder or connect repo</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Voice Command Quick Matrix -->
+          <div class="matrix-card">
+            <div class="matrix-card-title">
+              <span>🎙️ NEURAL VOICE COMMAND VOCABULARY</span>
+              <span class="card-orbit-tag">WEB SPEECH API</span>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));gap:1rem;margin-top:0.5rem;">
+              <div style="background:rgba(3,7,18,0.6);padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);">
+                <strong style="color:var(--cyan-glow);">"Open Executive Dashboard"</strong>
+                <p style="font-size:0.78rem;color:#94a3b8;margin-top:4px;">Switches to Chief of Staff briefing on Render.</p>
+              </div>
+              <div style="background:rgba(3,7,18,0.6);padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);">
+                <strong style="color:var(--laser-blue);">"Open Rental Operations"</strong>
+                <p style="font-size:0.78rem;color:#94a3b8;margin-top:4px;">Switches to Dual-Engine Sierra Pines &amp; JBLM terminal.</p>
+              </div>
+              <div style="background:rgba(3,7,18,0.6);padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);">
+                <strong style="color:var(--plasma-violet);">"Open Wealth Console"</strong>
+                <p style="font-size:0.78rem;color:#94a3b8;margin-top:4px;">Switches to Financial Command Center.</p>
+              </div>
+              <div style="background:rgba(3,7,18,0.6);padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);">
+                <strong style="color:var(--emerald-core);">"Show Atomic Core" / "Home"</strong>
+                <p style="font-size:0.78rem;color:#94a3b8;margin-top:4px;">Returns to the 3D atomic orbital structure.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+
+    <!-- FLOATING VOICE RECOGNITION HOLOGRAM HUD -->
+    <aside class="voice-hologram-hud" id="voice-hologram-hud">
+      <div class="emblem-core" style="width:24px;height:24px;"></div>
+      <div class="voice-hologram-text">
+        <span class="voice-hologram-title" id="voice-hologram-title">LISTENING...</span>
+        <span class="voice-transcript-output" id="voice-transcript-output">"Speak command..."</span>
+      </div>
+    </aside>
+
+    <!-- SETTINGS & CUSTOM ENDPOINTS MODAL -->
+    <div class="hud-modal-overlay" id="modal-hub-settings">
+      <div class="hud-modal">
+        <div class="modal-header-row">
+          <h3 class="modal-title">CENTRAL COMMAND HUB CONFIGURATION</h3>
+          <button class="modal-close-btn" id="btn-close-settings">&times;</button>
+        </div>
+        
+        <div style="display:flex;flex-direction:column;gap:14px;font-family:var(--font-mono);font-size:0.85rem;">
+          <p style="color:#94a3b8;font-family:var(--font-tech);font-size:0.95rem;">
+            Configure target dashboard URLs. These are saved in your browser and will route your embedded frames.
+          </p>
+
+          <label style="display:flex;flex-direction:column;gap:4px;">
+            <span style="color:var(--cyan-glow);">Executive Daily Briefing URL:</span>
+            <input type="text" id="setting-url-executive" style="background:#030712;border:1px solid var(--border-cyan);color:#fff;padding:8px 12px;border-radius:6px;font-family:inherit;" />
+          </label>
+
+          <label style="display:flex;flex-direction:column;gap:4px;">
+            <span style="color:var(--laser-blue);">Rental Operations &amp; JBLM Terminal URL:</span>
+            <input type="text" id="setting-url-rental" style="background:#030712;border:1px solid var(--border-cyan);color:#fff;padding:8px 12px;border-radius:6px;font-family:inherit;" />
+          </label>
+
+          <label style="display:flex;flex-direction:column;gap:4px;">
+            <span style="color:var(--plasma-violet);">Financial Wealth Console URL:</span>
+            <input type="text" id="setting-url-financial" style="background:#030712;border:1px solid var(--border-cyan);color:#fff;padding:8px 12px;border-radius:6px;font-family:inherit;" />
+          </label>
+
+          <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:10px;">
+            <button class="launch-btn" id="btn-save-settings">SAVE CONFIGURATION</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Boot Module Script -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
