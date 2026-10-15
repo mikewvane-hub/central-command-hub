@@ -28,6 +28,18 @@ export class AtomicCoreVisualizer {
     this.hoveredDeck = null;
     this.activeDeckId = 'core';
 
+    const resolveCloudUrl = (key, defaultRelPath) => {
+      try {
+        const val = localStorage.getItem(key);
+        if (!val || val.includes('127.0.0.1') || val.includes('localhost') || val === 'about:blank' || val === '') {
+          return defaultRelPath;
+        }
+        return val;
+      } catch (e) {
+        return defaultRelPath;
+      }
+    };
+
     this.dashboards = [
       {
         id: 'executive',
@@ -49,14 +61,14 @@ export class AtomicCoreVisualizer {
         name: 'ANTIGRAVITY RENTAL // JBLM',
         shortTitle: 'RENTAL OPS',
         orbitTag: 'ORBIT 02',
-        code: 'PORT 8000',
+        code: 'WA RENTAL',
         orbitRadius: 5.8,
         speed: 0.42,
         angle: 2.1,
         inclination: { x: -0.6, y: 0.8, z: -0.4 },
         color: 0x38bdf8,
         glowHex: '#38bdf8',
-        url: localStorage.getItem('hub_url_rental') || 'http://127.0.0.1:8000/',
+        url: resolveCloudUrl('hub_url_rental', './dashboards/rental/index.html'),
         icon: '🏡'
       },
       {
@@ -64,14 +76,14 @@ export class AtomicCoreVisualizer {
         name: 'FINANCIAL WEALTH CONSOLE',
         shortTitle: 'WEALTH CONSOLE',
         orbitTag: 'ORBIT 03',
-        code: 'PORT 3008',
+        code: 'WEALTH 24/7',
         orbitRadius: 7.2,
         speed: 0.30,
         angle: 4.4,
         inclination: { x: 0.4, y: -0.7, z: 0.9 },
         color: 0x8b5cf6,
         glowHex: '#8b5cf6',
-        url: localStorage.getItem('hub_url_financial') || 'http://localhost:3008/',
+        url: resolveCloudUrl('hub_url_financial', './dashboards/financial/index.html'),
         icon: '📈'
       },
       {
@@ -109,14 +121,14 @@ export class AtomicCoreVisualizer {
         name: '110TH CM BN S3 SYNERGY',
         shortTitle: '110TH BN S3',
         orbitTag: 'ORBIT 06',
-        code: 'PORT 3011',
+        code: 'TRAIN-PRO S3',
         orbitRadius: 11.2,
         speed: 0.12,
         angle: 5.1,
         inclination: { x: -0.7, y: 0.6, z: 0.4 },
         color: 0xf59e0b,
         glowHex: '#f59e0b',
-        url: localStorage.getItem('hub_url_bns3') || 'http://localhost:3011/',
+        url: resolveCloudUrl('hub_url_bns3', './dashboards/bns3/index.html'),
         icon: '🐉'
       }
     ];
