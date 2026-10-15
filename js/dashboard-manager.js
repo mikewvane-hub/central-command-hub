@@ -146,6 +146,18 @@ export class DashboardManager {
     if (!iframe) return;
 
     const targetUrl = this.urls[deckId];
+    const isHttpsOrigin = window.location.protocol === 'https:';
+    const isInsecureTarget = targetUrl.startsWith('http://');
+
+    if (isHttpsOrigin && isInsecureTarget) {
+      console.warn(`[Command Hub] Mixed content protection: Target ${targetUrl} is HTTP on an HTTPS origin. Activating local gateway fallback.`);
+      const fallbackEl = document.getElementById(`fallback-${deckId}`);
+      if (fallbackEl) {
+        fallbackEl.classList.add('visible');
+      }
+      return;
+    }
+
     if (!iframe.src || iframe.src === 'about:blank') {
       iframe.src = targetUrl;
     }
@@ -155,7 +167,16 @@ export class DashboardManager {
     const iframe = document.getElementById(`iframe-${deckId}`);
     if (iframe) {
       sfx.playClick();
-      iframe.src = this.urls[deckId];
+      const targetUrl = this.urls[deckId];
+      const isHttpsOrigin = window.location.protocol === 'https:';
+      const isInsecureTarget = targetUrl.startsWith('http://');
+
+      if (isHttpsOrigin && isInsecureTarget) {
+        const fallbackEl = document.getElementById(`fallback-${deckId}`);
+        if (fallbackEl) fallbackEl.classList.add('visible');
+        return;
+      }
+      iframe.src = targetUrl;
     }
   }
 
