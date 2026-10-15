@@ -33,9 +33,11 @@ An always-active, 24/7 centralized command hub designed with an **interactive 3D
 - **Interactive Raycasting**: Click or touch any orbiting electron node to warp directly into that dashboard. Dragging with mouse or touch smoothly rotates the 3D atomic structure.
 
 ### 2. Neural Voice Interactive Assistant (Web Speech API)
-Operated completely hands-free via continuous speech recognition or push-to-talk:
-- Tap the glowing **Voice Pill** in the top bar or press <kbd>Space</kbd>.
-- Supported Voice Commands:
+Operated hands-free with **Continuous Always-Listening Mode** and optional **Wake Words**:
+- **Activation**: Click the **Voice Pill** in the top bar (or press <kbd>Space</kbd>) to enable hands-free listening. When prompted, select **Allow** for microphone access.
+- **Continuous Mode**: Once tapped, it stays listening continuously in the background and will not time out.
+- **Wake Words (Optional)**: You can address the hub directly by saying **"Antigravity"**, **"Computer"**, **"Hub"**, or **"Jarvis"** (e.g., *"Antigravity, open Executive Briefing"* or *"Computer, open S3"*), or you can speak the command directly without a wake word!
+- **Supported Voice Commands**:
   - *"Open Executive Dashboard"* / *"Executive Briefing"* &rarr; Warps to Executive Briefing.
   - *"Open Rental Operations"* / *"Open Antigravity"* / *"JBLM Terminal"* &rarr; Warps to Rental Operations.
   - *"Open Financial Command"* / *"Wealth Console"* &rarr; Warps to Financial Command Center.
@@ -46,7 +48,7 @@ Operated completely hands-free via continuous speech recognition or push-to-talk
   - *"System Status"* / *"Diagnostics"* &rarr; Vocalizes fleet status report.
   - *"Z Fold Mode"* / *"Laptop Mode"* / *"Auto Mode"* &rarr; Dynamically re-calibrates display ratio.
   - *"Fullscreen"* &rarr; Toggles browser fullscreen.
-- **Tactical Audio Feedback**: Web Speech SpeechSynthesis generates verbal confirmation with sci-fi tactical pacing.
+- **Tactical Audio Feedback**: Built-in speech synthesis confirms every command with sci-fi tactical pacing and prevents audio echo feedback into the microphone.
 
 ### 3. Automatic Device Ratio Calibration (Galaxy Z Fold 8 & Laptop)
 - **Auto-Detect Viewport**: Automatically monitors window aspect ratios.
