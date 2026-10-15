@@ -48,7 +48,7 @@ export class AtomicCoreVisualizer {
         orbitTag: 'ORBIT 01',
         code: 'DAILY BRIEF',
         orbitRadius: 4.4,
-        speed: 0.55,
+        speed: 0.18,
         angle: 0.2,
         inclination: { x: 0.7, y: 0.3, z: 0.2 },
         color: 0x00f0ff,
@@ -63,7 +63,7 @@ export class AtomicCoreVisualizer {
         orbitTag: 'ORBIT 02',
         code: 'WA RENTAL',
         orbitRadius: 5.8,
-        speed: 0.42,
+        speed: 0.14,
         angle: 2.1,
         inclination: { x: -0.6, y: 0.8, z: -0.4 },
         color: 0x38bdf8,
@@ -78,7 +78,7 @@ export class AtomicCoreVisualizer {
         orbitTag: 'ORBIT 03',
         code: 'WEALTH 24/7',
         orbitRadius: 7.2,
-        speed: 0.30,
+        speed: 0.11,
         angle: 4.4,
         inclination: { x: 0.4, y: -0.7, z: 0.9 },
         color: 0x8b5cf6,
@@ -93,7 +93,7 @@ export class AtomicCoreVisualizer {
         orbitTag: 'ORBIT 04',
         code: 'OVERLAND',
         orbitRadius: 8.5,
-        speed: 0.22,
+        speed: 0.08,
         angle: 3.2,
         inclination: { x: -0.5, y: -0.4, z: 0.6 },
         color: 0x10b981,
@@ -108,7 +108,7 @@ export class AtomicCoreVisualizer {
         orbitTag: 'ORBIT 05',
         code: 'CALENDAR & MEALS',
         orbitRadius: 9.8,
-        speed: 0.16,
+        speed: 0.06,
         angle: 1.4,
         inclination: { x: 0.8, y: -0.3, z: -0.7 },
         color: 0xf43f5e,
@@ -123,7 +123,7 @@ export class AtomicCoreVisualizer {
         orbitTag: 'ORBIT 06',
         code: 'TRAIN-PRO S3',
         orbitRadius: 11.2,
-        speed: 0.12,
+        speed: 0.045,
         angle: 5.1,
         inclination: { x: -0.7, y: 0.6, z: 0.4 },
         color: 0xf59e0b,
@@ -399,8 +399,22 @@ export class AtomicCoreVisualizer {
       });
 
       circleEl.addEventListener('mouseleave', () => {
-        this.hoveredDeck = null;
+        if (this.hoveredDeck === dash.id) {
+          this.hoveredDeck = null;
+        }
       });
+
+      circleEl.addEventListener('touchstart', () => {
+        this.hoveredDeck = dash.id;
+      }, { passive: true });
+
+      circleEl.addEventListener('touchend', () => {
+        setTimeout(() => {
+          if (this.hoveredDeck === dash.id) {
+            this.hoveredDeck = null;
+          }
+        }, 1200);
+      }, { passive: true });
 
       overlay.appendChild(circleEl);
       el.domElement = circleEl;
@@ -550,7 +564,8 @@ export class AtomicCoreVisualizer {
     // Update Electron Positions along their Orbits & Project 3D circles to screen
     this.electrons.forEach((el) => {
       const dash = el.dash;
-      const speedMultiplier = (this.hoveredDeck === dash.id) ? 0.2 : 1.0;
+      const isHovered = (this.hoveredDeck === dash.id);
+      const speedMultiplier = isHovered ? 0.0 : 1.0;
       el.currentAngle += 0.016 * dash.speed * speedMultiplier;
       
       const x = Math.cos(el.currentAngle) * dash.orbitRadius;
@@ -572,9 +587,9 @@ export class AtomicCoreVisualizer {
         // If in front of camera
         if (worldVec.z < 1.0 && screenX >= -80 && screenX <= width + 80 && screenY >= -80 && screenY <= height + 80) {
           el.domElement.style.display = 'flex';
-          const depthScale = Math.max(0.68, Math.min(1.15, 1.02 - (worldVec.z * 0.4)));
-          const depthOpacity = Math.max(0.55, Math.min(1.0, 1.0 - (worldVec.z * 0.3)));
-          const zIndex = Math.round((1.0 - worldVec.z) * 100);
+          const depthScale = Math.max(0.68, Math.min(1.15, 1.02 - (worldVec.z * 0.4))) * (isHovered ? 1.15 : 1.0);
+          const depthOpacity = isHovered ? 1.0 : Math.max(0.55, Math.min(1.0, 1.0 - (worldVec.z * 0.3)));
+          const zIndex = isHovered ? 200 : Math.round((1.0 - worldVec.z) * 100);
 
           el.domElement.style.transform = `translate3d(${screenX}px, ${screenY}px, 0) translate(-50%, -50%) scale(${depthScale})`;
           el.domElement.style.opacity = depthOpacity;
