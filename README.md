@@ -13,6 +13,9 @@ An always-active, 24/7 centralized command hub designed with an **interactive 3D
 | **Financial Command Center** | `http://localhost:3008/` | Local Next.js 15 | Executive wealth console, asset distribution, liquidity & capital deployment. |
 | **Rainier Basecamp // Overland Planner** | `https://daily-executive-dashboard.onrender.com/trip-planner/` | Render Cloud (24/7) | Family overland expeditions, Rainier campsite logistics, GPS waypoints & packing checklists. |
 | **Mackie's Daily Board** | `https://daily-executive-dashboard.onrender.com/mackie/` | Render Cloud (24/7) | Family calendar synchronization, weekly meal planning, shared grocery shopping lists & coordination. |
+| **110th CBRN BN S3 Readiness (TRAIN-PRO)** | `http://localhost:3011/` | Local Synergy Hub | Iron Dragons Battalion METL, training readiness, exercise cycles & risk matrix. |
+
+**Live Permanent Global URL:** [https://mikewvane-hub.github.io/central-command-hub/](https://mikewvane-hub.github.io/central-command-hub/)
 
 ---
 
@@ -26,6 +29,7 @@ An always-active, 24/7 centralized command hub designed with an **interactive 3D
   - Orbit 03 (`0x8b5cf6` Plasma Violet): Financial Wealth Console
   - Orbit 04 (`0x10b981` Emerald Core): Rainier Basecamp & Overland Planner
   - Orbit 05 (`0xf43f5e` Rose Coral): Mackie's Daily Board (Calendar & Meals)
+  - Orbit 06 (`0xf59e0b` Amber Gold): 110th CBRN BN S3 Readiness Matrix
 - **Interactive Raycasting**: Click or touch any orbiting electron node to warp directly into that dashboard. Dragging with mouse or touch smoothly rotates the 3D atomic structure.
 
 ### 2. Neural Voice Interactive Assistant (Web Speech API)
@@ -35,6 +39,9 @@ Operated completely hands-free via continuous speech recognition or push-to-talk
   - *"Open Executive Dashboard"* / *"Executive Briefing"* &rarr; Warps to Executive Briefing.
   - *"Open Rental Operations"* / *"Open Antigravity"* / *"JBLM Terminal"* &rarr; Warps to Rental Operations.
   - *"Open Financial Command"* / *"Wealth Console"* &rarr; Warps to Financial Command Center.
+  - *"Open Rainier Basecamp"* / *"Overland Planner"* &rarr; Warps to Basecamp Planner.
+  - *"Open Mackie's Board"* / *"Meal Planner"* &rarr; Warps to Mackie's Daily Board.
+  - *"Open S3 Readiness"* / *"Battalion S3"* / *"Train Pro"* / *"Iron Dragons"* &rarr; Warps to 110th CBRN BN S3 Matrix.
   - *"Show Atomic Core"* / *"Return Home"* &rarr; Warps back to 3D Atomic Orbit view.
   - *"System Status"* / *"Diagnostics"* &rarr; Vocalizes fleet status report.
   - *"Z Fold Mode"* / *"Laptop Mode"* / *"Auto Mode"* &rarr; Dynamically re-calibrates display ratio.

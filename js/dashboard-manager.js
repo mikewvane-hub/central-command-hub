@@ -17,7 +17,8 @@ export class DashboardManager {
       rental: localStorage.getItem('hub_url_rental') || 'http://127.0.0.1:8000/',
       financial: localStorage.getItem('hub_url_financial') || 'http://localhost:3008/',
       trip: localStorage.getItem('hub_url_trip') || 'https://daily-executive-dashboard.onrender.com/trip-planner/',
-      mackie: localStorage.getItem('hub_url_mackie') || 'https://daily-executive-dashboard.onrender.com/mackie/'
+      mackie: localStorage.getItem('hub_url_mackie') || 'https://daily-executive-dashboard.onrender.com/mackie/',
+      bns3: localStorage.getItem('hub_url_bns3') || 'http://localhost:3011/'
     };
 
     this.statusMap = {
@@ -25,7 +26,8 @@ export class DashboardManager {
       rental: 'CHECKING',
       financial: 'CHECKING',
       trip: 'CHECKING',
-      mackie: 'CHECKING'
+      mackie: 'CHECKING',
+      bns3: 'CHECKING'
     };
 
     this.init();
@@ -135,7 +137,7 @@ export class DashboardManager {
     }
 
     // 3. Lazy Load / Initialize Iframe if necessary
-    if (deckId === 'executive' || deckId === 'rental' || deckId === 'financial' || deckId === 'trip' || deckId === 'mackie') {
+    if (deckId === 'executive' || deckId === 'rental' || deckId === 'financial' || deckId === 'trip' || deckId === 'mackie' || deckId === 'bns3') {
       this.ensureIframeLoaded(deckId);
     }
 
@@ -205,6 +207,7 @@ export class DashboardManager {
     this.probeUrl('financial', this.urls.financial);
     this.probeUrl('trip', this.urls.trip);
     this.probeUrl('mackie', this.urls.mackie);
+    this.probeUrl('bns3', this.urls.bns3);
   }
 
   async probeUrl(deckId, url) {

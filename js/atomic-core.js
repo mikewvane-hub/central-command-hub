@@ -81,6 +81,17 @@ export class AtomicCoreVisualizer {
         inclination: { x: 0.8, y: -0.3, z: -0.7 },
         color: 0xf43f5e,
         glowHex: '#f43f5e'
+      },
+      {
+        id: 'bns3',
+        name: '110TH CM BN S3 SYNERGY',
+        code: 'TRAIN-PRO // S3 METL',
+        orbitRadius: 11.0,
+        speed: 0.14,
+        angle: 5.1,
+        inclination: { x: -0.7, y: 0.6, z: 0.4 },
+        color: 0xf59e0b,
+        glowHex: '#f59e0b'
       }
     ];
 
@@ -150,10 +161,10 @@ export class AtomicCoreVisualizer {
   adjustCameraForAspect(aspect) {
     if (aspect < 1.1) {
       // Square or tall aspect ratio (Z Fold 8 Inner unfolded or mobile)
-      this.camera.position.set(0, 3.0, 23.0);
+      this.camera.position.set(0, 3.2, 26.0);
     } else {
       // Laptop widescreen
-      this.camera.position.set(0, 2.2, 19.2);
+      this.camera.position.set(0, 2.4, 21.5);
     }
     this.camera.lookAt(0, 0, 0);
   }

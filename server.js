@@ -65,6 +65,12 @@ app.get('/api/telemetry', async (req, res) => {
       name: "Mackie's Daily Board • Calendar & Meal Planner",
       url: 'https://daily-executive-dashboard.onrender.com/mackie/',
       type: 'cloud'
+    },
+    {
+      id: 'bns3',
+      name: '110th CM BN S3 Readiness & METL Matrix',
+      url: 'http://localhost:3011/',
+      type: 'local'
     }
   ];
 

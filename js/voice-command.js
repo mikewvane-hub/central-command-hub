@@ -281,6 +281,25 @@ export class VoiceCommandEngine {
       return;
     }
 
+    // 6. 110th Chemical Battalion S3 Readiness & METL Matrix
+    if (
+      text.includes('s3') ||
+      text.includes('battalion') ||
+      text.includes('110th') ||
+      text.includes('iron dragon') ||
+      text.includes('readiness') ||
+      text.includes('metl') ||
+      text.includes('train pro') ||
+      text.includes('training') ||
+      text.includes('synergy')
+    ) {
+      this.speak("Opening 110th Chemical Battalion S3 Readiness and METL Proficiency Matrix.");
+      if (this.handlers.onSelectDeck) {
+        this.handlers.onSelectDeck('bns3');
+      }
+      return;
+    }
+
     // 4. Return to Atomic Orbital Core
     if (
       text.includes('core') ||

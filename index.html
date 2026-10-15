@@ -73,6 +73,11 @@
           <span class="tab-badge" data-status-badge="mackie">LIVE</span>
         </button>
 
+        <button class="nav-tab-btn" data-deck="bns3">
+          <span>🐉 110TH BN S3</span>
+          <span class="tab-badge" data-status-badge="bns3">3011</span>
+        </button>
+
         <button class="nav-tab-btn" data-deck="telemetry">
           <span>📡 TELEMETRY &amp; 24/7</span>
           <span class="tab-badge">SHARE</span>
@@ -151,7 +156,7 @@
           <div class="telemetry-row">
             <div class="tactical-box overlay-interactive">
               <div class="tactical-title">QUANTUM ORBITAL TELEMETRY</div>
-              <div class="tactical-metric">5 ACTIVE CORES</div>
+              <div class="tactical-metric">6 ACTIVE CORES</div>
               <div class="tactical-sub" id="telemetry-aspect-ratio">VIEWPORT: OPTIMIZED</div>
             </div>
 
@@ -260,6 +265,24 @@
               <div class="card-footer-actions">
                 <div class="card-voice-hint">Voice: <span>"Open Mackie's Board"</span></div>
                 <button class="launch-btn" data-deck="mackie">DOCK CORE &rarr;</button>
+              </div>
+            </article>
+
+            <!-- Card 6: 110th Chemical Battalion S3 Readiness -->
+            <article class="launchpad-card" data-deck="bns3">
+              <div>
+                <div class="card-header-row">
+                  <span class="card-orbit-tag">ORBIT 06 // MILITARY TACTICAL</span>
+                  <div class="card-ping-badge" data-status-badge="bns3">
+                    <span class="status-beacon"></span> PORT 3011
+                  </div>
+                </div>
+                <h3 class="card-title">110TH CM BN S3 READINESS</h3>
+                <p class="card-desc">FM 7-0 TRAIN-PRO METL proficiency matrix, ATP 5-19 multi-echelon risk tracker, and battle rhythm operational input/outputs.</p>
+              </div>
+              <div class="card-footer-actions">
+                <div class="card-voice-hint">Voice: <span>"Open S3 Readiness"</span></div>
+                <button class="launch-btn" data-deck="bns3">DOCK CORE &rarr;</button>
               </div>
             </article>
 
@@ -415,7 +438,45 @@
       </section>
 
       <!-- ========================================== -->
-      <!-- DECK 6: SYSTEM TELEMETRY & 24/7 CLOUD HOST -->
+      <!-- DECK 6: 110TH CM BN S3 READINESS MATRIX   -->
+      <!-- ========================================== -->
+      <section class="deck-view" id="deck-bns3">
+        <div class="dashboard-subnav">
+          <div class="subnav-left">
+            <span class="subnav-status" data-status-badge="bns3">
+              <span class="status-beacon"></span> ONLINE
+            </span>
+            <strong>110TH CBRN BN (&quot;IRON DRAGONS&quot;) // TRAIN-PRO S3 READINESS &amp; METL MATRIX</strong>
+            <span class="subnav-url">http://localhost:3011/</span>
+          </div>
+          <div class="subnav-actions">
+            <button class="subnav-btn" data-action="refresh-frame" data-deck="bns3">🔄 Refresh</button>
+            <button class="subnav-btn" data-action="popout-tab" data-deck="bns3">↗️ Open in New Tab</button>
+            <button class="subnav-btn" data-action="return-core">⚛️ Return to Core</button>
+          </div>
+        </div>
+        <div class="dashboard-iframe-container">
+          <iframe id="iframe-bns3" class="dashboard-iframe" src="about:blank" title="110th BN S3 Readiness Matrix"></iframe>
+
+          <!-- Fallback Mirror for External Guests -->
+          <div class="fallback-mirror-container" id="fallback-bns3">
+            <div class="mirror-card">
+              <div class="mirror-icon">🐉</div>
+              <h3 class="mirror-title">110TH CM BN S3 READINESS MATRIX</h3>
+              <p class="mirror-body">
+                This dashboard is linked to your local TRAIN-PRO S3 engine on port <code>3011</code>. When accessing on your local PC or Wi-Fi, the military readiness dashboard streams live automatically.
+              </p>
+              <div class="mirror-actions">
+                <button class="launch-btn" onclick="window.open('http://localhost:3011/', '_blank')">Open Local Port 3011</button>
+                <button class="launch-btn" onclick="document.getElementById('deck-telemetry').classList.add('active');document.getElementById('deck-bns3').classList.remove('active');">Setup 24/7 Cloud Tunnel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- DECK 7: SYSTEM TELEMETRY & 24/7 CLOUD HOST -->
       <!-- ========================================== -->
       <section class="deck-view" id="deck-telemetry">
         <div class="telemetry-dashboard-container">
@@ -426,7 +487,7 @@
             <div class="matrix-card">
               <div class="matrix-card-title">
                 <span>🛰️ ACTIVE DASHBOARD FLEET</span>
-                <span class="card-ping-badge"><span class="status-beacon"></span> 5 SYNCHRONIZED</span>
+                <span class="card-ping-badge"><span class="status-beacon"></span> 6 SYNCHRONIZED</span>
               </div>
               <div class="matrix-item">
                 <span class="matrix-label">Executive Briefing (Render)</span>
@@ -447,6 +508,10 @@
               <div class="matrix-item">
                 <span class="matrix-label">Mackie's Daily Board</span>
                 <span class="matrix-value live" id="telemetry-status-mackie">ONLINE (200 OK)</span>
+              </div>
+              <div class="matrix-item">
+                <span class="matrix-label">110th CM BN S3 Readiness</span>
+                <span class="matrix-value live" id="telemetry-status-bns3">PORT 3011 ONLINE</span>
               </div>
               <div class="matrix-item">
                 <span class="matrix-label">Voice Neural Assistant</span>
@@ -528,6 +593,10 @@
                 <p style="font-size:0.78rem;color:#94a3b8;margin-top:4px;">Switches to Mackie's Daily Board, Meal Planner &amp; Grocery List.</p>
               </div>
               <div style="background:rgba(3,7,18,0.6);padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);">
+                <strong style="color:#f59e0b;">"Open S3 Readiness"</strong>
+                <p style="font-size:0.78rem;color:#94a3b8;margin-top:4px;">Switches to 110th CM BN TRAIN-PRO S3 Readiness &amp; METL Matrix.</p>
+              </div>
+              <div style="background:rgba(3,7,18,0.6);padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);">
                 <strong style="color:var(--cyan-glow);">"Show Atomic Core" / "Home"</strong>
                 <p style="font-size:0.78rem;color:#94a3b8;margin-top:4px;">Returns to the 3D atomic orbital structure.</p>
               </div>
@@ -584,6 +653,11 @@
           <label style="display:flex;flex-direction:column;gap:4px;">
             <span style="color:#f43f5e;">Mackie's Daily Board URL:</span>
             <input type="text" id="setting-url-mackie" style="background:#030712;border:1px solid var(--border-cyan);color:#fff;padding:8px 12px;border-radius:6px;font-family:inherit;" />
+          </label>
+
+          <label style="display:flex;flex-direction:column;gap:4px;">
+            <span style="color:#f59e0b;">110th CM BN S3 Readiness Matrix URL:</span>
+            <input type="text" id="setting-url-bns3" style="background:#030712;border:1px solid var(--border-cyan);color:#fff;padding:8px 12px;border-radius:6px;font-family:inherit;" />
           </label>
 
           <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:10px;">
