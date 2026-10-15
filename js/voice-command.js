@@ -165,6 +165,13 @@ export const VOICE_TARGETS = {
     keywords: ['full screen', 'fullscreen', 'maximize', 'toggle fullscreen'],
     phonetic: ['fulskrin', 'maksimais']
   },
+  alerts: {
+    category: 'alerts',
+    target: 'alerts',
+    speech: "Opening Tactical Alert and Action Registry. 18 active items across dashboards.",
+    keywords: ['alerts', 'alert', 'notifications', 'show alerts', 'open alerts', 'what are the alerts', 'action items', 'compliance alerts', 'warnings'],
+    phonetic: ['alerts', 'notifikashons', 'akshon items', 'warning']
+  },
   help: {
     category: 'help',
     target: 'help',
@@ -517,6 +524,8 @@ export class VoiceCommandEngine {
         this.handlers.onSetDeviceMode(cmd.target);
       } else if (cmd.category === 'action' && cmd.target === 'fullscreen' && this.handlers.onToggleFullscreen) {
         this.handlers.onToggleFullscreen();
+      } else if (cmd.category === 'alerts') {
+        window.dispatchEvent(new CustomEvent('OPEN_HUB_ALERTS', { detail: { deckId: 'all' } }));
       }
       return;
     }

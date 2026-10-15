@@ -397,6 +397,15 @@ export class AtomicCoreVisualizer {
         }
       });
 
+      const alertPillEl = circleEl.querySelector('.circle-alert-pill');
+      if (alertPillEl) {
+        alertPillEl.addEventListener('click', (e) => {
+          e.stopPropagation();
+          sfx.playAlert();
+          window.dispatchEvent(new CustomEvent('OPEN_HUB_ALERTS', { detail: { deckId: dash.id } }));
+        });
+      }
+
       circleEl.addEventListener('mouseenter', () => {
         sfx.playHover();
         this.hoveredDeck = dash.id;

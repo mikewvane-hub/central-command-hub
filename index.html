@@ -127,6 +127,12 @@
           </svg>
         </button>
 
+        <!-- Global Tactical Alerts Pill (Direct Access to All Active Alerts) -->
+        <button class="header-alerts-pill" id="btn-global-alerts" title="View Active Alerts & Action Items across all Dashboards">
+          <span class="alerts-pill-icon">⚠️</span>
+          <span class="alerts-pill-text" id="global-alerts-badge">18 ALERTS</span>
+        </button>
+
         <!-- Hub Settings / Deploy Gear -->
         <button class="hud-icon-btn" id="btn-open-settings" title="Hub Settings &amp; Endpoints">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -555,6 +561,40 @@
           <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:10px;">
             <button class="launch-btn" id="btn-save-settings">SAVE CONFIGURATION</button>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TACTICAL ALERT & ACTION REGISTRY MODAL -->
+    <div class="hud-modal-overlay" id="modal-hub-alerts">
+      <div class="hud-modal alert-center-modal">
+        <div class="modal-header-row">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <span style="font-size:1.4rem;">⚠️</span>
+            <div>
+              <h3 class="modal-title" style="margin:0;">TACTICAL ALERT &amp; ACTION REGISTRY</h3>
+              <p style="font-family:var(--font-mono);font-size:0.72rem;color:var(--text-muted);margin:3px 0 0 0;">
+                Real-time compliance, preventative maintenance, warranty expirations &amp; operational items
+              </p>
+            </div>
+          </div>
+          <button class="modal-close-btn" id="btn-close-alerts">&times;</button>
+        </div>
+
+        <!-- Filter Deck Tabs -->
+        <div class="alert-filters-bar" id="alert-filters-bar">
+          <!-- Dynamically populated with deck filter tabs -->
+        </div>
+
+        <!-- Alert Cards Container -->
+        <div class="alert-cards-container" id="alert-cards-container">
+          <!-- Dynamically populated alert item cards -->
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="alert-modal-footer">
+          <span class="alert-footer-note">💡 Click any alert card or "OPEN DASHBOARD" to jump directly to that dashboard.</span>
+          <button class="launch-btn" id="btn-dismiss-alerts-modal">CLOSE</button>
         </div>
       </div>
     </div>

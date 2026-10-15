@@ -93,6 +93,30 @@ class SoundEffectsEngine {
     osc.stop(now + 0.36);
   }
 
+  // Tactical Alert Ping / Notification Chime
+  playAlert() {
+    if (this.muted) return;
+    this.init();
+    if (!this.ctx) return;
+
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(880, now); // A5
+    osc.frequency.exponentialRampToValueAtTime(659.25, now + 0.12); // E5
+
+    gain.gain.setValueAtTime(0.28, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+
+    osc.connect(gain);
+    gain.connect(this.masterGain);
+
+    osc.start(now);
+    osc.stop(now + 0.23);
+  }
+
   // Voice Command Activated Beep (Double sci-fi chime)
   playVoiceChime() {
     if (this.muted) return;
