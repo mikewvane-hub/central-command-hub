@@ -59,6 +59,17 @@ export class AtomicCoreVisualizer {
         inclination: { x: 0.4, y: -0.7, z: 0.9 },
         color: 0x8b5cf6,
         glowHex: '#8b5cf6'
+      },
+      {
+        id: 'trip',
+        name: 'RAINIER BASECAMP',
+        code: 'OVERLAND // EXPEDITION',
+        orbitRadius: 8.2,
+        speed: 0.24,
+        angle: 3.2,
+        inclination: { x: -0.5, y: -0.4, z: 0.6 },
+        color: 0x10b981,
+        glowHex: '#10b981'
       }
     ];
 
@@ -128,10 +139,10 @@ export class AtomicCoreVisualizer {
   adjustCameraForAspect(aspect) {
     if (aspect < 1.1) {
       // Square or tall aspect ratio (Z Fold 8 Inner unfolded or mobile)
-      this.camera.position.set(0, 2.5, 17.5);
+      this.camera.position.set(0, 2.6, 20.0);
     } else {
       // Laptop widescreen
-      this.camera.position.set(0, 1.8, 14.5);
+      this.camera.position.set(0, 2.0, 16.8);
     }
     this.camera.lookAt(0, 0, 0);
   }

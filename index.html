@@ -63,6 +63,11 @@
           <span class="tab-badge" data-status-badge="financial">3008</span>
         </button>
 
+        <button class="nav-tab-btn" data-deck="trip">
+          <span>🏕️ RAINIER BASECAMP</span>
+          <span class="tab-badge" data-status-badge="trip">LIVE</span>
+        </button>
+
         <button class="nav-tab-btn" data-deck="telemetry">
           <span>📡 TELEMETRY &amp; 24/7</span>
           <span class="tab-badge">SHARE</span>
@@ -141,7 +146,7 @@
           <div class="telemetry-row">
             <div class="tactical-box overlay-interactive">
               <div class="tactical-title">QUANTUM ORBITAL TELEMETRY</div>
-              <div class="tactical-metric">3 ACTIVE CORES</div>
+              <div class="tactical-metric">4 ACTIVE CORES</div>
               <div class="tactical-sub" id="telemetry-aspect-ratio">VIEWPORT: OPTIMIZED</div>
             </div>
 
@@ -214,6 +219,24 @@
               <div class="card-footer-actions">
                 <div class="card-voice-hint">Voice: <span>"Wealth Console"</span></div>
                 <button class="launch-btn" data-deck="financial">DOCK CORE &rarr;</button>
+              </div>
+            </article>
+
+            <!-- Card 4: Rainier Basecamp Overland & Trip Planner -->
+            <article class="launchpad-card" data-deck="trip">
+              <div>
+                <div class="card-header-row">
+                  <span class="card-orbit-tag">ORBIT 04 // OVERLAND BASECAMP</span>
+                  <div class="card-ping-badge" data-status-badge="trip">
+                    <span class="status-beacon"></span> LIVE
+                  </div>
+                </div>
+                <h3 class="card-title">RAINIER BASECAMP // OVERLAND</h3>
+                <p class="card-desc">Family overland expeditions, Rainier campsite logistics, GPS waypoints, offline packing checklists, and alpine trail telemetries.</p>
+              </div>
+              <div class="card-footer-actions">
+                <div class="card-voice-hint">Voice: <span>"Open Trip Planner"</span></div>
+                <button class="launch-btn" data-deck="trip">DOCK CORE &rarr;</button>
               </div>
             </article>
 
@@ -323,7 +346,30 @@
       </section>
 
       <!-- ========================================== -->
-      <!-- DECK 4: SYSTEM TELEMETRY & 24/7 CLOUD HOST -->
+      <!-- DECK 4: RAINIER BASECAMP OVERLAND PLANNER -->
+      <!-- ========================================== -->
+      <section class="deck-view" id="deck-trip">
+        <div class="dashboard-subnav">
+          <div class="subnav-left">
+            <span class="subnav-status" data-status-badge="trip">
+              <span class="status-beacon"></span> ONLINE
+            </span>
+            <strong>RAINIER BASECAMP // FAMILY OVERLAND &amp; TRIP PLANNER</strong>
+            <span class="subnav-url">daily-executive-dashboard.onrender.com/trip-planner/</span>
+          </div>
+          <div class="subnav-actions">
+            <button class="subnav-btn" data-action="refresh-frame" data-deck="trip">🔄 Refresh</button>
+            <button class="subnav-btn" data-action="popout-tab" data-deck="trip">↗️ Open in New Tab</button>
+            <button class="subnav-btn" data-action="return-core">⚛️ Return to Core</button>
+          </div>
+        </div>
+        <div class="dashboard-iframe-container">
+          <iframe id="iframe-trip" class="dashboard-iframe" src="about:blank" title="Rainier Basecamp Overland Planner"></iframe>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- DECK 5: SYSTEM TELEMETRY & 24/7 CLOUD HOST -->
       <!-- ========================================== -->
       <section class="deck-view" id="deck-telemetry">
         <div class="telemetry-dashboard-container">
@@ -334,7 +380,7 @@
             <div class="matrix-card">
               <div class="matrix-card-title">
                 <span>🛰️ ACTIVE DASHBOARD FLEET</span>
-                <span class="card-ping-badge"><span class="status-beacon"></span> 3 SYNCHRONIZED</span>
+                <span class="card-ping-badge"><span class="status-beacon"></span> 4 SYNCHRONIZED</span>
               </div>
               <div class="matrix-item">
                 <span class="matrix-label">Executive Briefing (Render)</span>
@@ -347,6 +393,10 @@
               <div class="matrix-item">
                 <span class="matrix-label">Wealth Command Center</span>
                 <span class="matrix-value live" id="telemetry-status-financial">PORT 3008 ONLINE</span>
+              </div>
+              <div class="matrix-item">
+                <span class="matrix-label">Rainier Overland Basecamp</span>
+                <span class="matrix-value live" id="telemetry-status-trip">ONLINE (200 OK)</span>
               </div>
               <div class="matrix-item">
                 <span class="matrix-label">Voice Neural Assistant</span>
@@ -420,7 +470,11 @@
                 <p style="font-size:0.78rem;color:#94a3b8;margin-top:4px;">Switches to Financial Command Center.</p>
               </div>
               <div style="background:rgba(3,7,18,0.6);padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);">
-                <strong style="color:var(--emerald-core);">"Show Atomic Core" / "Home"</strong>
+                <strong style="color:var(--emerald-core);">"Open Trip Planner"</strong>
+                <p style="font-size:0.78rem;color:#94a3b8;margin-top:4px;">Switches to Rainier Basecamp &amp; Family Overland Expedition Planner.</p>
+              </div>
+              <div style="background:rgba(3,7,18,0.6);padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);">
+                <strong style="color:var(--cyan-glow);">"Show Atomic Core" / "Home"</strong>
                 <p style="font-size:0.78rem;color:#94a3b8;margin-top:4px;">Returns to the 3D atomic orbital structure.</p>
               </div>
             </div>
@@ -466,6 +520,11 @@
           <label style="display:flex;flex-direction:column;gap:4px;">
             <span style="color:var(--plasma-violet);">Financial Wealth Console URL:</span>
             <input type="text" id="setting-url-financial" style="background:#030712;border:1px solid var(--border-cyan);color:#fff;padding:8px 12px;border-radius:6px;font-family:inherit;" />
+          </label>
+
+          <label style="display:flex;flex-direction:column;gap:4px;">
+            <span style="color:var(--emerald-core);">Rainier Basecamp &amp; Trip Planner URL:</span>
+            <input type="text" id="setting-url-trip" style="background:#030712;border:1px solid var(--border-cyan);color:#fff;padding:8px 12px;border-radius:6px;font-family:inherit;" />
           </label>
 
           <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:10px;">

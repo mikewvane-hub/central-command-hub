@@ -53,6 +53,12 @@ app.get('/api/telemetry', async (req, res) => {
       name: 'Financial Wealth Console',
       url: 'http://localhost:3008/',
       type: 'local'
+    },
+    {
+      id: 'trip',
+      name: 'Rainier Basecamp // Overland & Trip Planner',
+      url: 'https://daily-executive-dashboard.onrender.com/trip-planner/',
+      type: 'cloud'
     }
   ];
 

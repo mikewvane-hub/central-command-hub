@@ -162,6 +162,9 @@ class CentralCommandHubApp {
           this.dashboardMgr.switchDeck('financial');
           break;
         case '4':
+          this.dashboardMgr.switchDeck('trip');
+          break;
+        case '5':
           this.dashboardMgr.switchDeck('telemetry');
           break;
         case 'f':
@@ -203,20 +206,24 @@ class CentralCommandHubApp {
     const inputExec = document.getElementById('setting-url-executive');
     const inputRent = document.getElementById('setting-url-rental');
     const inputFin = document.getElementById('setting-url-financial');
+    const inputTrip = document.getElementById('setting-url-trip');
 
     if (inputExec) inputExec.value = this.dashboardMgr.urls.executive;
     if (inputRent) inputRent.value = this.dashboardMgr.urls.rental;
     if (inputFin) inputFin.value = this.dashboardMgr.urls.financial;
+    if (inputTrip) inputTrip.value = this.dashboardMgr.urls.trip;
   }
 
   saveSettingsForm() {
     const inputExec = document.getElementById('setting-url-executive');
     const inputRent = document.getElementById('setting-url-rental');
     const inputFin = document.getElementById('setting-url-financial');
+    const inputTrip = document.getElementById('setting-url-trip');
 
     if (inputExec) this.dashboardMgr.saveCustomUrl('executive', inputExec.value.trim());
     if (inputRent) this.dashboardMgr.saveCustomUrl('rental', inputRent.value.trim());
     if (inputFin) this.dashboardMgr.saveCustomUrl('financial', inputFin.value.trim());
+    if (inputTrip) this.dashboardMgr.saveCustomUrl('trip', inputTrip.value.trim());
 
     sfx.playSuccess();
     this.voiceEngine.speak("System configuration updated.");
@@ -239,9 +246,10 @@ class CentralCommandHubApp {
     const execStatus = this.dashboardMgr.statusMap.executive || 'ONLINE';
     const rentStatus = this.dashboardMgr.statusMap.rental || 'ONLINE';
     const finStatus = this.dashboardMgr.statusMap.financial || 'ONLINE';
+    const tripStatus = this.dashboardMgr.statusMap.trip || 'ONLINE';
 
     this.voiceEngine.speak(
-      `Central Command Hub operational status: Executive Briefing is ${execStatus}. Rental Operations is ${rentStatus}. Wealth console is ${finStatus}. Display ratio calibrated.`
+      `Central Command Hub operational status: Executive Briefing is ${execStatus}. Rental Operations is ${rentStatus}. Wealth console is ${finStatus}. Rainier Basecamp is ${tripStatus}. Display ratio calibrated.`
     );
   }
 }

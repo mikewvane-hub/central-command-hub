@@ -11,6 +11,7 @@ An always-active, 24/7 centralized command hub designed with an **interactive 3D
 | **Executive Daily Briefing** | `https://daily-executive-dashboard.onrender.com/` | Render Cloud (24/7) | Chief of Staff briefing, strategic agenda & military defense intel feed. |
 | **ANTIGRAVITY // Dual-Engine WA Rental & JBLM** | `http://127.0.0.1:8000/` | Local FastAPI / Uvicorn | Sierra Pines property operations, ledger, repair vault & VA assumable loan pipeline. |
 | **Financial Command Center** | `http://localhost:3008/` | Local Next.js 15 | Executive wealth console, asset distribution, liquidity & capital deployment. |
+| **Rainier Basecamp // Overland Planner** | `https://daily-executive-dashboard.onrender.com/trip-planner/` | Render Cloud (24/7) | Family overland expeditions, Rainier campsite logistics, GPS waypoints & packing checklists. |
 
 ---
 
@@ -22,6 +23,7 @@ An always-active, 24/7 centralized command hub designed with an **interactive 3D
   - Orbit 01 (`0x00f0ff` Cyan): Executive Daily Briefing
   - Orbit 02 (`0x38bdf8` Laser Blue): Rental Operations & JBLM Terminal
   - Orbit 03 (`0x8b5cf6` Plasma Violet): Financial Wealth Console
+  - Orbit 04 (`0x10b981` Emerald Core): Rainier Basecamp & Overland Planner
 - **Interactive Raycasting**: Click or touch any orbiting electron node to warp directly into that dashboard. Dragging with mouse or touch smoothly rotates the 3D atomic structure.
 
 ### 2. Neural Voice Interactive Assistant (Web Speech API)

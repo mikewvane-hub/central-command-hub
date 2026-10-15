@@ -247,6 +247,23 @@ export class VoiceCommandEngine {
       return;
     }
 
+    // 4. Rainier Basecamp // Overland & Trip Planner Command
+    if (
+      text.includes('trip') ||
+      text.includes('planner') ||
+      text.includes('rainier') ||
+      text.includes('basecamp') ||
+      text.includes('overland') ||
+      text.includes('expedition') ||
+      text.includes('camping')
+    ) {
+      this.speak("Opening Rainier Basecamp Family Overland and Trip Planner.");
+      if (this.handlers.onSelectDeck) {
+        this.handlers.onSelectDeck('trip');
+      }
+      return;
+    }
+
     // 4. Return to Atomic Orbital Core
     if (
       text.includes('core') ||
