@@ -441,14 +441,22 @@ export class AtomicCoreVisualizer {
     const count = (alertInfo && typeof alertInfo.count === 'number') ? alertInfo.count : 0;
     const severity = (alertInfo && alertInfo.severity) ? alertInfo.severity : 'warning';
     const title = (alertInfo && alertInfo.title) ? alertInfo.title : '';
+    const acknowledged = !!(alertInfo && alertInfo.acknowledged);
 
-    el.hasAlert = count > 0;
-    el.alertCount = count;
+    el.hasAlert = count > 0 && !acknowledged;
+    el.alertCount = acknowledged ? 0 : count;
     el.alertSeverity = severity;
+
+    if (!el.hasAlert && el.glowMesh) {
+      el.glowMesh.scale.set(1.0, 1.0, 1.0);
+      if (el.glowMesh.material) {
+        el.glowMesh.material.opacity = 0.5;
+      }
+    }
 
     if (el.domElement) {
       const alertPill = el.domElement.querySelector('.circle-alert-pill');
-      if (count > 0) {
+      if (count > 0 && !acknowledged) {
         el.domElement.classList.add('has-alert');
         el.domElement.classList.remove('alert-severity-critical', 'alert-severity-warning', 'alert-severity-info');
         el.domElement.classList.add(`alert-severity-${severity}`);

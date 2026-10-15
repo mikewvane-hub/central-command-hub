@@ -793,6 +793,20 @@ body::after {
   color: #fff;
 }
 
+.subnav-alert-tag.acknowledged {
+  background: rgba(16, 185, 129, 0.16);
+  border-color: rgba(16, 185, 129, 0.48);
+  color: #34d399;
+  animation: none;
+}
+
+.subnav-alert-tag.acknowledged:hover {
+  background: rgba(16, 185, 129, 0.3);
+  border-color: #10b981;
+  box-shadow: 0 0 14px rgba(16, 185, 129, 0.5);
+  color: #fff;
+}
+
 /* ==================================================================== */
 /* TACTICAL ALERT CENTER MODAL STYLES                                  */
 /* ==================================================================== */

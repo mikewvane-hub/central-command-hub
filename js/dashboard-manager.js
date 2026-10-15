@@ -223,6 +223,16 @@ export class DashboardManager {
       bns3: 'CHECKING'
     };
 
+    // Track seen / acknowledged alerts per deck so indicators disappear once opened
+    const loadSeenAlerts = () => {
+      try {
+        const raw = localStorage.getItem('hub_seen_alerts');
+        if (raw) return new Set(JSON.parse(raw));
+      } catch (e) {}
+      return new Set();
+    };
+    this.seenDecks = loadSeenAlerts();
+
     // Alert & Notification Registry (Real alerts detected across dashboards)
     const loadStoredAlerts = () => {
       let stored = null;
@@ -235,13 +245,15 @@ export class DashboardManager {
       Object.keys(DEFAULT_HUB_ALERTS).forEach(deckId => {
         const def = DEFAULT_HUB_ALERTS[deckId];
         const s = stored?.[deckId];
+        const isSeen = this.seenDecks.has(deckId);
         alerts[deckId] = {
           deckName: def.deckName,
           deckIcon: def.deckIcon,
           count: (s && typeof s.count === 'number') ? s.count : def.count,
           severity: (s && s.severity) ? s.severity : def.severity,
           title: (s && s.title) ? s.title : def.title,
-          items: (s && Array.isArray(s.items) && s.items.length > 0) ? s.items : def.items
+          items: (s && Array.isArray(s.items) && s.items.length > 0) ? s.items : def.items,
+          acknowledged: isSeen
         };
       });
       return alerts;
@@ -328,38 +340,49 @@ export class DashboardManager {
     const pillBtn = document.getElementById('btn-global-alerts');
     if (!badgeEl || !pillBtn) return;
 
-    let total = 0;
+    let unreadTotal = 0;
     let hasCritical = false;
 
-    Object.values(this.alerts).forEach(a => {
-      total += (a.count || 0);
-      if (a.severity === 'critical') hasCritical = true;
+    Object.entries(this.alerts).forEach(([deckId, a]) => {
+      const isAcknowledged = a.acknowledged || this.seenDecks.has(deckId);
+      if (!isAcknowledged && a.count > 0) {
+        unreadTotal += a.count;
+        if (a.severity === 'critical') hasCritical = true;
+      }
     });
 
-    badgeEl.textContent = `${total} ALERTS`;
-    if (hasCritical) {
-      pillBtn.classList.add('has-critical');
-    } else {
-      pillBtn.classList.remove('has-critical');
-    }
-
-    if (total === 0) {
-      badgeEl.textContent = `ALL CLEAR`;
-      pillBtn.style.opacity = '0.6';
-    } else {
+    if (unreadTotal > 0) {
+      badgeEl.textContent = `${unreadTotal} ALERTS`;
       pillBtn.style.opacity = '1';
+      if (hasCritical) {
+        pillBtn.classList.add('has-critical');
+      } else {
+        pillBtn.classList.remove('has-critical');
+      }
+    } else {
+      badgeEl.textContent = `✓ ALL REVIEWED`;
+      pillBtn.classList.remove('has-critical');
+      pillBtn.style.opacity = '0.72';
     }
   }
 
   setAlert(deckId, count, severity = 'warning', title = '', items = null) {
     const existing = this.alerts[deckId] || DEFAULT_HUB_ALERTS[deckId] || { deckName: deckId, deckIcon: '⚡', items: [] };
+    if (count > 0) {
+      this.seenDecks.delete(deckId);
+      try {
+        localStorage.setItem('hub_seen_alerts', JSON.stringify([...this.seenDecks]));
+      } catch (e) {}
+    }
+    const isAcknowledged = this.seenDecks.has(deckId);
     this.alerts[deckId] = {
       deckName: existing.deckName || deckId,
       deckIcon: existing.deckIcon || '⚡',
       count,
       severity,
       title: title || existing.title || '',
-      items: items || existing.items || []
+      items: items || existing.items || [],
+      acknowledged: isAcknowledged
     };
     try {
       localStorage.setItem('hub_alerts', JSON.stringify(this.alerts));
@@ -380,7 +403,9 @@ export class DashboardManager {
     const tabBtn = document.querySelector(`.nav-tab-btn[data-deck="${deckId}"]`);
     if (!tabBtn) return;
     let dot = tabBtn.querySelector('.tab-alert-dot');
-    if (count > 0) {
+    const isAcknowledged = this.alerts[deckId]?.acknowledged || this.seenDecks.has(deckId);
+
+    if (count > 0 && !isAcknowledged) {
       if (!dot) {
         dot = document.createElement('span');
         tabBtn.appendChild(dot);
@@ -412,9 +437,16 @@ export class DashboardManager {
         alertTag = document.createElement('span');
         subnavLeft.appendChild(alertTag);
       }
-      alertTag.className = `subnav-alert-tag ${alertInfo.severity}`;
-      alertTag.innerHTML = `⚠️ ${alertInfo.count} ALERTS (INSPECT)`;
-      alertTag.title = `Click to inspect active alerts & action items for ${alertInfo.deckName || deckId}`;
+      const isAcknowledged = alertInfo.acknowledged || this.seenDecks.has(deckId);
+      if (isAcknowledged) {
+        alertTag.className = 'subnav-alert-tag acknowledged';
+        alertTag.innerHTML = `✓ ${alertInfo.count} ALERTS REVIEWED`;
+        alertTag.title = `Alerts have been seen. Click to inspect again.`;
+      } else {
+        alertTag.className = `subnav-alert-tag ${alertInfo.severity}`;
+        alertTag.innerHTML = `⚠️ ${alertInfo.count} ALERTS (INSPECT)`;
+        alertTag.title = `Click to inspect active alerts & action items for ${alertInfo.deckName || deckId}`;
+      }
       alertTag.onclick = (e) => {
         e.stopPropagation();
         sfx.playAlert();
@@ -423,6 +455,33 @@ export class DashboardManager {
     } else if (alertTag) {
       alertTag.remove();
     }
+  }
+
+  acknowledgeDeckAlerts(deckId) {
+    if (!this.alerts[deckId]) return;
+    this.seenDecks.add(deckId);
+    this.alerts[deckId].acknowledged = true;
+
+    try {
+      localStorage.setItem('hub_seen_alerts', JSON.stringify([...this.seenDecks]));
+    } catch (e) {}
+
+    // 1. Clear 3D sphere blinking and hide alert badge in atomic visualizer
+    if (this.onAlertChange) {
+      this.onAlertChange(deckId, {
+        ...this.alerts[deckId],
+        acknowledged: true
+      });
+    }
+
+    // 2. Remove pulsing alert dot from the top tab
+    this.updateTabAlertIndicator(deckId, 0, 'info');
+
+    // 3. Update subnav tag to acknowledged state
+    this.updateSubnavAlert(deckId);
+
+    // 4. Update tactical header global badge
+    this.updateGlobalAlertsBadge();
   }
 
   openAlertCenter(targetDeckId = 'all') {
@@ -511,6 +570,11 @@ export class DashboardManager {
           ? 'background:rgba(245,158,11,0.22);color:#f59e0b;border:1px solid rgba(245,158,11,0.6);'
           : 'background:rgba(6,182,212,0.22);color:#06b6d4;border:1px solid rgba(6,182,212,0.6);');
 
+      const isAcknowledged = item.acknowledged || this.seenDecks.has(item.deckId);
+      const seenBadge = isAcknowledged
+        ? `<span style="font-family:var(--font-mono);font-size:0.6rem;padding:2px 5px;border-radius:3px;background:rgba(16,185,129,0.18);color:#34d399;border:1px solid rgba(16,185,129,0.4);">✓ SEEN</span>`
+        : '';
+
       return `
         <div class="alert-card alert-${sevClass}" data-deck="${item.deckId}" data-alert-index="${idx}">
           <div class="alert-card-header">
@@ -519,6 +583,7 @@ export class DashboardManager {
               <span style="font-family:var(--font-mono);font-size:0.62rem;font-weight:800;padding:2px 6px;border-radius:3px;${badgeStyle}">
                 ${item.severity.toUpperCase()}
               </span>
+              ${seenBadge}
             </div>
             <span class="alert-card-statute">${item.statute || ''}</span>
           </div>
@@ -567,6 +632,7 @@ export class DashboardManager {
 
   syncAllAlertsToVisualizer() {
     Object.keys(this.alerts).forEach(deckId => {
+      this.alerts[deckId].acknowledged = this.seenDecks.has(deckId);
       const alertInfo = this.alerts[deckId];
       this.updateTabAlertIndicator(deckId, alertInfo.count, alertInfo.severity);
       this.updateSubnavAlert(deckId);
@@ -718,8 +784,9 @@ export class DashboardManager {
       }
     }
 
-    // 4. Lazy Load / Initialize Iframe if necessary
+    // 4. Acknowledge alerts for this dashboard (dismiss subtle sphere blink & tab dot)
     if (deckId !== 'core' && deckId !== 'telemetry') {
+      this.acknowledgeDeckAlerts(deckId);
       this.ensureIframeLoaded(deckId);
     }
 
