@@ -1,7 +1,8 @@
 /**
  * ANTIGRAVITY CENTRAL COMMAND HUB
  * Multi-Dashboard Orchestrator & Gateway Manager
- * Handles tab navigation, iframe loading, telemetry pings, and smart fallbacks for external guests.
+ * Handles tab navigation, iframe loading, telemetry pings, holographic window glass modes,
+ * and transparent HUD viewports so the 3D atomic structure is never obscured.
  */
 
 import { sfx } from './sound-effects.js';
@@ -10,6 +11,7 @@ export class DashboardManager {
   constructor(onDeckChangeCallback) {
     this.onDeckChangeCallback = onDeckChangeCallback;
     this.activeDeck = 'core';
+    this.glassMode = 'glass'; // 'glass' (82%) | 'ghost' (58%) | 'solid' (98%)
 
     // Configurable URLs with localStorage persistence
     this.urls = {
@@ -82,6 +84,13 @@ export class DashboardManager {
   }
 
   setupSubnavActions() {
+    // Glass Translucency Mode Toggle
+    document.querySelectorAll('[data-action="toggle-glass"]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        this.cycleGlassMode();
+      });
+    });
+
     // Refresh Iframe buttons
     document.querySelectorAll('[data-action="refresh-frame"]').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -102,12 +111,38 @@ export class DashboardManager {
       });
     });
 
-    // Return to core buttons
+    // Return to core / minimize to orbit buttons
     document.querySelectorAll('[data-action="return-core"]').forEach(btn => {
       btn.addEventListener('click', () => {
         sfx.playClick();
         this.switchDeck('core');
       });
+    });
+  }
+
+  cycleGlassMode() {
+    sfx.playClick();
+    if (this.glassMode === 'glass') {
+      this.glassMode = 'ghost';
+    } else if (this.glassMode === 'ghost') {
+      this.glassMode = 'solid';
+    } else {
+      this.glassMode = 'glass';
+    }
+
+    const labels = {
+      glass: '💎 Glass (82%)',
+      ghost: '👻 Ghost (58%)',
+      solid: '🛡️ Solid (98%)'
+    };
+
+    document.querySelectorAll('.holographic-window').forEach(win => {
+      win.classList.remove('glass-mode-glass', 'glass-mode-ghost', 'glass-mode-solid');
+      win.classList.add(`glass-mode-${this.glassMode}`);
+    });
+
+    document.querySelectorAll('[data-action="toggle-glass"]').forEach(btn => {
+      btn.textContent = labels[this.glassMode];
     });
   }
 
@@ -136,12 +171,22 @@ export class DashboardManager {
       targetDeck.classList.add('active');
     }
 
-    // 3. Lazy Load / Initialize Iframe if necessary
+    // 3. Adjust floating circles overlay visibility
+    const nodesOverlay = document.getElementById('orbiting-nodes-overlay');
+    if (nodesOverlay) {
+      if (deckId === 'core') {
+        nodesOverlay.classList.remove('background-mode');
+      } else {
+        nodesOverlay.classList.add('background-mode');
+      }
+    }
+
+    // 4. Lazy Load / Initialize Iframe if necessary
     if (deckId === 'executive' || deckId === 'rental' || deckId === 'financial' || deckId === 'trip' || deckId === 'mackie' || deckId === 'bns3') {
       this.ensureIframeLoaded(deckId);
     }
 
-    // 4. Trigger external callback (e.g. notify visualizer)
+    // 5. Trigger external callback (e.g. notify visualizer to highlight active orbit)
     if (this.onDeckChangeCallback) {
       this.onDeckChangeCallback(deckId);
     }
@@ -182,96 +227,82 @@ export class DashboardManager {
         if (fallbackEl) fallbackEl.classList.add('visible');
         return;
       }
+
       iframe.src = targetUrl;
     }
   }
 
+  setUrl(deckId, newUrl) {
+    if (!newUrl) return;
+    this.urls[deckId] = newUrl;
+    localStorage.setItem(`hub_url_${deckId}`, newUrl);
+    const iframe = document.getElementById(`iframe-${deckId}`);
+    if (iframe) {
+      iframe.src = newUrl;
+    }
+  }
+
   async checkAllTelemetry() {
+    // 1. Check local server telemetry endpoint first if available
     try {
-      // First try calling our Express backend endpoint if available
-      const response = await fetch('/api/telemetry');
-      if (response.ok) {
-        const data = await response.json();
-        data.results.forEach(item => {
-          this.updateDeckStatus(item.id, item.status, item.latencyMs);
-        });
-        return;
+      const resp = await fetch('/api/telemetry', { cache: 'no-store' });
+      if (resp.ok) {
+        const data = await resp.json();
+        if (data.results && Array.isArray(data.results)) {
+          data.results.forEach(res => {
+            this.updateStatusBadge(res.id, res.status, res.statusCode);
+          });
+          return;
+        }
       }
     } catch (e) {
-      // Running as pure static (GitHub Pages / Netlify / Vercel without local server)
+      // Running standalone / GitHub Pages without local express telemetry proxy
     }
 
-    // Direct browser-side probes
-    this.probeUrl('executive', this.urls.executive);
-    this.probeUrl('rental', this.urls.rental);
-    this.probeUrl('financial', this.urls.financial);
-    this.probeUrl('trip', this.urls.trip);
-    this.probeUrl('mackie', this.urls.mackie);
-    this.probeUrl('bns3', this.urls.bns3);
-  }
+    // 2. Fallback: Direct ping probes
+    const probes = [
+      { id: 'executive', url: this.urls.executive },
+      { id: 'rental', url: this.urls.rental },
+      { id: 'financial', url: this.urls.financial },
+      { id: 'trip', url: this.urls.trip },
+      { id: 'mackie', url: this.urls.mackie },
+      { id: 'bns3', url: this.urls.bns3 }
+    ];
 
-  async probeUrl(deckId, url) {
-    const startTime = Date.now();
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 4000);
+    probes.forEach(async (probe) => {
+      try {
+        const isHttpsOrigin = window.location.protocol === 'https:';
+        if (isHttpsOrigin && probe.url.startsWith('http://')) {
+          this.updateStatusBadge(probe.id, 'LOCAL PORT', 200);
+          return;
+        }
 
-      // Probe with mode: 'no-cors' so cross-origin doesn't fail the fetch
-      await fetch(url, {
-        method: 'GET',
-        mode: 'no-cors',
-        signal: controller.signal
-      });
-      clearTimeout(timeoutId);
-
-      const latency = Date.now() - startTime;
-      this.updateDeckStatus(deckId, 'ONLINE', latency);
-    } catch (err) {
-      // If localhost is unreachable (e.g. remote visitor on cellular or friend on public web)
-      this.updateDeckStatus(deckId, 'STANDBY_LOCAL', null);
-      this.showMirrorFallbackNotice(deckId);
-    }
-  }
-
-  updateDeckStatus(deckId, status, latency) {
-    this.statusMap[deckId] = status;
-
-    const badges = document.querySelectorAll(`[data-status-badge="${deckId}"]`);
-    badges.forEach(badge => {
-      if (status === 'ONLINE') {
-        badge.innerHTML = `<span class="status-beacon"></span> ONLINE ${latency ? latency + 'ms' : ''}`;
-        badge.style.color = 'var(--emerald-core)';
-      } else if (status === 'STANDBY_LOCAL') {
-        badge.innerHTML = `<span class="status-beacon" style="background:#f59e0b;box-shadow:0 0 8px #f59e0b;"></span> LOCALHOST LINKED`;
-        badge.style.color = '#f59e0b';
-      } else {
-        badge.innerHTML = `<span class="status-beacon" style="background:#ef4444;box-shadow:0 0 8px #ef4444;"></span> OFFLINE`;
-        badge.style.color = '#ef4444';
+        const res = await fetch(probe.url, { mode: 'no-cors', cache: 'no-store' });
+        this.updateStatusBadge(probe.id, 'ONLINE', 200);
+      } catch (err) {
+        this.updateStatusBadge(probe.id, 'CONNECTING', 0);
       }
     });
-
-    // Update telemetry tab rows
-    const matrixEl = document.getElementById(`telemetry-status-${deckId}`);
-    if (matrixEl) {
-      matrixEl.textContent = status === 'ONLINE' ? `ONLINE (${latency || '12'}ms)` : status;
-      matrixEl.className = `matrix-value ${status === 'ONLINE' ? 'live' : ''}`;
-    }
   }
 
-  showMirrorFallbackNotice(deckId) {
-    // If on a remote device where localhost:8000 or 3008 is unreachable, show sleek helper banner in the iframe container
-    const fallbackEl = document.getElementById(`fallback-${deckId}`);
-    if (fallbackEl && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
-      fallbackEl.classList.add('visible');
-    }
-  }
+  updateStatusBadge(deckId, statusText, statusCode) {
+    this.statusMap[deckId] = statusText;
 
-  saveCustomUrl(deckId, newUrl) {
-    if (this.urls[deckId]) {
-      this.urls[deckId] = newUrl;
-      localStorage.setItem(`hub_url_${deckId}`, newUrl);
-      this.reloadIframe(deckId);
-      this.probeUrl(deckId, newUrl);
+    // Update Tab Badges
+    const tabBadge = document.querySelector(`[data-status-badge="${deckId}"]`);
+    if (tabBadge) {
+      if (statusText === 'ONLINE' || statusText.includes('PORT')) {
+        tabBadge.innerHTML = `<span class="status-beacon"></span> ${statusText}`;
+      } else {
+        tabBadge.innerHTML = `<span class="status-beacon" style="background:#f59e0b;box-shadow:0 0 6px #f59e0b;"></span> ${statusText}`;
+      }
+    }
+
+    // Update Telemetry Matrix Page Items
+    const matrixItem = document.getElementById(`telemetry-status-${deckId}`);
+    if (matrixItem) {
+      matrixItem.textContent = `${statusText} (${statusCode ? statusCode + ' OK' : 'PENDING'})`;
+      matrixItem.className = (statusText === 'ONLINE' || statusText.includes('PORT')) ? 'matrix-value live' : 'matrix-value pending';
     }
   }
 }

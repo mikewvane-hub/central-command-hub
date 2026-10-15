@@ -397,42 +397,17 @@ body::after {
   overflow: hidden;
 }
 
-/* Deck Panels */
-.deck-view {
-  position: absolute;
-  inset: 0;
-  display: none;
-  flex-direction: column;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity var(--transition-smooth), transform var(--transition-smooth);
-  transform: scale(0.985);
-  z-index: 10;
-}
-
-.deck-view.active {
-  display: flex;
-  opacity: 1;
-  visibility: visible;
-  transform: scale(1);
-  z-index: 20;
-}
-
-/* Deck 0: Atomic Orbital 3D Core View */
-#deck-atomic-core {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background: radial-gradient(circle at center, #071026 0%, #030712 85%);
-}
-
+/* ==================================================================== */
+/* PERSISTENT 24/7 3D ATOMIC QUANTUM CORE (CANVAS ALWAYS VISIBLE BEHIND) */
+/* ==================================================================== */
 #atomic-canvas-container {
   position: absolute;
   inset: 0;
-  z-index: 5;
+  z-index: 1;
   width: 100%;
   height: 100%;
+  pointer-events: auto;
+  background: radial-gradient(circle at center, #071026 0%, #030712 92%);
 }
 
 #atomic-webgl-canvas {
@@ -441,16 +416,279 @@ body::after {
   display: block;
 }
 
-/* Atomic Orbital HUD Overlays */
-.atomic-hud-overlay {
+/* 3D-Projected Floating Dashboard Circles Overlay */
+.orbiting-nodes-overlay {
   position: absolute;
   inset: 0;
+  z-index: 6;
   pointer-events: none;
-  z-index: 15;
+  overflow: hidden;
+  transition: opacity 0.4s ease;
+}
+
+.orbiting-nodes-overlay.background-mode {
+  opacity: 0.55;
+}
+
+/* Individual 3D Orbiting Dashboard Circle */
+.orbiting-dashboard-circle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 142px;
+  height: 142px;
+  border-radius: 50%;
+  pointer-events: auto;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: box-shadow 0.25s ease, filter 0.25s ease;
+  will-change: transform, opacity;
+  transform-origin: center center;
+}
+
+.orbiting-dashboard-circle:hover {
+  box-shadow: 0 0 40px var(--orbit-color), 0 0 75px rgba(0, 240, 255, 0.45) !important;
+  z-index: 120 !important;
+}
+
+.orbiting-dashboard-circle.dimmed {
+  opacity: 0.25 !important;
+  filter: grayscale(0.65);
+}
+
+.orbiting-dashboard-circle.focused {
+  box-shadow: 0 0 50px var(--orbit-color) !important;
+  opacity: 1 !important;
+}
+
+.circle-halo-ring {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1.5px dashed var(--orbit-color);
+  animation: spin-orbit-ring 14s infinite linear;
+  pointer-events: none;
+}
+
+@keyframes spin-orbit-ring {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.circle-inner-portal {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  background: rgba(3, 7, 18, 0.92);
+  border: 2px solid var(--orbit-color);
+  box-shadow: 0 0 22px var(--orbit-color), inset 0 0 16px rgba(0,0,0,0.85);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.circle-orbit-index {
+  position: absolute;
+  top: 7px;
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  font-weight: 700;
+  color: var(--orbit-color);
+  background: rgba(0,0,0,0.72);
+  padding: 1px 6px;
+  border-radius: 4px;
+  border: 1px solid rgba(255,255,255,0.08);
+  pointer-events: none;
+  z-index: 10;
+  letter-spacing: 0.8px;
+}
+
+.circle-preview-viewport {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #020617;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.circle-mini-iframe {
+  width: 950px;
+  height: 680px;
+  transform: scale(0.155);
+  transform-origin: 0 0;
+  border: none;
+  pointer-events: none;
+  opacity: 0.88;
+  filter: contrast(1.1) brightness(0.95);
+}
+
+.circle-fallback-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  text-align: center;
+  padding: 8px;
+}
+
+.circle-fallback-icon {
+  font-size: 1.8rem;
+  filter: drop-shadow(0 0 10px var(--orbit-color));
+}
+
+.circle-fallback-code {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--orbit-color);
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.circle-touch-shield {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent 32%, rgba(3, 7, 18, 0.78) 100%);
+  pointer-events: none;
+}
+
+.circle-hud-badge {
+  position: absolute;
+  bottom: 8px;
+  background: rgba(3, 7, 18, 0.94);
+  border: 1px solid var(--orbit-color);
+  padding: 2px 7px;
+  border-radius: 12px;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.8px;
+  color: #fff;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  z-index: 10;
+}
+
+.circle-title-text {
+  font-weight: 600;
+}
+
+/* ==================================================================== */
+/* DECK PANELS (FLOATING HOLOGRAPHIC VIEWPORT WINDOWS)                  */
+/* ==================================================================== */
+.deck-view {
+  position: absolute;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 1.75rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: scale(0.97);
+  z-index: 20;
+  pointer-events: none;
+}
+
+.deck-view.active {
+  display: flex;
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+}
+
+/* Deck 0: Atomic Orbital HUD Overlay (Launchpad & Telemetry rows) */
+#deck-core {
+  pointer-events: none;
+  padding: 0;
+  align-items: stretch;
+  justify-content: stretch;
+}
+
+#deck-core .atomic-hud-overlay {
+  position: absolute;
+  inset: 0;
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  pointer-events: none;
+  z-index: 15;
+}
+
+/* Holographic Window Container (Floats above the 3D Atomic Structure) */
+.holographic-window {
+  width: 100%;
+  max-width: 1560px;
+  height: 100%;
+  max-height: calc(100vh - 96px);
+  display: flex;
+  flex-direction: column;
+  border-radius: 18px;
+  border: 1.5px solid rgba(0, 240, 255, 0.45);
+  background: rgba(4, 9, 23, 0.84); /* Default Frosted Glass: Atomic Core visible behind! */
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 0 50px rgba(0, 240, 255, 0.22), 0 25px 60px rgba(0, 0, 0, 0.8);
+  overflow: hidden;
+  pointer-events: auto;
+  position: relative;
+  transition: background 0.3s ease, border-color 0.3s ease, backdrop-filter 0.3s ease, box-shadow 0.3s ease;
+}
+
+.holographic-window.glass-mode-glass {
+  background: rgba(4, 9, 23, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-color: rgba(0, 240, 255, 0.45);
+}
+
+.holographic-window.glass-mode-ghost {
+  background: rgba(3, 7, 18, 0.55);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border-color: rgba(0, 240, 255, 0.7);
+  box-shadow: 0 0 70px rgba(0, 240, 255, 0.35), 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+.holographic-window.glass-mode-solid {
+  background: rgba(3, 7, 18, 0.98);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+.btn-toggle-glass {
+  color: var(--cyan-glow) !important;
+  border-color: rgba(0, 240, 255, 0.45) !important;
+  background: rgba(0, 240, 255, 0.12) !important;
+}
+
+.btn-toggle-glass:hover {
+  background: rgba(0, 240, 255, 0.25) !important;
+  box-shadow: 0 0 14px rgba(0, 240, 255, 0.4);
+}
+
+.btn-minimize {
+  color: #f1f5f9 !important;
+  border-color: rgba(139, 92, 246, 0.4) !important;
+  background: rgba(139, 92, 246, 0.12) !important;
+}
+
+.btn-minimize:hover {
+  background: rgba(139, 92, 246, 0.25) !important;
+  border-color: var(--plasma-violet) !important;
 }
 
 .overlay-interactive {
@@ -737,14 +975,14 @@ body::after {
   width: 100%;
   height: calc(100% - 48px);
   position: relative;
-  background: #030712;
+  background: transparent;
 }
 
 .dashboard-iframe {
   width: 100%;
   height: 100%;
   border: none;
-  background: #ffffff;
+  background: transparent;
   display: block;
 }
 
@@ -1003,6 +1241,125 @@ body::after {
   .tactical-box {
     padding: 0.65rem 1rem;
   }
+}
+
+/* Telemetry Dashboard Container inside Holographic Window */
+.telemetry-dashboard-container {
+  flex: 1;
+  width: 100%;
+  height: calc(100% - 48px);
+  overflow-y: auto;
+  padding: 1.5rem;
+  background: transparent;
+}
+
+.matrix-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.25rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.matrix-card {
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: var(--hud-radius);
+  padding: 1.25rem;
+  backdrop-filter: blur(8px);
+}
+
+.matrix-card-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-display);
+  font-size: 0.88rem;
+  color: var(--cyan-glow);
+  letter-spacing: 1px;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.matrix-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.45rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+}
+
+.matrix-label {
+  color: #94a3b8;
+}
+
+.matrix-value {
+  font-weight: 600;
+  color: #fff;
+}
+
+.matrix-value.live {
+  color: var(--emerald-core);
+}
+
+.matrix-value.pending {
+  color: #f59e0b;
+}
+
+.qr-code-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 1rem 0;
+}
+
+#qr-code-canvas {
+  width: 140px;
+  height: 140px;
+  border-radius: 8px;
+  border: 1px solid var(--border-cyan);
+  background: #fff;
+  padding: 4px;
+}
+
+.qr-subtext {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: #64748b;
+}
+
+.deploy-command-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(3, 7, 18, 0.8);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.copy-btn {
+  background: rgba(6, 182, 212, 0.2);
+  border: 1px solid var(--border-cyan);
+  color: var(--cyan-glow);
+  font-family: var(--font-tech);
+  font-size: 0.75rem;
+  padding: 3px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.copy-btn:hover {
+  background: var(--cyan-glow);
+  color: #030712;
 }
 
 /* Folded Cover Screen / Mobile Screen (Narrow portrait) */

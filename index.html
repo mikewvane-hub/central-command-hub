@@ -141,15 +141,16 @@
     <!-- VIEWPORT DECK CONTAINER -->
     <main class="viewport-workspace">
 
-      <!-- ========================================== -->
-      <!-- DECK 0: ATOMIC ORBITAL 3D CORE VIEW       -->
-      <!-- ========================================== -->
-      <section class="deck-view active" id="deck-atomic-core">
-        
-        <!-- 3D Canvas Mount -->
-        <div id="atomic-canvas-container"></div>
+      <!-- ⚛️ PERSISTENT 24/7 3D ATOMIC QUANTUM CORE (ALWAYS VISIBLE & ANIMATING IN BACKGROUND) -->
+      <div id="atomic-canvas-container"></div>
 
-        <!-- Holographic HUD Overlays on top of 3D Universe -->
+      <!-- 🪐 3D-TRACKED FLOATING DASHBOARD CIRCLES (ORBITING AROUND THE NUCLEUS) -->
+      <div id="orbiting-nodes-overlay" class="orbiting-nodes-overlay"></div>
+
+      <!-- ========================================== -->
+      <!-- DECK 0: ATOMIC ORBITAL HUD OVERLAY        -->
+      <!-- ========================================== -->
+      <section class="deck-view active" id="deck-core">
         <div class="atomic-hud-overlay">
           
           <!-- Top Telemetry Row -->
@@ -192,7 +193,7 @@
               </div>
               <div class="card-footer-actions">
                 <div class="card-voice-hint">Voice: <span>"Open Executive"</span></div>
-                <button class="launch-btn" data-deck="executive">DOCK CORE &rarr;</button>
+                <button class="launch-btn" data-deck="executive">EXPAND DASHBOARD &rarr;</button>
               </div>
             </article>
 
@@ -210,7 +211,7 @@
               </div>
               <div class="card-footer-actions">
                 <div class="card-voice-hint">Voice: <span>"Open Rental Ops"</span></div>
-                <button class="launch-btn" data-deck="rental">DOCK CORE &rarr;</button>
+                <button class="launch-btn" data-deck="rental">EXPAND DASHBOARD &rarr;</button>
               </div>
             </article>
 
@@ -228,7 +229,7 @@
               </div>
               <div class="card-footer-actions">
                 <div class="card-voice-hint">Voice: <span>"Wealth Console"</span></div>
-                <button class="launch-btn" data-deck="financial">DOCK CORE &rarr;</button>
+                <button class="launch-btn" data-deck="financial">EXPAND DASHBOARD &rarr;</button>
               </div>
             </article>
 
@@ -246,7 +247,7 @@
               </div>
               <div class="card-footer-actions">
                 <div class="card-voice-hint">Voice: <span>"Open Trip Planner"</span></div>
-                <button class="launch-btn" data-deck="trip">DOCK CORE &rarr;</button>
+                <button class="launch-btn" data-deck="trip">EXPAND DASHBOARD &rarr;</button>
               </div>
             </article>
 
@@ -264,7 +265,7 @@
               </div>
               <div class="card-footer-actions">
                 <div class="card-voice-hint">Voice: <span>"Open Mackie's Board"</span></div>
-                <button class="launch-btn" data-deck="mackie">DOCK CORE &rarr;</button>
+                <button class="launch-btn" data-deck="mackie">EXPAND DASHBOARD &rarr;</button>
               </div>
             </article>
 
@@ -282,7 +283,7 @@
               </div>
               <div class="card-footer-actions">
                 <div class="card-voice-hint">Voice: <span>"Open S3 Readiness"</span></div>
-                <button class="launch-btn" data-deck="bns3">DOCK CORE &rarr;</button>
+                <button class="launch-btn" data-deck="bns3">EXPAND DASHBOARD &rarr;</button>
               </div>
             </article>
 
@@ -296,22 +297,25 @@
       <!-- DECK 1: EXECUTIVE BRIEFING                -->
       <!-- ========================================== -->
       <section class="deck-view" id="deck-executive">
-        <div class="dashboard-subnav">
-          <div class="subnav-left">
-            <span class="subnav-status" data-status-badge="executive">
-              <span class="status-beacon"></span> ONLINE
-            </span>
-            <strong>EXECUTIVE DAILY BRIEFING // CHIEF OF STAFF COMMAND</strong>
-            <span class="subnav-url">daily-executive-dashboard.onrender.com</span>
+        <div class="holographic-window">
+          <div class="dashboard-subnav">
+            <div class="subnav-left">
+              <span class="subnav-status" data-status-badge="executive">
+                <span class="status-beacon"></span> ONLINE
+              </span>
+              <strong>EXECUTIVE DAILY BRIEFING // CHIEF OF STAFF COMMAND</strong>
+              <span class="subnav-url">daily-executive-dashboard.onrender.com</span>
+            </div>
+            <div class="subnav-actions">
+              <button class="subnav-btn btn-toggle-glass" data-action="toggle-glass" title="Toggle Glass / Ghost Translucency to see Atomic Core behind">💎 Glass (82%)</button>
+              <button class="subnav-btn" data-action="refresh-frame" data-deck="executive">🔄 Refresh</button>
+              <button class="subnav-btn" data-action="popout-tab" data-deck="executive">↗️ New Tab</button>
+              <button class="subnav-btn btn-minimize" data-action="return-core" title="Minimize back into Orbiting Circle">⚛️ Minimize to Orbit</button>
+            </div>
           </div>
-          <div class="subnav-actions">
-            <button class="subnav-btn" data-action="refresh-frame" data-deck="executive">🔄 Refresh</button>
-            <button class="subnav-btn" data-action="popout-tab" data-deck="executive">↗️ Open in New Tab</button>
-            <button class="subnav-btn" data-action="return-core">⚛️ Return to Core</button>
+          <div class="dashboard-iframe-container">
+            <iframe id="iframe-executive" class="dashboard-iframe" src="about:blank" title="Executive Briefing"></iframe>
           </div>
-        </div>
-        <div class="dashboard-iframe-container">
-          <iframe id="iframe-executive" class="dashboard-iframe" src="about:blank" title="Executive Briefing"></iframe>
         </div>
       </section>
 
@@ -319,34 +323,37 @@
       <!-- DECK 2: ANTIGRAVITY RENTAL & JBLM TERMINAL -->
       <!-- ========================================== -->
       <section class="deck-view" id="deck-rental">
-        <div class="dashboard-subnav">
-          <div class="subnav-left">
-            <span class="subnav-status" data-status-badge="rental">
-              <span class="status-beacon"></span> ONLINE
-            </span>
-            <strong>ANTIGRAVITY // DUAL-ENGINE WA RENTAL &amp; JBLM ACQUISITION</strong>
-            <span class="subnav-url">http://127.0.0.1:8000/</span>
+        <div class="holographic-window">
+          <div class="dashboard-subnav">
+            <div class="subnav-left">
+              <span class="subnav-status" data-status-badge="rental">
+                <span class="status-beacon"></span> ONLINE
+              </span>
+              <strong>ANTIGRAVITY // DUAL-ENGINE WA RENTAL &amp; JBLM ACQUISITION</strong>
+              <span class="subnav-url">http://127.0.0.1:8000/</span>
+            </div>
+            <div class="subnav-actions">
+              <button class="subnav-btn btn-toggle-glass" data-action="toggle-glass" title="Toggle Glass / Ghost Translucency to see Atomic Core behind">💎 Glass (82%)</button>
+              <button class="subnav-btn" data-action="refresh-frame" data-deck="rental">🔄 Refresh</button>
+              <button class="subnav-btn" data-action="popout-tab" data-deck="rental">↗️ New Tab</button>
+              <button class="subnav-btn btn-minimize" data-action="return-core" title="Minimize back into Orbiting Circle">⚛️ Minimize to Orbit</button>
+            </div>
           </div>
-          <div class="subnav-actions">
-            <button class="subnav-btn" data-action="refresh-frame" data-deck="rental">🔄 Refresh</button>
-            <button class="subnav-btn" data-action="popout-tab" data-deck="rental">↗️ Open in New Tab</button>
-            <button class="subnav-btn" data-action="return-core">⚛️ Return to Core</button>
-          </div>
-        </div>
-        <div class="dashboard-iframe-container">
-          <iframe id="iframe-rental" class="dashboard-iframe" src="about:blank" title="Antigravity Rental Operations"></iframe>
+          <div class="dashboard-iframe-container">
+            <iframe id="iframe-rental" class="dashboard-iframe" src="about:blank" title="Antigravity Rental Operations"></iframe>
 
-          <!-- Smart Fallback Mirror for External Guests -->
-          <div class="fallback-mirror-container" id="fallback-rental">
-            <div class="mirror-card">
-              <div class="mirror-icon">🏡</div>
-              <h3 class="mirror-title">ANTIGRAVITY DUAL-ENGINE TERMINAL</h3>
-              <p class="mirror-body">
-                This dashboard is linked to your local engine on port <code>8000</code>. When viewing remotely from your phone or sharing this link with colleagues, you can connect your free Cloudflare Tunnel or launch your local engine.
-              </p>
-              <div class="mirror-actions">
-                <button class="launch-btn" onclick="window.open('http://127.0.0.1:8000/', '_blank')">Open Local Port 8000</button>
-                <button class="launch-btn" onclick="document.getElementById('deck-telemetry').classList.add('active');document.getElementById('deck-rental').classList.remove('active');">Setup 24/7 Cloud Tunnel</button>
+            <!-- Smart Fallback Mirror for External Guests -->
+            <div class="fallback-mirror-container" id="fallback-rental">
+              <div class="mirror-card">
+                <div class="mirror-icon">🏡</div>
+                <h3 class="mirror-title">ANTIGRAVITY DUAL-ENGINE TERMINAL</h3>
+                <p class="mirror-body">
+                  This dashboard is linked to your local engine on port <code>8000</code>. When viewing remotely from your phone or sharing this link with colleagues, you can connect your free Cloudflare Tunnel or launch your local engine.
+                </p>
+                <div class="mirror-actions">
+                  <button class="launch-btn" onclick="window.open('http://127.0.0.1:8000/', '_blank')">Open Local Port 8000</button>
+                  <button class="launch-btn" onclick="document.getElementById('deck-telemetry').classList.add('active');document.getElementById('deck-rental').classList.remove('active');">Setup 24/7 Cloud Tunnel</button>
+                </div>
               </div>
             </div>
           </div>
@@ -357,34 +364,37 @@
       <!-- DECK 3: FINANCIAL COMMAND CENTER           -->
       <!-- ========================================== -->
       <section class="deck-view" id="deck-financial">
-        <div class="dashboard-subnav">
-          <div class="subnav-left">
-            <span class="subnav-status" data-status-badge="financial">
-              <span class="status-beacon"></span> ONLINE
-            </span>
-            <strong>FINANCIAL COMMAND CENTER // EXECUTIVE WEALTH CONSOLE</strong>
-            <span class="subnav-url">http://localhost:3008/</span>
+        <div class="holographic-window">
+          <div class="dashboard-subnav">
+            <div class="subnav-left">
+              <span class="subnav-status" data-status-badge="financial">
+                <span class="status-beacon"></span> ONLINE
+              </span>
+              <strong>FINANCIAL COMMAND CENTER // EXECUTIVE WEALTH CONSOLE</strong>
+              <span class="subnav-url">http://localhost:3008/</span>
+            </div>
+            <div class="subnav-actions">
+              <button class="subnav-btn btn-toggle-glass" data-action="toggle-glass" title="Toggle Glass / Ghost Translucency to see Atomic Core behind">💎 Glass (82%)</button>
+              <button class="subnav-btn" data-action="refresh-frame" data-deck="financial">🔄 Refresh</button>
+              <button class="subnav-btn" data-action="popout-tab" data-deck="financial">↗️ New Tab</button>
+              <button class="subnav-btn btn-minimize" data-action="return-core" title="Minimize back into Orbiting Circle">⚛️ Minimize to Orbit</button>
+            </div>
           </div>
-          <div class="subnav-actions">
-            <button class="subnav-btn" data-action="refresh-frame" data-deck="financial">🔄 Refresh</button>
-            <button class="subnav-btn" data-action="popout-tab" data-deck="financial">↗️ Open in New Tab</button>
-            <button class="subnav-btn" data-action="return-core">⚛️ Return to Core</button>
-          </div>
-        </div>
-        <div class="dashboard-iframe-container">
-          <iframe id="iframe-financial" class="dashboard-iframe" src="about:blank" title="Financial Wealth Console"></iframe>
+          <div class="dashboard-iframe-container">
+            <iframe id="iframe-financial" class="dashboard-iframe" src="about:blank" title="Financial Wealth Console"></iframe>
 
-          <!-- Smart Fallback Mirror for External Guests -->
-          <div class="fallback-mirror-container" id="fallback-financial">
-            <div class="mirror-card">
-              <div class="mirror-icon">📈</div>
-              <h3 class="mirror-title">EXECUTIVE WEALTH CONSOLE</h3>
-              <p class="mirror-body">
-                This dashboard is linked to your local Next.js wealth engine on port <code>3008</code>. When accessing on local Wi-Fi or directly on this PC, the dashboard streams live automatically.
-              </p>
-              <div class="mirror-actions">
-                <button class="launch-btn" onclick="window.open('http://localhost:3008/', '_blank')">Open Local Port 3008</button>
-                <button class="launch-btn" onclick="document.getElementById('deck-telemetry').classList.add('active');document.getElementById('deck-financial').classList.remove('active');">Setup 24/7 Cloud Tunnel</button>
+            <!-- Smart Fallback Mirror for External Guests -->
+            <div class="fallback-mirror-container" id="fallback-financial">
+              <div class="mirror-card">
+                <div class="mirror-icon">📈</div>
+                <h3 class="mirror-title">EXECUTIVE WEALTH CONSOLE</h3>
+                <p class="mirror-body">
+                  This dashboard is linked to your local Next.js wealth engine on port <code>3008</code>. When accessing on local Wi-Fi or directly on this PC, the dashboard streams live automatically.
+                </p>
+                <div class="mirror-actions">
+                  <button class="launch-btn" onclick="window.open('http://localhost:3008/', '_blank')">Open Local Port 3008</button>
+                  <button class="launch-btn" onclick="document.getElementById('deck-telemetry').classList.add('active');document.getElementById('deck-financial').classList.remove('active');">Setup 24/7 Cloud Tunnel</button>
+                </div>
               </div>
             </div>
           </div>
@@ -395,22 +405,25 @@
       <!-- DECK 4: RAINIER BASECAMP OVERLAND PLANNER -->
       <!-- ========================================== -->
       <section class="deck-view" id="deck-trip">
-        <div class="dashboard-subnav">
-          <div class="subnav-left">
-            <span class="subnav-status" data-status-badge="trip">
-              <span class="status-beacon"></span> ONLINE
-            </span>
-            <strong>RAINIER BASECAMP // FAMILY OVERLAND &amp; TRIP PLANNER</strong>
-            <span class="subnav-url">daily-executive-dashboard.onrender.com/trip-planner/</span>
+        <div class="holographic-window">
+          <div class="dashboard-subnav">
+            <div class="subnav-left">
+              <span class="subnav-status" data-status-badge="trip">
+                <span class="status-beacon"></span> ONLINE
+              </span>
+              <strong>RAINIER BASECAMP // FAMILY OVERLAND &amp; TRIP PLANNER</strong>
+              <span class="subnav-url">daily-executive-dashboard.onrender.com/trip-planner/</span>
+            </div>
+            <div class="subnav-actions">
+              <button class="subnav-btn btn-toggle-glass" data-action="toggle-glass" title="Toggle Glass / Ghost Translucency to see Atomic Core behind">💎 Glass (82%)</button>
+              <button class="subnav-btn" data-action="refresh-frame" data-deck="trip">🔄 Refresh</button>
+              <button class="subnav-btn" data-action="popout-tab" data-deck="trip">↗️ New Tab</button>
+              <button class="subnav-btn btn-minimize" data-action="return-core" title="Minimize back into Orbiting Circle">⚛️ Minimize to Orbit</button>
+            </div>
           </div>
-          <div class="subnav-actions">
-            <button class="subnav-btn" data-action="refresh-frame" data-deck="trip">🔄 Refresh</button>
-            <button class="subnav-btn" data-action="popout-tab" data-deck="trip">↗️ Open in New Tab</button>
-            <button class="subnav-btn" data-action="return-core">⚛️ Return to Core</button>
+          <div class="dashboard-iframe-container">
+            <iframe id="iframe-trip" class="dashboard-iframe" src="about:blank" title="Rainier Basecamp Overland Planner"></iframe>
           </div>
-        </div>
-        <div class="dashboard-iframe-container">
-          <iframe id="iframe-trip" class="dashboard-iframe" src="about:blank" title="Rainier Basecamp Overland Planner"></iframe>
         </div>
       </section>
 
@@ -418,22 +431,25 @@
       <!-- DECK 5: MACKIE'S DAILY BOARD              -->
       <!-- ========================================== -->
       <section class="deck-view" id="deck-mackie">
-        <div class="dashboard-subnav">
-          <div class="subnav-left">
-            <span class="subnav-status" data-status-badge="mackie">
-              <span class="status-beacon"></span> ONLINE
-            </span>
-            <strong>MACKIE'S DAILY BOARD // CALENDAR, MEAL PLANNER &amp; GROCERY LIST</strong>
-            <span class="subnav-url">daily-executive-dashboard.onrender.com/mackie/</span>
+        <div class="holographic-window">
+          <div class="dashboard-subnav">
+            <div class="subnav-left">
+              <span class="subnav-status" data-status-badge="mackie">
+                <span class="status-beacon"></span> ONLINE
+              </span>
+              <strong>MACKIE'S DAILY BOARD // CALENDAR, MEAL PLANNER &amp; GROCERY LIST</strong>
+              <span class="subnav-url">daily-executive-dashboard.onrender.com/mackie/</span>
+            </div>
+            <div class="subnav-actions">
+              <button class="subnav-btn btn-toggle-glass" data-action="toggle-glass" title="Toggle Glass / Ghost Translucency to see Atomic Core behind">💎 Glass (82%)</button>
+              <button class="subnav-btn" data-action="refresh-frame" data-deck="mackie">🔄 Refresh</button>
+              <button class="subnav-btn" data-action="popout-tab" data-deck="mackie">↗️ New Tab</button>
+              <button class="subnav-btn btn-minimize" data-action="return-core" title="Minimize back into Orbiting Circle">⚛️ Minimize to Orbit</button>
+            </div>
           </div>
-          <div class="subnav-actions">
-            <button class="subnav-btn" data-action="refresh-frame" data-deck="mackie">🔄 Refresh</button>
-            <button class="subnav-btn" data-action="popout-tab" data-deck="mackie">↗️ Open in New Tab</button>
-            <button class="subnav-btn" data-action="return-core">⚛️ Return to Core</button>
+          <div class="dashboard-iframe-container">
+            <iframe id="iframe-mackie" class="dashboard-iframe" src="about:blank" title="Mackie's Daily Board"></iframe>
           </div>
-        </div>
-        <div class="dashboard-iframe-container">
-          <iframe id="iframe-mackie" class="dashboard-iframe" src="about:blank" title="Mackie's Daily Board"></iframe>
         </div>
       </section>
 
@@ -441,34 +457,37 @@
       <!-- DECK 6: 110TH CM BN S3 READINESS MATRIX   -->
       <!-- ========================================== -->
       <section class="deck-view" id="deck-bns3">
-        <div class="dashboard-subnav">
-          <div class="subnav-left">
-            <span class="subnav-status" data-status-badge="bns3">
-              <span class="status-beacon"></span> ONLINE
-            </span>
-            <strong>110TH CBRN BN (&quot;IRON DRAGONS&quot;) // TRAIN-PRO S3 READINESS &amp; METL MATRIX</strong>
-            <span class="subnav-url">http://localhost:3011/</span>
+        <div class="holographic-window">
+          <div class="dashboard-subnav">
+            <div class="subnav-left">
+              <span class="subnav-status" data-status-badge="bns3">
+                <span class="status-beacon"></span> ONLINE
+              </span>
+              <strong>110TH CBRN BN (&quot;IRON DRAGONS&quot;) // TRAIN-PRO S3 READINESS &amp; METL MATRIX</strong>
+              <span class="subnav-url">http://localhost:3011/</span>
+            </div>
+            <div class="subnav-actions">
+              <button class="subnav-btn btn-toggle-glass" data-action="toggle-glass" title="Toggle Glass / Ghost Translucency to see Atomic Core behind">💎 Glass (82%)</button>
+              <button class="subnav-btn" data-action="refresh-frame" data-deck="bns3">🔄 Refresh</button>
+              <button class="subnav-btn" data-action="popout-tab" data-deck="bns3">↗️ New Tab</button>
+              <button class="subnav-btn btn-minimize" data-action="return-core" title="Minimize back into Orbiting Circle">⚛️ Minimize to Orbit</button>
+            </div>
           </div>
-          <div class="subnav-actions">
-            <button class="subnav-btn" data-action="refresh-frame" data-deck="bns3">🔄 Refresh</button>
-            <button class="subnav-btn" data-action="popout-tab" data-deck="bns3">↗️ Open in New Tab</button>
-            <button class="subnav-btn" data-action="return-core">⚛️ Return to Core</button>
-          </div>
-        </div>
-        <div class="dashboard-iframe-container">
-          <iframe id="iframe-bns3" class="dashboard-iframe" src="about:blank" title="110th BN S3 Readiness Matrix"></iframe>
+          <div class="dashboard-iframe-container">
+            <iframe id="iframe-bns3" class="dashboard-iframe" src="about:blank" title="110th BN S3 Readiness Matrix"></iframe>
 
-          <!-- Fallback Mirror for External Guests -->
-          <div class="fallback-mirror-container" id="fallback-bns3">
-            <div class="mirror-card">
-              <div class="mirror-icon">🐉</div>
-              <h3 class="mirror-title">110TH CM BN S3 READINESS MATRIX</h3>
-              <p class="mirror-body">
-                This dashboard is linked to your local TRAIN-PRO S3 engine on port <code>3011</code>. When accessing on your local PC or Wi-Fi, the military readiness dashboard streams live automatically.
-              </p>
-              <div class="mirror-actions">
-                <button class="launch-btn" onclick="window.open('http://localhost:3011/', '_blank')">Open Local Port 3011</button>
-                <button class="launch-btn" onclick="document.getElementById('deck-telemetry').classList.add('active');document.getElementById('deck-bns3').classList.remove('active');">Setup 24/7 Cloud Tunnel</button>
+            <!-- Fallback Mirror for External Guests -->
+            <div class="fallback-mirror-container" id="fallback-bns3">
+              <div class="mirror-card">
+                <div class="mirror-icon">🐉</div>
+                <h3 class="mirror-title">110TH CM BN S3 READINESS MATRIX</h3>
+                <p class="mirror-body">
+                  This dashboard is linked to your local TRAIN-PRO S3 engine on port <code>3011</code>. When accessing on your local PC or Wi-Fi, the military readiness dashboard streams live automatically.
+                </p>
+                <div class="mirror-actions">
+                  <button class="launch-btn" onclick="window.open('http://localhost:3011/', '_blank')">Open Local Port 3011</button>
+                  <button class="launch-btn" onclick="document.getElementById('deck-telemetry').classList.add('active');document.getElementById('deck-bns3').classList.remove('active');">Setup 24/7 Cloud Tunnel</button>
+                </div>
               </div>
             </div>
           </div>
@@ -479,6 +498,19 @@
       <!-- DECK 7: SYSTEM TELEMETRY & 24/7 CLOUD HOST -->
       <!-- ========================================== -->
       <section class="deck-view" id="deck-telemetry">
+        <div class="holographic-window">
+          <div class="dashboard-subnav">
+            <div class="subnav-left">
+              <span class="subnav-status">
+                <span class="status-beacon"></span> ONLINE
+              </span>
+              <strong>SYSTEM TELEMETRY // 24/7 CLOUD FLEET ARCHITECTURE</strong>
+            </div>
+            <div class="subnav-actions">
+              <button class="subnav-btn btn-toggle-glass" data-action="toggle-glass" title="Toggle Glass / Ghost Translucency to see Atomic Core behind">💎 Glass (82%)</button>
+              <button class="subnav-btn btn-minimize" data-action="return-core" title="Minimize back into Orbiting Circle">⚛️ Minimize to Orbit</button>
+            </div>
+          </div>
         <div class="telemetry-dashboard-container">
           
           <div class="matrix-grid">
@@ -610,6 +642,7 @@
             </div>
           </div>
 
+        </div>
         </div>
       </section>
 

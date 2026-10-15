@@ -25,9 +25,11 @@ class CentralCommandHubApp {
 
     // 1. Initialize Dashboard Manager
     this.dashboardMgr = new DashboardManager((deckId) => {
-      // When deck changes, update visualizer or UI
-      if (deckId === 'core' && this.visualizer) {
-        this.visualizer.onResize();
+      if (this.visualizer) {
+        this.visualizer.setFocusDeck(deckId);
+        if (deckId === 'core') {
+          this.visualizer.onResize();
+        }
       }
     });
 
