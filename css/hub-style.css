@@ -761,8 +761,17 @@ body::after {
 }
 
 /* Deprecated: In-sphere alert pills removed to keep visuals 100% clean and pristine */
-.circle-alert-pill {
+.circle-alert-pill,
+.orbit-alert-badge,
+.circle-alert-badge,
+.orbiting-dashboard-circle .circle-alert-pill,
+.orbiting-dashboard-circle [class*="alert-pill"],
+.orbiting-dashboard-circle [class*="circle-alert"],
+.circle-inner-portal .circle-alert-pill {
   display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 @keyframes pulse-dot {

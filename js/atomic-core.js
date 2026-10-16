@@ -408,11 +408,11 @@ export class AtomicCoreVisualizer {
 
   adjustCameraForAspect(aspect) {
     if (aspect < 1.1) {
-      // Square or tall aspect ratio (Z Fold 8 Inner unfolded or mobile)
-      this.camera.position.set(0, 3.2, 27.0);
+      // Square or tall aspect ratio (Z Fold 8 Inner unfolded or mobile) - Zoom out to fit all orbits
+      this.camera.position.set(0, 1.0, 38.0);
     } else {
-      // Laptop widescreen
-      this.camera.position.set(0, 2.2, 22.5);
+      // Laptop widescreen - Zoomed out so Red Orbit 05 and Gold Orbit 06 fit comfortably with full screen margin
+      this.camera.position.set(0, 0.5, 31.5);
     }
     this.camera.lookAt(0, 0, 0);
   }
@@ -640,6 +640,10 @@ export class AtomicCoreVisualizer {
     }
 
     if (el.domElement) {
+      // Defensively purge any existing or cached pills/badges from the orbital circle
+      const obsoletePills = el.domElement.querySelectorAll('.circle-alert-pill, [class*="alert-pill"], [class*="circle-alert"]');
+      obsoletePills.forEach(p => p.remove());
+
       if (count > 0 && !acknowledged) {
         el.domElement.classList.add('has-alert');
         el.domElement.classList.remove('alert-severity-critical', 'alert-severity-warning', 'alert-severity-info');
@@ -681,19 +685,50 @@ export class AtomicCoreVisualizer {
     window.addEventListener('mousemove', (e) => onMove(e.clientX, e.clientY));
     window.addEventListener('mouseup', onEnd);
 
+    // Touch Support: Single finger rotate, two fingers pinch-to-zoom
+    let initialPinchDist = 0;
+    let initialZoomZ = 0;
+
     dom.addEventListener('touchstart', (e) => {
       if (e.touches.length === 1) {
         onStart(e.touches[0].clientX, e.touches[0].clientY);
+      } else if (e.touches.length === 2) {
+        this.isDragging = false;
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        initialPinchDist = Math.hypot(dx, dy);
+        initialZoomZ = this.camera.position.z;
       }
     }, { passive: true });
 
     window.addEventListener('touchmove', (e) => {
       if (e.touches.length === 1) {
         onMove(e.touches[0].clientX, e.touches[0].clientY);
+      } else if (e.touches.length === 2 && initialPinchDist > 0) {
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        const currentDist = Math.hypot(dx, dy);
+        const factor = initialPinchDist / Math.max(10, currentDist);
+        this.camera.position.z = Math.max(18.0, Math.min(55.0, initialZoomZ * factor));
       }
     }, { passive: true });
 
-    window.addEventListener('touchend', onEnd);
+    window.addEventListener('touchend', (e) => {
+      if (e.touches.length < 2) {
+        initialPinchDist = 0;
+      }
+      if (e.touches.length === 0) {
+        onEnd();
+      }
+    }, { passive: true });
+
+    // Smooth Mouse Wheel Zoom (User can zoom out/in anytime)
+    dom.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const zoomStep = e.deltaY * 0.015;
+      const currentZ = this.camera.position.z;
+      this.camera.position.z = Math.max(18.0, Math.min(55.0, currentZ + zoomStep));
+    }, { passive: false });
 
     // Click on 3D Electron Meshes
     dom.addEventListener('click', (e) => {
