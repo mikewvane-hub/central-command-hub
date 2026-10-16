@@ -99,6 +99,7 @@ body::after {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 0.85rem;
   padding: 0 1.25rem;
   position: relative;
   z-index: 100;
@@ -121,6 +122,8 @@ body::after {
   align-items: center;
   gap: 0.85rem;
   cursor: pointer;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .brand-emblem {
@@ -160,15 +163,17 @@ body::after {
 .brand-text-block {
   display: flex;
   flex-direction: column;
+  white-space: nowrap;
 }
 
 .brand-title {
   font-family: var(--font-display);
   font-size: 1.05rem;
   font-weight: 800;
-  letter-spacing: 2.5px;
+  letter-spacing: 2px;
   color: #fff;
   text-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+  white-space: nowrap;
 }
 
 .brand-subtitle {
@@ -194,30 +199,37 @@ body::after {
 .nav-deck {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 4px;
+  justify-content: flex-start;
+  gap: 3px;
   background: rgba(15, 23, 42, 0.7);
-  padding: 3px 6px;
-  border-radius: 10px;
+  padding: 2px 4px;
+  border-radius: 8px;
   border: 1px solid rgba(59, 130, 246, 0.28);
   flex: 0 1 auto;
   min-width: 0;
   max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.nav-deck::-webkit-scrollbar {
+  display: none;
 }
 
 .nav-tab-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.32rem;
+  gap: 0.25rem;
   background: transparent;
   border: 1px solid transparent;
   color: #94a3b8;
   font-family: var(--font-tech);
-  font-size: 0.76rem;
+  font-size: 0.72rem;
   font-weight: 600;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.4px;
   text-transform: uppercase;
-  padding: 4px 8px;
+  padding: 3px 6px;
   border-radius: 6px;
   cursor: pointer;
   transition: all var(--transition-fast);
@@ -685,7 +697,7 @@ body::after {
   }
 }
 
-/* Sphere Alert State */
+/* Sphere Alert State - Subtle Perimeter and Beacon Pulse (Pristine Visuals Inside) */
 .orbiting-dashboard-circle.has-alert {
   animation: sphere-subtle-blink 2.4s infinite ease-in-out;
 }
@@ -700,6 +712,17 @@ body::after {
 
 .orbiting-dashboard-circle.has-alert .circle-halo-ring {
   animation: spin-orbit-ring 14s infinite linear, halo-alert-pulse 2.4s infinite ease-in-out;
+}
+
+.orbiting-dashboard-circle.has-alert .circle-hud-badge .status-beacon {
+  background: #f59e0b;
+  box-shadow: 0 0 7px #f59e0b;
+  animation: pulse-dot 1.4s infinite ease-in-out;
+}
+
+.orbiting-dashboard-circle.has-alert.alert-severity-critical .circle-hud-badge .status-beacon {
+  background: #ef4444;
+  box-shadow: 0 0 8px #ef4444;
 }
 
 /* Global Header Alerts Pill */
@@ -737,65 +760,14 @@ body::after {
   animation: pulse-red 2s infinite ease-in-out;
 }
 
-/* Subtle Alert Pill on the Orbiting Sphere */
+/* Deprecated: In-sphere alert pills removed to keep visuals 100% clean and pristine */
 .circle-alert-pill {
-  position: absolute;
-  top: 7px;
-  right: 7px;
-  background: rgba(245, 158, 11, 0.94);
-  border: 1px solid #fff;
-  border-radius: 12px;
-  padding: 2px 7px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  z-index: 25;
-  font-family: var(--font-mono);
-  font-size: 0.62rem;
-  font-weight: 800;
-  color: #030712;
-  letter-spacing: 0.5px;
-  animation: alert-badge-soft-pulse 2.4s infinite ease-in-out;
-  pointer-events: auto;
-  cursor: pointer;
-  box-shadow: 0 0 10px rgba(245, 158, 11, 0.7);
-  transition: transform 0.18s ease;
-}
-
-.circle-alert-pill:hover {
-  transform: scale(1.08);
-}
-
-.circle-alert-pill .alert-pulse-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #030712;
-  box-shadow: 0 0 4px #030712;
-  display: inline-block;
-  animation: pulse-dot 1.4s infinite ease-in-out;
-}
-
-.circle-alert-pill.severity-critical .alert-pulse-dot {
-  background: #fff;
-  box-shadow: 0 0 4px #fff;
+  display: none !important;
 }
 
 @keyframes pulse-dot {
   0%, 100% { opacity: 0.7; }
   50% { opacity: 1; }
-}
-
-.circle-alert-pill.severity-critical {
-  background: rgba(239, 68, 68, 0.95);
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 0 12px rgba(239, 68, 68, 0.85);
-}
-
-.circle-alert-pill .alert-icon {
-  font-size: 0.65rem;
-  line-height: 1;
 }
 
 /* Subnav Alert Badge - Interactive Clickable Button */
@@ -1833,6 +1805,15 @@ body::after {
 }
 
 /* Responsive Horizontal Tab Fitting for Laptops and Z Fold 8 Inner Display */
+@media screen and (max-width: 1440px) {
+  .device-selector {
+    display: none;
+  }
+  .voice-hud-pill .voice-label {
+    display: none;
+  }
+}
+
 @media screen and (max-width: 1200px) {
   .brand-subtitle {
     display: none;

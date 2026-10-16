@@ -24,19 +24,18 @@ const SPHERE_VISUAL_SVGS = {
         </defs>
         <circle cx="74" cy="74" r="74" fill="url(#grad-exec)"/>
         <!-- Radar Grid & Orbits -->
-        <circle cx="74" cy="70" r="48" fill="none" stroke="#00f0ff" stroke-width="0.75" stroke-dasharray="3,3" opacity="0.45"/>
-        <circle cx="74" cy="70" r="34" fill="none" stroke="#00f0ff" stroke-width="0.5" opacity="0.35"/>
-        <line x1="74" y1="22" x2="74" y2="118" stroke="#00f0ff" stroke-width="0.5" stroke-dasharray="2,4" opacity="0.4"/>
-        <line x1="26" y1="70" x2="122" y2="70" stroke="#00f0ff" stroke-width="0.5" stroke-dasharray="2,4" opacity="0.4"/>
-        <ellipse cx="74" cy="70" rx="42" ry="16" fill="none" stroke="#38bdf8" stroke-width="0.85" opacity="0.6" transform="rotate(-15 74 70)"/>
-        <ellipse cx="74" cy="70" rx="16" ry="42" fill="none" stroke="#38bdf8" stroke-width="0.85" opacity="0.6" transform="rotate(-15 74 70)"/>
+        <circle cx="74" cy="72" r="50" fill="none" stroke="#00f0ff" stroke-width="0.75" stroke-dasharray="3,3" opacity="0.45"/>
+        <circle cx="74" cy="72" r="35" fill="none" stroke="#00f0ff" stroke-width="0.5" opacity="0.35"/>
+        <line x1="74" y1="22" x2="74" y2="122" stroke="#00f0ff" stroke-width="0.5" stroke-dasharray="2,4" opacity="0.4"/>
+        <line x1="24" y1="72" x2="124" y2="72" stroke="#00f0ff" stroke-width="0.5" stroke-dasharray="2,4" opacity="0.4"/>
+        <ellipse cx="74" cy="72" rx="44" ry="17" fill="none" stroke="#38bdf8" stroke-width="0.85" opacity="0.6" transform="rotate(-15 74 72)"/>
+        <ellipse cx="74" cy="72" rx="17" ry="44" fill="none" stroke="#38bdf8" stroke-width="0.85" opacity="0.6" transform="rotate(-15 74 72)"/>
         <!-- Executive Commander Star -->
-        <g filter="url(#glow-cyan)" transform="translate(74,68)">
-          <polygon points="0,-20 6,-6 20,-6 9,5 13,19 0,10 -13,19 -9,5 -20,-6 -6,-6" fill="#00f0ff" opacity="0.95"/>
-          <polygon points="0,-14 4,-4 14,-4 6,4 9,14 0,7 -9,14 -6,4 -14,-4 -4,-4" fill="#ffffff" opacity="0.95"/>
-          <circle cx="0" cy="0" r="4" fill="#020617"/>
+        <g filter="url(#glow-cyan)" transform="translate(74,72)">
+          <polygon points="0,-22 6.5,-7 22,-7 10,5 14.5,21 0,11 -14.5,21 -10,5 -22,-7 -6.5,-7" fill="#00f0ff" opacity="0.95"/>
+          <polygon points="0,-15 4.5,-4.5 15,-4.5 6.5,4.5 10,15 0,7.5 -10,15 -6.5,4.5 -15,-4.5 -4.5,-4.5" fill="#ffffff" opacity="0.95"/>
+          <circle cx="0" cy="0" r="4.5" fill="#020617"/>
         </g>
-        <text x="74" y="104" text-anchor="middle" fill="#93c5fd" font-family="'JetBrains Mono', monospace" font-size="6.2" font-weight="700" letter-spacing="1">STRATEGIC COMMAND • C2</text>
       </svg>
     </div>
   `,
@@ -56,22 +55,21 @@ const SPHERE_VISUAL_SVGS = {
         </defs>
         <circle cx="74" cy="74" r="74" fill="url(#grad-rent)"/>
         <!-- Blueprint Grid -->
-        <line x1="26" y1="46" x2="122" y2="46" stroke="#0284c7" stroke-width="0.5" stroke-dasharray="2,3" opacity="0.35"/>
-        <line x1="26" y1="70" x2="122" y2="70" stroke="#0284c7" stroke-width="0.5" stroke-dasharray="2,3" opacity="0.35"/>
-        <line x1="26" y1="94" x2="122" y2="94" stroke="#0284c7" stroke-width="0.5" stroke-dasharray="2,3" opacity="0.35"/>
-        <line x1="50" y1="26" x2="50" y2="114" stroke="#0284c7" stroke-width="0.5" stroke-dasharray="2,3" opacity="0.35"/>
-        <line x1="74" y1="26" x2="74" y2="114" stroke="#0284c7" stroke-width="0.5" stroke-dasharray="2,3" opacity="0.35"/>
-        <line x1="98" y1="26" x2="98" y2="114" stroke="#0284c7" stroke-width="0.5" stroke-dasharray="2,3" opacity="0.35"/>
+        <line x1="24" y1="46" x2="124" y2="46" stroke="#0284c7" stroke-width="0.5" stroke-dasharray="2,3" opacity="0.35"/>
+        <line x1="24" y1="72" x2="124" y2="72" stroke="#0284c7" stroke-width="0.5" stroke-dasharray="2,3" opacity="0.35"/>
+        <line x1="24" y1="98" x2="124" y2="98" stroke="#0284c7" stroke-width="0.5" stroke-dasharray="2,3" opacity="0.35"/>
+        <line x1="48" y1="24" x2="48" y2="120" stroke="#0284c7" stroke-width="0.5" stroke-dasharray="2,3" opacity="0.35"/>
+        <line x1="74" y1="24" x2="74" y2="120" stroke="#0284c7" stroke-width="0.5" stroke-dasharray="2,3" opacity="0.35"/>
+        <line x1="100" y1="24" x2="100" y2="120" stroke="#0284c7" stroke-width="0.5" stroke-dasharray="2,3" opacity="0.35"/>
         <!-- Architectural Residence Facade -->
-        <g filter="url(#glow-sky)" transform="translate(74,68)">
-          <polygon points="0,-24 28,-4 28,18 -28,18 -28,-4" fill="rgba(14, 165, 233, 0.28)" stroke="#38bdf8" stroke-width="1.8"/>
-          <polyline points="-20,-4 0,-20 20,-4" fill="none" stroke="#7dd3fc" stroke-width="2"/>
-          <rect x="-20" y="0" width="11" height="10" rx="1.5" fill="#38bdf8" opacity="0.9"/>
-          <rect x="9" y="0" width="11" height="10" rx="1.5" fill="#38bdf8" opacity="0.9"/>
-          <path d="M-5,18 L-5,7 Q-5,4 0,4 Q5,4 5,7 L5,18 Z" fill="#0284c7"/>
-          <circle cx="0" cy="9.5" r="1.5" fill="#e0f2fe"/>
+        <g filter="url(#glow-sky)" transform="translate(74,72)">
+          <polygon points="0,-26 30,-5 30,20 -30,20 -30,-5" fill="rgba(14, 165, 233, 0.28)" stroke="#38bdf8" stroke-width="2"/>
+          <polyline points="-22,-5 0,-22 22,-5" fill="none" stroke="#7dd3fc" stroke-width="2.2"/>
+          <rect x="-22" y="-1" width="12" height="11" rx="1.5" fill="#38bdf8" opacity="0.9"/>
+          <rect x="10" y="-1" width="12" height="11" rx="1.5" fill="#38bdf8" opacity="0.9"/>
+          <path d="M-6,20 L-6,8 Q-6,4 0,4 Q6,4 6,8 L6,20 Z" fill="#0284c7"/>
+          <circle cx="0" cy="11" r="1.8" fill="#e0f2fe"/>
         </g>
-        <text x="74" y="104" text-anchor="middle" fill="#bae6fd" font-family="'JetBrains Mono', monospace" font-size="6.2" font-weight="700" letter-spacing="1">JBLM REALTY • 100% LEASED</text>
       </svg>
     </div>
   `,
@@ -91,26 +89,25 @@ const SPHERE_VISUAL_SVGS = {
         </defs>
         <circle cx="74" cy="74" r="74" fill="url(#grad-fin)"/>
         <!-- Candlestick chart columns -->
-        <g opacity="0.5" stroke="#c084fc">
-          <line x1="36" y1="50" x2="36" y2="84" stroke-width="0.8"/>
-          <rect x="33" y="56" width="6" height="20" rx="1" fill="#8b5cf6"/>
-          <line x1="50" y1="44" x2="50" y2="80" stroke-width="0.8"/>
-          <rect x="47" y="48" width="6" height="22" rx="1" fill="#10b981"/>
-          <line x1="64" y1="38" x2="64" y2="76" stroke-width="0.8"/>
-          <rect x="61" y="42" width="6" height="24" rx="1" fill="#8b5cf6"/>
-          <line x1="78" y1="34" x2="78" y2="74" stroke-width="0.8"/>
-          <rect x="75" y="36" width="6" height="28" rx="1" fill="#10b981"/>
-          <line x1="92" y1="28" x2="92" y2="70" stroke-width="0.8"/>
-          <rect x="89" y="30" width="6" height="30" rx="1" fill="#10b981"/>
-          <line x1="106" y1="22" x2="106" y2="64" stroke-width="0.8"/>
-          <rect x="103" y="24" width="6" height="30" rx="1" fill="#c084fc"/>
+        <g opacity="0.55" stroke="#c084fc">
+          <line x1="34" y1="52" x2="34" y2="90" stroke-width="0.8"/>
+          <rect x="31" y="58" width="6" height="22" rx="1" fill="#8b5cf6"/>
+          <line x1="49" y1="46" x2="49" y2="86" stroke-width="0.8"/>
+          <rect x="46" y="50" width="6" height="24" rx="1" fill="#10b981"/>
+          <line x1="64" y1="38" x2="64" y2="80" stroke-width="0.8"/>
+          <rect x="61" y="42" width="6" height="26" rx="1" fill="#8b5cf6"/>
+          <line x1="79" y1="32" x2="79" y2="76" stroke-width="0.8"/>
+          <rect x="76" y="36" width="6" height="30" rx="1" fill="#10b981"/>
+          <line x1="94" y1="26" x2="94" y2="72" stroke-width="0.8"/>
+          <rect x="91" y="28" width="6" height="32" rx="1" fill="#10b981"/>
+          <line x1="109" y1="20" x2="109" y2="66" stroke-width="0.8"/>
+          <rect x="106" y="22" width="6" height="32" rx="1" fill="#c084fc"/>
         </g>
-        <path d="M26,88 Q50,82 68,64 T108,34 T124,20" fill="none" stroke="#10b981" stroke-width="2.4" filter="url(#glow-purple)"/>
-        <g filter="url(#glow-purple)" transform="translate(74,66)">
-          <polygon points="0,-16 16,0 0,16 -16,0" fill="rgba(139, 92, 246, 0.5)" stroke="#c084fc" stroke-width="2"/>
-          <text x="0" y="5" text-anchor="middle" fill="#34d399" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="800">$</text>
+        <path d="M24,92 Q48,86 68,66 T110,34 T126,18" fill="none" stroke="#10b981" stroke-width="2.6" filter="url(#glow-purple)"/>
+        <g filter="url(#glow-purple)" transform="translate(74,70)">
+          <polygon points="0,-18 18,0 0,18 -18,0" fill="rgba(139, 92, 246, 0.5)" stroke="#c084fc" stroke-width="2.2"/>
+          <text x="0" y="6" text-anchor="middle" fill="#34d399" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="800">$</text>
         </g>
-        <text x="74" y="104" text-anchor="middle" fill="#34d399" font-family="'JetBrains Mono', monospace" font-size="6.2" font-weight="700" letter-spacing="1">GROWTH MATRIX • 24/7 YIELD</text>
       </svg>
     </div>
   `,
@@ -129,21 +126,20 @@ const SPHERE_VISUAL_SVGS = {
           </filter>
         </defs>
         <circle cx="74" cy="74" r="74" fill="url(#grad-trip)"/>
-        <ellipse cx="74" cy="70" rx="54" ry="44" fill="none" stroke="#059669" stroke-width="0.5" stroke-dasharray="3,3" opacity="0.4"/>
-        <ellipse cx="74" cy="70" rx="40" ry="32" fill="none" stroke="#059669" stroke-width="0.5" stroke-dasharray="2,2" opacity="0.4"/>
+        <ellipse cx="74" cy="72" rx="55" ry="45" fill="none" stroke="#059669" stroke-width="0.5" stroke-dasharray="3,3" opacity="0.4"/>
+        <ellipse cx="74" cy="72" rx="40" ry="32" fill="none" stroke="#059669" stroke-width="0.5" stroke-dasharray="2,2" opacity="0.4"/>
         <!-- Mount Rainier Silhouette -->
-        <g filter="url(#glow-emerald)" transform="translate(74,68)">
-          <polygon points="0,-28 36,18 -36,18" fill="rgba(16, 185, 129, 0.28)" stroke="#10b981" stroke-width="2"/>
-          <polygon points="0,-28 14,-10 7,-8 0,-15 -7,-8 -14,-10" fill="#ecfdf5" opacity="0.95"/>
-          <polyline points="0,-15 5,6 9,18" stroke="#34d399" stroke-width="1.3" fill="none"/>
-          <polyline points="-5,-10 -9,4 -18,18" stroke="#34d399" stroke-width="1.3" fill="none"/>
-          <polygon points="-26,18 -21,8 -17,18" fill="#047857"/>
-          <polygon points="-17,18 -13,10 -9,18" fill="#059669"/>
-          <polygon points="13,18 17,10 21,18" fill="#059669"/>
-          <polygon points="19,18 23,8 27,18" fill="#047857"/>
+        <g filter="url(#glow-emerald)" transform="translate(74,72)">
+          <polygon points="0,-30 38,20 -38,20" fill="rgba(16, 185, 129, 0.28)" stroke="#10b981" stroke-width="2.2"/>
+          <polygon points="0,-30 15,-11 7.5,-9 0,-16 -7.5,-9 -15,-11" fill="#ecfdf5" opacity="0.95"/>
+          <polyline points="0,-16 5.5,6 10,20" stroke="#34d399" stroke-width="1.4" fill="none"/>
+          <polyline points="-5.5,-11 -10,4 -20,20" stroke="#34d399" stroke-width="1.4" fill="none"/>
+          <polygon points="-28,20 -23,9 -18,20" fill="#047857"/>
+          <polygon points="-18,20 -14,11 -10,20" fill="#059669"/>
+          <polygon points="14,20 18,11 22,20" fill="#059669"/>
+          <polygon points="20,20 24,9 28,20" fill="#047857"/>
         </g>
-        <circle cx="74" cy="38" r="3" fill="#6ee7b7" filter="url(#glow-emerald)"/>
-        <text x="74" y="104" text-anchor="middle" fill="#6ee7b7" font-family="'JetBrains Mono', monospace" font-size="6.2" font-weight="700" letter-spacing="1">14,411 FT • SUMMIT EXPEDITION</text>
+        <circle cx="74" cy="40" r="3.2" fill="#6ee7b7" filter="url(#glow-emerald)"/>
       </svg>
     </div>
   `,
@@ -162,18 +158,17 @@ const SPHERE_VISUAL_SVGS = {
           </filter>
         </defs>
         <circle cx="74" cy="74" r="74" fill="url(#grad-mackie)"/>
-        <circle cx="74" cy="70" r="48" fill="none" stroke="#fb7185" stroke-width="0.6" stroke-dasharray="3,3" opacity="0.45"/>
-        <g filter="url(#glow-rose)" transform="translate(74,68)">
-          <rect x="-26" y="-20" width="52" height="36" rx="4" fill="rgba(244, 63, 94, 0.28)" stroke="#f43f5e" stroke-width="1.8"/>
-          <rect x="-26" y="-20" width="52" height="10" rx="3" fill="#be123c"/>
-          <rect x="-16" y="-24" width="3" height="6" rx="1.5" fill="#fecdd3"/>
-          <rect x="0" y="-24" width="3" height="6" rx="1.5" fill="#fecdd3"/>
-          <rect x="16" y="-24" width="3" height="6" rx="1.5" fill="#fecdd3"/>
-          <path d="M0,7 C-5,2 -10,-2 -10,-7 C-10,-11 -6,-14 -1,-14 C2,-14 5,-12 6,-9 C7,-12 10,-14 13,-14 C18,-14 22,-11 22,-7 C22,-2 17,2 12,7 L6,13 Z" transform="scale(0.6) translate(-6,-2)" fill="#f43f5e" opacity="0.95"/>
-          <path d="M-13,4 L-9,8 L-3,0" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-          <path d="M7,4 L11,8 L17,0" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <circle cx="74" cy="72" r="50" fill="none" stroke="#fb7185" stroke-width="0.6" stroke-dasharray="3,3" opacity="0.45"/>
+        <g filter="url(#glow-rose)" transform="translate(74,72)">
+          <rect x="-28" y="-22" width="56" height="40" rx="5" fill="rgba(244, 63, 94, 0.28)" stroke="#f43f5e" stroke-width="2"/>
+          <rect x="-28" y="-22" width="56" height="11" rx="4" fill="#be123c"/>
+          <rect x="-18" y="-26" width="3.5" height="7" rx="1.5" fill="#fecdd3"/>
+          <rect x="0" y="-26" width="3.5" height="7" rx="1.5" fill="#fecdd3"/>
+          <rect x="18" y="-26" width="3.5" height="7" rx="1.5" fill="#fecdd3"/>
+          <path d="M0,8 C-6,2 -12,-2 -12,-8 C-12,-12 -7,-15 -1,-15 C2,-15 5,-13 6,-10 C7,-13 10,-15 13,-15 C19,-15 24,-12 24,-8 C24,-2 18,2 12,8 L6,14 Z" transform="scale(0.65) translate(-6,-2)" fill="#f43f5e" opacity="0.95"/>
+          <path d="M-14,5 L-10,9 L-3,1" stroke="#34d399" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M8,5 L12,9 L19,1" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
         </g>
-        <text x="74" y="104" text-anchor="middle" fill="#fecdd3" font-family="'JetBrains Mono', monospace" font-size="6.2" font-weight="700" letter-spacing="1">MEALS &amp; DAILY ITINERARY</text>
       </svg>
     </div>
   `,
@@ -192,24 +187,23 @@ const SPHERE_VISUAL_SVGS = {
           </filter>
         </defs>
         <circle cx="74" cy="74" r="74" fill="url(#grad-bns3)"/>
-        <circle cx="74" cy="70" r="48" fill="none" stroke="#f59e0b" stroke-width="0.75" stroke-dasharray="4,4" opacity="0.45"/>
-        <circle cx="74" cy="70" r="34" fill="none" stroke="#d97706" stroke-width="0.5" opacity="0.35"/>
-        <line x1="74" y1="20" x2="74" y2="34" stroke="#f59e0b" stroke-width="1.3"/>
-        <line x1="74" y1="106" x2="74" y2="120" stroke="#f59e0b" stroke-width="1.3"/>
-        <line x1="20" y1="70" x2="34" y2="70" stroke="#f59e0b" stroke-width="1.3"/>
-        <line x1="114" y1="70" x2="128" y2="70" stroke="#f59e0b" stroke-width="1.3"/>
+        <circle cx="74" cy="72" r="50" fill="none" stroke="#f59e0b" stroke-width="0.75" stroke-dasharray="4,4" opacity="0.45"/>
+        <circle cx="74" cy="72" r="35" fill="none" stroke="#d97706" stroke-width="0.5" opacity="0.35"/>
+        <line x1="74" y1="20" x2="74" y2="35" stroke="#f59e0b" stroke-width="1.3"/>
+        <line x1="74" y1="109" x2="74" y2="124" stroke="#f59e0b" stroke-width="1.3"/>
+        <line x1="20" y1="72" x2="35" y2="72" stroke="#f59e0b" stroke-width="1.3"/>
+        <line x1="113" y1="72" x2="128" y2="72" stroke="#f59e0b" stroke-width="1.3"/>
         <!-- Golden Iron Dragon Insignia -->
-        <g filter="url(#glow-gold)" transform="translate(74,68)">
-          <polygon points="0,-24 24,-11 24,11 0,24 -24,11 -24,-11" fill="rgba(245, 158, 11, 0.28)" stroke="#f59e0b" stroke-width="2"/>
-          <path d="M-15,6 C-15,-3 -11,-13 0,-19 C7,-16 15,-17 17,-13 C19,-9 15,-5 17,0 C18,4 13,13 2,17 C-7,15 -15,11 -15,6 Z" fill="#d97706" stroke="#fbbf24" stroke-width="1.3"/>
-          <path d="M-7,-17 L-2,-25 L2,-18 L8,-23 L9,-15" stroke="#fbbf24" stroke-width="1.6" fill="none"/>
-          <circle cx="2" cy="-9" r="1.9" fill="#ffffff" filter="url(#glow-gold)"/>
-          <circle cx="2" cy="-9" r="0.9" fill="#ef4444"/>
-          <path d="M10,-2 Q19,-4 25,0 Q19,6 10,4 Z" fill="#fb923c" opacity="0.95"/>
-          <line x1="-9" y1="2" x2="7" y2="18" stroke="#fbbf24" stroke-width="1.5"/>
-          <line x1="7" y1="2" x2="-9" y2="18" stroke="#fbbf24" stroke-width="1.5"/>
+        <g filter="url(#glow-gold)" transform="translate(74,72)">
+          <polygon points="0,-26 26,-12 26,12 0,26 -26,12 -26,-12" fill="rgba(245, 158, 11, 0.28)" stroke="#f59e0b" stroke-width="2.2"/>
+          <path d="M-16,7 C-16,-3 -12,-14 0,-21 C8,-18 16,-19 19,-14 C21,-10 16,-5 19,0 C20,4 14,14 2,19 C-8,16 -16,12 -16,7 Z" fill="#d97706" stroke="#fbbf24" stroke-width="1.4"/>
+          <path d="M-8,-19 L-2,-27 L2,-20 L9,-25 L10,-16" stroke="#fbbf24" stroke-width="1.8" fill="none"/>
+          <circle cx="2" cy="-10" r="2.1" fill="#ffffff" filter="url(#glow-gold)"/>
+          <circle cx="2" cy="-10" r="1" fill="#ef4444"/>
+          <path d="M11,-2 Q21,-4 28,0 Q21,7 11,5 Z" fill="#fb923c" opacity="0.95"/>
+          <line x1="-10" y1="2" x2="8" y2="20" stroke="#fbbf24" stroke-width="1.6"/>
+          <line x1="8" y1="2" x2="-10" y2="20" stroke="#fbbf24" stroke-width="1.6"/>
         </g>
-        <text x="74" y="104" text-anchor="middle" fill="#fde68a" font-family="'JetBrains Mono', monospace" font-size="6.2" font-weight="700" letter-spacing="1">IRON DRAGONS • FM 7-0 S-3</text>
       </svg>
     </div>
   `
@@ -586,10 +580,6 @@ export class AtomicCoreVisualizer {
             <span class="status-beacon"></span>
             <span class="circle-title-text">${dash.shortTitle}</span>
           </div>
-          <div class="circle-alert-pill" style="display: none;">
-            <span class="alert-pulse-dot"></span>
-            <span class="alert-count">0</span>
-          </div>
         </div>
       `;
 
@@ -600,15 +590,6 @@ export class AtomicCoreVisualizer {
           this.onNodeSelect(dash.id);
         }
       });
-
-      const alertPillEl = circleEl.querySelector('.circle-alert-pill');
-      if (alertPillEl) {
-        alertPillEl.addEventListener('click', (e) => {
-          e.stopPropagation();
-          sfx.playAlert();
-          window.dispatchEvent(new CustomEvent('OPEN_HUB_ALERTS', { detail: { deckId: dash.id } }));
-        });
-      }
 
       circleEl.addEventListener('mouseenter', () => {
         sfx.playHover();
@@ -659,23 +640,12 @@ export class AtomicCoreVisualizer {
     }
 
     if (el.domElement) {
-      const alertPill = el.domElement.querySelector('.circle-alert-pill');
       if (count > 0 && !acknowledged) {
         el.domElement.classList.add('has-alert');
         el.domElement.classList.remove('alert-severity-critical', 'alert-severity-warning', 'alert-severity-info');
         el.domElement.classList.add(`alert-severity-${severity}`);
-        if (alertPill) {
-          alertPill.style.display = 'flex';
-          alertPill.className = `circle-alert-pill severity-${severity}`;
-          const countSpan = alertPill.querySelector('.alert-count');
-          if (countSpan) countSpan.textContent = count;
-          alertPill.setAttribute('title', `${count} active notification(s): ${title}`);
-        }
       } else {
         el.domElement.classList.remove('has-alert', 'alert-severity-critical', 'alert-severity-warning', 'alert-severity-info');
-        if (alertPill) {
-          alertPill.style.display = 'none';
-        }
       }
     }
   }
