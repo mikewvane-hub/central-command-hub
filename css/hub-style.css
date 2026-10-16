@@ -760,14 +760,15 @@ body::after {
   animation: pulse-red 2s infinite ease-in-out;
 }
 
-/* Deprecated: In-sphere alert pills removed to keep visuals 100% clean and pristine */
+/* Deprecated: In-sphere alert pills removed to keep visuals 100% clean and pristine across all spheres */
 .circle-alert-pill,
 .orbit-alert-badge,
 .circle-alert-badge,
 .orbiting-dashboard-circle .circle-alert-pill,
 .orbiting-dashboard-circle [class*="alert-pill"],
 .orbiting-dashboard-circle [class*="circle-alert"],
-.circle-inner-portal .circle-alert-pill {
+.circle-inner-portal .circle-alert-pill,
+.circle-inner-portal [class*="alert-pill"] {
   display: none !important;
   visibility: hidden !important;
   opacity: 0 !important;

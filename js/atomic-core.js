@@ -583,6 +583,10 @@ export class AtomicCoreVisualizer {
         </div>
       `;
 
+      // Defensively purge any legacy or injected alert pills across all spheres
+      const obsoletePills = circleEl.querySelectorAll('.circle-alert-pill, [class*="alert-pill"], [class*="circle-alert"], .circle-alert-badge');
+      obsoletePills.forEach(p => p.remove());
+
       circleEl.addEventListener('click', (e) => {
         e.stopPropagation();
         sfx.playWarp();
