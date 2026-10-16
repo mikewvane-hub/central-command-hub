@@ -7,6 +7,214 @@
 
 import { sfx } from './sound-effects.js';
 
+const SPHERE_VISUAL_SVGS = {
+  executive: `
+    <div class="circle-graphic-container circle-graphic-executive">
+      <svg viewBox="0 0 148 148" class="circle-svg-art" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="grad-exec" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#0284c7" stop-opacity="0.55"/>
+            <stop offset="65%" stop-color="#082f49" stop-opacity="0.9"/>
+            <stop offset="100%" stop-color="#020617" stop-opacity="0.98"/>
+          </radialGradient>
+          <filter id="glow-cyan" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="2.2" result="blur"/>
+            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+          </filter>
+        </defs>
+        <circle cx="74" cy="74" r="74" fill="url(#grad-exec)"/>
+        <!-- Radar Grid & Orbits -->
+        <circle cx="74" cy="70" r="48" fill="none" stroke="#00f0ff" stroke-width="0.75" stroke-dasharray="3,3" opacity="0.45"/>
+        <circle cx="74" cy="70" r="34" fill="none" stroke="#00f0ff" stroke-width="0.5" opacity="0.35"/>
+        <line x1="74" y1="22" x2="74" y2="118" stroke="#00f0ff" stroke-width="0.5" stroke-dasharray="2,4" opacity="0.4"/>
+        <line x1="26" y1="70" x2="122" y2="70" stroke="#00f0ff" stroke-width="0.5" stroke-dasharray="2,4" opacity="0.4"/>
+        <ellipse cx="74" cy="70" rx="42" ry="16" fill="none" stroke="#38bdf8" stroke-width="0.85" opacity="0.6" transform="rotate(-15 74 70)"/>
+        <ellipse cx="74" cy="70" rx="16" ry="42" fill="none" stroke="#38bdf8" stroke-width="0.85" opacity="0.6" transform="rotate(-15 74 70)"/>
+        <!-- Executive Commander Star -->
+        <g filter="url(#glow-cyan)" transform="translate(74,68)">
+          <polygon points="0,-20 6,-6 20,-6 9,5 13,19 0,10 -13,19 -9,5 -20,-6 -6,-6" fill="#00f0ff" opacity="0.95"/>
+          <polygon points="0,-14 4,-4 14,-4 6,4 9,14 0,7 -9,14 -6,4 -14,-4 -4,-4" fill="#ffffff" opacity="0.95"/>
+          <circle cx="0" cy="0" r="4" fill="#020617"/>
+        </g>
+        <text x="74" y="104" text-anchor="middle" fill="#93c5fd" font-family="'JetBrains Mono', monospace" font-size="6.2" font-weight="700" letter-spacing="1">STRATEGIC COMMAND • C2</text>
+      </svg>
+    </div>
+  `,
+  rental: `
+    <div class="circle-graphic-container circle-graphic-rental">
+      <svg viewBox="0 0 148 148" class="circle-svg-art" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="grad-rent" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#0369a1" stop-opacity="0.55"/>
+            <stop offset="65%" stop-color="#082f49" stop-opacity="0.9"/>
+            <stop offset="100%" stop-color="#020617" stop-opacity="0.98"/>
+          </radialGradient>
+          <filter id="glow-sky" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="2.2" result="blur"/>
+            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+          </filter>
+        </defs>
+        <circle cx="74" cy="74" r="74" fill="url(#grad-rent)"/>
+        <!-- Blueprint Grid -->
+        <line x1="26" y1="46" x2="122" y2="46" stroke="#0284c7" stroke-width="0.5" stroke-dasharray="2,3" opacity="0.35"/>
+        <line x1="26" y1="70" x2="122" y2="70" stroke="#0284c7" stroke-width="0.5" stroke-dasharray="2,3" opacity="0.35"/>
+        <line x1="26" y1="94" x2="122" y2="94" stroke="#0284c7" stroke-width="0.5" stroke-dasharray="2,3" opacity="0.35"/>
+        <line x1="50" y1="26" x2="50" y2="114" stroke="#0284c7" stroke-width="0.5" stroke-dasharray="2,3" opacity="0.35"/>
+        <line x1="74" y1="26" x2="74" y2="114" stroke="#0284c7" stroke-width="0.5" stroke-dasharray="2,3" opacity="0.35"/>
+        <line x1="98" y1="26" x2="98" y2="114" stroke="#0284c7" stroke-width="0.5" stroke-dasharray="2,3" opacity="0.35"/>
+        <!-- Architectural Residence Facade -->
+        <g filter="url(#glow-sky)" transform="translate(74,68)">
+          <polygon points="0,-24 28,-4 28,18 -28,18 -28,-4" fill="rgba(14, 165, 233, 0.28)" stroke="#38bdf8" stroke-width="1.8"/>
+          <polyline points="-20,-4 0,-20 20,-4" fill="none" stroke="#7dd3fc" stroke-width="2"/>
+          <rect x="-20" y="0" width="11" height="10" rx="1.5" fill="#38bdf8" opacity="0.9"/>
+          <rect x="9" y="0" width="11" height="10" rx="1.5" fill="#38bdf8" opacity="0.9"/>
+          <path d="M-5,18 L-5,7 Q-5,4 0,4 Q5,4 5,7 L5,18 Z" fill="#0284c7"/>
+          <circle cx="0" cy="9.5" r="1.5" fill="#e0f2fe"/>
+        </g>
+        <text x="74" y="104" text-anchor="middle" fill="#bae6fd" font-family="'JetBrains Mono', monospace" font-size="6.2" font-weight="700" letter-spacing="1">JBLM REALTY • 100% LEASED</text>
+      </svg>
+    </div>
+  `,
+  financial: `
+    <div class="circle-graphic-container circle-graphic-financial">
+      <svg viewBox="0 0 148 148" class="circle-svg-art" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="grad-fin" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#581c87" stop-opacity="0.55"/>
+            <stop offset="65%" stop-color="#2e1065" stop-opacity="0.9"/>
+            <stop offset="100%" stop-color="#020617" stop-opacity="0.98"/>
+          </radialGradient>
+          <filter id="glow-purple" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="2.2" result="blur"/>
+            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+          </filter>
+        </defs>
+        <circle cx="74" cy="74" r="74" fill="url(#grad-fin)"/>
+        <!-- Candlestick chart columns -->
+        <g opacity="0.5" stroke="#c084fc">
+          <line x1="36" y1="50" x2="36" y2="84" stroke-width="0.8"/>
+          <rect x="33" y="56" width="6" height="20" rx="1" fill="#8b5cf6"/>
+          <line x1="50" y1="44" x2="50" y2="80" stroke-width="0.8"/>
+          <rect x="47" y="48" width="6" height="22" rx="1" fill="#10b981"/>
+          <line x1="64" y1="38" x2="64" y2="76" stroke-width="0.8"/>
+          <rect x="61" y="42" width="6" height="24" rx="1" fill="#8b5cf6"/>
+          <line x1="78" y1="34" x2="78" y2="74" stroke-width="0.8"/>
+          <rect x="75" y="36" width="6" height="28" rx="1" fill="#10b981"/>
+          <line x1="92" y1="28" x2="92" y2="70" stroke-width="0.8"/>
+          <rect x="89" y="30" width="6" height="30" rx="1" fill="#10b981"/>
+          <line x1="106" y1="22" x2="106" y2="64" stroke-width="0.8"/>
+          <rect x="103" y="24" width="6" height="30" rx="1" fill="#c084fc"/>
+        </g>
+        <path d="M26,88 Q50,82 68,64 T108,34 T124,20" fill="none" stroke="#10b981" stroke-width="2.4" filter="url(#glow-purple)"/>
+        <g filter="url(#glow-purple)" transform="translate(74,66)">
+          <polygon points="0,-16 16,0 0,16 -16,0" fill="rgba(139, 92, 246, 0.5)" stroke="#c084fc" stroke-width="2"/>
+          <text x="0" y="5" text-anchor="middle" fill="#34d399" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="800">$</text>
+        </g>
+        <text x="74" y="104" text-anchor="middle" fill="#34d399" font-family="'JetBrains Mono', monospace" font-size="6.2" font-weight="700" letter-spacing="1">GROWTH MATRIX • 24/7 YIELD</text>
+      </svg>
+    </div>
+  `,
+  trip: `
+    <div class="circle-graphic-container circle-graphic-trip">
+      <svg viewBox="0 0 148 148" class="circle-svg-art" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="grad-trip" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#065f46" stop-opacity="0.55"/>
+            <stop offset="65%" stop-color="#064e3b" stop-opacity="0.9"/>
+            <stop offset="100%" stop-color="#020617" stop-opacity="0.98"/>
+          </radialGradient>
+          <filter id="glow-emerald" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="2.2" result="blur"/>
+            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+          </filter>
+        </defs>
+        <circle cx="74" cy="74" r="74" fill="url(#grad-trip)"/>
+        <ellipse cx="74" cy="70" rx="54" ry="44" fill="none" stroke="#059669" stroke-width="0.5" stroke-dasharray="3,3" opacity="0.4"/>
+        <ellipse cx="74" cy="70" rx="40" ry="32" fill="none" stroke="#059669" stroke-width="0.5" stroke-dasharray="2,2" opacity="0.4"/>
+        <!-- Mount Rainier Silhouette -->
+        <g filter="url(#glow-emerald)" transform="translate(74,68)">
+          <polygon points="0,-28 36,18 -36,18" fill="rgba(16, 185, 129, 0.28)" stroke="#10b981" stroke-width="2"/>
+          <polygon points="0,-28 14,-10 7,-8 0,-15 -7,-8 -14,-10" fill="#ecfdf5" opacity="0.95"/>
+          <polyline points="0,-15 5,6 9,18" stroke="#34d399" stroke-width="1.3" fill="none"/>
+          <polyline points="-5,-10 -9,4 -18,18" stroke="#34d399" stroke-width="1.3" fill="none"/>
+          <polygon points="-26,18 -21,8 -17,18" fill="#047857"/>
+          <polygon points="-17,18 -13,10 -9,18" fill="#059669"/>
+          <polygon points="13,18 17,10 21,18" fill="#059669"/>
+          <polygon points="19,18 23,8 27,18" fill="#047857"/>
+        </g>
+        <circle cx="74" cy="38" r="3" fill="#6ee7b7" filter="url(#glow-emerald)"/>
+        <text x="74" y="104" text-anchor="middle" fill="#6ee7b7" font-family="'JetBrains Mono', monospace" font-size="6.2" font-weight="700" letter-spacing="1">14,411 FT • SUMMIT EXPEDITION</text>
+      </svg>
+    </div>
+  `,
+  mackie: `
+    <div class="circle-graphic-container circle-graphic-mackie">
+      <svg viewBox="0 0 148 148" class="circle-svg-art" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="grad-mackie" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#9f1239" stop-opacity="0.55"/>
+            <stop offset="65%" stop-color="#881337" stop-opacity="0.9"/>
+            <stop offset="100%" stop-color="#020617" stop-opacity="0.98"/>
+          </radialGradient>
+          <filter id="glow-rose" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="2.2" result="blur"/>
+            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+          </filter>
+        </defs>
+        <circle cx="74" cy="74" r="74" fill="url(#grad-mackie)"/>
+        <circle cx="74" cy="70" r="48" fill="none" stroke="#fb7185" stroke-width="0.6" stroke-dasharray="3,3" opacity="0.45"/>
+        <g filter="url(#glow-rose)" transform="translate(74,68)">
+          <rect x="-26" y="-20" width="52" height="36" rx="4" fill="rgba(244, 63, 94, 0.28)" stroke="#f43f5e" stroke-width="1.8"/>
+          <rect x="-26" y="-20" width="52" height="10" rx="3" fill="#be123c"/>
+          <rect x="-16" y="-24" width="3" height="6" rx="1.5" fill="#fecdd3"/>
+          <rect x="0" y="-24" width="3" height="6" rx="1.5" fill="#fecdd3"/>
+          <rect x="16" y="-24" width="3" height="6" rx="1.5" fill="#fecdd3"/>
+          <path d="M0,7 C-5,2 -10,-2 -10,-7 C-10,-11 -6,-14 -1,-14 C2,-14 5,-12 6,-9 C7,-12 10,-14 13,-14 C18,-14 22,-11 22,-7 C22,-2 17,2 12,7 L6,13 Z" transform="scale(0.6) translate(-6,-2)" fill="#f43f5e" opacity="0.95"/>
+          <path d="M-13,4 L-9,8 L-3,0" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M7,4 L11,8 L17,0" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </g>
+        <text x="74" y="104" text-anchor="middle" fill="#fecdd3" font-family="'JetBrains Mono', monospace" font-size="6.2" font-weight="700" letter-spacing="1">MEALS &amp; DAILY ITINERARY</text>
+      </svg>
+    </div>
+  `,
+  bns3: `
+    <div class="circle-graphic-container circle-graphic-bns3">
+      <svg viewBox="0 0 148 148" class="circle-svg-art" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="grad-bns3" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#92400e" stop-opacity="0.55"/>
+            <stop offset="65%" stop-color="#78350f" stop-opacity="0.9"/>
+            <stop offset="100%" stop-color="#020617" stop-opacity="0.98"/>
+          </radialGradient>
+          <filter id="glow-gold" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="2.2" result="blur"/>
+            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+          </filter>
+        </defs>
+        <circle cx="74" cy="74" r="74" fill="url(#grad-bns3)"/>
+        <circle cx="74" cy="70" r="48" fill="none" stroke="#f59e0b" stroke-width="0.75" stroke-dasharray="4,4" opacity="0.45"/>
+        <circle cx="74" cy="70" r="34" fill="none" stroke="#d97706" stroke-width="0.5" opacity="0.35"/>
+        <line x1="74" y1="20" x2="74" y2="34" stroke="#f59e0b" stroke-width="1.3"/>
+        <line x1="74" y1="106" x2="74" y2="120" stroke="#f59e0b" stroke-width="1.3"/>
+        <line x1="20" y1="70" x2="34" y2="70" stroke="#f59e0b" stroke-width="1.3"/>
+        <line x1="114" y1="70" x2="128" y2="70" stroke="#f59e0b" stroke-width="1.3"/>
+        <!-- Golden Iron Dragon Insignia -->
+        <g filter="url(#glow-gold)" transform="translate(74,68)">
+          <polygon points="0,-24 24,-11 24,11 0,24 -24,11 -24,-11" fill="rgba(245, 158, 11, 0.28)" stroke="#f59e0b" stroke-width="2"/>
+          <path d="M-15,6 C-15,-3 -11,-13 0,-19 C7,-16 15,-17 17,-13 C19,-9 15,-5 17,0 C18,4 13,13 2,17 C-7,15 -15,11 -15,6 Z" fill="#d97706" stroke="#fbbf24" stroke-width="1.3"/>
+          <path d="M-7,-17 L-2,-25 L2,-18 L8,-23 L9,-15" stroke="#fbbf24" stroke-width="1.6" fill="none"/>
+          <circle cx="2" cy="-9" r="1.9" fill="#ffffff" filter="url(#glow-gold)"/>
+          <circle cx="2" cy="-9" r="0.9" fill="#ef4444"/>
+          <path d="M10,-2 Q19,-4 25,0 Q19,6 10,4 Z" fill="#fb923c" opacity="0.95"/>
+          <line x1="-9" y1="2" x2="7" y2="18" stroke="#fbbf24" stroke-width="1.5"/>
+          <line x1="7" y1="2" x2="-9" y2="18" stroke="#fbbf24" stroke-width="1.5"/>
+        </g>
+        <text x="74" y="104" text-anchor="middle" fill="#fde68a" font-family="'JetBrains Mono', monospace" font-size="6.2" font-weight="700" letter-spacing="1">IRON DRAGONS • FM 7-0 S-3</text>
+      </svg>
+    </div>
+  `
+};
+
 export class AtomicCoreVisualizer {
   constructor(canvasContainerId, onNodeSelect) {
     this.container = document.getElementById(canvasContainerId);
@@ -47,8 +255,8 @@ export class AtomicCoreVisualizer {
         shortTitle: 'EXECUTIVE',
         orbitTag: 'ORBIT 01',
         code: 'DAILY BRIEF',
-        orbitRadius: 4.4,
-        speed: 0.18,
+        orbitRadius: 4.8,
+        speed: 0.16,
         angle: 0.2,
         inclination: { x: 0.7, y: 0.3, z: 0.2 },
         color: 0x00f0ff,
@@ -62,8 +270,8 @@ export class AtomicCoreVisualizer {
         shortTitle: 'RENTAL OPS',
         orbitTag: 'ORBIT 02',
         code: 'WA RENTAL',
-        orbitRadius: 5.8,
-        speed: 0.14,
+        orbitRadius: 6.0,
+        speed: 0.13,
         angle: 2.1,
         inclination: { x: -0.6, y: 0.8, z: -0.4 },
         color: 0x38bdf8,
@@ -78,7 +286,7 @@ export class AtomicCoreVisualizer {
         orbitTag: 'ORBIT 03',
         code: 'WEALTH 24/7',
         orbitRadius: 7.2,
-        speed: 0.11,
+        speed: 0.105,
         angle: 4.4,
         inclination: { x: 0.4, y: -0.7, z: 0.9 },
         color: 0x8b5cf6,
@@ -92,7 +300,7 @@ export class AtomicCoreVisualizer {
         shortTitle: 'BASECAMP',
         orbitTag: 'ORBIT 04',
         code: 'OVERLAND',
-        orbitRadius: 8.5,
+        orbitRadius: 8.4,
         speed: 0.08,
         angle: 3.2,
         inclination: { x: -0.5, y: -0.4, z: 0.6 },
@@ -107,8 +315,8 @@ export class AtomicCoreVisualizer {
         shortTitle: "MACKIE'S BOARD",
         orbitTag: 'ORBIT 05',
         code: 'CALENDAR & MEALS',
-        orbitRadius: 9.8,
-        speed: 0.06,
+        orbitRadius: 9.6,
+        speed: 0.065,
         angle: 1.4,
         inclination: { x: 0.8, y: -0.3, z: -0.7 },
         color: 0xf43f5e,
@@ -122,8 +330,8 @@ export class AtomicCoreVisualizer {
         shortTitle: '110TH BN S3',
         orbitTag: 'ORBIT 06',
         code: 'TRAIN-PRO S3',
-        orbitRadius: 11.2,
-        speed: 0.045,
+        orbitRadius: 10.8,
+        speed: 0.05,
         angle: 5.1,
         inclination: { x: -0.7, y: 0.6, z: 0.4 },
         color: 0xf59e0b,
@@ -352,8 +560,6 @@ export class AtomicCoreVisualizer {
     if (!overlay) return;
     overlay.innerHTML = '';
 
-    const isHttps = window.location.protocol === 'https:';
-
     this.electrons.forEach((el, idx) => {
       const dash = el.dash;
       const circleEl = document.createElement('div');
@@ -361,21 +567,19 @@ export class AtomicCoreVisualizer {
       circleEl.dataset.deck = dash.id;
       circleEl.style.setProperty('--orbit-color', dash.glowHex);
 
-      const isInsecureTarget = isHttps && dash.url.startsWith('http://');
+      const visualSVG = SPHERE_VISUAL_SVGS[dash.id] || `
+        <div class="circle-fallback-view">
+          <div class="circle-fallback-icon">${dash.icon}</div>
+          <div class="circle-fallback-code">${dash.code}</div>
+        </div>
+      `;
 
       circleEl.innerHTML = `
         <div class="circle-halo-ring"></div>
         <div class="circle-inner-portal">
           <div class="circle-orbit-index">${dash.orbitTag}</div>
           <div class="circle-preview-viewport">
-            ${!isInsecureTarget ? `
-              <iframe src="${dash.url}" class="circle-mini-iframe" loading="lazy" tabindex="-1"></iframe>
-            ` : `
-              <div class="circle-fallback-view">
-                <div class="circle-fallback-icon">${dash.icon}</div>
-                <div class="circle-fallback-code">${dash.code}</div>
-              </div>
-            `}
+            ${visualSVG}
             <div class="circle-touch-shield"></div>
           </div>
           <div class="circle-hud-badge">
@@ -383,7 +587,7 @@ export class AtomicCoreVisualizer {
             <span class="circle-title-text">${dash.shortTitle}</span>
           </div>
           <div class="circle-alert-pill" style="display: none;">
-            <span class="alert-icon">⚠️</span>
+            <span class="alert-pulse-dot"></span>
             <span class="alert-count">0</span>
           </div>
         </div>
@@ -633,10 +837,8 @@ export class AtomicCoreVisualizer {
 
       // Subtle 3D pulsating quantum glow if sphere has active alerts/notifications
       if (el.hasAlert && el.glowMesh) {
-        const pulse = 1.0 + Math.sin(time * 2.6) * 0.22;
-        el.glowMesh.scale.set(pulse, pulse, pulse);
         if (el.glowMesh.material) {
-          el.glowMesh.material.opacity = 0.52 + Math.sin(time * 2.6) * 0.24;
+          el.glowMesh.material.opacity = 0.45 + Math.sin(time * 2.6) * 0.22;
         }
       }
 
@@ -651,11 +853,13 @@ export class AtomicCoreVisualizer {
         // If in front of camera
         if (worldVec.z < 1.0 && screenX >= -80 && screenX <= width + 80 && screenY >= -80 && screenY <= height + 80) {
           el.domElement.style.display = 'flex';
-          const depthScale = Math.max(0.68, Math.min(1.15, 1.02 - (worldVec.z * 0.4))) * (isHovered ? 1.15 : 1.0);
-          const depthOpacity = isHovered ? 1.0 : Math.max(0.55, Math.min(1.0, 1.0 - (worldVec.z * 0.3)));
+          // Keep ALL 6 spheres at the exact same uniform scale!
+          const isHovered = (this.hoveredDeck === dash.id);
+          const uniformScale = isHovered ? 1.08 : 1.0;
+          const depthOpacity = isHovered ? 1.0 : Math.max(0.68, Math.min(1.0, 1.02 - (worldVec.z * 0.22)));
           const zIndex = isHovered ? 200 : Math.round((1.0 - worldVec.z) * 100);
 
-          el.domElement.style.transform = `translate3d(${screenX}px, ${screenY}px, 0) translate(-50%, -50%) scale(${depthScale})`;
+          el.domElement.style.transform = `translate3d(${screenX}px, ${screenY}px, 0) translate(-50%, -50%) scale(${uniformScale})`;
           el.domElement.style.opacity = depthOpacity;
           el.domElement.style.zIndex = zIndex;
         } else {

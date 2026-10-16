@@ -649,13 +649,38 @@ body::after {
   }
 }
 
+.circle-graphic-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #020617;
+}
+
+.circle-svg-art {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: contrast(1.08) brightness(1.02);
+  transition: transform 0.35s ease;
+}
+
+.orbiting-dashboard-circle:hover .circle-svg-art {
+  transform: scale(1.06);
+}
+
 @keyframes alert-badge-soft-pulse {
   0%, 100% {
-    transform: scale(1);
     box-shadow: 0 0 8px rgba(245, 158, 11, 0.6);
   }
   50% {
-    transform: scale(1.14);
     box-shadow: 0 0 18px rgba(239, 68, 68, 0.9);
   }
 }
@@ -720,10 +745,10 @@ body::after {
   background: rgba(245, 158, 11, 0.94);
   border: 1px solid #fff;
   border-radius: 12px;
-  padding: 1px 6px;
+  padding: 2px 7px;
   display: flex;
   align-items: center;
-  gap: 3px;
+  gap: 4px;
   z-index: 25;
   font-family: var(--font-mono);
   font-size: 0.62rem;
@@ -738,7 +763,27 @@ body::after {
 }
 
 .circle-alert-pill:hover {
-  transform: scale(1.22);
+  transform: scale(1.08);
+}
+
+.circle-alert-pill .alert-pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #030712;
+  box-shadow: 0 0 4px #030712;
+  display: inline-block;
+  animation: pulse-dot 1.4s infinite ease-in-out;
+}
+
+.circle-alert-pill.severity-critical .alert-pulse-dot {
+  background: #fff;
+  box-shadow: 0 0 4px #fff;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
 }
 
 .circle-alert-pill.severity-critical {
