@@ -3,12 +3,12 @@
  * Main Application Orchestrator
  */
 
-import { sfx } from './sound-effects.js?v=3.3';
-import { AtomicCoreVisualizer } from './atomic-core.js?v=3.3';
-import { DashboardManager } from './dashboard-manager.js?v=3.3';
-import { VoiceCommandEngine } from './voice-command.js?v=3.3';
-import { DeviceOptimizer } from './device-optimizer.js?v=3.3';
-import { renderQRCode } from './qr-generator.js?v=3.3';
+import { sfx } from './sound-effects.js?v=3.4';
+import { AtomicCoreVisualizer } from './atomic-core.js?v=3.4';
+import { DashboardManager } from './dashboard-manager.js?v=3.4';
+import { VoiceCommandEngine } from './voice-command.js?v=3.4';
+import { DeviceOptimizer } from './device-optimizer.js?v=3.4';
+import { renderQRCode } from './qr-generator.js?v=3.4';
 
 class CentralCommandHubApp {
   constructor() {

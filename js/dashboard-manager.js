@@ -233,6 +233,16 @@ export class DashboardManager {
     };
     this.seenDecks = loadSeenAlerts();
 
+    // Track individually dismissed alerts by their unique code
+    const loadDismissedAlerts = () => {
+      try {
+        const raw = localStorage.getItem('hub_dismissed_alerts');
+        if (raw) return new Set(JSON.parse(raw));
+      } catch (e) {}
+      return new Set();
+    };
+    this.dismissedAlerts = loadDismissedAlerts();
+
     // Alert & Notification Registry (Real alerts detected across dashboards)
     const loadStoredAlerts = () => {
       let stored = null;
@@ -246,13 +256,15 @@ export class DashboardManager {
         const def = DEFAULT_HUB_ALERTS[deckId];
         const s = stored?.[deckId];
         const isSeen = this.seenDecks.has(deckId);
+        const allItems = (s && Array.isArray(s.items) && s.items.length > 0) ? s.items : def.items;
+        const activeItems = allItems.filter(item => !this.dismissedAlerts.has(item.code));
         alerts[deckId] = {
           deckName: def.deckName,
           deckIcon: def.deckIcon,
-          count: (s && typeof s.count === 'number') ? s.count : def.count,
+          count: activeItems.length,
           severity: (s && s.severity) ? s.severity : def.severity,
           title: (s && s.title) ? s.title : def.title,
-          items: (s && Array.isArray(s.items) && s.items.length > 0) ? s.items : def.items,
+          items: allItems,
           acknowledged: isSeen
         };
       });
@@ -316,6 +328,16 @@ export class DashboardManager {
       dismissBtn.addEventListener('click', () => this.closeAlertCenter());
     }
 
+    // 4. Modal footer dismiss-all button
+    const footerDismissAll = document.getElementById('btn-footer-dismiss-all');
+    if (footerDismissAll) {
+      footerDismissAll.addEventListener('click', () => {
+        const activeTab = document.querySelector('.alert-filter-tab.active');
+        const filter = activeTab ? activeTab.getAttribute('data-filter') : 'all';
+        this.dismissAllInView(filter);
+      });
+    }
+
     const overlay = document.getElementById('modal-hub-alerts');
     if (overlay) {
       overlay.addEventListener('click', (e) => {
@@ -335,6 +357,28 @@ export class DashboardManager {
     this.updateGlobalAlertsBadge();
   }
 
+  getActiveItems(deckId) {
+    const a = this.alerts[deckId];
+    if (!a || !a.items) return [];
+    return a.items.filter(item => !this.dismissedAlerts.has(item.code));
+  }
+
+  getActiveTotalCount() {
+    let total = 0;
+    Object.keys(this.alerts).forEach(deckId => {
+      total += this.getActiveItems(deckId).length;
+    });
+    return total;
+  }
+
+  updateDeckAlertCounts() {
+    Object.keys(this.alerts).forEach(deckId => {
+      if (this.alerts[deckId]) {
+        this.alerts[deckId].count = this.getActiveItems(deckId).length;
+      }
+    });
+  }
+
   updateGlobalAlertsBadge() {
     const badgeEl = document.getElementById('global-alerts-badge');
     const pillBtn = document.getElementById('btn-global-alerts');
@@ -344,10 +388,13 @@ export class DashboardManager {
     let hasCritical = false;
 
     Object.entries(this.alerts).forEach(([deckId, a]) => {
+      const activeItems = this.getActiveItems(deckId);
       const isAcknowledged = a.acknowledged || this.seenDecks.has(deckId);
-      if (!isAcknowledged && a.count > 0) {
-        unreadTotal += a.count;
-        if (a.severity === 'critical') hasCritical = true;
+      if (!isAcknowledged && activeItems.length > 0) {
+        unreadTotal += activeItems.length;
+        if (activeItems.some(i => (i.severity || '').toLowerCase() === 'critical')) {
+          hasCritical = true;
+        }
       }
     });
 
@@ -360,7 +407,8 @@ export class DashboardManager {
         pillBtn.classList.remove('has-critical');
       }
     } else {
-      badgeEl.textContent = `✓ ALL REVIEWED`;
+      const totalRemaining = this.getActiveTotalCount();
+      badgeEl.textContent = totalRemaining === 0 ? `✓ ALL DISMISSED` : `✓ ALL REVIEWED`;
       pillBtn.classList.remove('has-critical');
       pillBtn.style.opacity = '0.72';
     }
@@ -375,23 +423,47 @@ export class DashboardManager {
       } catch (e) {}
     }
     const isAcknowledged = this.seenDecks.has(deckId);
+
+    let suppliedItems = [];
+    if (Array.isArray(items)) {
+      suppliedItems = items;
+    } else if (count === 0) {
+      suppliedItems = [];
+    } else if (existing.items && Array.isArray(existing.items) && existing.items.length > 0) {
+      suppliedItems = existing.items;
+    } else if (count > 0) {
+      suppliedItems = Array.from({ length: count }, (_, i) => ({
+        severity: severity.toUpperCase(),
+        code: `${deckId}_telemetry_alert_${i + 1}`,
+        statute: 'System Telemetry',
+        title: title || `${existing.deckName || deckId} Notification`,
+        message: `Active operational telemetry notification (${count} items).`
+      }));
+    }
+
+    const activeCount = suppliedItems.filter(i => !this.dismissedAlerts.has(i.code)).length;
+
     this.alerts[deckId] = {
       deckName: existing.deckName || deckId,
       deckIcon: existing.deckIcon || '⚡',
-      count,
+      count: activeCount,
       severity,
       title: title || existing.title || '',
-      items: items || existing.items || [],
+      items: suppliedItems,
       acknowledged: isAcknowledged
     };
     try {
       localStorage.setItem('hub_alerts', JSON.stringify(this.alerts));
     } catch (e) {}
-    this.updateTabAlertIndicator(deckId, count, severity);
+    this.updateTabAlertIndicator(deckId, activeCount, severity);
     this.updateSubnavAlert(deckId);
     this.updateGlobalAlertsBadge();
     if (this.onAlertChange) {
-      this.onAlertChange(deckId, this.alerts[deckId]);
+      this.onAlertChange(deckId, {
+        ...this.alerts[deckId],
+        count: activeCount,
+        acknowledged: isAcknowledged || activeCount === 0
+      });
     }
   }
 
@@ -403,15 +475,16 @@ export class DashboardManager {
     const tabBtn = document.querySelector(`.nav-tab-btn[data-deck="${deckId}"]`);
     if (!tabBtn) return;
     let dot = tabBtn.querySelector('.tab-alert-dot');
+    const activeCount = this.getActiveItems(deckId).length;
     const isAcknowledged = this.alerts[deckId]?.acknowledged || this.seenDecks.has(deckId);
 
-    if (count > 0 && !isAcknowledged) {
+    if (activeCount > 0 && !isAcknowledged) {
       if (!dot) {
         dot = document.createElement('span');
         tabBtn.appendChild(dot);
       }
       dot.className = `tab-alert-dot ${severity || 'warning'}`;
-      dot.title = `${count} active notification(s) • Click to view`;
+      dot.title = `${activeCount} active notification(s) • Click to view`;
       dot.style.pointerEvents = 'auto';
       dot.style.cursor = 'pointer';
       dot.onclick = (e) => {
@@ -432,20 +505,22 @@ export class DashboardManager {
 
     let alertTag = subnavLeft.querySelector('.subnav-alert-tag');
     const alertInfo = this.alerts[deckId];
-    if (alertInfo && alertInfo.count > 0) {
+    const activeCount = this.getActiveItems(deckId).length;
+
+    if (activeCount > 0) {
       if (!alertTag) {
         alertTag = document.createElement('span');
         subnavLeft.appendChild(alertTag);
       }
-      const isAcknowledged = alertInfo.acknowledged || this.seenDecks.has(deckId);
+      const isAcknowledged = alertInfo?.acknowledged || this.seenDecks.has(deckId);
       if (isAcknowledged) {
         alertTag.className = 'subnav-alert-tag acknowledged';
-        alertTag.innerHTML = `✓ ${alertInfo.count} ALERTS REVIEWED`;
+        alertTag.innerHTML = `✓ ${activeCount} ALERTS REVIEWED`;
         alertTag.title = `Alerts have been seen. Click to inspect again.`;
       } else {
-        alertTag.className = `subnav-alert-tag ${alertInfo.severity}`;
-        alertTag.innerHTML = `⚠️ ${alertInfo.count} ALERTS (INSPECT)`;
-        alertTag.title = `Click to inspect active alerts & action items for ${alertInfo.deckName || deckId}`;
+        alertTag.className = `subnav-alert-tag ${alertInfo?.severity || 'warning'}`;
+        alertTag.innerHTML = `⚠️ ${activeCount} ALERTS (INSPECT)`;
+        alertTag.title = `Click to inspect active alerts & action items for ${alertInfo?.deckName || deckId}`;
       }
       alertTag.onclick = (e) => {
         e.stopPropagation();
@@ -503,18 +578,19 @@ export class DashboardManager {
     if (!filtersBar || !cardsContainer) return;
 
     // Build filter items: ALL + each deck that has alerts
-    let totalCount = 0;
-    Object.values(this.alerts).forEach(a => { totalCount += (a.count || 0); });
+    const totalCount = this.getActiveTotalCount();
 
     const filterOptions = [
-      { id: 'all', label: `ALL ALERTS (${totalCount})`, icon: '⚡' }
+      { id: 'all', title: 'ALL ALERTS', count: totalCount, icon: '⚡' }
     ];
 
     Object.entries(this.alerts).forEach(([deckId, a]) => {
-      if (a.count > 0 || (a.items && a.items.length > 0)) {
+      const activeCount = this.getActiveItems(deckId).length;
+      if (activeCount > 0 || (a.items && a.items.length > 0) || selectedFilter === deckId) {
         filterOptions.push({
           id: deckId,
-          label: `${a.deckName || deckId} (${a.count})`,
+          title: a.deckName || deckId,
+          count: activeCount,
           icon: a.deckIcon || '⚡'
         });
       }
@@ -523,7 +599,8 @@ export class DashboardManager {
     filtersBar.innerHTML = filterOptions.map(opt => `
       <button class="alert-filter-tab ${opt.id === selectedFilter ? 'active' : ''}" data-filter="${opt.id}">
         <span>${opt.icon}</span>
-        <span>${opt.label}</span>
+        <span class="filter-tab-name">${opt.title}</span>
+        <span class="filter-tab-count">(${opt.count})</span>
       </button>
     `).join('');
 
@@ -535,34 +612,57 @@ export class DashboardManager {
       });
     });
 
-    // Collect all alert items to display
+    // Collect all active alert items to display
     const itemsToDisplay = [];
     Object.entries(this.alerts).forEach(([deckId, a]) => {
       if (selectedFilter !== 'all' && selectedFilter !== deckId) return;
       if (a.items && a.items.length > 0) {
         a.items.forEach(item => {
-          itemsToDisplay.push({
-            ...item,
-            deckId,
-            deckName: a.deckName || deckId,
-            deckIcon: a.deckIcon || '⚡'
-          });
+          if (!this.dismissedAlerts.has(item.code)) {
+            itemsToDisplay.push({
+              ...item,
+              deckId,
+              deckName: a.deckName || deckId,
+              deckIcon: a.deckIcon || '⚡'
+            });
+          }
         });
       }
     });
 
     if (itemsToDisplay.length === 0) {
+      const filterName = selectedFilter === 'all' ? 'All Dashboards' : (this.alerts[selectedFilter]?.deckName || selectedFilter);
       cardsContainer.innerHTML = `
-        <div style="text-align:center;padding:2.5rem 1rem;font-family:var(--font-mono);color:#94a3b8;">
-          <div style="font-size:2rem;margin-bottom:8px;">✅</div>
-          <strong style="color:#fff;font-size:1rem;">NO ACTIVE ALERTS FOR THIS SELECTION</strong>
-          <p style="font-size:0.8rem;margin-top:6px;">All operational systems and statutory guardrails verified compliant.</p>
+        <div class="alert-empty-state">
+          <div style="font-size:2.2rem;margin-bottom:8px;">✅</div>
+          <strong style="color:#fff;font-size:1.05rem;letter-spacing:0.5px;">NO ACTIVE ALERTS FOR ${filterName.toUpperCase()}</strong>
+          <p style="font-size:0.82rem;color:#94a3b8;margin:6px 0 16px 0;">All alerts have been reviewed or dismissed. Operational systems and statutory compliance nominal.</p>
+          <button class="alert-reset-btn" id="btn-reset-alerts">
+            <span>🔄</span> RESTORE ALL ALERTS
+          </button>
         </div>
       `;
+      const resetBtn = document.getElementById('btn-reset-alerts');
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          this.resetAllAlerts();
+        });
+      }
       return;
     }
 
-    cardsContainer.innerHTML = itemsToDisplay.map((item, idx) => {
+    // Top action bar above cards
+    const filterTitle = selectedFilter === 'all' ? 'ALL DASHBOARDS' : (this.alerts[selectedFilter]?.deckName || selectedFilter).toUpperCase();
+    const actionsBarHtml = `
+      <div class="alert-actions-bar">
+        <span class="alert-active-count-label" id="alert-active-count-label">SHOWING ${itemsToDisplay.length} ACTIVE ALERTS • ${filterTitle}</span>
+        <button class="alert-bulk-btn" id="btn-dismiss-all-view" title="Dismiss all alerts currently shown in this view">
+          <span>✓</span> DISMISS ALL IN VIEW
+        </button>
+      </div>
+    `;
+
+    const cardsHtml = itemsToDisplay.map((item, idx) => {
       const sevClass = (item.severity || 'warning').toLowerCase();
       const badgeStyle = (sevClass === 'critical')
         ? 'background:rgba(239,68,68,0.22);color:#ef4444;border:1px solid rgba(239,68,68,0.6);'
@@ -576,7 +676,7 @@ export class DashboardManager {
         : '';
 
       return `
-        <div class="alert-card alert-${sevClass}" data-deck="${item.deckId}" data-alert-index="${idx}">
+        <div class="alert-card alert-${sevClass}" data-deck="${item.deckId}" data-code="${item.code}" data-alert-index="${idx}">
           <div class="alert-card-header">
             <div style="display:flex;align-items:center;gap:6px;">
               <span class="alert-deck-badge">${item.deckIcon} ${item.deckName.toUpperCase()}</span>
@@ -585,28 +685,200 @@ export class DashboardManager {
               </span>
               ${seenBadge}
             </div>
-            <span class="alert-card-statute">${item.statute || ''}</span>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span class="alert-card-statute">${item.statute || ''}</span>
+              <button class="alert-card-dismiss-btn" data-code="${item.code}" data-deck="${item.deckId}" title="Dismiss this alert (✕)">✕</button>
+            </div>
           </div>
           <div class="alert-card-title">${item.title}</div>
           <div class="alert-card-msg">${item.message}</div>
-          <button class="alert-card-action" data-deck="${item.deckId}">
-            <span>OPEN IN DASHBOARD</span>
-            <span>➔</span>
-          </button>
+          <div class="alert-card-actions-row">
+            <button class="alert-card-btn-dismiss" data-code="${item.code}" data-deck="${item.deckId}" title="Dismiss this alert without opening">
+              <span>✓</span>
+              <span>DISMISS</span>
+            </button>
+            <button class="alert-card-action" data-deck="${item.deckId}" data-code="${item.code}">
+              <span>OPEN IN DASHBOARD</span>
+              <span>➔</span>
+            </button>
+          </div>
         </div>
       `;
     }).join('');
 
-    // Wire card click -> jump to dashboard
+    cardsContainer.innerHTML = actionsBarHtml + cardsHtml;
+
+    // Wire "DISMISS ALL IN VIEW" button
+    const bulkBtn = document.getElementById('btn-dismiss-all-view');
+    if (bulkBtn) {
+      bulkBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.dismissAllInView(selectedFilter);
+      });
+    }
+
+    // Wire individual card dismiss buttons (both top-right ✕ and bottom ✓ DISMISS)
+    cardsContainer.querySelectorAll('.alert-card-dismiss-btn, .alert-card-btn-dismiss').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const code = btn.getAttribute('data-code');
+        const deckId = btn.getAttribute('data-deck');
+        sfx.playClick();
+        this.dismissAlert(code, deckId, true);
+      });
+    });
+
+    // Wire card click -> jump to dashboard (viewing this alert marks it as viewed/dismissed)
     cardsContainer.querySelectorAll('.alert-card').forEach(card => {
-      card.addEventListener('click', () => {
+      card.addEventListener('click', (e) => {
+        if (e.target.closest('.alert-card-dismiss-btn') || e.target.closest('.alert-card-btn-dismiss')) {
+          return;
+        }
         const deckId = card.getAttribute('data-deck');
-        this.jumpToAlert(deckId);
+        const alertCode = card.getAttribute('data-code');
+        this.jumpToAlert(deckId, alertCode);
       });
     });
   }
 
-  jumpToAlert(deckId) {
+  dismissAlert(alertCode, deckId, animate = true) {
+    if (!alertCode) return;
+    this.dismissedAlerts.add(alertCode);
+    try {
+      localStorage.setItem('hub_dismissed_alerts', JSON.stringify([...this.dismissedAlerts]));
+    } catch (e) {}
+
+    const alertInfo = this.alerts[deckId];
+    const activeCount = this.getActiveItems(deckId).length;
+    if (alertInfo) {
+      alertInfo.count = activeCount;
+    }
+
+    this.updateTabAlertIndicator(deckId, activeCount, alertInfo?.severity);
+    this.updateSubnavAlert(deckId);
+    this.updateGlobalAlertsBadge();
+
+    if (this.onAlertChange && alertInfo) {
+      this.onAlertChange(deckId, {
+        ...alertInfo,
+        count: activeCount,
+        acknowledged: alertInfo.acknowledged || activeCount === 0
+      });
+    }
+
+    if (animate) {
+      const card = document.querySelector(`.alert-card[data-code="${alertCode}"]`);
+      if (card) {
+        card.classList.add('dismissing');
+        setTimeout(() => {
+          if (card.parentNode) card.remove();
+          this.refreshAlertCenterCounts();
+        }, 280);
+      } else {
+        this.refreshAlertCenterCounts();
+      }
+    }
+  }
+
+  dismissAllInView(selectedFilter = 'all') {
+    sfx.playClick();
+    Object.entries(this.alerts).forEach(([deckId, a]) => {
+      if (selectedFilter !== 'all' && selectedFilter !== deckId) return;
+      if (a.items && a.items.length > 0) {
+        a.items.forEach(item => {
+          this.dismissedAlerts.add(item.code);
+        });
+        a.count = this.getActiveItems(deckId).length;
+      }
+    });
+
+    try {
+      localStorage.setItem('hub_dismissed_alerts', JSON.stringify([...this.dismissedAlerts]));
+    } catch (e) {}
+
+    this.syncAllAlertsToVisualizer();
+    this.renderAlertCenter(selectedFilter);
+  }
+
+  resetAllAlerts() {
+    sfx.playClick();
+    this.dismissedAlerts.clear();
+    this.seenDecks.clear();
+    try {
+      localStorage.removeItem('hub_dismissed_alerts');
+      localStorage.removeItem('hub_seen_alerts');
+    } catch (e) {}
+
+    Object.keys(DEFAULT_HUB_ALERTS).forEach(deckId => {
+      const def = DEFAULT_HUB_ALERTS[deckId];
+      if (this.alerts[deckId]) {
+        this.alerts[deckId].count = def.count;
+        this.alerts[deckId].acknowledged = false;
+        this.alerts[deckId].items = [...def.items];
+      }
+    });
+
+    this.syncAllAlertsToVisualizer();
+    this.renderAlertCenter('all');
+  }
+
+  refreshAlertCenterCounts() {
+    const filtersBar = document.getElementById('alert-filters-bar');
+    const cardsContainer = document.getElementById('alert-cards-container');
+    if (!filtersBar || !cardsContainer) return;
+
+    // Update counts on filter tabs
+    let totalActive = 0;
+    Object.entries(this.alerts).forEach(([deckId, a]) => {
+      const active = this.getActiveItems(deckId).length;
+      totalActive += active;
+      const tab = filtersBar.querySelector(`.alert-filter-tab[data-filter="${deckId}"]`);
+      if (tab) {
+        const countSpan = tab.querySelector('.filter-tab-count');
+        if (countSpan) countSpan.textContent = `(${active})`;
+      }
+    });
+
+    const allTab = filtersBar.querySelector(`.alert-filter-tab[data-filter="all"]`);
+    if (allTab) {
+      const countSpan = allTab.querySelector('.filter-tab-count');
+      if (countSpan) countSpan.textContent = `(${totalActive})`;
+    }
+
+    const subbarLabel = document.getElementById('alert-active-count-label');
+    const visibleCards = cardsContainer.querySelectorAll('.alert-card:not(.dismissing)');
+    if (subbarLabel) {
+      subbarLabel.textContent = `SHOWING ${visibleCards.length} ACTIVE ALERTS`;
+    }
+
+    if (visibleCards.length === 0) {
+      const activeTab = filtersBar.querySelector('.alert-filter-tab.active');
+      const activeFilter = activeTab ? activeTab.getAttribute('data-filter') : 'all';
+      const filterName = activeFilter === 'all' ? 'All Dashboards' : (this.alerts[activeFilter]?.deckName || activeFilter);
+      cardsContainer.innerHTML = `
+        <div class="alert-empty-state">
+          <div style="font-size:2.2rem;margin-bottom:8px;">✅</div>
+          <strong style="color:#fff;font-size:1.05rem;letter-spacing:0.5px;">NO ACTIVE ALERTS FOR ${filterName.toUpperCase()}</strong>
+          <p style="font-size:0.82rem;color:#94a3b8;margin:6px 0 16px 0;">All alerts have been reviewed or dismissed. Operational systems nominal.</p>
+          <button class="alert-reset-btn" id="btn-reset-alerts">
+            <span>🔄</span> RESTORE ALL ALERTS
+          </button>
+        </div>
+      `;
+      const resetBtn = document.getElementById('btn-reset-alerts');
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          this.resetAllAlerts();
+        });
+      }
+    }
+  }
+
+  jumpToAlert(deckId, alertCode = null) {
+    // If specific alert code was clicked/viewed, dismiss it so it disappears from the alert window
+    if (alertCode) {
+      this.dismissAlert(alertCode, deckId, false);
+    }
     this.closeAlertCenter();
     this.switchDeck(deckId);
 
@@ -631,13 +903,20 @@ export class DashboardManager {
   }
 
   syncAllAlertsToVisualizer() {
+    this.updateDeckAlertCounts();
     Object.keys(this.alerts).forEach(deckId => {
       this.alerts[deckId].acknowledged = this.seenDecks.has(deckId);
       const alertInfo = this.alerts[deckId];
-      this.updateTabAlertIndicator(deckId, alertInfo.count, alertInfo.severity);
+      const activeCount = this.getActiveItems(deckId).length;
+      alertInfo.count = activeCount;
+      this.updateTabAlertIndicator(deckId, activeCount, alertInfo.severity);
       this.updateSubnavAlert(deckId);
       if (this.onAlertChange) {
-        this.onAlertChange(deckId, alertInfo);
+        this.onAlertChange(deckId, {
+          ...alertInfo,
+          count: activeCount,
+          acknowledged: alertInfo.acknowledged || activeCount === 0
+        });
       }
     });
     this.updateGlobalAlertsBadge();
