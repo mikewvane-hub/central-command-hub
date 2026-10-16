@@ -329,11 +329,11 @@ export class AtomicCoreVisualizer {
         shortTitle: '110TH BN S3',
         orbitTag: 'ORBIT 06',
         code: 'TRAIN-PRO S3',
-        orbitRadius: 12.2,
-        horizontalStretch: 1.70,
+        orbitRadius: 11.0,
+        horizontalStretch: 1.44,
         speed: 0.10,
         angle: 5.1,
-        inclination: { x: -0.28, y: 0.46, z: 0.26 },
+        inclination: { x: -0.58, y: 0.32, z: 0.22 },
         color: 0xf59e0b,
         glowHex: '#f59e0b',
         url: resolveCloudUrl('hub_url_bns3', './dashboards/bns3/index.html'),
@@ -415,7 +415,7 @@ export class AtomicCoreVisualizer {
   adjustCameraForAspect(aspect) {
     if (aspect < 1.1) {
       // Square or tall aspect ratio (Z Fold 8 Inner unfolded or mobile) - Zoom out to fit all orbits
-      this.camera.position.set(0, 0.8, 38.0);
+      this.camera.position.set(0, 0.8, 44.0);
     } else {
       // Laptop widescreen - Wider horizontal view taking up the horizontal room on screen
       this.camera.position.set(0, 0.4, 27.5);
