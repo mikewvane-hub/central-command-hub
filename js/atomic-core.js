@@ -249,10 +249,11 @@ export class AtomicCoreVisualizer {
         shortTitle: 'EXECUTIVE',
         orbitTag: 'ORBIT 01',
         code: 'DAILY BRIEF',
-        orbitRadius: 4.8,
-        speed: 0.16,
+        orbitRadius: 5.2,
+        horizontalStretch: 1.48,
+        speed: 0.28,
         angle: 0.2,
-        inclination: { x: 0.7, y: 0.3, z: 0.2 },
+        inclination: { x: 0.32, y: 0.35, z: 0.15 },
         color: 0x00f0ff,
         glowHex: '#00f0ff',
         url: localStorage.getItem('hub_url_executive') || 'https://daily-executive-dashboard.onrender.com/',
@@ -264,10 +265,11 @@ export class AtomicCoreVisualizer {
         shortTitle: 'RENTAL OPS',
         orbitTag: 'ORBIT 02',
         code: 'WA RENTAL',
-        orbitRadius: 6.0,
-        speed: 0.13,
+        orbitRadius: 6.6,
+        horizontalStretch: 1.54,
+        speed: 0.23,
         angle: 2.1,
-        inclination: { x: -0.6, y: 0.8, z: -0.4 },
+        inclination: { x: -0.30, y: 0.70, z: -0.26 },
         color: 0x38bdf8,
         glowHex: '#38bdf8',
         url: resolveCloudUrl('hub_url_rental', './dashboards/rental/index.html'),
@@ -279,10 +281,11 @@ export class AtomicCoreVisualizer {
         shortTitle: 'WEALTH CONSOLE',
         orbitTag: 'ORBIT 03',
         code: 'WEALTH 24/7',
-        orbitRadius: 7.2,
-        speed: 0.105,
+        orbitRadius: 8.0,
+        horizontalStretch: 1.58,
+        speed: 0.19,
         angle: 4.4,
-        inclination: { x: 0.4, y: -0.7, z: 0.9 },
+        inclination: { x: 0.28, y: -0.60, z: 0.38 },
         color: 0x8b5cf6,
         glowHex: '#8b5cf6',
         url: resolveCloudUrl('hub_url_financial', './dashboards/financial/index.html'),
@@ -294,10 +297,11 @@ export class AtomicCoreVisualizer {
         shortTitle: 'BASECAMP',
         orbitTag: 'ORBIT 04',
         code: 'OVERLAND',
-        orbitRadius: 8.4,
-        speed: 0.08,
+        orbitRadius: 9.4,
+        horizontalStretch: 1.62,
+        speed: 0.15,
         angle: 3.2,
-        inclination: { x: -0.5, y: -0.4, z: 0.6 },
+        inclination: { x: -0.26, y: -0.36, z: 0.34 },
         color: 0x10b981,
         glowHex: '#10b981',
         url: localStorage.getItem('hub_url_trip') || 'https://daily-executive-dashboard.onrender.com/trip-planner/',
@@ -309,10 +313,11 @@ export class AtomicCoreVisualizer {
         shortTitle: "MACKIE'S BOARD",
         orbitTag: 'ORBIT 05',
         code: 'CALENDAR & MEALS',
-        orbitRadius: 9.6,
-        speed: 0.065,
+        orbitRadius: 10.8,
+        horizontalStretch: 1.66,
+        speed: 0.12,
         angle: 1.4,
-        inclination: { x: 0.8, y: -0.3, z: -0.7 },
+        inclination: { x: 0.30, y: -0.26, z: -0.32 },
         color: 0xf43f5e,
         glowHex: '#f43f5e',
         url: localStorage.getItem('hub_url_mackie') || 'https://daily-executive-dashboard.onrender.com/mackie/',
@@ -324,10 +329,11 @@ export class AtomicCoreVisualizer {
         shortTitle: '110TH BN S3',
         orbitTag: 'ORBIT 06',
         code: 'TRAIN-PRO S3',
-        orbitRadius: 10.8,
-        speed: 0.05,
+        orbitRadius: 12.2,
+        horizontalStretch: 1.70,
+        speed: 0.10,
         angle: 5.1,
-        inclination: { x: -0.7, y: 0.6, z: 0.4 },
+        inclination: { x: -0.28, y: 0.46, z: 0.26 },
         color: 0xf59e0b,
         glowHex: '#f59e0b',
         url: resolveCloudUrl('hub_url_bns3', './dashboards/bns3/index.html'),
@@ -409,10 +415,10 @@ export class AtomicCoreVisualizer {
   adjustCameraForAspect(aspect) {
     if (aspect < 1.1) {
       // Square or tall aspect ratio (Z Fold 8 Inner unfolded or mobile) - Zoom out to fit all orbits
-      this.camera.position.set(0, 1.0, 38.0);
+      this.camera.position.set(0, 0.8, 38.0);
     } else {
-      // Laptop widescreen - Zoomed out so Red Orbit 05 and Gold Orbit 06 fit comfortably with full screen margin
-      this.camera.position.set(0, 0.5, 31.5);
+      // Laptop widescreen - Wider horizontal view taking up the horizontal room on screen
+      this.camera.position.set(0, 0.4, 27.5);
     }
     this.camera.lookAt(0, 0, 0);
   }
@@ -469,7 +475,7 @@ export class AtomicCoreVisualizer {
     this.electrons = [];
 
     this.dashboards.forEach((dash) => {
-      // 1. Orbital Ring Track (Smooth Ellipse / Ring)
+      // 1. Orbital Ring Track (Smooth Ellipse / Ring stretched horizontally)
       const ringGeo = new THREE.RingGeometry(dash.orbitRadius - 0.025, dash.orbitRadius + 0.025, 128);
       const ringMat = new THREE.MeshBasicMaterial({
         color: dash.color,
@@ -479,6 +485,8 @@ export class AtomicCoreVisualizer {
       });
       const ring = new THREE.Mesh(ringGeo, ringMat);
       ring.rotation.x = Math.PI / 2;
+      const stretchX = dash.horizontalStretch || 1.4;
+      ring.scale.set(stretchX, 1.0, 1.0);
 
       // Container for tilting the orbit
       const orbitTiltGroup = new THREE.Group();
@@ -487,8 +495,8 @@ export class AtomicCoreVisualizer {
       orbitTiltGroup.rotation.z = dash.inclination.z;
       orbitTiltGroup.add(ring);
 
-      // 2. Electron Satellite Node (Docking anchor point in 3D)
-      const electronGeo = new THREE.SphereGeometry(0.48, 24, 24);
+      // 2. Electron Satellite Node (Docking anchor point in 3D - sleek minimized size)
+      const electronGeo = new THREE.SphereGeometry(0.36, 24, 24);
       const electronMat = new THREE.MeshStandardMaterial({
         color: dash.color,
         emissive: dash.color,
@@ -500,7 +508,7 @@ export class AtomicCoreVisualizer {
       electron.userData = { dashboard: dash };
 
       // Outer glow halo for the electron
-      const electronGlowGeo = new THREE.SphereGeometry(0.78, 16, 16);
+      const electronGlowGeo = new THREE.SphereGeometry(0.58, 16, 16);
       const electronGlowMat = new THREE.MeshBasicMaterial({
         color: dash.color,
         transparent: true,
@@ -836,7 +844,8 @@ export class AtomicCoreVisualizer {
       const speedMultiplier = isHovered ? 0.0 : 1.0;
       el.currentAngle += 0.016 * dash.speed * speedMultiplier;
       
-      const x = Math.cos(el.currentAngle) * dash.orbitRadius;
+      const stretchX = dash.horizontalStretch || 1.4;
+      const x = Math.cos(el.currentAngle) * (dash.orbitRadius * stretchX);
       const z = Math.sin(el.currentAngle) * dash.orbitRadius;
       el.mesh.position.set(x, 0, z);
 

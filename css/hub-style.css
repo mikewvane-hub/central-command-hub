@@ -486,8 +486,8 @@ body::after {
   position: absolute;
   top: 0;
   left: 0;
-  width: 148px;
-  height: 148px;
+  width: 116px;
+  height: 116px;
   border-radius: 50%;
   pointer-events: auto;
   cursor: pointer;
@@ -516,7 +516,7 @@ body::after {
 
 .circle-halo-ring {
   position: absolute;
-  inset: -6px;
+  inset: -5px;
   border-radius: 50%;
   border: 1.5px dashed var(--orbit-color);
   animation: spin-orbit-ring 14s infinite linear;
@@ -545,13 +545,13 @@ body::after {
 
 .circle-orbit-index {
   position: absolute;
-  top: 7px;
+  top: 5px;
   font-family: var(--font-mono);
-  font-size: 0.58rem;
+  font-size: 0.52rem;
   font-weight: 700;
   color: var(--orbit-color);
   background: rgba(0,0,0,0.72);
-  padding: 1px 6px;
+  padding: 1px 5px;
   border-radius: 4px;
   border: 1px solid rgba(255,255,255,0.08);
   pointer-events: none;
@@ -573,7 +573,7 @@ body::after {
 .circle-mini-iframe {
   width: 950px;
   height: 680px;
-  transform: scale(0.155);
+  transform: scale(0.125);
   transform-origin: 0 0;
   border: none;
   pointer-events: none;
@@ -588,17 +588,17 @@ body::after {
   justify-content: center;
   gap: 4px;
   text-align: center;
-  padding: 8px;
+  padding: 6px;
 }
 
 .circle-fallback-icon {
-  font-size: 1.8rem;
+  font-size: 1.4rem;
   filter: drop-shadow(0 0 10px var(--orbit-color));
 }
 
 .circle-fallback-code {
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: 0.58rem;
   color: var(--orbit-color);
   font-weight: 600;
   letter-spacing: 1px;
@@ -613,13 +613,13 @@ body::after {
 
 .circle-hud-badge {
   position: absolute;
-  bottom: 8px;
+  bottom: 6px;
   background: rgba(3, 7, 18, 0.94);
   border: 1px solid var(--orbit-color);
-  padding: 2px 7px;
-  border-radius: 12px;
+  padding: 1.5px 6px;
+  border-radius: 10px;
   font-family: var(--font-mono);
-  font-size: 0.6rem;
+  font-size: 0.56rem;
   letter-spacing: 0.8px;
   color: #fff;
   white-space: nowrap;
@@ -627,12 +627,13 @@ body::after {
   box-shadow: 0 2px 8px rgba(0,0,0,0.7);
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
   z-index: 10;
 }
 
 .circle-title-text {
   font-weight: 600;
+  font-size: 0.58rem;
 }
 
 /* ==================================================================== */
