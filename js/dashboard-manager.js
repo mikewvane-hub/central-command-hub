@@ -630,7 +630,10 @@ export class DashboardManager {
       }
     });
 
+    const footerDismissAll = document.getElementById('btn-footer-dismiss-all');
+
     if (itemsToDisplay.length === 0) {
+      if (footerDismissAll) footerDismissAll.style.display = 'none';
       const filterName = selectedFilter === 'all' ? 'All Dashboards' : (this.alerts[selectedFilter]?.deckName || selectedFilter);
       cardsContainer.innerHTML = `
         <div class="alert-empty-state">
@@ -650,6 +653,8 @@ export class DashboardManager {
       }
       return;
     }
+
+    if (footerDismissAll) footerDismissAll.style.display = '';
 
     // Top action bar above cards
     const filterTitle = selectedFilter === 'all' ? 'ALL DASHBOARDS' : (this.alerts[selectedFilter]?.deckName || selectedFilter).toUpperCase();

@@ -3,12 +3,12 @@
  * Main Application Orchestrator
  */
 
-import { sfx } from './sound-effects.js?v=3.6';
-import { AtomicCoreVisualizer } from './atomic-core.js?v=3.6';
-import { DashboardManager } from './dashboard-manager.js?v=3.6';
-import { VoiceCommandEngine } from './voice-command.js?v=3.6';
-import { DeviceOptimizer } from './device-optimizer.js?v=3.6';
-import { renderQRCode } from './qr-generator.js?v=3.6';
+import { sfx } from './sound-effects.js?v=3.7';
+import { AtomicCoreVisualizer } from './atomic-core.js?v=3.7';
+import { DashboardManager } from './dashboard-manager.js?v=3.7';
+import { VoiceCommandEngine } from './voice-command.js?v=3.7';
+import { DeviceOptimizer } from './device-optimizer.js?v=3.7';
+import { renderQRCode } from './qr-generator.js?v=3.7';
 
 class CentralCommandHubApp {
   constructor() {
@@ -122,6 +122,16 @@ class CentralCommandHubApp {
       });
     }
 
+    // Settings Modal backdrop click closes modal
+    if (settingsModal) {
+      settingsModal.addEventListener('click', (e) => {
+        if (e.target === settingsModal) {
+          sfx.playClick();
+          settingsModal.classList.remove('open');
+        }
+      });
+    }
+
     // Settings Form Save
     const saveSettingsBtn = document.getElementById('btn-save-settings');
     if (saveSettingsBtn) {
@@ -158,7 +168,21 @@ class CentralCommandHubApp {
           e.preventDefault();
           this.voiceEngine.toggleListening();
           break;
-        case 'Escape':
+        case 'Escape': {
+          const settingsModal = document.getElementById('modal-hub-settings');
+          if (settingsModal && settingsModal.classList.contains('open')) {
+            settingsModal.classList.remove('open');
+            sfx.playClick();
+            break;
+          }
+          const alertsModal = document.getElementById('modal-hub-alerts');
+          if (alertsModal && alertsModal.classList.contains('open')) {
+            this.dashboardMgr.closeAlertCenter();
+            break;
+          }
+          this.dashboardMgr.switchDeck('core');
+          break;
+        }
         case '0':
           this.dashboardMgr.switchDeck('core');
           break;
@@ -209,11 +233,31 @@ class CentralCommandHubApp {
     const copyBtn = document.getElementById('btn-copy-share-url');
     if (copyBtn) {
       copyBtn.addEventListener('click', () => {
-        navigator.clipboard.writeText(currentUrl).then(() => {
+        const onSuccess = () => {
           sfx.playSuccess();
           copyBtn.textContent = 'COPIED!';
           setTimeout(() => { copyBtn.textContent = 'COPY URL'; }, 2000);
-        });
+        };
+        const fallbackCopy = () => {
+          try {
+            if (shareUrlInput) {
+              shareUrlInput.select();
+              shareUrlInput.setSelectionRange(0, 99999);
+            }
+            document.execCommand('copy');
+            onSuccess();
+          } catch (err) {
+            console.warn('Fallback copy failed', err);
+          }
+        };
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(currentUrl)
+            .then(onSuccess)
+            .catch(() => fallbackCopy());
+        } else {
+          fallbackCopy();
+        }
       });
     }
   }
@@ -248,6 +292,22 @@ class CentralCommandHubApp {
     if (inputTrip) this.dashboardMgr.saveCustomUrl('trip', inputTrip.value.trim());
     if (inputMackie) this.dashboardMgr.saveCustomUrl('mackie', inputMackie.value.trim());
     if (inputBns3) this.dashboardMgr.saveCustomUrl('bns3', inputBns3.value.trim());
+
+    // Synchronize custom URLs into 3D orbital visualizer in memory
+    if (this.visualizer && Array.isArray(this.visualizer.dashboards)) {
+      this.visualizer.dashboards.forEach(d => {
+        if (this.dashboardMgr.urls[d.id]) {
+          d.url = this.dashboardMgr.urls[d.id];
+        }
+      });
+      if (Array.isArray(this.visualizer.electrons)) {
+        this.visualizer.electrons.forEach(el => {
+          if (el.dash && this.dashboardMgr.urls[el.dash.id]) {
+            el.dash.url = this.dashboardMgr.urls[el.dash.id];
+          }
+        });
+      }
+    }
 
     sfx.playSuccess();
     this.voiceEngine.speak("System configuration updated.");
