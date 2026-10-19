@@ -3,12 +3,13 @@
  * Main Application Orchestrator
  */
 
-import { sfx } from './sound-effects.js?v=8.0';
-import { AtomicCoreVisualizer } from './atomic-core.js?v=8.0';
-import { DashboardManager } from './dashboard-manager.js?v=8.0';
-import { VoiceCommandEngine } from './voice-command.js?v=8.0';
-import { DeviceOptimizer } from './device-optimizer.js?v=8.0';
-import { renderQRCode } from './qr-generator.js?v=8.0';
+import { sfx } from './sound-effects.js?v=20.0';
+import { AtomicCoreVisualizer } from './atomic-core.js?v=20.0';
+import { DashboardManager } from './dashboard-manager.js?v=20.0';
+import { VoiceCommandEngine } from './voice-command.js?v=20.0';
+import { DeviceOptimizer } from './device-optimizer.js?v=20.0';
+import { renderQRCode } from './qr-generator.js?v=20.0';
+import { ExecutiveSidebarManager } from './executive-sidebar.js?v=20.0';
 
 class CentralCommandHubApp {
   constructor() {
@@ -38,13 +39,22 @@ class CentralCommandHubApp {
       this.dashboardMgr.switchDeck(selectedDeckId);
     });
 
-    // Wire dynamic Alert/Notification syncing to 3D visual spheres
+    // Wire dynamic Alert/Notification syncing to 3D visual spheres and Executive Sidebar
     this.dashboardMgr.onAlertChange = (deckId, alertInfo) => {
       if (this.visualizer) {
         this.visualizer.setDeckAlert(deckId, alertInfo);
       }
+      if (this.sidebarMgr) {
+        this.sidebarMgr.render();
+      }
     };
     this.dashboardMgr.syncAllAlertsToVisualizer();
+
+    // 3. Initialize Executive Summary Sidebar (Priority Directives & Platform Diagnostics)
+    this.sidebarMgr = new ExecutiveSidebarManager({
+      visualizer: this.visualizer,
+      dashboardMgr: this.dashboardMgr
+    });
 
     // 3. Initialize Adaptive Device Optimizer (Z Fold 8 vs Laptop)
     this.deviceOptimizer = new DeviceOptimizer((mode) => {

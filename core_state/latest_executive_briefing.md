@@ -1,11 +1,11 @@
 # EXECUTIVE WEEKLY BRIEFING // WEEK OF OCTOBER 19 – OCTOBER 26, 2026
-*Generated on Monday, October 19, 2026 at 21:48 UTC | Cadence: Sunday 18:00*
+*Generated on Monday, October 19, 2026 at 23:24 UTC | Cadence: Sunday 18:00*
 
 ---
 
 ## 📌 Executive Highlights
 - FAMILY: User Birthday (29 Mar 1993, in 161d), Wife Birthday (23 Apr 1996, in 186d), Anniversary (23 Sep).
-- PROPERTY: Sierra Pines cash flow at +$1,120/mo Net ($2,450 Gross). Priority ticket: 'Perimeter Fence Wash & Gate Warranty Inspection'.
+- PROPERTY: Sierra Pines cash flow at +$1,120/mo Net ($3,030 Gross). Priority ticket: 'Perimeter Fence Wash & Gate Warranty Inspection'.
 - ATHLETIC: Readiness Score 61/100. HRV at 46 ms (BELOW_TARGET). Directive: ⚠️ HRV at 46 ms (Target: 65 ms). Autonomic nervous system fatigued. Throttle training to Zone 2 Active Recovery..
 - ACADEMIC: 0 draft(s) in critical T-72h window. Next submission due Oct 22.
 - FLEET: Colorado ZR2 oil life at 18% (service due); Nissan Murano WA State tabs expire Nov 30.
@@ -17,7 +17,7 @@
 | :--- | :--- |
 | **Family** | 📅 Family Sunday Meal Prep & Planning (2026-10-25) |
 | **Family** | 📅 Mackie School Fall Conference (2026-10-23) |
-| **Academic** | Autonomous Multi-Domain Agent Architectures (Draft V2) (Due 2026-10-22 • T-74.2h) |
+| **Academic** | Autonomous Multi-Domain Agent Architectures (Draft V2) (Due 2026-10-22 • T-72.6h) |
 | **Fleet** | 2021 Chevy Colorado ZR2 maintenance/registration action due. |
 
 **Core Family Milestones:**
@@ -28,7 +28,7 @@
 ---
 
 ## 🏡 Property Cash Flow & Maintenance (Sierra Pines // JBLM)
-- **Monthly Net Cash Flow:** **+$1,120/month** (Gross: $2,450)
+- **Monthly Net Cash Flow:** **+$1,120/month** (Gross: $3,030)
 - **Pending Maintenance Tickets:** 2
 - **Priority Escalation:** `Perimeter Fence Wash & Gate Warranty Inspection` (Deadline: Q4 2026)
 

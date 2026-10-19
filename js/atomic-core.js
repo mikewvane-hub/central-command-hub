@@ -234,20 +234,27 @@ export class AtomicCoreVisualizer {
     this.targetRotation = { x: 0.22, y: 0.32 };
     this.currentRotation = { x: 0.22, y: 0.32 };
     this.raycaster = null;
-    this.mouse = null;
     this.hoveredDeck = null;
     this.activeDeckId = 'core';
+    this.sidebarWidth = typeof window !== 'undefined' && window.innerWidth >= 1400 ? 380 : 0;
+    this.currentViewOffsetX = this.sidebarWidth > 0 ? (this.sidebarWidth / 2) : 0;
+    this.targetViewOffsetX = this.currentViewOffsetX;
 
     const resolveCloudUrl = (key, defaultRelPath) => {
       try {
         const val = localStorage.getItem(key);
+        if (key === 'hub_url_garage') {
+          if (val && (val.includes(':3009') || val.includes('localhost'))) {
+            return val;
+          }
+          return 'http://localhost:3009/';
+        }
         if (
           !val ||
           val.includes('127.0.0.1') ||
           val.includes('localhost') ||
           val === 'about:blank' ||
-          val === '' ||
-          (key === 'hub_url_garage' && !val.includes('v=14.0'))
+          val === ''
         ) {
           return defaultRelPath;
         }
@@ -351,7 +358,7 @@ export class AtomicCoreVisualizer {
         inclination: { x: -0.34, y: 0.42, z: -0.18 },
         color: 0xf59e0b,
         glowHex: '#f59e0b',
-        url: resolveCloudUrl('hub_url_garage', './dashboards/garage/index.html?v=14.0'),
+        url: resolveCloudUrl('hub_url_garage', 'http://localhost:3009/'),
         icon: '🛻'
       }
     ];
@@ -436,6 +443,7 @@ export class AtomicCoreVisualizer {
       this.camera.position.set(0, 0.4, 27.5);
     }
     this.camera.lookAt(0, 0, 0);
+    this.applyViewOffset(true);
   }
 
   buildNucleus() {
@@ -485,6 +493,128 @@ export class AtomicCoreVisualizer {
     this.scene.add(this.nucleusGroup);
   }
 
+  buildNodeGeometry(deckId) {
+    let geo;
+    if (deckId === 'garage') {
+      // 🛻 3D Open-Ended Wrench
+      const shape = new THREE.Shape();
+      const hw = 0.09, l = 0.48;
+      shape.moveTo(-hw, -l);
+      shape.lineTo(hw, -l);
+      shape.lineTo(hw, 0.16);
+      shape.lineTo(0.30, 0.20);
+      shape.lineTo(0.32, 0.42);
+      shape.lineTo(0.12, 0.54);
+      shape.lineTo(0.10, 0.34);
+      shape.lineTo(-0.10, 0.34);
+      shape.lineTo(-0.12, 0.54);
+      shape.lineTo(-0.32, 0.42);
+      shape.lineTo(-0.30, 0.20);
+      shape.lineTo(-hw, 0.16);
+      shape.closePath();
+      geo = new THREE.ExtrudeGeometry(shape, {
+        depth: 0.12,
+        bevelEnabled: true,
+        bevelSegments: 2,
+        steps: 1,
+        bevelSize: 0.02,
+        bevelThickness: 0.02
+      });
+      geo.center();
+      geo.scale(1.15, 1.15, 1.15);
+    } else if (deckId === 'rental') {
+      // 🏡 3D Architectural House with Gabled Roof
+      const shape = new THREE.Shape();
+      shape.moveTo(-0.36, -0.30);
+      shape.lineTo(0.36, -0.30);
+      shape.lineTo(0.36, 0.12);
+      shape.lineTo(0, 0.46); // Gabled roof peak
+      shape.lineTo(-0.36, 0.12);
+      shape.closePath();
+      geo = new THREE.ExtrudeGeometry(shape, {
+        depth: 0.40,
+        bevelEnabled: true,
+        bevelSegments: 2,
+        steps: 1,
+        bevelSize: 0.025,
+        bevelThickness: 0.025
+      });
+      geo.center();
+    } else if (deckId === 'trip') {
+      // 🏕️ 3D Mount Rainier Mountain Peak
+      const shape = new THREE.Shape();
+      shape.moveTo(-0.50, -0.32);
+      shape.lineTo(-0.20, 0.10);
+      shape.lineTo(0, 0.50); // Summit
+      shape.lineTo(0.22, 0.08);
+      shape.lineTo(0.50, -0.32);
+      shape.closePath();
+      geo = new THREE.ExtrudeGeometry(shape, {
+        depth: 0.30,
+        bevelEnabled: true,
+        bevelSegments: 2,
+        steps: 1,
+        bevelSize: 0.03,
+        bevelThickness: 0.03
+      });
+      geo.center();
+    } else if (deckId === 'financial') {
+      // 📈 3D Faceted Wealth Gem / Diamond
+      geo = new THREE.OctahedronGeometry(0.44, 0);
+      geo.scale(1, 1.3, 1);
+    } else if (deckId === 'executive') {
+      // 🎖️ 3D Commander 5-Point Star
+      const shape = new THREE.Shape();
+      const points = 5;
+      const outerR = 0.46;
+      const innerR = 0.20;
+      for (let i = 0; i < points * 2; i++) {
+        const r = (i % 2 === 0) ? outerR : innerR;
+        const angle = (i * Math.PI) / points - Math.PI / 2;
+        const x = Math.cos(angle) * r;
+        const y = Math.sin(angle) * r;
+        if (i === 0) shape.moveTo(x, y);
+        else shape.lineTo(x, y);
+      }
+      shape.closePath();
+      geo = new THREE.ExtrudeGeometry(shape, {
+        depth: 0.14,
+        bevelEnabled: true,
+        bevelSegments: 2,
+        steps: 1,
+        bevelSize: 0.02,
+        bevelThickness: 0.02
+      });
+      geo.center();
+    } else if (deckId === 'mackie') {
+      // 🗓️ 3D Daily Board / Calendar Tablet
+      const shape = new THREE.Shape();
+      const w = 0.36, h = 0.42, r = 0.05;
+      shape.moveTo(-w + r, -h);
+      shape.lineTo(w - r, -h);
+      shape.quadraticCurveTo(w, -h, w, -h + r);
+      shape.lineTo(w, h - r);
+      shape.quadraticCurveTo(w, h, w - r, h);
+      shape.lineTo(-w + r, h);
+      shape.quadraticCurveTo(-w, h, -w, h - r);
+      shape.lineTo(-w, -h + r);
+      shape.quadraticCurveTo(-w, -h, -w + r, -h);
+      shape.closePath();
+      geo = new THREE.ExtrudeGeometry(shape, {
+        depth: 0.12,
+        bevelEnabled: true,
+        bevelSegments: 2,
+        steps: 1,
+        bevelSize: 0.02,
+        bevelThickness: 0.02
+      });
+      geo.center();
+    } else {
+      geo = new THREE.SphereGeometry(0.36, 24, 24);
+    }
+    return geo;
+  }
+
   buildOrbitals() {
     this.orbitalGroup = new THREE.Group();
     this.electrons = [];
@@ -510,27 +640,29 @@ export class AtomicCoreVisualizer {
       orbitTiltGroup.rotation.z = dash.inclination.z;
       orbitTiltGroup.add(ring);
 
-      // 2. Electron Satellite Node (Docking anchor point in 3D - sleek minimized size)
-      const electronGeo = new THREE.SphereGeometry(0.36, 24, 24);
+      // 2. Custom 3D Node Mesh representing each domain:
+      // Garage: Wrench | Rental: House | Basecamp: Mountain | Wealth: Diamond | Exec: Star | Mackie: Calendar
+      const nodeGeo = this.buildNodeGeometry(dash.id);
       const electronMat = new THREE.MeshStandardMaterial({
         color: dash.color,
         emissive: dash.color,
-        emissiveIntensity: 0.9,
-        roughness: 0.15,
+        emissiveIntensity: 0.95,
+        roughness: 0.18,
         metalness: 0.85
       });
-      const electron = new THREE.Mesh(electronGeo, electronMat);
+      const electron = new THREE.Mesh(nodeGeo, electronMat);
       electron.userData = { dashboard: dash };
 
-      // Outer glow halo for the electron
-      const electronGlowGeo = new THREE.SphereGeometry(0.58, 16, 16);
+      // Outer glow halo matching the node shape
+      const glowGeo = nodeGeo.clone();
+      glowGeo.scale(1.22, 1.22, 1.22);
       const electronGlowMat = new THREE.MeshBasicMaterial({
         color: dash.color,
         transparent: true,
-        opacity: 0.38,
+        opacity: 0.35,
         wireframe: true
       });
-      const electronGlow = new THREE.Mesh(electronGlowGeo, electronGlowMat);
+      const electronGlow = new THREE.Mesh(glowGeo, electronGlowMat);
       electron.add(electronGlow);
 
       orbitTiltGroup.add(electron);
@@ -791,11 +923,76 @@ export class AtomicCoreVisualizer {
     const height = this.container.clientHeight || (window.innerHeight - 70);
     const aspect = width / height;
 
+    const isDesktop = (window.innerWidth >= 1400);
+    this.targetViewOffsetX = isDesktop && this.sidebarWidth > 0 ? (this.sidebarWidth / 2) : 0;
+    this.currentViewOffsetX = this.targetViewOffsetX;
+
     this.camera.aspect = aspect;
     this.adjustCameraForAspect(aspect);
-    this.camera.updateProjectionMatrix();
+    this.applyViewOffset(true);
 
     this.renderer.setSize(width, height);
+  }
+
+  setSidebarWidth(width, immediate = false) {
+    this.sidebarWidth = width;
+    const isDesktop = (window.innerWidth >= 1400);
+    // On desktop widescreen, offset by width / 2 to center the 3D atomic nucleus at ~40.1% screen width
+    this.targetViewOffsetX = isDesktop && width > 0 ? (width / 2) : 0;
+    if (immediate) {
+      this.currentViewOffsetX = this.targetViewOffsetX;
+      this.applyViewOffset(true);
+    }
+  }
+
+  applyViewOffset(force = false) {
+    if (!this.camera || !this.container) return;
+    const width = this.container.clientWidth || window.innerWidth;
+    const height = this.container.clientHeight || (window.innerHeight - 70);
+
+    if (Math.abs(this.currentViewOffsetX) < 0.5) {
+      this.camera.clearViewOffset();
+    } else {
+      this.camera.setViewOffset(width, height, this.currentViewOffsetX, 0, width, height);
+    }
+    this.camera.updateProjectionMatrix();
+  }
+
+  pulseSphere(deckId) {
+    this.hoveredDeck = deckId;
+    const el = this.electrons.find(e => e.dash.id === deckId);
+    if (el) {
+      if (el.ringMesh && el.ringMesh.material) {
+        el.ringMesh.material.opacity = 0.95;
+        el.ringMesh.material.color.setHex(0xffffff);
+      }
+      if (el.glowMesh && el.glowMesh.material) {
+        el.glowMesh.material.opacity = 0.85;
+      }
+      if (el.domElement) {
+        el.domElement.classList.add('sidebar-hover-pulse');
+      }
+    }
+  }
+
+  clearPulseSphere(deckId) {
+    if (this.hoveredDeck === deckId) {
+      this.hoveredDeck = null;
+    }
+    const el = this.electrons.find(e => e.dash.id === deckId);
+    if (el) {
+      if (el.ringMesh && el.ringMesh.material) {
+        const isFocus = (this.activeDeckId === 'core' || el.dash.id === this.activeDeckId);
+        el.ringMesh.material.opacity = isFocus ? 0.35 : 0.15;
+        el.ringMesh.material.color.setHex(el.dash.color);
+      }
+      if (el.glowMesh && el.glowMesh.material) {
+        el.glowMesh.material.opacity = 0.45;
+      }
+      if (el.domElement) {
+        el.domElement.classList.remove('sidebar-hover-pulse');
+      }
+    }
   }
 
   setFocusDeck(deckId) {
@@ -827,7 +1024,19 @@ export class AtomicCoreVisualizer {
 
     const time = performance.now() * 0.001;
 
-    // Smooth drag interpolation
+    // Smooth view offset interpolation for sidebar transitions
+    if (Math.abs(this.targetViewOffsetX - this.currentViewOffsetX) > 0.15) {
+      this.currentViewOffsetX += (this.targetViewOffsetX - this.currentViewOffsetX) * 0.12;
+      this.applyViewOffset();
+    }
+
+    // Constant slow elegant rotation of the atomic structure itself when user is not dragging
+    if (!this.isDragging) {
+      this.targetRotation.y += 0.0024;
+      this.targetRotation.x = 0.22 + Math.sin(time * 0.35) * 0.04;
+    }
+
+    // Smooth drag / rotation interpolation
     this.currentRotation.x += (this.targetRotation.x - this.currentRotation.x) * 0.08;
     this.currentRotation.y += (this.targetRotation.y - this.currentRotation.y) * 0.08;
 
@@ -863,6 +1072,11 @@ export class AtomicCoreVisualizer {
       const x = Math.cos(el.currentAngle) * (dash.orbitRadius * stretchX);
       const z = Math.sin(el.currentAngle) * dash.orbitRadius;
       el.mesh.position.set(x, 0, z);
+
+      // Spin the custom 3D domain shape (wrench, house, mountain, gem, star, calendar)
+      el.mesh.rotation.y += 0.02;
+      el.mesh.rotation.x += 0.01;
+      el.mesh.rotation.z += 0.012;
 
       // Spin the glow
       el.glowMesh.rotation.y += 0.04;

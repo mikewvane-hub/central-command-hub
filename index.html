@@ -11,8 +11,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@500;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet" />
 
   <!-- Core Stylesheets -->
-  <link rel="stylesheet" href="css/hub-style.css?v=3.6" />
-  <link rel="stylesheet" href="css/atomic-theme.css?v=3.6" />
+  <link rel="stylesheet" href="css/hub-style.css?v=4.0" />
+  <link rel="stylesheet" href="css/atomic-theme.css?v=4.0" />
 
   <!-- Three.js 3D Engine for Atomic Simulation -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -159,7 +159,7 @@
       <section class="deck-view active" id="deck-core">
         <div class="atomic-hud-overlay">
           
-          <!-- Top Telemetry Row -->
+          <!-- Top Telemetry Row (Security Link relocated to Executive Summary Sidebar) -->
           <div class="telemetry-row">
             <div class="tactical-box overlay-interactive">
               <div class="tactical-title">QUANTUM ORBITAL TELEMETRY</div>
@@ -173,12 +173,6 @@
               <div class="prompt-text">
                 VOICE COMMAND ACTIVE: Say <strong>"Open Executive Dashboard"</strong>, <strong>"Open Rental Ops"</strong>, or <strong>"Wealth Console"</strong>
               </div>
-            </div>
-
-            <div class="tactical-box overlay-interactive">
-              <div class="tactical-title">CENTRAL SECURITY LINK</div>
-              <div class="tactical-metric" style="color:var(--emerald-core);">ALL SECURE</div>
-              <div class="tactical-sub">ENCRYPTED GATEWAY // 24/7</div>
             </div>
           </div>
 
@@ -262,8 +256,8 @@
               <span class="subnav-status" data-status-badge="rental">
                 <span class="status-beacon"></span> ONLINE
               </span>
-              <strong>ANTIGRAVITY // DUAL-ENGINE WA RENTAL &amp; JBLM ACQUISITION</strong>
-              <span class="subnav-url">CLOUD 24/7 // WA RENTAL &amp; JBLM RADAR</span>
+              <strong>ANTIGRAVITY // PROPERTY &amp; ASSET MANAGEMENT COMMAND</strong>
+              <span class="subnav-url">SIERRA PINES, LLC // 6701 SIERRA DR SE, LACEY WA</span>
             </div>
             <div class="subnav-actions">
               <button class="subnav-btn btn-toggle-glass" data-action="toggle-glass" title="Toggle Glass / Ghost Translucency to see Atomic Core behind">💎 Glass (82%)</button>
@@ -377,7 +371,7 @@
             </div>
           </div>
           <div class="dashboard-iframe-container">
-            <iframe id="iframe-garage" class="dashboard-iframe" src="./dashboards/garage/index.html?v=14.0" title="Garage &amp; Fleet Asset Command"></iframe>
+            <iframe id="iframe-garage" class="dashboard-iframe" src="http://localhost:3009/" title="Garage &amp; Fleet Asset Command"></iframe>
           </div>
         </div>
       </section>
@@ -532,6 +526,129 @@
 
     </main>
 
+    <!-- MOBILE / DRAWER BACKDROP (Active when sidebar is open on screens < 1400px) -->
+    <div id="sidebar-backdrop" class="sidebar-backdrop"></div>
+
+    <!-- ======================================================== -->
+    <!-- 🏛️ FIXED COLLAPSIBLE RIGHT-HAND EXECUTIVE SUMMARY SIDEBAR -->
+    <!-- ======================================================== -->
+    <aside id="executive-sidebar" class="executive-sidebar" aria-label="Executive Summary and Tactical Operations">
+      
+      <!-- Left-Border Expand / Collapse Rail Toggle Button -->
+      <button id="sidebar-toggle-btn" class="sidebar-toggle-btn" title="Toggle Executive Sidebar (Collapse / Expand)" aria-expanded="true">
+        <span class="toggle-icon">⇥</span>
+      </button>
+
+      <!-- COLLAPSED ICON RAIL (Visible when .collapsed) -->
+      <div class="sidebar-collapsed-rail" id="sidebar-collapsed-rail">
+        <button class="rail-icon-btn" id="rail-btn-expand" title="Expand Executive Summary">
+          <span class="rail-icon">⇤</span>
+        </button>
+        <div class="rail-divider"></div>
+        <button class="rail-icon-btn" id="rail-btn-directives" title="Priority Directives (Active Life Ops)">
+          <span class="rail-icon">⚡</span>
+          <span class="rail-badge" id="rail-badge-directives">18</span>
+        </button>
+        <button class="rail-icon-btn" id="rail-btn-diagnostics" title="Platform Diagnostics & Backlog">
+          <span class="rail-icon">🛠️</span>
+          <span class="rail-badge" id="rail-badge-diagnostics">6</span>
+        </button>
+        <div class="rail-divider"></div>
+        <div class="rail-status-beacon" title="Central Security Link // All Secure (24/7 Encrypted)">
+          <span class="status-beacon"></span>
+          <span class="rail-mini-label">SEC</span>
+        </div>
+      </div>
+
+      <!-- EXPANDED SIDEBAR CONTENT (Visible when NOT .collapsed) -->
+      <div class="sidebar-expanded-content" id="sidebar-expanded-content">
+        
+        <!-- Sidebar Header HUD Card (Merged Central Security Link) -->
+        <div class="sidebar-header">
+          <div class="sidebar-header-top">
+            <div class="sidebar-brand-title">
+              <span class="brand-spark">🏛️</span>
+              <span>EXECUTIVE SUMMARY</span>
+            </div>
+            <div class="sidebar-header-actions">
+              <button class="sidebar-action-btn" id="btn-sidebar-refresh" title="Refresh Live State & Diagnostics">🔄</button>
+              <button class="sidebar-action-btn" id="btn-sidebar-collapse" title="Collapse to Rail (Alt + [)">⇥</button>
+            </div>
+          </div>
+
+          <!-- Merged Central Security Link & Status Strip -->
+          <div class="sidebar-security-strip">
+            <div class="security-chip">
+              <span class="status-beacon"></span>
+              <span class="security-text">CENTRAL SECURITY LINK // ALL SECURE</span>
+            </div>
+            <span class="security-enc-badge">ENCRYPTED 24/7</span>
+          </div>
+
+          <!-- Quick Executive Stat Bar -->
+          <div class="sidebar-stat-strip">
+            <div class="stat-cell" id="stat-cell-critical">
+              <span class="stat-num" id="sidebar-count-critical">2</span>
+              <span class="stat-lbl">P0 CRITICAL</span>
+            </div>
+            <div class="stat-cell" id="stat-cell-required">
+              <span class="stat-num" id="sidebar-count-required">8</span>
+              <span class="stat-lbl">P1 REQUIRED</span>
+            </div>
+            <div class="stat-cell" id="stat-cell-backlog">
+              <span class="stat-num" id="sidebar-count-backlog">6</span>
+              <span class="stat-lbl">DIAGNOSTICS</span>
+            </div>
+          </div>
+
+          <!-- Stream Switcher Tabs -->
+          <div class="sidebar-nav-tabs" role="tablist">
+            <button class="sidebar-tab-btn active" id="tab-btn-directives" data-stream="directives" role="tab" aria-selected="true">
+              <span>⚡ DIRECTIVES & LIFE OPS</span>
+              <span class="stream-tab-badge" id="badge-stream-directives">18</span>
+            </button>
+            <button class="sidebar-tab-btn" id="tab-btn-diagnostics" data-stream="diagnostics" role="tab" aria-selected="false">
+              <span>🛠️ PLATFORM BACKLOG</span>
+              <span class="stream-tab-badge" id="badge-stream-diagnostics">6</span>
+            </button>
+          </div>
+
+          <!-- Sub-filter chips row -->
+          <div class="sidebar-filter-pills" id="sidebar-filter-pills">
+            <button class="filter-pill active" data-filter="all">ALL</button>
+            <button class="filter-pill filter-p0" data-filter="P0">P0 CRITICAL</button>
+            <button class="filter-pill filter-p1" data-filter="P1">P1 REQUIRED</button>
+            <button class="filter-pill filter-info" data-filter="INFO">INFO</button>
+          </div>
+        </div>
+
+        <!-- STREAM CONTAINER A: PRIORITY DIRECTIVES & LIFE OPS -->
+        <div class="sidebar-stream-module active" id="stream-directives" role="tabpanel">
+          <div class="stream-cards-list" id="directives-cards-container">
+            <!-- Rendered dynamically from active domain cores -->
+          </div>
+        </div>
+
+        <!-- STREAM CONTAINER B: PLATFORM DIAGNOSTICS & BACKLOG -->
+        <div class="sidebar-stream-module" id="stream-diagnostics" role="tabpanel">
+          <div class="stream-cards-list" id="diagnostics-cards-container">
+            <!-- Rendered dynamically from telemetry error states and user backlog items -->
+          </div>
+        </div>
+
+        <!-- Sidebar Footer Quick Actions -->
+        <div class="sidebar-footer">
+          <button class="sidebar-footer-btn secondary" id="btn-sidebar-rerun-cadence" title="Re-run Sunday Executive Cadence Pipeline">
+            <span>⚡</span> RERUN CADENCE
+          </button>
+          <button class="sidebar-footer-btn primary" id="btn-sidebar-open-briefing" title="Open Full Executive Sunday Briefing Modal">
+            <span>📖</span> FULL BRIEFING
+          </button>
+        </div>
+
+      </div>
+    </aside>
+
     <!-- FLOATING VOICE RECOGNITION HOLOGRAM HUD -->
     <aside class="voice-hologram-hud" id="voice-hologram-hud">
       <div class="emblem-core" style="width:24px;height:24px;"></div>
@@ -581,7 +698,7 @@
 
           <label style="display:flex;flex-direction:column;gap:4px;">
             <span style="color:#f59e0b;">Garage &amp; Fleet Asset Command URL:</span>
-            <input type="text" id="setting-url-garage" style="background:#030712;border:1px solid var(--border-cyan);color:#fff;padding:8px 12px;border-radius:6px;font-family:inherit;" placeholder="./dashboards/garage/index.html?v=14.0" />
+            <input type="text" id="setting-url-garage" style="background:#030712;border:1px solid var(--border-cyan);color:#fff;padding:8px 12px;border-radius:6px;font-family:inherit;" placeholder="http://localhost:3009/" />
           </label>
 
           <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:10px;">
@@ -661,6 +778,6 @@
   </div>
 
   <!-- Boot Module Script -->
-  <script type="module" src="js/app.js?v=8.0"></script>
+  <script type="module" src="js/app.js?v=20.0"></script>
 </body>
 </html>

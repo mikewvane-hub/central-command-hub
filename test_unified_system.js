@@ -137,13 +137,17 @@ async function main() {
 
     serverProc.stdout.on('data', d => {
       const msg = d.toString();
-      if (msg.includes('Listening on port') || msg.includes('HUB CORE ACTIVE')) {
+      if (msg.includes('ANTIGRAVITY CENTRAL COMMAND HUB ONLINE') || msg.includes('localhost:') || msg.includes('Listening on port')) {
         if (!resolved) {
           resolved = true;
           clearTimeout(timeout);
           resolve();
         }
       }
+    });
+
+    serverProc.stderr.on('data', d => {
+      console.error('[Test Server stderr]:', d.toString());
     });
 
     serverProc.on('error', err => {
@@ -179,7 +183,7 @@ async function main() {
 
   // 6. Test syntax of client JavaScript files
   console.log('\n▶ [6/6] Validating Client JavaScript Modules syntax...');
-  const jsFiles = ['dashboard-manager.js', 'app.js', 'atomic-core.js', 'voice-command.js', 'device-optimizer.js'];
+  const jsFiles = ['dashboard-manager.js', 'app.js', 'atomic-core.js', 'voice-command.js', 'device-optimizer.js', 'executive-sidebar.js'];
   for (const f of jsFiles) {
     const checkRes = await runCommand('node', ['--check', `js/${f}`], __dirname);
     if (checkRes.code !== 0) {

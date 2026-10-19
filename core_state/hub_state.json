@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": "1.0.0-UNIFIED",
-    "last_updated": "2026-10-19T21:48:33.158578+00:00",
+    "last_updated": "2026-10-19T23:24:08.469061+00:00",
     "timezone": "America/New_York",
     "status": "ONLINE"
   },
@@ -200,7 +200,7 @@
     "property": "Sierra Pines // JBLM WA",
     "status": "OCCUPIED_100%",
     "financials": {
-      "monthly_gross": 2450,
+      "monthly_gross": 3030,
       "monthly_net": 1120,
       "currency": "USD"
     },
@@ -234,7 +234,7 @@
       "statute_or_category": "Athletic Readiness",
       "due_date": "2026-10-19",
       "action_url": "health",
-      "created_at": "2026-10-19T21:48:33.000233+00:00",
+      "created_at": "2026-10-19T23:24:08.227533+00:00",
       "acknowledged": false,
       "dismissed": false
     },
@@ -304,7 +304,7 @@
       "statute_or_category": "Preventive Maintenance",
       "due_date": "2026-11-02",
       "action_url": "fleet",
-      "created_at": "2026-10-19T21:48:33.001236+00:00",
+      "created_at": "2026-10-19T23:24:08.227533+00:00",
       "acknowledged": false,
       "dismissed": false
     },
@@ -318,7 +318,7 @@
       "statute_or_category": "State Vehicle Registration",
       "due_date": "2026-11-30",
       "action_url": "fleet",
-      "created_at": "2026-10-19T21:48:33.013588+00:00",
+      "created_at": "2026-10-19T23:24:08.257571+00:00",
       "acknowledged": false,
       "dismissed": false
     },
@@ -332,27 +332,27 @@
       "statute_or_category": "Q4 Statutory Maintenance",
       "due_date": "2026-12-31",
       "action_url": "rental",
-      "created_at": "2026-10-19T21:48:33.013588+00:00",
+      "created_at": "2026-10-19T23:24:08.257571+00:00",
       "acknowledged": false,
       "dismissed": false
     }
   ],
   "executive_briefing": {
     "cadence": "SUNDAY_1800_EXECUTIVE_BRIEFING",
-    "generated_at": "2026-10-19T21:48:33.000233+00:00",
+    "generated_at": "2026-10-19T23:24:08.226007+00:00",
     "week_label": "Week of October 19 \u2013 October 26, 2026",
     "cadence_window": "Week of October 19 \u2013 October 26, 2026",
     "summary": "Executive briefing for Week of October 19 \u2013 October 26, 2026 integrating Family Milestones, Property Cash Flow, Athletic Readiness, Academic Deadlines, and Fleet Telemetry.",
     "highlights": [
       "FAMILY: User Birthday (29 Mar 1993, in 161d), Wife Birthday (23 Apr 1996, in 186d), Anniversary (23 Sep).",
-      "PROPERTY: Sierra Pines cash flow at +$1,120/mo Net ($2,450 Gross). Priority ticket: 'Perimeter Fence Wash & Gate Warranty Inspection'.",
+      "PROPERTY: Sierra Pines cash flow at +$1,120/mo Net ($3,030 Gross). Priority ticket: 'Perimeter Fence Wash & Gate Warranty Inspection'.",
       "ATHLETIC: Readiness Score 61/100. HRV at 46 ms (BELOW_TARGET). Directive: \u26a0\ufe0f HRV at 46 ms (Target: 65 ms). Autonomic nervous system fatigued. Throttle training to Zone 2 Active Recovery..",
       "ACADEMIC: 0 draft(s) in critical T-72h window. Next submission due Oct 22.",
       "FLEET: Colorado ZR2 oil life at 18% (service due); Nissan Murano WA State tabs expire Nov 30."
     ],
     "executive_highlights": [
       "FAMILY: User Birthday (29 Mar 1993, in 161d), Wife Birthday (23 Apr 1996, in 186d), Anniversary (23 Sep).",
-      "PROPERTY: Sierra Pines cash flow at +$1,120/mo Net ($2,450 Gross). Priority ticket: 'Perimeter Fence Wash & Gate Warranty Inspection'.",
+      "PROPERTY: Sierra Pines cash flow at +$1,120/mo Net ($3,030 Gross). Priority ticket: 'Perimeter Fence Wash & Gate Warranty Inspection'.",
       "ATHLETIC: Readiness Score 61/100. HRV at 46 ms (BELOW_TARGET). Directive: \u26a0\ufe0f HRV at 46 ms (Target: 65 ms). Autonomic nervous system fatigued. Throttle training to Zone 2 Active Recovery..",
       "ACADEMIC: 0 draft(s) in critical T-72h window. Next submission due Oct 22.",
       "FLEET: Colorado ZR2 oil life at 18% (service due); Nissan Murano WA State tabs expire Nov 30."
@@ -368,7 +368,7 @@
       },
       {
         "category": "Academic",
-        "detail": "Autonomous Multi-Domain Agent Architectures (Draft V2) (Due 2026-10-22 \u2022 T-74.2h)"
+        "detail": "Autonomous Multi-Domain Agent Architectures (Draft V2) (Due 2026-10-22 \u2022 T-72.6h)"
       },
       {
         "category": "Fleet",
@@ -401,7 +401,7 @@
     },
     "property_cashflow": {
       "monthly_net": 1120,
-      "monthly_gross": 2450,
+      "monthly_gross": 3030,
       "pending_tickets_count": 2,
       "critical_ticket": "Perimeter Fence Wash & Gate Warranty Inspection"
     },
@@ -419,7 +419,7 @@
         "id": "draft_agentic_arch",
         "title": "Autonomous Multi-Domain Agent Architectures (Draft V2)",
         "deadline": "2026-10-22T23:59:00Z",
-        "hours_remaining": 74.2,
+        "hours_remaining": 72.6,
         "urgency": "T_MINUS_72H",
         "target": "IEEE / ACM Software Engineering Submission"
       },
@@ -427,7 +427,7 @@
         "id": "lit_review_defense",
         "title": "Comprehensive Literature Review & Defense Synthesis",
         "deadline": "2026-11-10T17:00:00Z",
-        "hours_remaining": 523.2,
+        "hours_remaining": 521.6,
         "urgency": "ON_TRACK",
         "target": null
       }

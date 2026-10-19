@@ -8,6 +8,13 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+process.on('uncaughtException', (err) => {
+  console.error('[Central Command Hub] Uncaught Exception:', err);
+});
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('[Central Command Hub] Unhandled Rejection:', reason);
+});
+
 const app = express();
 const PORT = process.env.PORT || 4000;
 
@@ -51,8 +58,8 @@ app.get('/api/telemetry', async (req, res) => {
     },
     {
       id: 'rental',
-      name: 'Antigravity Rental Ops & JBLM Terminal',
-      url: 'http://127.0.0.1:8000/',
+      name: 'Property & Asset Management Command',
+      url: `http://127.0.0.1:${PORT}/dashboards/rental/index.html`,
       type: 'local'
     },
     {
@@ -76,7 +83,7 @@ app.get('/api/telemetry', async (req, res) => {
     {
       id: 'garage',
       name: 'Garage & Fleet Asset Command',
-      url: `http://127.0.0.1:${PORT}/dashboards/garage/index.html`,
+      url: 'http://localhost:3009/',
       type: 'local'
     }
   ];

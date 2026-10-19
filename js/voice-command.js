@@ -451,12 +451,12 @@ export class VoiceCommandEngine {
     const hasWakeWord = wakeWordRegex.test(text);
     const strippedText = text.replace(wakeWordRegex, '').trim();
 
-    // If user ONLY said wake word
+    // If user ONLY said wake word, listen silently with zero voice welcome speech
     if (hasWakeWord && (strippedText === '' || strippedText === 'hello' || strippedText === 'hi' || strippedText === 'are you there')) {
       return {
         category: 'wake',
         target: 'wake',
-        speech: "Antigravity online. Ready for command."
+        speech: "" // No voice welcome/greeting
       };
     }
 
@@ -515,7 +515,9 @@ export class VoiceCommandEngine {
     const cmd = this.classifyCommand(originalText);
 
     if (cmd) {
-      this.speak(cmd.speech);
+      if (cmd.speech && cmd.speech.trim() !== '') {
+        this.speak(cmd.speech);
+      }
 
       if (cmd.category === 'deck' && this.handlers.onSelectDeck) {
         this.handlers.onSelectDeck(cmd.target);
