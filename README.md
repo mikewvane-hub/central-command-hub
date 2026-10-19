@@ -13,7 +13,6 @@ An always-active, 24/7 centralized command hub designed with an **interactive 3D
 | **Financial Command Center** | `http://localhost:3008/` | Local Next.js 15 | Executive wealth console, asset distribution, liquidity & capital deployment. |
 | **Rainier Basecamp // Overland Planner** | `https://daily-executive-dashboard.onrender.com/trip-planner/` | Render Cloud (24/7) | Family overland expeditions, Rainier campsite logistics, GPS waypoints & packing checklists. |
 | **Mackie's Daily Board** | `https://daily-executive-dashboard.onrender.com/mackie/` | Render Cloud (24/7) | Family calendar synchronization, weekly meal planning, shared grocery shopping lists & coordination. |
-| **110th CBRN BN S3 Readiness (TRAIN-PRO)** | `http://localhost:3011/` | Local Synergy Hub | Iron Dragons Battalion METL, training readiness, exercise cycles & risk matrix. |
 
 **Live Permanent Global URL:** [https://mikewvane-hub.github.io/central-command-hub/](https://mikewvane-hub.github.io/central-command-hub/)
 
@@ -24,7 +23,7 @@ An always-active, 24/7 centralized command hub designed with an **interactive 3D
 ### 1. 3D Atomic Orbital Core with Floating Dashboard Circles (Three.js WebGL)
 - **Central Quantum Nucleus**: Dynamic pulsating proton/neutron energy cluster with additive halo blending running 24/7 as a **persistent background world**.
 - **Floating Circles with Actual Dashboards**:
-  - The 6 orbiting circles are 3D-tracked **holographic viewport pods** that display the **actual dashboards** orbiting the nucleus!
+  - The 5 orbiting circles are 3D-tracked **holographic viewport pods** that display the **actual dashboards** orbiting the nucleus!
   - As they orbit, depth scaling dynamically resizes each circle between `0.68x` and `1.15x` based on 3D camera distance.
   - Tilted Quantum Orbits:
     - Orbit 01 (`0x00f0ff` Cyan): Executive Daily Briefing
@@ -32,7 +31,6 @@ An always-active, 24/7 centralized command hub designed with an **interactive 3D
     - Orbit 03 (`0x8b5cf6` Plasma Violet): Financial Wealth Console
     - Orbit 04 (`0x10b981` Emerald Core): Rainier Basecamp & Overland Planner
     - Orbit 05 (`0xf43f5e` Rose Coral): Mackie's Daily Board (Calendar & Meals)
-    - Orbit 06 (`0xf59e0b` Amber Gold): 110th CBRN BN S3 Readiness Matrix
 - **See-Through Holographic Windows (Atomic Core Never Hidden)**:
   - Opening any dashboard displays it inside a centered **floating holographic HUD window** with customizable glass translucency.
   - The atomic core, pulsating nucleus, and all electron orbits remain 100% visible and animating **behind and around** the active dashboard!
@@ -42,14 +40,13 @@ An always-active, 24/7 centralized command hub designed with an **interactive 3D
 Operated hands-free with **Continuous Always-Listening Mode** and optional **Wake Words**:
 - **Activation**: Click the **Voice Pill** in the top bar (or press <kbd>Space</kbd>) to enable hands-free listening. When prompted, select **Allow** for microphone access.
 - **Continuous Mode**: Once tapped, it stays listening continuously in the background and will not time out.
-- **Wake Words (Optional)**: You can address the hub directly by saying **"Antigravity"**, **"Computer"**, **"Hub"**, or **"Jarvis"** (e.g., *"Antigravity, open Executive Briefing"* or *"Computer, open S3"*), or you can speak the command directly without a wake word!
+- **Wake Words (Optional)**: You can address the hub directly by saying **"Antigravity"**, **"Computer"**, **"Hub"**, or **"Jarvis"** (e.g., *"Antigravity, open Executive Briefing"*), or you can speak the command directly without a wake word!
 - **Supported Voice Commands**:
   - *"Open Executive Dashboard"* / *"Executive Briefing"* &rarr; Warps to Executive Briefing.
   - *"Open Rental Operations"* / *"Open Antigravity"* / *"JBLM Terminal"* &rarr; Warps to Rental Operations.
   - *"Open Financial Command"* / *"Wealth Console"* &rarr; Warps to Financial Command Center.
   - *"Open Rainier Basecamp"* / *"Overland Planner"* &rarr; Warps to Basecamp Planner.
   - *"Open Mackie's Board"* / *"Meal Planner"* &rarr; Warps to Mackie's Daily Board.
-  - *"Open S3 Readiness"* / *"Battalion S3"* / *"Train Pro"* / *"Iron Dragons"* &rarr; Warps to 110th CBRN BN S3 Matrix.
   - *"Show Atomic Core"* / *"Return Home"* &rarr; Warps back to 3D Atomic Orbit view.
   - *"System Status"* / *"Diagnostics"* &rarr; Vocalizes fleet status report.
   - *"Z Fold Mode"* / *"Laptop Mode"* / *"Auto Mode"* &rarr; Dynamically re-calibrates display ratio.

@@ -3,12 +3,12 @@
  * Main Application Orchestrator
  */
 
-import { sfx } from './sound-effects.js?v=3.7';
-import { AtomicCoreVisualizer } from './atomic-core.js?v=3.7';
-import { DashboardManager } from './dashboard-manager.js?v=3.7';
-import { VoiceCommandEngine } from './voice-command.js?v=3.7';
-import { DeviceOptimizer } from './device-optimizer.js?v=3.7';
-import { renderQRCode } from './qr-generator.js?v=3.7';
+import { sfx } from './sound-effects.js?v=4.0';
+import { AtomicCoreVisualizer } from './atomic-core.js?v=4.0';
+import { DashboardManager } from './dashboard-manager.js?v=4.0';
+import { VoiceCommandEngine } from './voice-command.js?v=4.0';
+import { DeviceOptimizer } from './device-optimizer.js?v=4.0';
+import { renderQRCode } from './qr-generator.js?v=4.0';
 
 class CentralCommandHubApp {
   constructor() {
@@ -202,8 +202,6 @@ class CentralCommandHubApp {
           this.dashboardMgr.switchDeck('mackie');
           break;
         case '6':
-          this.dashboardMgr.switchDeck('bns3');
-          break;
         case '7':
           this.dashboardMgr.switchDeck('telemetry');
           break;
@@ -268,14 +266,12 @@ class CentralCommandHubApp {
     const inputFin = document.getElementById('setting-url-financial');
     const inputTrip = document.getElementById('setting-url-trip');
     const inputMackie = document.getElementById('setting-url-mackie');
-    const inputBns3 = document.getElementById('setting-url-bns3');
 
     if (inputExec) inputExec.value = this.dashboardMgr.urls.executive;
     if (inputRent) inputRent.value = this.dashboardMgr.urls.rental;
     if (inputFin) inputFin.value = this.dashboardMgr.urls.financial;
     if (inputTrip) inputTrip.value = this.dashboardMgr.urls.trip;
     if (inputMackie) inputMackie.value = this.dashboardMgr.urls.mackie;
-    if (inputBns3) inputBns3.value = this.dashboardMgr.urls.bns3;
   }
 
   saveSettingsForm() {
@@ -284,14 +280,12 @@ class CentralCommandHubApp {
     const inputFin = document.getElementById('setting-url-financial');
     const inputTrip = document.getElementById('setting-url-trip');
     const inputMackie = document.getElementById('setting-url-mackie');
-    const inputBns3 = document.getElementById('setting-url-bns3');
 
     if (inputExec) this.dashboardMgr.saveCustomUrl('executive', inputExec.value.trim());
     if (inputRent) this.dashboardMgr.saveCustomUrl('rental', inputRent.value.trim());
     if (inputFin) this.dashboardMgr.saveCustomUrl('financial', inputFin.value.trim());
     if (inputTrip) this.dashboardMgr.saveCustomUrl('trip', inputTrip.value.trim());
     if (inputMackie) this.dashboardMgr.saveCustomUrl('mackie', inputMackie.value.trim());
-    if (inputBns3) this.dashboardMgr.saveCustomUrl('bns3', inputBns3.value.trim());
 
     // Synchronize custom URLs into 3D orbital visualizer in memory
     if (this.visualizer && Array.isArray(this.visualizer.dashboards)) {
@@ -332,10 +326,9 @@ class CentralCommandHubApp {
     const finStatus = this.dashboardMgr.statusMap.financial || 'ONLINE';
     const tripStatus = this.dashboardMgr.statusMap.trip || 'ONLINE';
     const mackieStatus = this.dashboardMgr.statusMap.mackie || 'ONLINE';
-    const bns3Status = this.dashboardMgr.statusMap.bns3 || 'ONLINE';
 
     this.voiceEngine.speak(
-      `Central Command Hub operational status: Executive Briefing is ${execStatus}. Rental Operations is ${rentStatus}. Wealth console is ${finStatus}. Rainier Basecamp is ${tripStatus}. Mackie's Daily Board is ${mackieStatus}. 110th Chemical Battalion S3 is ${bns3Status}. Display ratio calibrated.`
+      `Central Command Hub operational status: Executive Briefing is ${execStatus}. Rental Operations is ${rentStatus}. Wealth console is ${finStatus}. Rainier Basecamp is ${tripStatus}. Mackie's Daily Board is ${mackieStatus}. Display ratio calibrated.`
     );
   }
 }

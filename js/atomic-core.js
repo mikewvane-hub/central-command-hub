@@ -171,41 +171,6 @@ const SPHERE_VISUAL_SVGS = {
         </g>
       </svg>
     </div>
-  `,
-  bns3: `
-    <div class="circle-graphic-container circle-graphic-bns3">
-      <svg viewBox="0 0 148 148" class="circle-svg-art" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <radialGradient id="grad-bns3" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="#92400e" stop-opacity="0.55"/>
-            <stop offset="65%" stop-color="#78350f" stop-opacity="0.9"/>
-            <stop offset="100%" stop-color="#020617" stop-opacity="0.98"/>
-          </radialGradient>
-          <filter id="glow-gold" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="2.2" result="blur"/>
-            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-          </filter>
-        </defs>
-        <circle cx="74" cy="74" r="74" fill="url(#grad-bns3)"/>
-        <circle cx="74" cy="72" r="50" fill="none" stroke="#f59e0b" stroke-width="0.75" stroke-dasharray="4,4" opacity="0.45"/>
-        <circle cx="74" cy="72" r="35" fill="none" stroke="#d97706" stroke-width="0.5" opacity="0.35"/>
-        <line x1="74" y1="20" x2="74" y2="35" stroke="#f59e0b" stroke-width="1.3"/>
-        <line x1="74" y1="109" x2="74" y2="124" stroke="#f59e0b" stroke-width="1.3"/>
-        <line x1="20" y1="72" x2="35" y2="72" stroke="#f59e0b" stroke-width="1.3"/>
-        <line x1="113" y1="72" x2="128" y2="72" stroke="#f59e0b" stroke-width="1.3"/>
-        <!-- Golden Iron Dragon Insignia -->
-        <g filter="url(#glow-gold)" transform="translate(74,72)">
-          <polygon points="0,-26 26,-12 26,12 0,26 -26,12 -26,-12" fill="rgba(245, 158, 11, 0.28)" stroke="#f59e0b" stroke-width="2.2"/>
-          <path d="M-16,7 C-16,-3 -12,-14 0,-21 C8,-18 16,-19 19,-14 C21,-10 16,-5 19,0 C20,4 14,14 2,19 C-8,16 -16,12 -16,7 Z" fill="#d97706" stroke="#fbbf24" stroke-width="1.4"/>
-          <path d="M-8,-19 L-2,-27 L2,-20 L9,-25 L10,-16" stroke="#fbbf24" stroke-width="1.8" fill="none"/>
-          <circle cx="2" cy="-10" r="2.1" fill="#ffffff" filter="url(#glow-gold)"/>
-          <circle cx="2" cy="-10" r="1" fill="#ef4444"/>
-          <path d="M11,-2 Q21,-4 28,0 Q21,7 11,5 Z" fill="#fb923c" opacity="0.95"/>
-          <line x1="-10" y1="2" x2="8" y2="20" stroke="#fbbf24" stroke-width="1.6"/>
-          <line x1="8" y1="2" x2="-10" y2="20" stroke="#fbbf24" stroke-width="1.6"/>
-        </g>
-      </svg>
-    </div>
   `
 };
 
@@ -322,22 +287,6 @@ export class AtomicCoreVisualizer {
         glowHex: '#f43f5e',
         url: localStorage.getItem('hub_url_mackie') || 'https://daily-executive-dashboard.onrender.com/mackie/',
         icon: '🗓️'
-      },
-      {
-        id: 'bns3',
-        name: '110TH CM BN S3 SYNERGY',
-        shortTitle: '110TH BN S3',
-        orbitTag: 'ORBIT 06',
-        code: 'TRAIN-PRO S3',
-        orbitRadius: 11.0,
-        horizontalStretch: 1.44,
-        speed: 0.10,
-        angle: 5.1,
-        inclination: { x: -0.58, y: 0.32, z: 0.22 },
-        color: 0xf59e0b,
-        glowHex: '#f59e0b',
-        url: resolveCloudUrl('hub_url_bns3', './dashboards/bns3/index.html'),
-        icon: '🐉'
       }
     ];
 

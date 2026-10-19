@@ -95,41 +95,11 @@ export const DEFAULT_HUB_ALERTS = {
         message: 'Prepare written statutory Owner Occupancy notice and coordinate with property manager before Dec 31 statutory cutoff.'
       },
       {
-        severity: 'WARNING',
-        code: 'EXEC_ACTION_METL_SYNC',
-        statute: 'Command Group Coordination',
-        title: '110th Chemical BN S3 METL Training Schedule Sign-Off',
-        message: 'Review upcoming field training exercise readiness matrix and TRAIN-PRO synchronization calendar.'
-      }
-    ]
-  },
-  bns3: {
-    deckName: '110th BN S3 Readiness',
-    deckIcon: '🐉',
-    count: 3,
-    severity: 'warning',
-    title: '3 METL Readiness Action Items',
-    items: [
-      {
-        severity: 'WARNING',
-        code: 'BNS3_CBRN_RECON',
-        statute: 'AR 350-1 / Training Matrix',
-        title: 'METL Assessment: CBRN Reconnaissance & Surveillance Qualification',
-        message: 'Company B CBRN platoon qualification verification required for upcoming quarter evaluation.'
-      },
-      {
-        severity: 'WARNING',
-        code: 'BNS3_DECON_PMCS',
-        statute: 'Battalion Maintenance & S4',
-        title: 'Decontamination Equipment Readiness Inspection',
-        message: 'M26 Joint Service Transportable Decontamination System PMCS log updates pending sign-off.'
-      },
-      {
-        severity: 'WARNING',
-        code: 'BNS3_WEEKLY_SYNC',
-        statute: 'Operations Order 26-10',
-        title: 'Iron Dragons S3 Weekly Synchronization Meeting',
-        message: 'Synchronize live training lanes, ammunition allocations, and safety briefs for next rotation.'
+        severity: 'INFO',
+        code: 'EXEC_ACTION_STRATEGIC_SYNC',
+        statute: 'Family Strategic Review',
+        title: 'Quarterly Family Operations & Calendar Alignment',
+        message: 'Review upcoming expedition dates, Mackie Board routines, and investment cashflow milestones.'
       }
     ]
   },
@@ -210,8 +180,7 @@ export class DashboardManager {
       rental: sanitizeCloudUrl('hub_url_rental', './dashboards/rental/index.html'),
       financial: sanitizeCloudUrl('hub_url_financial', './dashboards/financial/index.html'),
       trip: localStorage.getItem('hub_url_trip') || 'https://daily-executive-dashboard.onrender.com/trip-planner/',
-      mackie: localStorage.getItem('hub_url_mackie') || 'https://daily-executive-dashboard.onrender.com/mackie/',
-      bns3: sanitizeCloudUrl('hub_url_bns3', './dashboards/bns3/index.html')
+      mackie: localStorage.getItem('hub_url_mackie') || 'https://daily-executive-dashboard.onrender.com/mackie/'
     };
 
     this.statusMap = {
@@ -219,8 +188,7 @@ export class DashboardManager {
       rental: 'CHECKING',
       financial: 'CHECKING',
       trip: 'CHECKING',
-      mackie: 'CHECKING',
-      bns3: 'CHECKING'
+      mackie: 'CHECKING'
     };
 
     // Track seen / acknowledged alerts per deck so indicators disappear once opened
@@ -1145,8 +1113,7 @@ export class DashboardManager {
       { id: 'rental', url: this.urls.rental },
       { id: 'financial', url: this.urls.financial },
       { id: 'trip', url: this.urls.trip },
-      { id: 'mackie', url: this.urls.mackie },
-      { id: 'bns3', url: this.urls.bns3 }
+      { id: 'mackie', url: this.urls.mackie }
     ];
 
     probes.forEach(async (probe) => {

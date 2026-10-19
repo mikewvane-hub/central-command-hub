@@ -106,17 +106,6 @@ export const VOICE_TARGETS = {
     ],
     phonetic: ['ranir', 'baskamp', 'oferland', 'trip', 'planer', 'kamping']
   },
-  bns3: {
-    category: 'deck',
-    target: 'bns3',
-    speech: "Opening 110th Chemical Battalion S3 Readiness and METL Proficiency Matrix.",
-    keywords: [
-      's3', 's-3', 's 3', 's three', 'battalion', 'batallion', '110th', '110', 'one ten',
-      'one tenth', 'iron dragon', 'iron dragons', 'readiness', 'metl', 'train pro',
-      'train-pro', 'cbrn', 'chemical', 'synergy'
-    ],
-    phonetic: ['estri', 'bataliun', 'wanten', 'irondragon', 'redines', 'trenpro', 'sinergi']
-  },
   core: {
     category: 'deck',
     target: 'core',

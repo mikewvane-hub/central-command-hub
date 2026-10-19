@@ -73,11 +73,6 @@
           <span class="tab-badge" data-status-badge="mackie">LIVE</span>
         </button>
 
-        <button class="nav-tab-btn" data-deck="bns3" title="110th CBRN BN // TRAIN-PRO S3 Readiness &amp; METL Matrix">
-          <span>🐉 110TH S3</span>
-          <span class="tab-badge" data-status-badge="bns3">CLOUD</span>
-        </button>
-
         <button class="nav-tab-btn" data-deck="telemetry" title="Quantum Telemetry &amp; 24/7 Cloud Fleet Console">
           <span>📡 FLEET</span>
           <span class="tab-badge">24/7</span>
@@ -186,7 +181,7 @@
           <div class="atomic-orbital-status-bar overlay-interactive">
             <div class="status-pill">
               <span class="status-beacon"></span>
-              <span>6 ORBITAL SPHERES ACTIVE • PULSING SPHERES INDICATE ACTIVE ALERTS / NOTIFICATIONS</span>
+              <span>5 ORBITAL SPHERES ACTIVE • PULSING SPHERES INDICATE ACTIVE ALERTS / NOTIFICATIONS</span>
             </div>
             <div class="status-pill status-tip">
               <span>🖱️ DRAG TO ROTATE 3D ATOM • 👆 CLICK SPHERE OR TAB TO EXPAND</span>
@@ -327,33 +322,7 @@
       </section>
 
       <!-- ========================================== -->
-      <!-- DECK 6: 110TH CM BN S3 READINESS MATRIX   -->
-      <!-- ========================================== -->
-      <section class="deck-view" id="deck-bns3">
-        <div class="holographic-window">
-          <div class="dashboard-subnav">
-            <div class="subnav-left">
-              <span class="subnav-status" data-status-badge="bns3">
-                <span class="status-beacon"></span> ONLINE
-              </span>
-              <strong>110TH CBRN BN (&quot;IRON DRAGONS&quot;) // TRAIN-PRO S3 READINESS &amp; METL MATRIX</strong>
-              <span class="subnav-url">CLOUD 24/7 // TRAIN-PRO S3 READINESS</span>
-            </div>
-            <div class="subnav-actions">
-              <button class="subnav-btn btn-toggle-glass" data-action="toggle-glass" title="Toggle Glass / Ghost Translucency to see Atomic Core behind">💎 Glass (82%)</button>
-              <button class="subnav-btn" data-action="refresh-frame" data-deck="bns3">🔄 Refresh</button>
-              <button class="subnav-btn" data-action="popout-tab" data-deck="bns3">↗️ New Tab</button>
-              <button class="subnav-btn btn-minimize" data-action="return-core" title="Minimize back into Orbiting Circle">⚛️ Minimize to Orbit</button>
-            </div>
-          </div>
-          <div class="dashboard-iframe-container">
-            <iframe id="iframe-bns3" class="dashboard-iframe" src="./dashboards/bns3/index.html" title="110th BN S3 Readiness Matrix"></iframe>
-          </div>
-        </div>
-      </section>
-
-      <!-- ========================================== -->
-      <!-- DECK 7: SYSTEM TELEMETRY & 24/7 CLOUD HOST -->
+      <!-- DECK 6: SYSTEM TELEMETRY & 24/7 CLOUD HOST -->
       <!-- ========================================== -->
       <section class="deck-view" id="deck-telemetry">
         <div class="holographic-window">
@@ -398,10 +367,6 @@
               <div class="matrix-item">
                 <span class="matrix-label">Mackie's Daily Board</span>
                 <span class="matrix-value live" id="telemetry-status-mackie">ONLINE (200 OK)</span>
-              </div>
-              <div class="matrix-item">
-                <span class="matrix-label">110th CM BN S3 Readiness</span>
-                <span class="matrix-value live" id="telemetry-status-bns3">CLOUD 24/7 ONLINE</span>
               </div>
               <div class="matrix-item">
                 <span class="matrix-label">Voice Neural Assistant</span>
@@ -486,10 +451,6 @@
                 <p style="font-size:0.78rem;color:#94a3b8;margin-top:4px;">Switches to Mackie's Daily Board, Meal Planner &amp; Grocery List.</p>
               </div>
               <div style="background:rgba(3,7,18,0.6);padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);">
-                <strong style="color:#f59e0b;">"Open S3 Readiness"</strong>
-                <p style="font-size:0.78rem;color:#94a3b8;margin-top:4px;">Switches to 110th CM BN TRAIN-PRO S3 Readiness &amp; METL Matrix.</p>
-              </div>
-              <div style="background:rgba(3,7,18,0.6);padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);">
                 <strong style="color:var(--cyan-glow);">"Show Atomic Core" / "Home"</strong>
                 <p style="font-size:0.78rem;color:#94a3b8;margin-top:4px;">Returns to the 3D atomic orbital structure.</p>
               </div>
@@ -553,11 +514,6 @@
             <input type="text" id="setting-url-mackie" style="background:#030712;border:1px solid var(--border-cyan);color:#fff;padding:8px 12px;border-radius:6px;font-family:inherit;" />
           </label>
 
-          <label style="display:flex;flex-direction:column;gap:4px;">
-            <span style="color:#f59e0b;">110th CM BN S3 Readiness Matrix URL:</span>
-            <input type="text" id="setting-url-bns3" style="background:#030712;border:1px solid var(--border-cyan);color:#fff;padding:8px 12px;border-radius:6px;font-family:inherit;" />
-          </label>
-
           <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:10px;">
             <button class="launch-btn" id="btn-save-settings">SAVE CONFIGURATION</button>
           </div>
@@ -605,6 +561,6 @@
   </div>
 
   <!-- Boot Module Script -->
-  <script type="module" src="js/app.js?v=3.7"></script>
+  <script type="module" src="js/app.js?v=4.0"></script>
 </body>
 </html>
