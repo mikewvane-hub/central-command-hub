@@ -3,12 +3,12 @@
  * Main Application Orchestrator
  */
 
-import { sfx } from './sound-effects.js?v=4.0';
-import { AtomicCoreVisualizer } from './atomic-core.js?v=4.0';
-import { DashboardManager } from './dashboard-manager.js?v=4.0';
-import { VoiceCommandEngine } from './voice-command.js?v=4.0';
-import { DeviceOptimizer } from './device-optimizer.js?v=4.0';
-import { renderQRCode } from './qr-generator.js?v=4.0';
+import { sfx } from './sound-effects.js?v=4.1';
+import { AtomicCoreVisualizer } from './atomic-core.js?v=4.1';
+import { DashboardManager } from './dashboard-manager.js?v=4.1';
+import { VoiceCommandEngine } from './voice-command.js?v=4.1';
+import { DeviceOptimizer } from './device-optimizer.js?v=4.1';
+import { renderQRCode } from './qr-generator.js?v=4.1';
 
 class CentralCommandHubApp {
   constructor() {
@@ -169,6 +169,12 @@ class CentralCommandHubApp {
           this.voiceEngine.toggleListening();
           break;
         case 'Escape': {
+          const briefingModal = document.getElementById('modal-executive-briefing');
+          if (briefingModal && briefingModal.classList.contains('open')) {
+            this.dashboardMgr.closeExecutiveBriefing();
+            sfx.playClick();
+            break;
+          }
           const settingsModal = document.getElementById('modal-hub-settings');
           if (settingsModal && settingsModal.classList.contains('open')) {
             settingsModal.classList.remove('open');

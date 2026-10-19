@@ -116,6 +116,16 @@ export const VOICE_TARGETS = {
     ],
     phonetic: ['kor', 'atomik', 'orbit', 'hom', 'riturn']
   },
+  garage: {
+    category: 'deck',
+    target: 'garage',
+    speech: "Opening Garage and Fleet Asset Command. Orbit 06 Titanium Core online.",
+    keywords: [
+      'garage', 'garadge', 'fleet', 'colorado', 'zr2', 'murano', 'chevy', 'nissan', 'truck',
+      'car', 'cars', 'vehicle', 'vehicles', 'oil life', 'tire rotation', 'tabs', 'registration'
+    ],
+    phonetic: ['garaj', 'flit', 'kolorado', 'murano', 'kar', 'truk']
+  },
   telemetry: {
     category: 'deck',
     target: 'telemetry',

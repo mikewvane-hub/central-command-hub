@@ -171,6 +171,49 @@ const SPHERE_VISUAL_SVGS = {
         </g>
       </svg>
     </div>
+  `,
+  garage: `
+    <div class="circle-graphic-container circle-graphic-garage">
+      <svg viewBox="0 0 148 148" class="circle-svg-art" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="grad-garage" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#b45309" stop-opacity="0.6"/>
+            <stop offset="65%" stop-color="#78350f" stop-opacity="0.9"/>
+            <stop offset="100%" stop-color="#020617" stop-opacity="0.98"/>
+          </radialGradient>
+          <filter id="glow-copper" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="2.2" result="blur"/>
+            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+          </filter>
+        </defs>
+        <circle cx="74" cy="74" r="74" fill="url(#grad-garage)"/>
+        <!-- Off-Road Gear & Wheel Orbits -->
+        <circle cx="74" cy="72" r="50" fill="none" stroke="#f59e0b" stroke-width="0.75" stroke-dasharray="3,3" opacity="0.45"/>
+        <circle cx="74" cy="72" r="34" fill="none" stroke="#d97706" stroke-width="0.5" opacity="0.4"/>
+        <line x1="74" y1="22" x2="74" y2="122" stroke="#f59e0b" stroke-width="0.5" stroke-dasharray="2,4" opacity="0.35"/>
+        <line x1="24" y1="72" x2="124" y2="72" stroke="#f59e0b" stroke-width="0.5" stroke-dasharray="2,4" opacity="0.35"/>
+        <!-- Rugged Tire Tread Lug Elements -->
+        <g stroke="#f59e0b" stroke-width="2.5" opacity="0.5" stroke-linecap="round">
+          <line x1="74" y1="20" x2="74" y2="28" />
+          <line x1="74" y1="116" x2="74" y2="124" />
+          <line x1="22" y1="72" x2="30" y2="72" />
+          <line x1="118" y1="72" x2="126" y2="72" />
+          <line x1="37" y1="35" x2="43" y2="41" />
+          <line x1="105" y1="103" x2="111" y2="109" />
+          <line x1="37" y1="109" x2="43" y2="103" />
+          <line x1="105" y1="41" x2="111" y2="35" />
+        </g>
+        <!-- Titanium/Copper Rim & Wrench Icon -->
+        <g filter="url(#glow-copper)" transform="translate(74,72)">
+          <circle cx="0" cy="0" r="22" fill="rgba(245, 158, 11, 0.18)" stroke="#f59e0b" stroke-width="2"/>
+          <circle cx="0" cy="0" r="14" fill="#0f172a" stroke="#d97706" stroke-width="1.5"/>
+          <!-- Crossed wrenches / piston -->
+          <path d="M-9,-9 L9,9 M-9,9 L9,-9" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round"/>
+          <circle cx="0" cy="0" r="5" fill="#f59e0b"/>
+          <circle cx="0" cy="0" r="2" fill="#030712"/>
+        </g>
+      </svg>
+    </div>
   `
 };
 
@@ -287,6 +330,22 @@ export class AtomicCoreVisualizer {
         glowHex: '#f43f5e',
         url: localStorage.getItem('hub_url_mackie') || 'https://daily-executive-dashboard.onrender.com/mackie/',
         icon: '🗓️'
+      },
+      {
+        id: 'garage',
+        name: 'GARAGE & FLEET ASSET COMMAND',
+        shortTitle: 'GARAGE & FLEET',
+        orbitTag: 'ORBIT 06',
+        code: 'FLEET TELEMETRY',
+        orbitRadius: 12.2,
+        horizontalStretch: 1.70,
+        speed: 0.10,
+        angle: 5.6,
+        inclination: { x: -0.34, y: 0.42, z: -0.18 },
+        color: 0xf59e0b,
+        glowHex: '#f59e0b',
+        url: resolveCloudUrl('hub_url_garage', './dashboards/garage/index.html'),
+        icon: '🚙'
       }
     ];
 

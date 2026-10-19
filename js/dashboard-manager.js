@@ -149,6 +149,98 @@ export const DEFAULT_HUB_ALERTS = {
     severity: 'info',
     title: 'All Accounts Reconciled',
     items: []
+  },
+  garage: {
+    deckName: 'Garage & Fleet Command',
+    deckIcon: '🛞',
+    count: 3,
+    severity: 'critical',
+    title: '1 Critical (Tabs Expire in 14d) + 2 Service Due',
+    items: [
+      {
+        severity: 'CRITICAL',
+        code: 'WA_DOL_TABS_MURANO',
+        statute: 'WA DOL RCW 46.16A',
+        title: 'Murano WA State Vehicle Tabs Expire in 14 Days',
+        message: 'Washington State Vehicle Tabs for plate CDE4108 expire on Nov 2, 2026. Renew via WA License eXpress to avoid state penalties.'
+      },
+      {
+        severity: 'WARNING',
+        code: 'ZR2_OIL_LIFE_12PCT',
+        statute: 'GM dexos1 Service Timer',
+        title: 'Colorado ZR2 Oil Life at 12% (Service Due)',
+        message: 'dexos 5W-30 Full Synthetic oil and ACDelco PF63 filter change due within 450 mi.'
+      },
+      {
+        severity: 'INFO',
+        code: 'ZR2_TIRE_ROTATION_DUE',
+        statute: '5-Tire Overland Rotation',
+        title: 'Colorado ZR2 5-Tire Rotation Due in 450 mi',
+        message: 'Cycle full-size spare into Right Rear for uniform 31-inch AT tire wear.'
+      }
+    ]
+  },
+  fleet: {
+    deckName: 'Fleet Telemetry',
+    deckIcon: '🛞',
+    count: 3,
+    severity: 'critical',
+    title: '1 Critical (Tabs Expire in 14d) + 2 Service Due',
+    items: [
+      {
+        severity: 'CRITICAL',
+        code: 'WA_DOL_TABS_MURANO',
+        statute: 'WA DOL RCW 46.16A',
+        title: 'Murano WA State Vehicle Tabs Expire in 14 Days',
+        message: 'Washington State Vehicle Tabs for plate CDE4108 expire on Nov 2, 2026. Renew via WA License eXpress to avoid state penalties.'
+      },
+      {
+        severity: 'WARNING',
+        code: 'ZR2_OIL_LIFE_12PCT',
+        statute: 'GM dexos1 Service Timer',
+        title: 'Colorado ZR2 Oil Life at 12% (Service Due)',
+        message: 'dexos 5W-30 Full Synthetic oil and ACDelco PF63 filter change due within 450 mi.'
+      },
+      {
+        severity: 'INFO',
+        code: 'ZR2_TIRE_ROTATION_DUE',
+        statute: '5-Tire Overland Rotation',
+        title: 'Colorado ZR2 5-Tire Rotation Due in 450 mi',
+        message: 'Cycle full-size spare into Right Rear for uniform 31-inch AT tire wear.'
+      }
+    ]
+  },
+  health: {
+    deckName: 'Athletic Readiness',
+    deckIcon: '🏃',
+    count: 1,
+    severity: 'critical',
+    title: 'HRV Readiness Below Target',
+    items: [
+      {
+        severity: 'CRITICAL',
+        code: 'HRV_BELOW_BASELINE',
+        statute: 'Autonomic Biometrics Engine',
+        title: 'HRV Readiness Alert: 46 ms (Below 65 ms Baseline)',
+        message: 'Heart Rate Variability is 46 ms vs 65 ms target baseline. Autonomic nervous system fatigued. Throttle training to Zone 2 Active Recovery.'
+      }
+    ]
+  },
+  academic: {
+    deckName: 'Academic Research',
+    deckIcon: '📚',
+    count: 1,
+    severity: 'critical',
+    title: 'Draft Submission Deadline',
+    items: [
+      {
+        severity: 'CRITICAL',
+        code: 'ACADEMIC_DRAFT_T72H',
+        statute: 'Graduate Research Deadline',
+        title: 'Autonomous Multi-Domain Agent Architectures (Draft V2) Due in T-68h (Oct 22)',
+        message: 'Submission deadline is October 22, 2026 at 23:59 UTC. Complete section 4 methodology synthesis.'
+      }
+    ]
   }
 };
 
@@ -180,7 +272,8 @@ export class DashboardManager {
       rental: sanitizeCloudUrl('hub_url_rental', './dashboards/rental/index.html'),
       financial: sanitizeCloudUrl('hub_url_financial', './dashboards/financial/index.html'),
       trip: localStorage.getItem('hub_url_trip') || 'https://daily-executive-dashboard.onrender.com/trip-planner/',
-      mackie: localStorage.getItem('hub_url_mackie') || 'https://daily-executive-dashboard.onrender.com/mackie/'
+      mackie: localStorage.getItem('hub_url_mackie') || 'https://daily-executive-dashboard.onrender.com/mackie/',
+      garage: sanitizeCloudUrl('hub_url_garage', './dashboards/garage/index.html')
     };
 
     this.statusMap = {
@@ -188,7 +281,8 @@ export class DashboardManager {
       rental: 'CHECKING',
       financial: 'CHECKING',
       trip: 'CHECKING',
-      mackie: 'CHECKING'
+      mackie: 'CHECKING',
+      garage: 'CHECKING'
     };
 
     // Track seen / acknowledged alerts per deck so indicators disappear once opened
@@ -251,22 +345,46 @@ export class DashboardManager {
     this.setupSubnavActions();
     this.setupCrossFrameAlertListener();
     this.setupAlertCenter();
+    this.setupBriefingModal();
+    this.loadExecutiveBriefing();
+    this.syncUnifiedAlerts();
     this.checkAllTelemetry();
     this.syncAllAlertsToVisualizer();
 
     // Periodic telemetry ping every 30 seconds
     setInterval(() => this.checkAllTelemetry(), 30000);
+    // Periodic unified alert sync every 45 seconds
+    setInterval(() => this.syncUnifiedAlerts(), 45000);
   }
 
   setupCrossFrameAlertListener() {
     window.addEventListener('message', (event) => {
-      if (event.data && (event.data.type === 'HUB_ALERT_UPDATE' || event.data.type === 'DASHBOARD_ALERTS')) {
-        const { deckId, count, severity, title, items } = event.data;
-        if (deckId && typeof count === 'number') {
-          this.setAlert(deckId, count, severity || 'warning', title || '', items || null);
+      if (event.data) {
+        if (event.data.type === 'FLEET_ALERTS_UPDATED' && event.data.payload) {
+          const p = event.data.payload;
+          this.setAlert('garage', p.count, p.severity, p.title, p.items);
+          return;
+        }
+        if (event.data.type === 'HUB_ALERT_UPDATE' || event.data.type === 'DASHBOARD_ALERTS') {
+          const { deckId, count, severity, title, items } = event.data;
+          if (deckId && typeof count === 'number') {
+            this.setAlert(deckId, count, severity || 'warning', title || '', items || null);
+          }
         }
       }
     });
+
+    if ('BroadcastChannel' in window) {
+      try {
+        const bc = new BroadcastChannel('antigravity_hub');
+        bc.onmessage = (event) => {
+          if (event.data && event.data.type === 'FLEET_ALERTS_UPDATED' && event.data.payload) {
+            const p = event.data.payload;
+            this.setAlert('garage', p.count, p.severity, p.title, p.items);
+          }
+        };
+      } catch (e) {}
+    }
   }
 
   setupAlertCenter() {
@@ -721,6 +839,15 @@ export class DashboardManager {
       localStorage.setItem('hub_dismissed_alerts', JSON.stringify([...this.dismissedAlerts]));
     } catch (e) {}
 
+    // Synchronize dismissal with backend unified state pipeline
+    try {
+      fetch('/api/alerts/dismiss', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: alertCode })
+      }).catch(() => {});
+    } catch (e) {}
+
     const alertInfo = this.alerts[deckId];
     const activeCount = this.getActiveItems(deckId).length;
     if (alertInfo) {
@@ -853,7 +980,16 @@ export class DashboardManager {
       this.dismissAlert(alertCode, deckId, false);
     }
     this.closeAlertCenter();
-    this.switchDeck(deckId);
+
+    // Route to appropriate deck and view
+    if (deckId === 'executive' || deckId === 'fleet' || deckId === 'health' || deckId === 'academic' || deckId === 'family') {
+      this.switchDeck('executive');
+      if (deckId !== 'executive') {
+        setTimeout(() => this.openExecutiveBriefing(), 250);
+      }
+    } else {
+      this.switchDeck(deckId);
+    }
 
     // If deck is rental, smoothly scroll iframe to alerts list
     if (deckId === 'rental') {
@@ -1146,6 +1282,430 @@ export class DashboardManager {
     if (matrixItem) {
       matrixItem.textContent = `${statusText} (${statusCode ? statusCode + ' OK' : 'LIVE'})`;
       matrixItem.className = 'matrix-value live';
+    }
+  }
+
+  // ==========================================
+  // EXECUTIVE WEEKLY BRIEFING // CADENCE HUD
+  // ==========================================
+  setupBriefingModal() {
+    // 1. Open briefing modal button in Executive Cadence Banner
+    const openBtn = document.getElementById('btn-open-executive-briefing');
+    if (openBtn) {
+      openBtn.addEventListener('click', () => {
+        sfx.playClick();
+        this.openExecutiveBriefing();
+      });
+    }
+
+    // 2. Close modal buttons
+    const closeBtn = document.getElementById('btn-close-briefing');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => {
+        sfx.playClick();
+        this.closeExecutiveBriefing();
+      });
+    }
+
+    const dismissBtn = document.getElementById('btn-dismiss-briefing-modal');
+    if (dismissBtn) {
+      dismissBtn.addEventListener('click', () => {
+        sfx.playClick();
+        this.closeExecutiveBriefing();
+      });
+    }
+
+    // 3. Modal backdrop click
+    const modal = document.getElementById('modal-executive-briefing');
+    if (modal) {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          sfx.playClick();
+          this.closeExecutiveBriefing();
+        }
+      });
+    }
+
+    // 4. Re-run Cadence buttons (banner + modal footer)
+    const runBtnBanner = document.getElementById('btn-trigger-cadence-run');
+    if (runBtnBanner) {
+      runBtnBanner.addEventListener('click', () => this.runCadenceAgent(runBtnBanner));
+    }
+
+    const runBtnModal = document.getElementById('btn-modal-rerun-cadence');
+    if (runBtnModal) {
+      runBtnModal.addEventListener('click', () => this.runCadenceAgent(runBtnModal));
+    }
+
+    // 5. Escape key handling
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const briefingModal = document.getElementById('modal-executive-briefing');
+        if (briefingModal && briefingModal.classList.contains('open')) {
+          this.closeExecutiveBriefing();
+        }
+      }
+    });
+  }
+
+  openExecutiveBriefing() {
+    const modal = document.getElementById('modal-executive-briefing');
+    if (!modal) return;
+    modal.classList.add('open');
+    if (!this.executiveBriefing) {
+      this.loadExecutiveBriefing();
+    } else {
+      this.renderExecutiveBriefingModal(this.executiveBriefing);
+    }
+  }
+
+  closeExecutiveBriefing() {
+    const modal = document.getElementById('modal-executive-briefing');
+    if (modal) modal.classList.remove('open');
+  }
+
+  async runCadenceAgent(triggerBtn = null) {
+    sfx.playClick();
+    const originalText = triggerBtn ? triggerBtn.innerHTML : '⚡ RUN CADENCE';
+    if (triggerBtn) {
+      triggerBtn.disabled = true;
+      triggerBtn.innerHTML = '⏳ SYNTHESIZING...';
+    }
+
+    try {
+      const resp = await fetch('/api/cadence/run', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      if (resp.ok) {
+        const data = await resp.json();
+        sfx.playSuccess();
+        if (data.briefing) {
+          this.executiveBriefing = data.briefing;
+          this.renderExecutiveBriefingBanner(data.briefing);
+          this.renderExecutiveBriefingModal(data.briefing);
+        } else {
+          await this.loadExecutiveBriefing();
+        }
+        await this.syncUnifiedAlerts();
+      } else {
+        console.warn('[Command Hub] Cadence agent trigger returned status', resp.status);
+      }
+    } catch (err) {
+      console.warn('[Command Hub] Cadence agent trigger failed (likely offline/static):', err);
+    } finally {
+      if (triggerBtn) {
+        triggerBtn.disabled = false;
+        triggerBtn.innerHTML = originalText;
+      }
+    }
+  }
+
+  async loadExecutiveBriefing() {
+    try {
+      const resp = await fetch('/api/briefing', { cache: 'no-store' });
+      if (resp.ok) {
+        const briefing = await resp.json();
+        this.executiveBriefing = briefing;
+        this.renderExecutiveBriefingBanner(briefing);
+        this.renderExecutiveBriefingModal(briefing);
+        return;
+      }
+    } catch (e) {
+      // Offline fallback: Use default pre-synthesized data
+    }
+
+    // Default static fallback briefing
+    const fallbackBriefing = {
+      cadence_window: "Week of October 19 – October 26, 2026",
+      executive_highlights: [
+        "FAMILY: User Birthday (29 Mar 1993, in 161d), Wife Birthday (23 Apr 1996, in 186d), Anniversary (23 Sep).",
+        "PROPERTY: Sierra Pines cash flow at +$1,120/mo Net ($2,450 Gross). Priority ticket: 'Perimeter Fence Wash & Gate Warranty Inspection'.",
+        "ATHLETIC: Readiness Score 61/100. HRV at 46 ms (BELOW_TARGET). Directive: ⚠️ HRV at 46 ms (Target: 65 ms). Autonomic nervous system fatigued. Throttle training to Zone 2 Active Recovery.",
+        "ACADEMIC: Autonomous Multi-Domain Agent Architectures (Draft V2) due Oct 22 (T-68h).",
+        "FLEET: Colorado ZR2 oil life at 18% (service due); Nissan Murano WA State tabs expire Nov 30."
+      ],
+      upcoming_7d_milestones: [
+        { category: "Family", detail: "📅 Family Sunday Meal Prep & Planning (2026-10-25)" },
+        { category: "Family", detail: "📅 Mackie School Fall Conference (2026-10-23)" },
+        { category: "Academic", detail: "Autonomous Multi-Domain Agent Architectures (Draft V2) (Due 2026-10-22 • T-68h)" },
+        { category: "Fleet", detail: "2021 Chevy Colorado ZR2 maintenance action due (oil life 18%)." }
+      ],
+      family_registry: {
+        milestone_countdowns: [
+          { event: "User Birthday (29 Mar 1993)", date: "March 29", days_until: 161, age_turning: 34 },
+          { event: "Wife's Birthday (23 Apr 1996)", date: "April 23", days_until: 186, age_turning: 31 },
+          { event: "Wedding Anniversary (23 Sep)", date: "September 23", days_until: 339 }
+        ]
+      },
+      property_cashflow: {
+        monthly_net: 1120,
+        monthly_gross: 2450,
+        pending_tickets_count: 2,
+        critical_ticket: "Perimeter Fence Wash & Gate Warranty Inspection"
+      },
+      athletic_readiness: {
+        readiness_score: 61,
+        hrv_current: 46,
+        hrv_target: 65,
+        hrv_status: "BELOW_TARGET",
+        cardio_progress: "6.5 / 20 miles",
+        strength_progress: "1 / 4 sessions",
+        recovery_directive: "⚠️ HRV at 46 ms (Target: 65 ms). Autonomic nervous system fatigued. Throttle training to Zone 2 Active Recovery."
+      },
+      academic_queue: [
+        {
+          id: "draft_agentic_arch",
+          title: "Autonomous Multi-Domain Agent Architectures (Draft V2)",
+          deadline: "2026-10-22T23:59:00Z",
+          hours_remaining: 68.0,
+          urgency: "T_MINUS_72H",
+          target: "IEEE / ACM Software Engineering Submission"
+        }
+      ],
+      fleet_status: [
+        { name: "2021 Chevy Colorado ZR2", odometer: "38,450 mi", oil_life: "18%", tabs_expiration: "2027-02-28", status: "SERVICE_SOON" },
+        { name: "2021 Nissan Murano Midnight Edition", odometer: "32,180 mi", oil_life: "68%", tabs_expiration: "2026-11-30", status: "NOMINAL" }
+      ]
+    };
+
+    this.executiveBriefing = fallbackBriefing;
+    this.renderExecutiveBriefingBanner(fallbackBriefing);
+    this.renderExecutiveBriefingModal(fallbackBriefing);
+  }
+
+  renderExecutiveBriefingBanner(briefing) {
+    if (!briefing) return;
+    const bannerTitle = document.getElementById('cadence-banner-title');
+    if (bannerTitle && briefing.cadence_window) {
+      bannerTitle.textContent = briefing.cadence_window;
+    }
+
+    const chipFamily = document.getElementById('chip-family');
+    if (chipFamily && briefing.family_registry?.milestone_countdowns) {
+      const nextMilestone = briefing.family_registry.milestone_countdowns[0];
+      chipFamily.textContent = `👨‍👩‍👧 Family: ${nextMilestone.event.split('(')[0].trim()} in ${nextMilestone.days_until}d`;
+    }
+
+    const chipProperty = document.getElementById('chip-property');
+    if (chipProperty && briefing.property_cashflow) {
+      chipProperty.textContent = `🏡 Cash Flow: +$${Number(briefing.property_cashflow.monthly_net).toLocaleString()}/mo Net`;
+    }
+
+    const chipHealth = document.getElementById('chip-health');
+    if (chipHealth && briefing.athletic_readiness) {
+      const isBelow = briefing.athletic_readiness.hrv_status === 'BELOW_TARGET';
+      chipHealth.textContent = `🏃 HRV: ${briefing.athletic_readiness.hrv_current} ms (${isBelow ? 'Zone 2 Directive' : 'Nominal'})`;
+      if (isBelow) chipHealth.classList.add('alert');
+      else chipHealth.classList.remove('alert');
+    }
+
+    const chipAcademic = document.getElementById('chip-academic');
+    if (chipAcademic && briefing.academic_queue) {
+      const criticalDraft = briefing.academic_queue.find(d => d.urgency === 'T_MINUS_72H');
+      if (criticalDraft) {
+        chipAcademic.textContent = `📚 Academic: Draft T-72h (${criticalDraft.hours_remaining ? Math.round(criticalDraft.hours_remaining) + 'h' : 'Oct 22'})`;
+        chipAcademic.classList.add('alert');
+      } else {
+        chipAcademic.textContent = `📚 Academic: On Track`;
+        chipAcademic.classList.remove('alert');
+      }
+    }
+
+    const chipFleet = document.getElementById('chip-fleet');
+    if (chipFleet && briefing.fleet_status) {
+      chipFleet.textContent = `🛞 Fleet: Murano Tabs Nov 30 • ZR2 Oil 18%`;
+    }
+  }
+
+  renderExecutiveBriefingModal(briefing) {
+    const modalContent = document.getElementById('briefing-modal-content');
+    if (!modalContent || !briefing) return;
+
+    const highlights = briefing.executive_highlights || [];
+    const upcoming = briefing.upcoming_7d_milestones || [];
+    const countdowns = briefing.family_registry?.milestone_countdowns || [];
+    const prop = briefing.property_cashflow || {};
+    const ath = briefing.athletic_readiness || {};
+    const academic = briefing.academic_queue || [];
+    const fleet = briefing.fleet_status || [];
+
+    modalContent.innerHTML = `
+      <div class="briefing-highlights-box" style="background:rgba(15,23,42,0.85);border:1px solid rgba(0,240,255,0.3);border-radius:8px;padding:14px 18px;">
+        <div style="font-family:var(--font-tech);font-weight:700;color:var(--cyan-glow);font-size:0.85rem;margin-bottom:8px;display:flex;align-items:center;gap:6px;">
+          <span>⚡</span> EXECUTIVE STRATEGIC HIGHLIGHTS
+        </div>
+        <ul style="margin:0;padding-left:18px;font-size:0.82rem;color:#cbd5e1;line-height:1.6;">
+          ${highlights.map(h => `<li>${h}</li>`).join('')}
+        </ul>
+      </div>
+
+      <div class="briefing-domain-card family">
+        <div class="briefing-domain-title">
+          <span>👨‍👩‍👧 FAMILY REGISTRY & 7-DAY MILESTONES</span>
+          <span style="font-family:var(--font-mono);font-size:0.7rem;color:#f43f5e;font-weight:700;">ACTIVE SYNC</span>
+        </div>
+        <div class="briefing-metric-grid">
+          ${countdowns.map(c => `
+            <div class="briefing-metric-item">
+              <span class="label">${c.event}</span>
+              <span class="val" style="color:#f43f5e;">${c.days_until} days remaining</span>
+            </div>
+          `).join('')}
+          <div class="briefing-metric-item">
+            <span class="label">Google Calendar Sync</span>
+            <span class="val" style="color:#34d399;">Connected (Family + Personal)</span>
+          </div>
+        </div>
+        ${upcoming.length > 0 ? `
+          <div style="font-family:var(--font-mono);font-size:0.75rem;color:#94a3b8;background:rgba(0,0,0,0.35);padding:10px 14px;border-radius:6px;border:1px solid rgba(255,255,255,0.05);margin-top:4px;">
+            <strong style="color:#e2e8f0;display:block;margin-bottom:4px;">Upcoming 7-Day Deadlines & Milestones:</strong>
+            <ul style="margin:0;padding-left:16px;">
+              ${upcoming.map(e => `<li style="margin-bottom:3px;"><strong style="color:#f8fafc;">${e.category}:</strong> ${e.detail}</li>`).join('')}
+            </ul>
+          </div>
+        ` : ''}
+      </div>
+
+      <div class="briefing-domain-card property">
+        <div class="briefing-domain-title">
+          <span>🏡 PROPERTY CASH FLOW & MAINTENANCE (SIERRA PINES // JBLM)</span>
+          <span style="font-family:var(--font-mono);font-size:0.7rem;color:#38bdf8;font-weight:700;">+$${Number(prop.monthly_net || 1120).toLocaleString()}/MO NET</span>
+        </div>
+        <div class="briefing-metric-grid">
+          <div class="briefing-metric-item">
+            <span class="label">Monthly Net Cash Flow</span>
+            <span class="val" style="color:#34d399;">+$${Number(prop.monthly_net || 1120).toLocaleString()} / mo</span>
+          </div>
+          <div class="briefing-metric-item">
+            <span class="label">Gross Rental Inflow</span>
+            <span class="val">$${Number(prop.monthly_gross || 2450).toLocaleString()} / mo</span>
+          </div>
+          <div class="briefing-metric-item">
+            <span class="label">Pending Work Orders</span>
+            <span class="val" style="color:#fbbf24;">${prop.pending_tickets_count || 2} Tickets</span>
+          </div>
+          <div class="briefing-metric-item">
+            <span class="label">Priority Action</span>
+            <span class="val" style="color:#ef4444;font-size:0.8rem;">${prop.critical_ticket || 'Fence Warranty Inspection'}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="briefing-domain-card health">
+        <div class="briefing-domain-title">
+          <span>🏃 ATHLETIC READINESS & PLANNED LOAD</span>
+          <span style="font-family:var(--font-mono);font-size:0.7rem;color:#ef4444;font-weight:700;">HRV ${ath.hrv_current || 46} MS (BELOW BASELINE)</span>
+        </div>
+        <div class="briefing-metric-grid">
+          <div class="briefing-metric-item">
+            <span class="label">Readiness Score</span>
+            <span class="val" style="color:#fbbf24;">${ath.readiness_score || 61} / 100</span>
+          </div>
+          <div class="briefing-metric-item">
+            <span class="label">Heart Rate Variability</span>
+            <span class="val" style="color:#ef4444;">${ath.hrv_current || 46} ms <span style="font-size:0.7rem;color:#94a3b8;">(Target ${ath.hrv_target || 65} ms)</span></span>
+          </div>
+          <div class="briefing-metric-item">
+            <span class="label">Cardio Load (Miles)</span>
+            <span class="val">${ath.cardio_progress || '6.5 / 20 miles'}</span>
+          </div>
+          <div class="briefing-metric-item">
+            <span class="label">Strength Training</span>
+            <span class="val">${ath.strength_progress || '1 / 4 sessions'}</span>
+          </div>
+        </div>
+        <div style="font-family:var(--font-mono);font-size:0.75rem;color:#fca5a5;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);padding:8px 12px;border-radius:6px;margin-top:4px;">
+          <strong>Coaching Directive:</strong> ${ath.recovery_directive || 'Throttle training to Zone 2 Active Recovery.'}
+        </div>
+      </div>
+
+      <div class="briefing-domain-card fleet">
+        <div class="briefing-domain-title">
+          <span>🛞 FLEET TELEMETRY & ASSET MANAGEMENT</span>
+          <span style="font-family:var(--font-mono);font-size:0.7rem;color:#10b981;font-weight:700;">2 VEHICLES MONITORED</span>
+        </div>
+        <div class="briefing-metric-grid">
+          ${fleet.map(v => `
+            <div class="briefing-metric-item">
+              <span class="label">${v.name}</span>
+              <span class="val" style="color:${v.oil_life === '18%' ? '#fbbf24' : '#38bdf8'};font-size:0.85rem;">
+                ${v.odometer} • Oil ${v.oil_life}
+              </span>
+              <div style="font-size:0.68rem;color:#94a3b8;margin-top:3px;">Tabs Expire: ${v.tabs_expiration} (${v.status})</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+
+      <div class="briefing-domain-card academic">
+        <div class="briefing-domain-title">
+          <span>📚 ACADEMIC RESEARCH & SUBMISSION DEADLINES</span>
+          <span style="font-family:var(--font-mono);font-size:0.7rem;color:#f59e0b;font-weight:700;">T-72H WINDOW</span>
+        </div>
+        <div class="briefing-metric-grid">
+          ${academic.map(item => `
+            <div class="briefing-metric-item" style="grid-column: 1 / -1;">
+              <span class="label">${item.urgency === 'T_MINUS_72H' ? '⚠️ CRITICAL DRAFT DEADLINE' : 'RESEARCH TASK'}</span>
+              <span class="val" style="color:#f59e0b;font-size:0.88rem;">${item.title}</span>
+              <div style="font-size:0.72rem;color:#94a3b8;margin-top:4px;">
+                ${item.target ? `Target: ${item.target} • ` : ''}Deadline: ${new Date(item.deadline).toUTCString()}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  async syncUnifiedAlerts() {
+    try {
+      const resp = await fetch('/api/alerts', { cache: 'no-store' });
+      if (resp.ok) {
+        const data = await resp.json();
+        if (data && Array.isArray(data.alerts)) {
+          // Merge unified alerts from hub_state into domain alerts
+          data.alerts.forEach(alert => {
+            const domainKey = alert.domain || 'executive';
+            if (!this.alerts[domainKey]) {
+              const domainMeta = DEFAULT_HUB_ALERTS[domainKey] || {
+                deckName: domainKey.charAt(0).toUpperCase() + domainKey.slice(1),
+                deckIcon: '⚡',
+                items: []
+              };
+              this.alerts[domainKey] = {
+                deckName: domainMeta.deckName,
+                deckIcon: domainMeta.deckIcon,
+                count: 0,
+                severity: (alert.severity || 'WARNING').toLowerCase(),
+                title: `${domainMeta.deckName} Notifications`,
+                items: [],
+                acknowledged: this.seenDecks.has(domainKey)
+              };
+            }
+            const items = this.alerts[domainKey].items || [];
+            const alertCode = alert.code || alert.id;
+            const existingIdx = items.findIndex(it => it.code === alertCode);
+            const alertItem = {
+              severity: (alert.severity || 'WARNING').toUpperCase(),
+              code: alertCode,
+              statute: alert.statute || 'Unified Alert Pipeline',
+              title: alert.title,
+              message: alert.message
+            };
+            if (existingIdx >= 0) {
+              items[existingIdx] = alertItem;
+            } else {
+              items.push(alertItem);
+            }
+            this.alerts[domainKey].items = items;
+          });
+
+          this.syncAllAlertsToVisualizer();
+        }
+      }
+    } catch (e) {
+      // Standalone / offline mode
     }
   }
 }

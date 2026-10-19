@@ -73,6 +73,11 @@
           <span class="tab-badge" data-status-badge="mackie">LIVE</span>
         </button>
 
+        <button class="nav-tab-btn" data-deck="garage" title="Garage &amp; Fleet Asset Command // Vehicle Telemetry &amp; Compliance">
+          <span>🚙 GARAGE</span>
+          <span class="tab-badge" data-status-badge="garage">ORBIT 06</span>
+        </button>
+
         <button class="nav-tab-btn" data-deck="telemetry" title="Quantum Telemetry &amp; 24/7 Cloud Fleet Console">
           <span>📡 FLEET</span>
           <span class="tab-badge">24/7</span>
@@ -211,6 +216,36 @@
               <button class="subnav-btn btn-minimize" data-action="return-core" title="Minimize back into Orbiting Circle">⚛️ Minimize to Orbit</button>
             </div>
           </div>
+
+          <!-- SUNDAY EXECUTIVE WEEKLY BRIEFING HUD BANNER -->
+          <div class="executive-cadence-banner" id="executive-cadence-banner">
+            <div class="cadence-banner-left">
+              <span class="cadence-badge">📅 SUNDAY 18:00 CADENCE</span>
+              <span class="cadence-title" id="cadence-banner-title">Week of October 19 – October 26, 2026</span>
+              <div class="cadence-chips-row">
+                <span class="cadence-chip family" id="chip-family" title="Family Milestones: User (29 Mar), Wife (23 Apr), Anniversary (23 Sep)">
+                  👨‍👩‍👧 Family: 2 Focus Items
+                </span>
+                <span class="cadence-chip property" id="chip-property" title="Sierra Pines Property Net Cash Flow">
+                  🏡 Cash Flow: +$1,120/mo Net
+                </span>
+                <span class="cadence-chip health alert" id="chip-health" title="HRV Readiness Score">
+                  🏃 HRV: 46 ms (Zone 2 Directive)
+                </span>
+                <span class="cadence-chip academic alert" id="chip-academic" title="Academic Draft Submission">
+                  📚 Academic: Draft T-72h
+                </span>
+                <span class="cadence-chip fleet" id="chip-fleet" title="Fleet Telemetry: Murano & ZR2">
+                  🛞 Fleet: Murano Tabs Nov 30
+                </span>
+              </div>
+            </div>
+            <div class="cadence-banner-actions">
+              <button class="cadence-btn-action" id="btn-open-executive-briefing">📖 READ FULL BRIEFING</button>
+              <button class="cadence-btn-secondary" id="btn-trigger-cadence-run" title="Re-run Sunday Weekly Cadence Agent">⚡ RUN CADENCE</button>
+            </div>
+          </div>
+
           <div class="dashboard-iframe-container">
             <iframe id="iframe-executive" class="dashboard-iframe" src="https://daily-executive-dashboard.onrender.com/" title="Executive Briefing"></iframe>
           </div>
@@ -322,7 +357,33 @@
       </section>
 
       <!-- ========================================== -->
-      <!-- DECK 6: SYSTEM TELEMETRY & 24/7 CLOUD HOST -->
+      <!-- DECK 6: GARAGE & FLEET ASSET COMMAND       -->
+      <!-- ========================================== -->
+      <section class="deck-view" id="deck-garage">
+        <div class="holographic-window">
+          <div class="dashboard-subnav">
+            <div class="subnav-left">
+              <span class="subnav-status" data-status-badge="garage">
+                <span class="status-beacon"></span> ONLINE
+              </span>
+              <strong>GARAGE &amp; FLEET ASSET COMMAND // CENTRAL FLEET TELEMETRY</strong>
+              <span class="subnav-url">LOCAL / CLOUD // ORBIT 06 TITANIUM/COPPER</span>
+            </div>
+            <div class="subnav-actions">
+              <button class="subnav-btn btn-toggle-glass" data-action="toggle-glass" title="Toggle Glass / Ghost Translucency to see Atomic Core behind">💎 Glass (82%)</button>
+              <button class="subnav-btn" data-action="refresh-frame" data-deck="garage">🔄 Refresh</button>
+              <button class="subnav-btn" data-action="popout-tab" data-deck="garage">↗️ New Tab</button>
+              <button class="subnav-btn btn-minimize" data-action="return-core" title="Minimize back into Orbiting Circle">⚛️ Minimize to Orbit</button>
+            </div>
+          </div>
+          <div class="dashboard-iframe-container">
+            <iframe id="iframe-garage" class="dashboard-iframe" src="./dashboards/garage/index.html" title="Garage &amp; Fleet Asset Command"></iframe>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- DECK 7: SYSTEM TELEMETRY & 24/7 CLOUD HOST -->
       <!-- ========================================== -->
       <section class="deck-view" id="deck-telemetry">
         <div class="holographic-window">
@@ -514,6 +575,11 @@
             <input type="text" id="setting-url-mackie" style="background:#030712;border:1px solid var(--border-cyan);color:#fff;padding:8px 12px;border-radius:6px;font-family:inherit;" />
           </label>
 
+          <label style="display:flex;flex-direction:column;gap:4px;">
+            <span style="color:#f59e0b;">Garage &amp; Fleet Asset Command URL:</span>
+            <input type="text" id="setting-url-garage" style="background:#030712;border:1px solid var(--border-cyan);color:#fff;padding:8px 12px;border-radius:6px;font-family:inherit;" placeholder="./dashboards/garage/index.html" />
+          </label>
+
           <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:10px;">
             <button class="launch-btn" id="btn-save-settings">SAVE CONFIGURATION</button>
           </div>
@@ -558,9 +624,39 @@
       </div>
     </div>
 
+    <!-- EXECUTIVE SUNDAY WEEKLY BRIEFING MODAL -->
+    <div class="hud-modal-overlay" id="modal-executive-briefing">
+      <div class="hud-modal" style="max-width: 860px; width: 92%;">
+        <div class="modal-header-row">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <span style="font-size:1.4rem;">🏛️</span>
+            <div>
+              <h3 class="modal-title" style="margin:0;" id="briefing-modal-title">EXECUTIVE WEEKLY BRIEFING // CADENCE</h3>
+              <p style="font-family:var(--font-mono);font-size:0.72rem;color:var(--text-muted);margin:3px 0 0 0;" id="briefing-modal-subtitle">
+                Autonomous Sunday 18:00 cross-domain aggregation across personal, family, property, athletic, and academic domains.
+              </p>
+            </div>
+          </div>
+          <button class="modal-close-btn" id="btn-close-briefing">&times;</button>
+        </div>
+
+        <div class="briefing-modal-body" id="briefing-modal-content">
+          <!-- Dynamic briefing cards rendered by JavaScript -->
+        </div>
+
+        <div class="alert-modal-footer">
+          <span class="alert-footer-note">⚡ Aggregated autonomously every Sunday at 18:00 America/New_York.</span>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <button class="alert-bulk-btn" id="btn-modal-rerun-cadence">⚡ RE-RUN CADENCE</button>
+            <button class="launch-btn" id="btn-dismiss-briefing-modal">CLOSE</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <!-- Boot Module Script -->
-  <script type="module" src="js/app.js?v=4.0"></script>
+  <script type="module" src="js/app.js?v=4.1"></script>
 </body>
 </html>

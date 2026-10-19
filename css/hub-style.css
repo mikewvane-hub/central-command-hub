@@ -2079,3 +2079,232 @@ body::after {
     max-width: none;
   }
 }
+
+/* ==========================================================================
+   EXECUTIVE SUNDAY WEEKLY BRIEFING HUD & MODAL
+   ========================================================================== */
+.executive-cadence-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: linear-gradient(90deg, rgba(8, 47, 73, 0.88) 0%, rgba(15, 23, 42, 0.94) 50%, rgba(2, 6, 23, 0.98) 100%);
+  border-bottom: 1px solid rgba(0, 240, 255, 0.45);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  padding: 8px 18px;
+  flex-shrink: 0;
+  z-index: 10;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.cadence-banner-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.cadence-badge {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(0, 240, 255, 0.18);
+  color: #00f0ff;
+  border: 1px solid rgba(0, 240, 255, 0.55);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.cadence-title {
+  font-family: var(--font-tech);
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.cadence-chips-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.cadence-chip {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #cbd5e1;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.cadence-chip:hover {
+  border-color: rgba(0, 240, 255, 0.6);
+  color: #ffffff;
+}
+
+.cadence-chip.family {
+  border-color: rgba(244, 63, 94, 0.45);
+  color: #fca5a5;
+  background: rgba(244, 63, 94, 0.12);
+}
+
+.cadence-chip.property {
+  border-color: rgba(56, 189, 248, 0.45);
+  color: #7dd3fc;
+  background: rgba(56, 189, 248, 0.12);
+}
+
+.cadence-chip.health.alert {
+  border-color: rgba(239, 68, 68, 0.6);
+  color: #fca5a5;
+  background: rgba(239, 68, 68, 0.2);
+  animation: pulse-border 2s infinite;
+}
+
+.cadence-chip.academic.alert {
+  border-color: rgba(245, 158, 11, 0.6);
+  color: #fde68a;
+  background: rgba(245, 158, 11, 0.18);
+}
+
+.cadence-chip.fleet {
+  border-color: rgba(16, 185, 129, 0.45);
+  color: #6ee7b7;
+  background: rgba(16, 185, 129, 0.12);
+}
+
+.cadence-banner-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.cadence-btn-action {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 5px 12px;
+  border-radius: 4px;
+  background: linear-gradient(135deg, rgba(0, 240, 255, 0.25) 0%, rgba(2, 132, 199, 0.4) 100%);
+  border: 1px solid rgba(0, 240, 255, 0.7);
+  color: #ffffff;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+  transition: all 0.2s ease;
+}
+
+.cadence-btn-action:hover {
+  background: linear-gradient(135deg, rgba(0, 240, 255, 0.45) 0%, rgba(2, 132, 199, 0.6) 100%);
+  box-shadow: 0 0 16px rgba(0, 240, 255, 0.45);
+  transform: translateY(-1px);
+}
+
+.cadence-btn-secondary {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 4px;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(245, 158, 11, 0.55);
+  color: #fbbf24;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.2s ease;
+}
+
+.cadence-btn-secondary:hover {
+  background: rgba(245, 158, 11, 0.22);
+  border-color: #f59e0b;
+}
+
+/* Briefing Modal Styles */
+.briefing-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 72vh;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.briefing-domain-card {
+  background: rgba(3, 7, 18, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.briefing-domain-card.family { border-left: 4px solid #f43f5e; }
+.briefing-domain-card.property { border-left: 4px solid #38bdf8; }
+.briefing-domain-card.health { border-left: 4px solid #ef4444; }
+.briefing-domain-card.academic { border-left: 4px solid #f59e0b; }
+.briefing-domain-card.fleet { border-left: 4px solid #10b981; }
+
+.briefing-domain-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-tech);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+}
+
+.briefing-metric-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+}
+
+.briefing-metric-item {
+  background: rgba(15, 23, 42, 0.6);
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.briefing-metric-item .label {
+  font-size: 0.68rem;
+  color: #94a3b8;
+  display: block;
+  margin-bottom: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.briefing-metric-item .val {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #f8fafc;
+}
+

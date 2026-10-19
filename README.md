@@ -13,6 +13,7 @@ An always-active, 24/7 centralized command hub designed with an **interactive 3D
 | **Financial Command Center** | `http://localhost:3008/` | Local Next.js 15 | Executive wealth console, asset distribution, liquidity & capital deployment. |
 | **Rainier Basecamp // Overland Planner** | `https://daily-executive-dashboard.onrender.com/trip-planner/` | Render Cloud (24/7) | Family overland expeditions, Rainier campsite logistics, GPS waypoints & packing checklists. |
 | **Mackie's Daily Board** | `https://daily-executive-dashboard.onrender.com/mackie/` | Render Cloud (24/7) | Family calendar synchronization, weekly meal planning, shared grocery shopping lists & coordination. |
+| **Garage & Fleet Asset Command** | `./dashboards/garage/index.html` | Local Static / Cloud (Orbit 06) | Vehicle telemetry decay engine, 5-tire rotation, WA DOL tabs & maintenance vault. |
 
 **Live Permanent Global URL:** [https://mikewvane-hub.github.io/central-command-hub/](https://mikewvane-hub.github.io/central-command-hub/)
 
@@ -23,7 +24,7 @@ An always-active, 24/7 centralized command hub designed with an **interactive 3D
 ### 1. 3D Atomic Orbital Core with Floating Dashboard Circles (Three.js WebGL)
 - **Central Quantum Nucleus**: Dynamic pulsating proton/neutron energy cluster with additive halo blending running 24/7 as a **persistent background world**.
 - **Floating Circles with Actual Dashboards**:
-  - The 5 orbiting circles are 3D-tracked **holographic viewport pods** that display the **actual dashboards** orbiting the nucleus!
+  - The 6 orbiting circles are 3D-tracked **holographic viewport pods** that display the **actual dashboards** orbiting the nucleus!
   - As they orbit, depth scaling dynamically resizes each circle between `0.68x` and `1.15x` based on 3D camera distance.
   - Tilted Quantum Orbits:
     - Orbit 01 (`0x00f0ff` Cyan): Executive Daily Briefing
@@ -31,6 +32,7 @@ An always-active, 24/7 centralized command hub designed with an **interactive 3D
     - Orbit 03 (`0x8b5cf6` Plasma Violet): Financial Wealth Console
     - Orbit 04 (`0x10b981` Emerald Core): Rainier Basecamp & Overland Planner
     - Orbit 05 (`0xf43f5e` Rose Coral): Mackie's Daily Board (Calendar & Meals)
+    - Orbit 06 (`0xf59e0b` Titanium/Copper): Garage & Fleet Asset Command (Telemetry & Compliance)
 - **See-Through Holographic Windows (Atomic Core Never Hidden)**:
   - Opening any dashboard displays it inside a centered **floating holographic HUD window** with customizable glass translucency.
   - The atomic core, pulsating nucleus, and all electron orbits remain 100% visible and animating **behind and around** the active dashboard!
