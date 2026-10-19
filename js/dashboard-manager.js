@@ -273,13 +273,13 @@ export class DashboardManager {
     const sanitizeGarageUrl = () => {
       try {
         const stored = localStorage.getItem('hub_url_garage');
-        if (stored && stored.includes(':3009')) {
-          return stored;
+        if (!stored || stored.includes(':3009') || stored.includes('localhost') || stored.startsWith('http://') || stored === '') {
+          localStorage.setItem('hub_url_garage', './dashboards/garage/index.html');
+          return './dashboards/garage/index.html';
         }
-        localStorage.setItem('hub_url_garage', 'http://localhost:3009/');
-        return 'http://localhost:3009/';
+        return stored;
       } catch (e) {
-        return 'http://localhost:3009/';
+        return './dashboards/garage/index.html';
       }
     };
 
@@ -1213,7 +1213,7 @@ export class DashboardManager {
 
     if (!iframe.src || iframe.src === 'about:blank' || iframe.getAttribute('src') === 'about:blank') {
       iframe.src = targetUrl;
-    } else if (deckId === 'garage' && (!iframe.src.includes(':3009') && !iframe.src.includes('localhost'))) {
+    } else if (deckId === 'garage' && iframe.src !== targetUrl && !iframe.src.endsWith(targetUrl)) {
       iframe.src = targetUrl;
     }
   }
@@ -1222,7 +1222,7 @@ export class DashboardManager {
     const iframe = document.getElementById(`iframe-${deckId}`);
     if (iframe) {
       sfx.playClick();
-      const targetUrl = this.urls[deckId] || (deckId === 'garage' ? 'http://localhost:3009/' : '');
+      const targetUrl = this.urls[deckId] || (deckId === 'garage' ? './dashboards/garage/index.html' : '');
       if (targetUrl) {
         iframe.src = targetUrl;
       }

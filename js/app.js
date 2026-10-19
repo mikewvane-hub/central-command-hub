@@ -3,13 +3,13 @@
  * Main Application Orchestrator
  */
 
-import { sfx } from './sound-effects.js?v=20.0';
-import { AtomicCoreVisualizer } from './atomic-core.js?v=20.0';
-import { DashboardManager } from './dashboard-manager.js?v=20.0';
-import { VoiceCommandEngine } from './voice-command.js?v=20.0';
-import { DeviceOptimizer } from './device-optimizer.js?v=20.0';
-import { renderQRCode } from './qr-generator.js?v=20.0';
-import { ExecutiveSidebarManager } from './executive-sidebar.js?v=20.0';
+import { sfx } from './sound-effects.js?v=21.0';
+import { AtomicCoreVisualizer } from './atomic-core.js?v=21.0';
+import { DashboardManager } from './dashboard-manager.js?v=21.0';
+import { VoiceCommandEngine } from './voice-command.js?v=21.0';
+import { DeviceOptimizer } from './device-optimizer.js?v=21.0';
+import { renderQRCode } from './qr-generator.js?v=21.0';
+import { ExecutiveSidebarManager } from './executive-sidebar.js?v=21.0';
 
 class CentralCommandHubApp {
   constructor() {
@@ -235,14 +235,29 @@ class CentralCommandHubApp {
     });
   }
 
-  setupShareAndQR() {
-    const currentUrl = window.location.href;
-    const shareUrlInput = document.getElementById('share-hub-url');
-    if (shareUrlInput) {
-      shareUrlInput.value = currentUrl;
+  async setupShareAndQR() {
+    let targetUrl = window.location.href;
+    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+    // If running on PC desktop via localhost, fetch the actual LAN IP so phone QR scanning connects!
+    if (isLocalhost) {
+      try {
+        const resp = await fetch('/api/network-info');
+        if (resp.ok) {
+          const info = await resp.json();
+          if (info.hubUrl) {
+            targetUrl = info.hubUrl;
+          }
+        }
+      } catch (e) {}
     }
 
-    renderQRCode('qr-code-canvas', currentUrl);
+    const shareUrlInput = document.getElementById('share-hub-url');
+    if (shareUrlInput) {
+      shareUrlInput.value = targetUrl;
+    }
+
+    renderQRCode('qr-code-canvas', targetUrl);
 
     const copyBtn = document.getElementById('btn-copy-share-url');
     if (copyBtn) {

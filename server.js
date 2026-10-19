@@ -2,11 +2,24 @@ import express from 'express';
 import http from 'http';
 import path from 'path';
 import fs from 'fs';
+import os from 'os';
 import { exec } from 'child_process';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+function getLocalIp() {
+  const interfaces = os.networkInterfaces();
+  for (const name of Object.keys(interfaces)) {
+    for (const iface of interfaces[name]) {
+      if (iface.family === 'IPv4' && !iface.internal) {
+        return iface.address;
+      }
+    }
+  }
+  return 'localhost';
+}
 
 process.on('uncaughtException', (err) => {
   console.error('[Central Command Hub] Uncaught Exception:', err);
@@ -44,6 +57,18 @@ app.get('/api/health', (req, res) => {
     timestamp: new Date().toISOString(),
     system: 'ANTIGRAVITY // CENTRAL COMMAND HUB',
     version: '2.5.0-QUANTUM'
+  });
+});
+
+// Network LAN information for mobile & Galaxy Z Fold 8 hand-off
+app.get('/api/network-info', (req, res) => {
+  const lanIp = getLocalIp();
+  res.json({
+    ip: lanIp,
+    port: PORT,
+    garagePort: 3009,
+    hubUrl: `http://${lanIp}:${PORT}/`,
+    garageUrl: `http://${lanIp}:3009/`
   });
 });
 
