@@ -261,7 +261,7 @@ export class DashboardManager {
           stored.includes('localhost') ||
           stored === 'about:blank' ||
           stored === '' ||
-          (key === 'hub_url_garage' && (!stored.includes('v=7.5') && !stored.startsWith('https://')))
+          (key === 'hub_url_garage' && !stored.includes('v=14.0'))
         ) {
           localStorage.setItem(key, defaultCloud);
           return defaultCloud;
@@ -279,7 +279,7 @@ export class DashboardManager {
       financial: sanitizeCloudUrl('hub_url_financial', './dashboards/financial/index.html'),
       trip: localStorage.getItem('hub_url_trip') || 'https://daily-executive-dashboard.onrender.com/trip-planner/',
       mackie: localStorage.getItem('hub_url_mackie') || 'https://daily-executive-dashboard.onrender.com/mackie/',
-      garage: sanitizeCloudUrl('hub_url_garage', './dashboards/garage/index.html?v=7.5')
+      garage: sanitizeCloudUrl('hub_url_garage', './dashboards/garage/index.html?v=14.0')
     };
 
     this.statusMap = {
@@ -1184,7 +1184,7 @@ export class DashboardManager {
       this.ensureIframeLoaded(deckId);
       if (deckId === 'garage') {
         const frame = document.getElementById('iframe-garage');
-        if (frame && (!frame.src || !frame.src.includes('v=7.5'))) {
+        if (frame && (!frame.src || !frame.src.includes('v=14.0'))) {
           frame.src = this.urls.garage;
         }
       }
@@ -1208,7 +1208,7 @@ export class DashboardManager {
 
     if (!iframe.src || iframe.src === 'about:blank' || iframe.getAttribute('src') === 'about:blank') {
       iframe.src = targetUrl;
-    } else if (deckId === 'garage' && !iframe.src.includes('v=7.5')) {
+    } else if (deckId === 'garage' && !iframe.src.includes('v=14.0')) {
       iframe.src = targetUrl;
     }
   }

@@ -125,15 +125,35 @@ async function main() {
     env: { ...process.env, PORT: String(testPort) }
   });
 
-  serverProc.stdout.on('data', d => {
-    // console.log('[Server stdout]', d.toString());
-  });
-  serverProc.stderr.on('data', d => {
-    console.error('[Server stderr]', d.toString());
-  });
+  // Wait for server to emit listening or up to 5 seconds
+  await new Promise((resolve, reject) => {
+    let resolved = false;
+    const timeout = setTimeout(() => {
+      if (!resolved) {
+        resolved = true;
+        resolve();
+      }
+    }, 5000);
 
-  // Wait for server to emit listening or 2 seconds
-  await new Promise(r => setTimeout(r, 2000));
+    serverProc.stdout.on('data', d => {
+      const msg = d.toString();
+      if (msg.includes('Listening on port') || msg.includes('HUB CORE ACTIVE')) {
+        if (!resolved) {
+          resolved = true;
+          clearTimeout(timeout);
+          resolve();
+        }
+      }
+    });
+
+    serverProc.on('error', err => {
+      if (!resolved) {
+        resolved = true;
+        clearTimeout(timeout);
+        reject(err);
+      }
+    });
+  });
 
   try {
     // GET /api/state

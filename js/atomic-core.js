@@ -247,7 +247,7 @@ export class AtomicCoreVisualizer {
           val.includes('localhost') ||
           val === 'about:blank' ||
           val === '' ||
-          (key === 'hub_url_garage' && (!val.includes('v=7.0') && !val.startsWith('https://')))
+          (key === 'hub_url_garage' && !val.includes('v=14.0'))
         ) {
           return defaultRelPath;
         }
@@ -342,8 +342,8 @@ export class AtomicCoreVisualizer {
         id: 'garage',
         name: 'GARAGE & FLEET ASSET COMMAND',
         shortTitle: 'GARAGE & FLEET',
-        orbitTag: 'ORBIT 06',
-        code: 'FLEET TELEMETRY',
+        orbitTag: 'BAY 01-02',
+        code: 'POWERTRAIN & TELEMETRY',
         orbitRadius: 12.2,
         horizontalStretch: 1.70,
         speed: 0.10,
@@ -351,7 +351,7 @@ export class AtomicCoreVisualizer {
         inclination: { x: -0.34, y: 0.42, z: -0.18 },
         color: 0xf59e0b,
         glowHex: '#f59e0b',
-        url: resolveCloudUrl('hub_url_garage', './dashboards/garage/index.html?v=7.0'),
+        url: resolveCloudUrl('hub_url_garage', './dashboards/garage/index.html?v=14.0'),
         icon: '🛻'
       }
     ];
