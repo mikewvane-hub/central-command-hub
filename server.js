@@ -13,18 +13,21 @@ const PORT = process.env.PORT || 4000;
 
 app.use(express.json());
 
-// Enable CORS and permissive headers for iframes and cross-device usage
+// Enable CORS, permissive headers for iframes, and disable caching for instant updates
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
   // Allow framing from authorized domains or self
   res.removeHeader('X-Frame-Options');
   next();
 });
 
-// Serve static assets
-app.use(express.static(__dirname));
+// Serve static assets with zero caching
+app.use(express.static(__dirname, { etag: false, maxAge: 0 }));
 
 // Health check
 app.get('/api/health', (req, res) => {
@@ -73,7 +76,7 @@ app.get('/api/telemetry', async (req, res) => {
     {
       id: 'garage',
       name: 'Garage & Fleet Asset Command',
-      url: 'http://127.0.0.1:3009/',
+      url: `http://127.0.0.1:${PORT}/dashboards/garage/index.html`,
       type: 'local'
     }
   ];

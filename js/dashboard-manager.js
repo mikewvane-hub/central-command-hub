@@ -255,8 +255,14 @@ export class DashboardManager {
       try {
         const stored = localStorage.getItem(key);
         if (!stored) return defaultCloud;
-        // Unconditionally migrate from local port URLs to 24/7 cloud dashboards
-        if (stored.includes('127.0.0.1') || stored.includes('localhost') || stored === 'about:blank' || stored === '') {
+        // Unconditionally migrate from local port URLs to 24/7 cloud dashboards, or outdated garage cache
+        if (
+          stored.includes('127.0.0.1') ||
+          stored.includes('localhost') ||
+          stored === 'about:blank' ||
+          stored === '' ||
+          (key === 'hub_url_garage' && (!stored.includes('v=7.5') && !stored.startsWith('https://')))
+        ) {
           localStorage.setItem(key, defaultCloud);
           return defaultCloud;
         }
@@ -273,7 +279,7 @@ export class DashboardManager {
       financial: sanitizeCloudUrl('hub_url_financial', './dashboards/financial/index.html'),
       trip: localStorage.getItem('hub_url_trip') || 'https://daily-executive-dashboard.onrender.com/trip-planner/',
       mackie: localStorage.getItem('hub_url_mackie') || 'https://daily-executive-dashboard.onrender.com/mackie/',
-      garage: sanitizeCloudUrl('hub_url_garage', './dashboards/garage/index.html')
+      garage: sanitizeCloudUrl('hub_url_garage', './dashboards/garage/index.html?v=7.5')
     };
 
     this.statusMap = {
@@ -1176,6 +1182,12 @@ export class DashboardManager {
     if (deckId !== 'core' && deckId !== 'telemetry') {
       this.acknowledgeDeckAlerts(deckId);
       this.ensureIframeLoaded(deckId);
+      if (deckId === 'garage') {
+        const frame = document.getElementById('iframe-garage');
+        if (frame && (!frame.src || !frame.src.includes('v=7.5'))) {
+          frame.src = this.urls.garage;
+        }
+      }
     }
 
     // 5. Update subnav alert tag if active alerts exist
@@ -1196,6 +1208,8 @@ export class DashboardManager {
 
     if (!iframe.src || iframe.src === 'about:blank' || iframe.getAttribute('src') === 'about:blank') {
       iframe.src = targetUrl;
+    } else if (deckId === 'garage' && !iframe.src.includes('v=7.5')) {
+      iframe.src = targetUrl;
     }
   }
 
@@ -1203,7 +1217,10 @@ export class DashboardManager {
     const iframe = document.getElementById(`iframe-${deckId}`);
     if (iframe) {
       sfx.playClick();
-      const targetUrl = this.urls[deckId];
+      let targetUrl = this.urls[deckId];
+      if (deckId === 'garage') {
+        targetUrl = './dashboards/garage/index.html?v=' + Date.now();
+      }
       if (targetUrl) {
         iframe.src = targetUrl;
       }
@@ -1249,7 +1266,8 @@ export class DashboardManager {
       { id: 'rental', url: this.urls.rental },
       { id: 'financial', url: this.urls.financial },
       { id: 'trip', url: this.urls.trip },
-      { id: 'mackie', url: this.urls.mackie }
+      { id: 'mackie', url: this.urls.mackie },
+      { id: 'garage', url: this.urls.garage }
     ];
 
     probes.forEach(async (probe) => {

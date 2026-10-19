@@ -241,7 +241,14 @@ export class AtomicCoreVisualizer {
     const resolveCloudUrl = (key, defaultRelPath) => {
       try {
         const val = localStorage.getItem(key);
-        if (!val || val.includes('127.0.0.1') || val.includes('localhost') || val === 'about:blank' || val === '') {
+        if (
+          !val ||
+          val.includes('127.0.0.1') ||
+          val.includes('localhost') ||
+          val === 'about:blank' ||
+          val === '' ||
+          (key === 'hub_url_garage' && (!val.includes('v=7.0') && !val.startsWith('https://')))
+        ) {
           return defaultRelPath;
         }
         return val;
@@ -344,8 +351,8 @@ export class AtomicCoreVisualizer {
         inclination: { x: -0.34, y: 0.42, z: -0.18 },
         color: 0xf59e0b,
         glowHex: '#f59e0b',
-        url: resolveCloudUrl('hub_url_garage', './dashboards/garage/index.html'),
-        icon: '🚙'
+        url: resolveCloudUrl('hub_url_garage', './dashboards/garage/index.html?v=7.0'),
+        icon: '🛻'
       }
     ];
 

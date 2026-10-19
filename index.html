@@ -74,7 +74,7 @@
         </button>
 
         <button class="nav-tab-btn" data-deck="garage" title="Garage &amp; Fleet Asset Command // Vehicle Telemetry &amp; Compliance">
-          <span>🚙 GARAGE</span>
+          <span>🛻 GARAGE</span>
           <span class="tab-badge" data-status-badge="garage">ORBIT 06</span>
         </button>
 
@@ -377,7 +377,7 @@
             </div>
           </div>
           <div class="dashboard-iframe-container">
-            <iframe id="iframe-garage" class="dashboard-iframe" src="./dashboards/garage/index.html" title="Garage &amp; Fleet Asset Command"></iframe>
+            <iframe id="iframe-garage" class="dashboard-iframe" src="./dashboards/garage/index.html?v=7.5" title="Garage &amp; Fleet Asset Command"></iframe>
           </div>
         </div>
       </section>
@@ -407,7 +407,7 @@
             <div class="matrix-card">
               <div class="matrix-card-title">
                 <span>🛰️ ACTIVE DASHBOARD FLEET</span>
-                <span class="card-ping-badge"><span class="status-beacon"></span> 6 SYNCHRONIZED</span>
+                <span class="card-ping-badge"><span class="status-beacon"></span> 7 SYNCHRONIZED</span>
               </div>
               <div class="matrix-item">
                 <span class="matrix-label">Executive Briefing (Render)</span>
@@ -428,6 +428,10 @@
               <div class="matrix-item">
                 <span class="matrix-label">Mackie's Daily Board</span>
                 <span class="matrix-value live" id="telemetry-status-mackie">ONLINE (200 OK)</span>
+              </div>
+              <div class="matrix-item">
+                <span class="matrix-label">Garage &amp; Fleet Asset Command</span>
+                <span class="matrix-value live" id="telemetry-status-garage">ORBIT 06 ONLINE</span>
               </div>
               <div class="matrix-item">
                 <span class="matrix-label">Voice Neural Assistant</span>
@@ -577,7 +581,7 @@
 
           <label style="display:flex;flex-direction:column;gap:4px;">
             <span style="color:#f59e0b;">Garage &amp; Fleet Asset Command URL:</span>
-            <input type="text" id="setting-url-garage" style="background:#030712;border:1px solid var(--border-cyan);color:#fff;padding:8px 12px;border-radius:6px;font-family:inherit;" placeholder="./dashboards/garage/index.html" />
+            <input type="text" id="setting-url-garage" style="background:#030712;border:1px solid var(--border-cyan);color:#fff;padding:8px 12px;border-radius:6px;font-family:inherit;" placeholder="./dashboards/garage/index.html?v=7.5" />
           </label>
 
           <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:10px;">
@@ -657,6 +661,6 @@
   </div>
 
   <!-- Boot Module Script -->
-  <script type="module" src="js/app.js?v=4.1"></script>
+  <script type="module" src="js/app.js?v=7.0"></script>
 </body>
 </html>
