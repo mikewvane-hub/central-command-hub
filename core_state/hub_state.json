@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": "1.0.0-UNIFIED",
-    "last_updated": "2026-10-19T23:41:03.726090+00:00",
+    "last_updated": "2026-10-20T00:40:13.542827+00:00",
     "timezone": "America/New_York",
     "status": "ONLINE"
   },
@@ -232,9 +232,9 @@
       "title": "HRV Readiness Alert: 46 ms (Below 65 ms Baseline)",
       "message": "Athletic recovery compromised. Planned training load should be throttled to Zone 2 active recovery.",
       "statute_or_category": "Athletic Readiness",
-      "due_date": "2026-10-19",
+      "due_date": "2026-10-20",
       "action_url": "health",
-      "created_at": "2026-10-19T23:41:03.388133+00:00",
+      "created_at": "2026-10-20T00:40:13.290117+00:00",
       "acknowledged": false,
       "dismissed": false
     },
@@ -302,9 +302,9 @@
       "title": "2021 Chevy Colorado ZR2 Oil Life at 18%",
       "message": "Service interval approaching. Prepare synthetic oil & filter replacement.",
       "statute_or_category": "Preventive Maintenance",
-      "due_date": "2026-11-02",
+      "due_date": "2026-11-03",
       "action_url": "fleet",
-      "created_at": "2026-10-19T23:41:03.388133+00:00",
+      "created_at": "2026-10-20T00:40:13.290117+00:00",
       "acknowledged": false,
       "dismissed": false
     },
@@ -313,12 +313,12 @@
       "domain": "fleet",
       "severity": "WARNING",
       "code": "NISSAN_MURANO_MIDNIGHT_TABS_EXPIRING",
-      "title": "2021 Nissan Murano Midnight Edition Tabs Expire in 41 Days (2026-11-30)",
+      "title": "2021 Nissan Murano Midnight Edition Tabs Expire in 40 Days (2026-11-30)",
       "message": "WA DOL vehicle tab renewal due. Renew online to avoid penalty.",
       "statute_or_category": "State Vehicle Registration",
       "due_date": "2026-11-30",
       "action_url": "fleet",
-      "created_at": "2026-10-19T23:41:03.458217+00:00",
+      "created_at": "2026-10-20T00:40:13.326877+00:00",
       "acknowledged": false,
       "dismissed": false
     },
@@ -332,29 +332,43 @@
       "statute_or_category": "Q4 Statutory Maintenance",
       "due_date": "2026-12-31",
       "action_url": "rental",
-      "created_at": "2026-10-19T23:41:03.458217+00:00",
+      "created_at": "2026-10-20T00:40:13.326877+00:00",
+      "acknowledged": false,
+      "dismissed": false
+    },
+    {
+      "id": "alert_acad_draft_agentic_arch",
+      "domain": "academic",
+      "severity": "CRITICAL",
+      "code": "ACADEMIC_DRAFT_T72H_draft_agentic_arch",
+      "title": "Academic Draft Due in T-71h: Autonomous Multi-Domain Agent Architectures (Draft V2)",
+      "message": "Draft deadline within T-72 hours (Oct 22, 23:59 UTC). Final revision required.",
+      "statute_or_category": "Academic Submission",
+      "due_date": "2026-10-22",
+      "action_url": "academic",
+      "created_at": "2026-10-20T00:40:13.290117+00:00",
       "acknowledged": false,
       "dismissed": false
     }
   ],
   "executive_briefing": {
     "cadence": "SUNDAY_1800_EXECUTIVE_BRIEFING",
-    "generated_at": "2026-10-19T23:41:03.386128+00:00",
-    "week_label": "Week of October 19 \u2013 October 26, 2026",
-    "cadence_window": "Week of October 19 \u2013 October 26, 2026",
-    "summary": "Executive briefing for Week of October 19 \u2013 October 26, 2026 integrating Family Milestones, Property Cash Flow, Athletic Readiness, Academic Deadlines, and Fleet Telemetry.",
+    "generated_at": "2026-10-20T00:40:13.289117+00:00",
+    "week_label": "Week of October 20 \u2013 October 27, 2026",
+    "cadence_window": "Week of October 20 \u2013 October 27, 2026",
+    "summary": "Executive briefing for Week of October 20 \u2013 October 27, 2026 integrating Family Milestones, Property Cash Flow, Athletic Readiness, Academic Deadlines, and Fleet Telemetry.",
     "highlights": [
       "FAMILY: User Birthday (29 Mar 1993, in 161d), Wife Birthday (23 Apr 1996, in 186d), Anniversary (23 Sep).",
       "PROPERTY: Sierra Pines cash flow at +$1,120/mo Net ($3,030 Gross). Priority ticket: 'Perimeter Fence Wash & Gate Warranty Inspection'.",
       "ATHLETIC: Readiness Score 61/100. HRV at 46 ms (BELOW_TARGET). Directive: \u26a0\ufe0f HRV at 46 ms (Target: 65 ms). Autonomic nervous system fatigued. Throttle training to Zone 2 Active Recovery..",
-      "ACADEMIC: 0 draft(s) in critical T-72h window. Next submission due Oct 22.",
+      "ACADEMIC: 1 draft(s) in critical T-72h window. Next submission due Oct 22.",
       "FLEET: Colorado ZR2 oil life at 18% (service due); Nissan Murano WA State tabs expire Nov 30."
     ],
     "executive_highlights": [
       "FAMILY: User Birthday (29 Mar 1993, in 161d), Wife Birthday (23 Apr 1996, in 186d), Anniversary (23 Sep).",
       "PROPERTY: Sierra Pines cash flow at +$1,120/mo Net ($3,030 Gross). Priority ticket: 'Perimeter Fence Wash & Gate Warranty Inspection'.",
       "ATHLETIC: Readiness Score 61/100. HRV at 46 ms (BELOW_TARGET). Directive: \u26a0\ufe0f HRV at 46 ms (Target: 65 ms). Autonomic nervous system fatigued. Throttle training to Zone 2 Active Recovery..",
-      "ACADEMIC: 0 draft(s) in critical T-72h window. Next submission due Oct 22.",
+      "ACADEMIC: 1 draft(s) in critical T-72h window. Next submission due Oct 22.",
       "FLEET: Colorado ZR2 oil life at 18% (service due); Nissan Murano WA State tabs expire Nov 30."
     ],
     "upcoming_7d_milestones": [
@@ -368,7 +382,7 @@
       },
       {
         "category": "Academic",
-        "detail": "Autonomous Multi-Domain Agent Architectures (Draft V2) (Due 2026-10-22 \u2022 T-72.3h)"
+        "detail": "Autonomous Multi-Domain Agent Architectures (Draft V2) (Due 2026-10-22 \u2022 T-71.3h)"
       },
       {
         "category": "Fleet",
@@ -419,7 +433,7 @@
         "id": "draft_agentic_arch",
         "title": "Autonomous Multi-Domain Agent Architectures (Draft V2)",
         "deadline": "2026-10-22T23:59:00Z",
-        "hours_remaining": 72.3,
+        "hours_remaining": 71.3,
         "urgency": "T_MINUS_72H",
         "target": "IEEE / ACM Software Engineering Submission"
       },
@@ -427,7 +441,7 @@
         "id": "lit_review_defense",
         "title": "Comprehensive Literature Review & Defense Synthesis",
         "deadline": "2026-11-10T17:00:00Z",
-        "hours_remaining": 521.3,
+        "hours_remaining": 520.3,
         "urgency": "ON_TRACK",
         "target": null
       }
@@ -448,6 +462,6 @@
         "status": "NOMINAL"
       }
     ],
-    "active_alerts_count": 8
+    "active_alerts_count": 9
   }
 }

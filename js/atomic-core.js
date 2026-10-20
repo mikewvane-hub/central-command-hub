@@ -244,9 +244,9 @@ export class AtomicCoreVisualizer {
       try {
         const val = localStorage.getItem(key);
         if (key === 'hub_url_garage') {
-          if (!val || val.includes(':3009') || val.includes('localhost') || val.startsWith('http://') || val === '') {
-            localStorage.setItem('hub_url_garage', './dashboards/garage/index.html');
-            return './dashboards/garage/index.html';
+          if (!val || val.includes(':3009') || val.includes('localhost') || val.startsWith('http://') || val === '' || val === './dashboards/garage/index.html') {
+            localStorage.setItem('hub_url_garage', './dashboards/garage/index.html?v=4.0');
+            return './dashboards/garage/index.html?v=4.0';
           }
           return val;
         }
@@ -359,7 +359,7 @@ export class AtomicCoreVisualizer {
         inclination: { x: -0.34, y: 0.42, z: -0.18 },
         color: 0xf59e0b,
         glowHex: '#f59e0b',
-        url: resolveCloudUrl('hub_url_garage', './dashboards/garage/index.html'),
+        url: resolveCloudUrl('hub_url_garage', './dashboards/garage/index.html?v=4.0'),
         icon: '🛻'
       }
     ];

@@ -153,62 +153,18 @@ export const DEFAULT_HUB_ALERTS = {
   garage: {
     deckName: 'Garage & Fleet Command',
     deckIcon: '🛞',
-    count: 3,
-    severity: 'critical',
-    title: '1 Critical (Tabs Expire in 14d) + 2 Service Due',
-    items: [
-      {
-        severity: 'CRITICAL',
-        code: 'WA_DOL_TABS_MURANO',
-        statute: 'WA DOL RCW 46.16A',
-        title: 'Murano WA State Vehicle Tabs Expire in 14 Days',
-        message: 'Washington State Vehicle Tabs for plate CDE4108 expire on Nov 2, 2026. Renew via WA License eXpress to avoid state penalties.'
-      },
-      {
-        severity: 'WARNING',
-        code: 'ZR2_OIL_LIFE_12PCT',
-        statute: 'GM dexos1 Service Timer',
-        title: 'Colorado ZR2 Oil Life at 12% (Service Due)',
-        message: 'dexos 5W-30 Full Synthetic oil and ACDelco PF63 filter change due within 450 mi.'
-      },
-      {
-        severity: 'INFO',
-        code: 'ZR2_TIRE_ROTATION_DUE',
-        statute: '5-Tire Overland Rotation',
-        title: 'Colorado ZR2 5-Tire Rotation Due in 450 mi',
-        message: 'Cycle full-size spare into Right Rear for uniform 31-inch AT tire wear.'
-      }
-    ]
+    count: 0,
+    severity: 'nominal',
+    title: 'Fleet Telemetry Calibrated • Awaiting Telemetry Input',
+    items: []
   },
   fleet: {
     deckName: 'Fleet Telemetry',
     deckIcon: '🛞',
-    count: 3,
-    severity: 'critical',
-    title: '1 Critical (Tabs Expire in 14d) + 2 Service Due',
-    items: [
-      {
-        severity: 'CRITICAL',
-        code: 'WA_DOL_TABS_MURANO',
-        statute: 'WA DOL RCW 46.16A',
-        title: 'Murano WA State Vehicle Tabs Expire in 14 Days',
-        message: 'Washington State Vehicle Tabs for plate CDE4108 expire on Nov 2, 2026. Renew via WA License eXpress to avoid state penalties.'
-      },
-      {
-        severity: 'WARNING',
-        code: 'ZR2_OIL_LIFE_12PCT',
-        statute: 'GM dexos1 Service Timer',
-        title: 'Colorado ZR2 Oil Life at 12% (Service Due)',
-        message: 'dexos 5W-30 Full Synthetic oil and ACDelco PF63 filter change due within 450 mi.'
-      },
-      {
-        severity: 'INFO',
-        code: 'ZR2_TIRE_ROTATION_DUE',
-        statute: '5-Tire Overland Rotation',
-        title: 'Colorado ZR2 5-Tire Rotation Due in 450 mi',
-        message: 'Cycle full-size spare into Right Rear for uniform 31-inch AT tire wear.'
-      }
-    ]
+    count: 0,
+    severity: 'nominal',
+    title: 'Fleet Telemetry Calibrated • Awaiting Telemetry Input',
+    items: []
   },
   health: {
     deckName: 'Athletic Readiness',
@@ -273,13 +229,13 @@ export class DashboardManager {
     const sanitizeGarageUrl = () => {
       try {
         const stored = localStorage.getItem('hub_url_garage');
-        if (!stored || stored.includes(':3009') || stored.includes('localhost') || stored.startsWith('http://') || stored === '') {
-          localStorage.setItem('hub_url_garage', './dashboards/garage/index.html');
-          return './dashboards/garage/index.html';
+        if (!stored || stored.includes(':3009') || stored.includes('localhost') || stored.startsWith('http://') || stored === '' || stored === './dashboards/garage/index.html') {
+          localStorage.setItem('hub_url_garage', './dashboards/garage/index.html?v=4.0');
+          return './dashboards/garage/index.html?v=4.0';
         }
         return stored;
       } catch (e) {
-        return './dashboards/garage/index.html';
+        return './dashboards/garage/index.html?v=4.0';
       }
     };
 
@@ -1213,7 +1169,7 @@ export class DashboardManager {
 
     if (!iframe.src || iframe.src === 'about:blank' || iframe.getAttribute('src') === 'about:blank') {
       iframe.src = targetUrl;
-    } else if (deckId === 'garage' && iframe.src !== targetUrl && !iframe.src.endsWith(targetUrl)) {
+    } else if (deckId === 'garage' && !iframe.src.includes('dashboards/garage')) {
       iframe.src = targetUrl;
     }
   }
@@ -1443,13 +1399,13 @@ export class DashboardManager {
         "PROPERTY: Sierra Pines cash flow at +$1,120/mo Net ($2,450 Gross). Priority ticket: 'Perimeter Fence Wash & Gate Warranty Inspection'.",
         "ATHLETIC: Readiness Score 61/100. HRV at 46 ms (BELOW_TARGET). Directive: ⚠️ HRV at 46 ms (Target: 65 ms). Autonomic nervous system fatigued. Throttle training to Zone 2 Active Recovery.",
         "ACADEMIC: Autonomous Multi-Domain Agent Architectures (Draft V2) due Oct 22 (T-68h).",
-        "FLEET: Colorado ZR2 oil life at 18% (service due); Nissan Murano WA State tabs expire Nov 30."
+        "FLEET: Vehicles online. Telemetry calibrated — awaiting current odometer & tabs expiration from owner."
       ],
       upcoming_7d_milestones: [
         { category: "Family", detail: "📅 Family Sunday Meal Prep & Planning (2026-10-25)" },
         { category: "Family", detail: "📅 Mackie School Fall Conference (2026-10-23)" },
         { category: "Academic", detail: "Autonomous Multi-Domain Agent Architectures (Draft V2) (Due 2026-10-22 • T-68h)" },
-        { category: "Fleet", detail: "2021 Chevy Colorado ZR2 maintenance action due (oil life 18%)." }
+        { category: "Fleet", detail: "Garage bay online: Awaiting current odometer & registration input." }
       ],
       family_registry: {
         milestone_countdowns: [
@@ -1484,8 +1440,8 @@ export class DashboardManager {
         }
       ],
       fleet_status: [
-        { name: "2021 Chevy Colorado ZR2", odometer: "38,450 mi", oil_life: "18%", tabs_expiration: "2027-02-28", status: "SERVICE_SOON" },
-        { name: "2021 Nissan Murano Midnight Edition", odometer: "32,180 mi", oil_life: "68%", tabs_expiration: "2026-11-30", status: "NOMINAL" }
+        { name: "2021 Chevy Colorado ZR2", odometer: "Pending Input", oil_life: "Pending Input", tabs_expiration: "Pending Input", status: "READY" },
+        { name: "2021 Nissan Murano Midnight Edition", odometer: "Pending Input", oil_life: "Pending Input", tabs_expiration: "Pending Input", status: "READY" }
       ]
     };
 
@@ -1534,7 +1490,7 @@ export class DashboardManager {
 
     const chipFleet = document.getElementById('chip-fleet');
     if (chipFleet && briefing.fleet_status) {
-      chipFleet.textContent = `🛞 Fleet: Murano Tabs Nov 30 • ZR2 Oil 18%`;
+      chipFleet.textContent = `🛞 Fleet: Telemetry Ready`;
     }
   }
 
