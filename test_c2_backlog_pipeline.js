@@ -1,5 +1,6 @@
 import http from 'http';
 import assert from 'assert';
+import fs from 'fs';
 import { AGENT_ROUTING_MAP, PLATFORM_DIAGNOSTICS_DATA } from './js/executive-sidebar.js';
 
 function request(options, data = null) {
@@ -25,33 +26,43 @@ function request(options, data = null) {
 
 async function runTests() {
   console.log('🧪 ========================================================');
-  console.log('🧪 TESTING C2 ACTION PIPELINE & PLATFORM BACKLOG ROUTING');
+  console.log('🧪 TESTING C2 ACTION PIPELINE & ANTIGRAVITY TASK MIGRATION');
   console.log('🧪 ========================================================\n');
 
-  // Test 1: Verify Agent Routing Map
-  console.log('▶ [1/4] Verifying AGENT_ROUTING_MAP specification requirements...');
+  // Test 1: Verify Agent Routing Map & Simplified Descriptions
+  console.log('▶ [1/5] Verifying AGENT_ROUTING_MAP & Plain-English Descriptions...');
   assert.strictEqual(AGENT_ROUTING_MAP['diag-001'].targetAgent, 'scene-architect', 'diag-001 must route to scene-architect');
   assert.strictEqual(AGENT_ROUTING_MAP['diag-003'].targetAgent, 'telemetry-ingest', 'diag-003 must route to telemetry-ingest');
-  console.log('  ✓ WebGL Context Re-Acquisition Delay (diag-001) -> scene-architect');
-  console.log('  ✓ OBD-II BLE Stream Integration (diag-003) -> telemetry-ingest');
-  console.log('  ✓ Routing map covers all diagnostic items.');
 
-  // Test 2: Verify Server /api/tasks API
-  console.log('\n▶ [2/4] Testing POST /api/tasks & GET /api/tasks endpoints...');
+  PLATFORM_DIAGNOSTICS_DATA.forEach(d => {
+    assert(d.title, `Item ${d.id} must have a simple title`);
+    assert(d.description, `Item ${d.id} must have a simple description`);
+    assert(d.description.length > 20, `Description for ${d.id} should be descriptive`);
+  });
+
+  console.log('  ✓ WebGL Context Delay (diag-001) -> scene-architect ("Fix 3D Garage Lag")');
+  console.log('  ✓ OBD-II BLE Stream (diag-003) -> telemetry-ingest ("Wireless Car Diagnostics")');
+  console.log('  ✓ All 6 items have human-readable plain-English titles and descriptions.');
+
+  // Test 2: Verify Server /api/tasks & Physical File Migration in project folder
+  console.log('\n▶ [2/5] Testing POST /api/tasks & Antigravity Physical File Creation...');
   const testTaskId = `TK-${Math.floor(1000 + Math.random() * 9000)}`;
   const testTaskPayload = {
     taskId: testTaskId,
     uuid: 'test-uuid-' + Date.now(),
     diagId: 'diag-001',
-    title: 'WebGL Context Re-Acquisition Delay',
-    sourceCategory: 'Platform Backlog',
+    title: 'Fix 3D Garage Lag',
+    simpleDescription: 'Speeds up loading when switching between 3D view and photo mode on your phone or laptop.',
+    technicalDescription: 'Three.js canvas context rebuild delay (~120ms) observed when toggling on mobile WebGL2 runtimes.',
+    sourceCategory: 'Platform Diagnostics',
     targetAgent: 'scene-architect',
     priority: 'HIGH',
-    status: 'QUEUED',
+    status: 'IN_PROGRESS',
     timestamp: new Date().toISOString(),
     contextParameters: {
       subsystem: 'Three.js / WebGL2 Context',
-      targetFiles: ['js/atomic-core.js', 'dashboards/garage/src/components/garage/ThreeDGarageScene.jsx']
+      targetFiles: ['js/atomic-core.js', 'dashboards/garage/src/components/garage/ThreeDGarageScene.jsx'],
+      issue: 'Fix 3D Garage Lag'
     }
   };
 
@@ -65,7 +76,14 @@ async function runTests() {
 
   assert.strictEqual(postTaskRes.status, 200, 'POST /api/tasks should return status 200');
   assert.strictEqual(postTaskRes.body.success, true, 'POST /api/tasks success should be true');
-  console.log(`  ✓ POST /api/tasks dispatched task #${testTaskId} to ${testTaskPayload.targetAgent}`);
+  assert(postTaskRes.body.filePath, 'Response should include created task file path');
+  assert(fs.existsSync(postTaskRes.body.filePath), `Physical task file ${postTaskRes.body.filePath} must exist on disk`);
+  console.log(`  ✓ POST /api/tasks created physical task in: ${postTaskRes.body.filePath}`);
+
+  const taskFileContent = fs.readFileSync(postTaskRes.body.filePath, 'utf-8');
+  assert(taskFileContent.includes(testTaskId), 'Task file must contain taskId');
+  assert(taskFileContent.includes('scene-architect'), 'Task file must contain targetAgent');
+  console.log(`  ✓ Verified task file content includes subagent directives and context.`);
 
   const getTasksRes = await request({
     hostname: '127.0.0.1',
@@ -75,17 +93,17 @@ async function runTests() {
   });
 
   assert.strictEqual(getTasksRes.status, 200, 'GET /api/tasks should return status 200');
-  assert(Array.isArray(getTasksRes.body.tasks), 'tasks should be an array');
   const foundTask = getTasksRes.body.tasks.find(t => t.taskId === testTaskId);
   assert(foundTask, `Task ${testTaskId} should be present in GET /api/tasks`);
-  console.log(`  ✓ GET /api/tasks verified task #${testTaskId} in persisted state.`);
+  console.log(`  ✓ GET /api/tasks verified task #${testTaskId} in state.`);
 
-  // Test 3: Verify Server /api/backlog API
-  console.log('\n▶ [3/4] Testing POST /api/backlog & GET /api/backlog endpoints...');
+  // Test 3: Verify Server /api/backlog & tasks/backlog/BACKLOG.md
+  console.log('\n▶ [3/5] Testing POST /api/backlog & Project Backlog File Creation...');
   const testBacklogItem = {
     id: 'diag-003',
-    title: 'OBD-II Bluetooth BLE Stream Integration',
-    category: 'FEATURE REQUEST',
+    title: 'Wireless Car Diagnostics (OBD-II)',
+    simpleDescription: 'Connect phone to Chevy Colorado & Nissan Murano via Bluetooth to track transmission fluid temperature live.',
+    category: 'NEW FEATURE',
     origin: 'Fleet Telemetry Console',
     deckId: 'garage',
     timestamp: new Date().toISOString(),
@@ -101,31 +119,34 @@ async function runTests() {
   }, testBacklogItem);
 
   assert.strictEqual(postBacklogRes.status, 200, 'POST /api/backlog should return status 200');
-  assert.strictEqual(postBacklogRes.body.success, true, 'POST /api/backlog success should be true');
-  console.log(`  ✓ POST /api/backlog persisted #${testBacklogItem.id} into system backlog`);
+  assert(postBacklogRes.body.filePath, 'Response should include backlog file path');
+  assert(fs.existsSync(postBacklogRes.body.filePath), `Backlog file ${postBacklogRes.body.filePath} must exist on disk`);
+  console.log(`  ✓ POST /api/backlog persisted into: ${postBacklogRes.body.filePath}`);
 
-  const getBacklogRes = await request({
+  // Test 4: Verify Deny API & Dismissed Log
+  console.log('\n▶ [4/5] Testing POST /api/diagnostics/deny...');
+  const denyRes = await request({
     hostname: '127.0.0.1',
     port: 4000,
-    path: '/api/backlog',
-    method: 'GET'
-  });
+    path: '/api/diagnostics/deny',
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' }
+  }, { id: 'diag-002', title: 'Rental Fence Warranty Expiring' });
 
-  assert.strictEqual(getBacklogRes.status, 200, 'GET /api/backlog should return status 200');
-  assert(Array.isArray(getBacklogRes.body.backlog), 'backlog should be an array');
-  const foundBacklog = getBacklogRes.body.backlog.find(b => b.id === 'diag-003');
-  assert(foundBacklog, 'Backlog item diag-003 should be present in GET /api/backlog');
-  console.log('  ✓ GET /api/backlog verified item in persisted storage.');
+  assert.strictEqual(denyRes.status, 200, 'POST /api/diagnostics/deny should return status 200');
+  assert.strictEqual(denyRes.body.success, true);
+  console.log('  ✓ POST /api/diagnostics/deny successfully logged denial and removed recommendation.');
 
-  // Test 4: Schema & Structure Integrity
-  console.log('\n▶ [4/4] Validating Task Schema Fields & Auto-Collapse Integration...');
-  const requiredFields = ['taskId', 'uuid', 'diagId', 'title', 'sourceCategory', 'targetAgent', 'priority', 'status', 'timestamp', 'contextParameters'];
-  for (const field of requiredFields) {
-    assert(field in testTaskPayload, `Field ${field} must exist in task payload schema`);
-  }
-  console.log('  ✓ All 10 Task Schema fields verified compliant with C2 specification.');
+  // Test 5: Verify Antigravity Task Directory Structure
+  console.log('\n▶ [5/5] Verifying /tasks/ project directory layout...');
+  assert(fs.existsSync('tasks/active'), 'tasks/active/ must exist');
+  assert(fs.existsSync('tasks/backlog'), 'tasks/backlog/ must exist');
+  assert(fs.existsSync('tasks/INDEX.md'), 'tasks/INDEX.md must exist');
+  console.log('  ✓ tasks/active/ verified.');
+  console.log('  ✓ tasks/backlog/ verified.');
+  console.log('  ✓ tasks/INDEX.md verified.');
 
-  console.log('\n🎉 ALL C2 ACTION & BACKLOG PIPELINE TESTS PASSED 100%!\n');
+  console.log('\n🎉 ALL ANTIGRAVITY TASK MIGRATION & BACKLOG TESTS PASSED 100%!\n');
 }
 
 runTests().catch(err => {

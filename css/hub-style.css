@@ -3277,6 +3277,26 @@ body::after {
   pointer-events: none;
 }
 
+.btn-diag-action.btn-deny {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #fca5a5;
+  transition: all 0.2s ease;
+}
+
+.btn-diag-action.btn-deny:hover {
+  background: rgba(239, 68, 68, 0.28);
+  border-color: #ef4444;
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+}
+
+.btn-diag-action.denying {
+  opacity: 0.65;
+  cursor: wait !important;
+  pointer-events: none;
+}
+
 .diag-status-pill {
   display: inline-flex;
   align-items: center;
@@ -3290,6 +3310,18 @@ body::after {
   width: fit-content;
 }
 
+.diag-status-pill.pill-inprogress {
+  background: rgba(245, 158, 11, 0.22);
+  border: 1px solid rgba(245, 158, 11, 0.65);
+  color: #fbbf24;
+  animation: pulseInprogress 1.2s ease-in-out infinite;
+}
+
+@keyframes pulseInprogress {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.75; transform: scale(0.98); }
+}
+
 .diag-status-pill.pill-dispatched {
   background: rgba(16, 185, 129, 0.16);
   border: 1px solid rgba(16, 185, 129, 0.45);
@@ -3300,6 +3332,35 @@ body::after {
   background: rgba(168, 85, 247, 0.16);
   border: 1px solid rgba(168, 85, 247, 0.45);
   color: #c084fc;
+}
+
+/* Smooth disappearance transitions when item is actioned or denied */
+.stream-card.card-disappearing {
+  transition: all 0.55s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  opacity: 0 !important;
+  transform: translateX(45px) scale(0.92) !important;
+  max-height: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  border-width: 0 !important;
+  pointer-events: none !important;
+  overflow: hidden !important;
+}
+
+.stream-card.card-denied-disappearing {
+  transition: all 0.45s ease-out !important;
+  opacity: 0 !important;
+  transform: scale(0.88) !important;
+  max-height: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  border-width: 0 !important;
+  pointer-events: none !important;
+  overflow: hidden !important;
 }
 
 .spinner-tactical {

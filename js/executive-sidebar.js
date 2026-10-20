@@ -10,73 +10,85 @@ import { sfx } from './sound-effects.js';
 export const PLATFORM_DIAGNOSTICS_DATA = [
   {
     id: 'diag-001',
-    category: 'RENDER REGRESSION',
-    categoryClass: 'cat-regression',
+    category: 'PERFORMANCE FIX',
+    categoryClass: 'cat-fix',
     origin: 'Garage 3D Viewport',
     deckId: 'garage',
     timestamp: '2026-10-19 17:15 UTC',
-    title: 'WebGL Context Re-Acquisition Delay',
-    description: 'Three.js canvas context rebuild delay (~120ms) observed when toggling between 2D Photo Studio and 3D Interactive Bay on mobile WebGL2 runtimes.',
+    title: 'Fix 3D Garage Lag',
+    technicalTitle: 'WebGL Context Re-Acquisition Delay',
+    description: 'Speeds up loading when switching between 3D view and photo mode on your phone or laptop.',
+    technicalDescription: 'Three.js canvas context rebuild delay (~120ms) observed when toggling between 2D Photo Studio and 3D Interactive Bay on mobile WebGL2 runtimes.',
     status: 'ACTIVE_INVESTIGATION',
-    assignedAgent: 'antigravity-webgl-worker'
+    assignedAgent: 'scene-architect'
   },
   {
     id: 'diag-002',
-    category: 'FIX REQUIRED',
-    categoryClass: 'cat-fix',
+    category: 'ACTION REQUIRED',
+    categoryClass: 'cat-regression',
     origin: 'Rental Ledger & JBLM Terminal',
     deckId: 'rental',
     timestamp: '2026-10-19 16:40 UTC',
-    title: 'Clause Q Workmanship Warranty Expiration',
-    description: 'Superior Fence & Rail workmanship warranty reached T-0d expiration. Inspection checklist and gate latch photos pending upload.',
+    title: 'Rental Fence Warranty Expiring',
+    technicalTitle: 'Clause Q Workmanship Warranty Expiration',
+    description: 'Superior Fence warranty ends today. Check the new fence and upload gate latch photos.',
+    technicalDescription: 'Superior Fence & Rail workmanship warranty reached T-0d expiration. Inspection checklist and gate latch photos pending upload.',
     status: 'ACTION_MANDATORY',
     assignedAgent: 'property-ops-cadence'
   },
   {
     id: 'diag-003',
-    category: 'FEATURE REQUEST',
+    category: 'NEW FEATURE',
     categoryClass: 'cat-feature',
     origin: 'Fleet Telemetry Console',
     deckId: 'garage',
     timestamp: '2026-10-19 14:22 UTC',
-    title: 'OBD-II Bluetooth BLE Stream Integration',
-    description: 'Ingest real-time ELM327 BLE telemetry stream for Chevy Colorado ZR2 & Nissan Murano to track transmission fluid thermal decay.',
+    title: 'Wireless Car Diagnostics (OBD-II)',
+    technicalTitle: 'OBD-II Bluetooth BLE Stream Integration',
+    description: 'Connect phone to Chevy Colorado & Nissan Murano via Bluetooth to track transmission fluid temperature live.',
+    technicalDescription: 'Ingest real-time ELM327 BLE telemetry stream for Chevy Colorado ZR2 & Nissan Murano to track transmission fluid thermal decay.',
     status: 'BACKLOG_PRIORITY',
-    assignedAgent: 'telematics-bridge-agent'
+    assignedAgent: 'telemetry-ingest'
   },
   {
     id: 'diag-004',
-    category: 'FIX REQUIRED',
+    category: 'SYSTEM FIX',
     categoryClass: 'cat-fix',
     origin: 'Academic Research Pipeline',
     deckId: 'executive',
     timestamp: '2026-10-19 12:05 UTC',
-    title: 'arXiv Citation Crawler Throttling',
-    description: 'Automated bibtex hydration for Autonomous Multi-Domain Agent Architectures (Draft V2) throttled at 3 req/sec. Exponential backoff required.',
+    title: 'Research Paper Citation Helper',
+    technicalTitle: 'arXiv Citation Crawler Throttling',
+    description: 'Fix automatic citation downloader so academic research papers and bibliography references pull in smoothly.',
+    technicalDescription: 'Automated bibtex hydration for Autonomous Multi-Domain Agent Architectures (Draft V2) throttled at 3 req/sec. Exponential backoff required.',
     status: 'IN_QUEUE',
     assignedAgent: 'academic-cadence-agent'
   },
   {
     id: 'diag-005',
-    category: 'FEATURE REQUEST',
+    category: 'NEW FEATURE',
     categoryClass: 'cat-feature',
-    origin: 'Executive Briefing API',
+    origin: 'Executive Cadence Engine',
     deckId: 'executive',
     timestamp: '2026-10-18 18:00 UTC',
-    title: 'Automated Sunday 18:00 Encrypted Briefing Dispatch',
-    description: 'Executive Cadence Agent should generate and dispatch an encrypted markdown & PDF summary to family operations channel at 18:05 EST.',
+    title: 'Sunday Weekly Summary Automation',
+    technicalTitle: 'Automated Sunday 18:00 Encrypted Briefing Dispatch',
+    description: 'Automatically send your consolidated family & operations summary every Sunday at 6:00 PM.',
+    technicalDescription: 'Executive Cadence Agent should generate and dispatch an encrypted markdown & PDF summary to family operations channel at 18:05 EST.',
     status: 'BACKLOG_REVIEW',
     assignedAgent: 'executive-cadence-agent'
   },
   {
     id: 'diag-006',
-    category: 'RENDER REGRESSION',
-    categoryClass: 'cat-regression',
+    category: 'DISPLAY FIX',
+    categoryClass: 'cat-fix',
     origin: 'Galaxy Z Fold 8 Viewport',
     deckId: 'core',
     timestamp: '2026-10-18 09:30 UTC',
-    title: 'Dynamic Safe-Area Viewport Transition',
-    description: 'Fold/unfold sensor orientation event triggers double reflow on Android Chrome before locking aspect ratio 1.08:1.',
+    title: 'Galaxy Z Fold 8 Screen Optimization',
+    technicalTitle: 'Dynamic Safe-Area Viewport Transition',
+    description: 'Fix screen glitch and smooth out the view when unfolding or folding your Z Fold 8.',
+    technicalDescription: 'Fold/unfold sensor orientation event triggers double reflow on Android Chrome before locking aspect ratio 1.08:1.',
     status: 'TRIAGED',
     assignedAgent: 'device-optimizer'
   }
@@ -168,6 +180,19 @@ export class ExecutiveSidebarManager {
       this.backlogItems = JSON.parse(localStorage.getItem('hub_platform_backlog_items') || '[]');
     } catch (e) {
       this.backlogItems = [];
+    }
+
+    // Handled & Denied items persistence so actioned items remain disappeared
+    try {
+      this.handledItems = new Set(JSON.parse(localStorage.getItem('hub_handled_diagnostics') || '[]'));
+    } catch (e) {
+      this.handledItems = new Set();
+    }
+
+    try {
+      this.deniedItems = new Set(JSON.parse(localStorage.getItem('hub_denied_diagnostics') || '[]'));
+    } catch (e) {
+      this.deniedItems = new Set();
     }
 
     if (typeof BroadcastChannel !== 'undefined') {
@@ -340,11 +365,11 @@ export class ExecutiveSidebarManager {
       });
     }
 
-    const btnBriefing = document.getElementById('btn-sidebar-open-briefing');
-    if (btnBriefing && this.dashboardMgr) {
-      btnBriefing.addEventListener('click', () => {
+    const btnFooterRefresh = document.getElementById('btn-sidebar-footer-refresh');
+    if (btnFooterRefresh) {
+      btnFooterRefresh.addEventListener('click', () => {
         sfx.playClick();
-        this.dashboardMgr.openExecutiveBriefing();
+        this.refreshFeeds();
       });
     }
 
@@ -533,6 +558,10 @@ export class ExecutiveSidebarManager {
     return directives;
   }
 
+  getActiveDiagnostics() {
+    return this.diagnostics.filter(d => !this.handledItems.has(d.id) && !this.deniedItems.has(d.id));
+  }
+
   render() {
     this.updateCounters();
     if (this.currentStream === 'directives') {
@@ -546,7 +575,8 @@ export class ExecutiveSidebarManager {
     const directives = this.getAllDirectives();
     const p0Count = directives.filter(d => d.priorityLevel === 'P0').length;
     const p1Count = directives.filter(d => d.priorityLevel === 'P1').length;
-    const diagCount = this.diagnostics.length;
+    const activeDiagnostics = this.getActiveDiagnostics();
+    const diagCount = activeDiagnostics.length;
 
     // Header Stat Strip
     const countCritEl = document.getElementById('sidebar-count-critical');
@@ -751,7 +781,6 @@ export class ExecutiveSidebarManager {
     if (this.dashboardMgr) {
       if (deckId === 'health' || deckId === 'academic' || deckId === 'family') {
         this.dashboardMgr.switchDeck('executive');
-        setTimeout(() => this.dashboardMgr.openExecutiveBriefing(), 250);
       } else {
         this.dashboardMgr.switchDeck(deckId);
       }
@@ -767,64 +796,46 @@ export class ExecutiveSidebarManager {
     const container = document.getElementById('diagnostics-cards-container');
     if (!container) return;
 
-    let items = [...this.diagnostics];
+    let items = this.getActiveDiagnostics();
 
     if (this.currentFilter !== 'all') {
-      if (this.currentFilter === 'P0') items = items.filter(d => d.category === 'FIX REQUIRED');
-      else if (this.currentFilter === 'P1') items = items.filter(d => d.category === 'RENDER REGRESSION');
-      else if (this.currentFilter === 'INFO') items = items.filter(d => d.category === 'FEATURE REQUEST');
+      if (this.currentFilter === 'P0') items = items.filter(d => d.category.includes('ACTION') || d.category.includes('FIX'));
+      else if (this.currentFilter === 'P1') items = items.filter(d => d.category.includes('PERFORMANCE') || d.category.includes('DISPLAY'));
+      else if (this.currentFilter === 'INFO') items = items.filter(d => d.category.includes('FEATURE'));
     }
 
     if (items.length === 0) {
       container.innerHTML = `
         <div class="sidebar-empty-state">
-          <div class="empty-icon">🛠️</div>
-          <div class="empty-title">NO DIAGNOSTIC DEFECTS</div>
-          <p class="empty-sub">All platform telemetry items and render regressions currently nominal.</p>
+          <div class="empty-icon">✅</div>
+          <div class="empty-title">ALL ITEMS ACTIONED</div>
+          <p class="empty-sub">All platform recommendations have been dispatched to Antigravity agents, saved to backlog, or dismissed.</p>
+          <button class="empty-reset-btn" id="btn-sidebar-reset-diagnostics">RESTORE RECOMMENDATIONS</button>
         </div>
       `;
+      const resetBtn = document.getElementById('btn-sidebar-reset-diagnostics');
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          this.handledItems.clear();
+          this.deniedItems.clear();
+          try {
+            localStorage.removeItem('hub_handled_diagnostics');
+            localStorage.removeItem('hub_denied_diagnostics');
+          } catch (e) {}
+          this.render();
+          this.showToast('RECOMMENDATIONS RESTORED', 'All platform items reset to active review state.', '🔄', 'info');
+        });
+      }
       return;
     }
 
     container.innerHTML = items.map(item => {
-      const catClass = item.category === 'FIX REQUIRED' 
-        ? 'cat-fix' 
-        : (item.category === 'RENDER REGRESSION' ? 'cat-regression' : 'cat-feature');
-
+      const catClass = item.categoryClass || 'cat-feature';
       const routing = AGENT_ROUTING_MAP[item.id] || {
         targetAgent: item.assignedAgent || 'antigravity-worker',
         priority: 'MEDIUM',
         contextParameters: {}
       };
-
-      const dispatchedTask = this.dispatchedTasks.find(t => t.diagId === item.id);
-      const isBacklog = this.backlogItems.some(b => b.id === item.id);
-
-      let dispatchedClass = '';
-      let dispatchedDisabled = '';
-      let dispatchedText = '⚡ Generate Agent Task';
-      if (dispatchedTask) {
-        dispatchedClass = 'dispatched';
-        dispatchedDisabled = 'disabled';
-        dispatchedText = `✓ Dispatched to ${dispatchedTask.targetAgent} (#${dispatchedTask.taskId})`;
-      }
-
-      let backlogClass = '';
-      let backlogDisabled = '';
-      let backlogText = '📋 Push to Backlog';
-      if (isBacklog) {
-        backlogClass = 'in-backlog';
-        backlogDisabled = 'disabled';
-        backlogText = '✓ Logged in Backlog';
-      }
-
-      let pillsHtml = '';
-      if (dispatchedTask) {
-        pillsHtml += `<div class="diag-status-pill pill-dispatched">🚀 TASK #${dispatchedTask.taskId} DISPATCHED ➔ ${dispatchedTask.targetAgent.toUpperCase()}</div>`;
-      }
-      if (isBacklog) {
-        pillsHtml += `<div class="diag-status-pill pill-backlog">📋 LOGGED IN BACKLOG</div>`;
-      }
 
       return `
         <div class="stream-card diagnostic-card ${catClass}" 
@@ -838,34 +849,41 @@ export class ExecutiveSidebarManager {
             <span class="diag-origin-tag">${item.origin}</span>
           </div>
 
-          <!-- Description Summary -->
-          <div class="card-title">${item.title}</div>
-          <div class="card-message">${item.description}</div>
-
-          <!-- Metadata row -->
-          <div class="diag-meta-row">
-            <span class="diag-meta-time">⏱️ ${item.timestamp}</span>
-            <span class="diag-meta-agent">🤖 ${routing.targetAgent || item.assignedAgent}</span>
+          <!-- Human-Friendly Title -->
+          <div class="card-title" style="font-size:0.92rem;font-weight:700;color:#ffffff;margin-bottom:4px;">
+            ${item.title}
           </div>
 
-          <!-- Status Pills Row -->
-          <div class="card-pills-row">
-            ${pillsHtml}
+          <!-- Simple, Easy-to-Understand Description -->
+          <div class="card-message" style="font-size:0.82rem;color:#cbd5e1;line-height:1.45;margin-bottom:6px;">
+            ${item.description}
           </div>
 
-          <!-- Quick Actions -->
-          <div class="card-action-bar diag-actions">
-            <button class="btn-diag-action btn-gen-task ${dispatchedClass}" 
+          <!-- Subtle Tech Ref -->
+          <div class="card-statute-row" style="margin-bottom:6px;">
+            <span class="statute-label" style="font-size:0.63rem;color:#64748b;">REF:</span>
+            <span class="statute-val" style="font-size:0.65rem;color:#94a3b8;font-family:var(--font-mono);">${item.technicalTitle || item.title} • Agent: ${routing.targetAgent}</span>
+          </div>
+
+          <!-- Status Pills Row (Shows Working / Dispatched) -->
+          <div class="card-pills-row"></div>
+
+          <!-- Quick Actions: Generate Agent Task, Push to Backlog, Deny -->
+          <div class="card-action-bar diag-actions" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">
+            <button class="btn-diag-action btn-gen-task" 
                     data-action="gen-task" 
-                    ${dispatchedDisabled} 
-                    title="Generate immediate Antigravity agent task">
-              ${dispatchedText}
+                    title="Dispatch Antigravity agent and create task in project folder">
+              ⚡ Generate Agent Task
             </button>
-            <button class="btn-diag-action btn-push-backlog ${backlogClass}" 
+            <button class="btn-diag-action btn-push-backlog" 
                     data-action="push-backlog" 
-                    ${backlogDisabled} 
-                    title="Queue into Antigravity backlog state">
-              ${backlogText}
+                    title="Save to persistent project backlog (/tasks/backlog/)">
+              📋 Push to Backlog
+            </button>
+            <button class="btn-diag-action btn-deny" 
+                    data-action="deny" 
+                    title="Dismiss and ignore this item">
+              ✕ Deny
             </button>
           </div>
 
@@ -913,6 +931,14 @@ export class ExecutiveSidebarManager {
         });
       }
 
+      const btnDeny = card.querySelector('[data-action="deny"]');
+      if (btnDeny) {
+        btnDeny.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.denyDiagnostic(diagId, btnDeny, card);
+        });
+      }
+
       // Clicking card body navigates to node
       card.addEventListener('click', (e) => {
         if (e.target.closest('.btn-diag-action')) return;
@@ -923,16 +949,14 @@ export class ExecutiveSidebarManager {
   }
 
   generateAgentTask(diagId, buttonEl, cardEl) {
-    if (buttonEl && (buttonEl.classList.contains('loading') || buttonEl.classList.contains('dispatched'))) {
-      return;
-    }
+    if (buttonEl && buttonEl.classList.contains('loading')) return;
 
     const item = this.diagnostics.find(d => d.id === diagId);
     if (!item) return;
 
     const routing = AGENT_ROUTING_MAP[diagId] || {
       targetAgent: item.assignedAgent || 'antigravity-worker',
-      priority: 'MEDIUM',
+      priority: 'HIGH',
       contextParameters: { origin: item.origin, deckId: item.deckId }
     };
 
@@ -944,36 +968,50 @@ export class ExecutiveSidebarManager {
 
     sfx.playClick();
 
-    if (buttonEl) {
-      buttonEl.classList.add('loading');
-      buttonEl.innerHTML = `<span class="spinner-tactical"></span> Dispatching to ${routing.targetAgent}...`;
-      buttonEl.disabled = true;
+    // Disable buttons on this card during dispatch
+    if (cardEl) {
+      cardEl.querySelectorAll('.btn-diag-action').forEach(b => {
+        b.disabled = true;
+        b.style.pointerEvents = 'none';
+      });
     }
 
+    // 1. Show immediate In-Progress state
+    if (buttonEl) {
+      buttonEl.classList.add('loading');
+      buttonEl.innerHTML = `<span class="spinner-tactical"></span> Working...`;
+    }
+
+    const pillContainer = cardEl ? cardEl.querySelector('.card-pills-row') : null;
+    if (pillContainer) {
+      pillContainer.innerHTML = `<div class="diag-status-pill pill-inprogress">⚡ IN PROGRESS // Migrating to Antigravity (${routing.targetAgent})...</div>`;
+    }
+
+    // 2. Perform dispatch, write project files & update C2 action queue
     setTimeout(() => {
       const payload = {
         taskId: taskId,
         uuid: uuid,
         diagId: diagId,
         title: item.title,
-        sourceCategory: "Platform Backlog",
+        simpleDescription: item.description,
+        technicalDescription: item.technicalDescription || item.description,
+        sourceCategory: "Platform Diagnostics",
         targetAgent: routing.targetAgent,
-        priority: routing.priority,
-        status: "QUEUED",
+        priority: routing.priority || 'HIGH',
+        status: "IN_PROGRESS",
         timestamp: new Date().toISOString(),
         contextParameters: routing.contextParameters || { origin: item.origin, deckId: item.deckId }
       };
 
-      // 1. Update in-memory & persistent localStorage
+      // In-memory & localStorage
       this.dispatchedTasks = this.dispatchedTasks.filter(t => t.diagId !== diagId);
       this.dispatchedTasks.unshift(payload);
       try {
         localStorage.setItem('c2-actions', JSON.stringify(this.dispatchedTasks));
-      } catch (e) {
-        console.warn('[C2 Dispatch] localStorage write error:', e);
-      }
+      } catch (e) {}
 
-      // 2. Server persistence non-blocking
+      // POST to server (writes markdown task file into /tasks/active/ in project folder)
       try {
         fetch('/api/tasks', {
           method: 'POST',
@@ -982,79 +1020,87 @@ export class ExecutiveSidebarManager {
         }).catch(() => {});
       } catch (e) {}
 
-      // 3. BroadcastChannel sync
       try {
         if (this.broadcastChannel) {
           this.broadcastChannel.postMessage({ type: 'TASK_DISPATCHED', payload });
         }
       } catch (e) {}
 
-      // 4. Audio Feedback
       sfx.playWarp();
 
-      // 5. Update Button State
+      // Show completion state on card before disappearing
       if (buttonEl) {
         buttonEl.classList.remove('loading');
         buttonEl.classList.add('dispatched');
-        buttonEl.innerHTML = `✓ Dispatched to ${routing.targetAgent} (#${taskId})`;
-        buttonEl.disabled = true;
+        buttonEl.innerHTML = `✓ Dispatched!`;
       }
 
-      // 6. Update Card Status Pill
-      if (cardEl) {
-        let pillContainer = cardEl.querySelector('.card-pills-row');
-        if (!pillContainer) {
-          pillContainer = document.createElement('div');
-          pillContainer.className = 'card-pills-row';
-          const metaRow = cardEl.querySelector('.diag-meta-row');
-          if (metaRow) {
-            metaRow.insertAdjacentElement('afterend', pillContainer);
-          } else {
-            cardEl.appendChild(pillContainer);
-          }
-        }
-        const existingPill = pillContainer.querySelector('.pill-dispatched');
-        if (existingPill) existingPill.remove();
-
-        const pill = document.createElement('div');
-        pill.className = 'diag-status-pill pill-dispatched';
-        pill.innerHTML = `🚀 TASK #${taskId} DISPATCHED ➔ ${routing.targetAgent.toUpperCase()}`;
-        pillContainer.appendChild(pill);
+      if (pillContainer) {
+        pillContainer.innerHTML = `<div class="diag-status-pill pill-dispatched">✓ Task #${taskId} Created in /tasks/active/</div>`;
       }
 
-      // 7. HUD Toast Notification
       this.showToast(
-        'C2 AGENT TASK DISPATCHED',
-        `[C2-ACTION] Dispatched Agent Task #${taskId} [${item.title.substring(0, 24)}...] ➔ ${routing.targetAgent}: READY.`,
+        'ANTIGRAVITY TASK DISPATCHED',
+        `Task #${taskId} created in project /tasks/ folder ➔ Subagent: ${routing.targetAgent}.`,
         '⚡',
         'success'
       );
 
-      // 8. Runtime Action Log HUD Dock
-      this.logC2Action(`[C2-ACTION] Dispatched Agent Task #${taskId} [${item.title}] ➔ ${routing.targetAgent}: READY`);
-    }, 220);
+      this.logC2Action(`[ANTIGRAVITY MIGRATION] Task #${taskId} [${item.title}] ➔ ${routing.targetAgent}: ACTIVE IN PROJECT`);
+
+      // 3. Smoothly animate out and disappear from executive summary
+      setTimeout(() => {
+        if (cardEl) {
+          cardEl.classList.add('card-disappearing');
+          setTimeout(() => {
+            cardEl.remove();
+            this.handledItems.add(diagId);
+            try {
+              localStorage.setItem('hub_handled_diagnostics', JSON.stringify([...this.handledItems]));
+            } catch (e) {}
+            this.updateCounters();
+
+            const c = document.getElementById('diagnostics-cards-container');
+            if (c && c.querySelectorAll('.stream-card').length === 0) {
+              this.render();
+            }
+          }, 550);
+        }
+      }, 700);
+
+    }, 450);
   }
 
   pushToBacklog(diagId, buttonEl, cardEl) {
-    if (buttonEl && (buttonEl.classList.contains('loading') || buttonEl.classList.contains('in-backlog'))) {
-      return;
-    }
+    if (buttonEl && buttonEl.classList.contains('loading')) return;
 
     const item = this.diagnostics.find(d => d.id === diagId);
     if (!item) return;
 
     sfx.playClick();
 
+    if (cardEl) {
+      cardEl.querySelectorAll('.btn-diag-action').forEach(b => {
+        b.disabled = true;
+        b.style.pointerEvents = 'none';
+      });
+    }
+
     if (buttonEl) {
       buttonEl.classList.add('loading');
       buttonEl.innerHTML = `<span class="spinner-tactical"></span> Pushing to Backlog...`;
-      buttonEl.disabled = true;
+    }
+
+    const pillContainer = cardEl ? cardEl.querySelector('.card-pills-row') : null;
+    if (pillContainer) {
+      pillContainer.innerHTML = `<div class="diag-status-pill pill-inprogress">📋 IN PROGRESS // Archiving to System Backlog...</div>`;
     }
 
     setTimeout(() => {
       const backlogItem = {
         id: diagId,
         title: item.title,
+        simpleDescription: item.description,
         category: item.category,
         origin: item.origin,
         deckId: item.deckId,
@@ -1062,16 +1108,13 @@ export class ExecutiveSidebarManager {
         status: "LOGGED_IN_BACKLOG"
       };
 
-      // 1. Update in-memory & persistent localStorage
       this.backlogItems = this.backlogItems.filter(b => b.id !== diagId);
       this.backlogItems.unshift(backlogItem);
       try {
         localStorage.setItem('hub_platform_backlog_items', JSON.stringify(this.backlogItems));
-      } catch (e) {
-        console.warn('[Backlog] localStorage write error:', e);
-      }
+      } catch (e) {}
 
-      // 2. Server persistence non-blocking
+      // POST to server (appends to /tasks/backlog/BACKLOG.md in project folder)
       try {
         fetch('/api/backlog', {
           method: 'POST',
@@ -1080,50 +1123,113 @@ export class ExecutiveSidebarManager {
         }).catch(() => {});
       } catch (e) {}
 
-      // 3. Audio Feedback
       sfx.playSuccess();
 
-      // 4. Update Button State
       if (buttonEl) {
         buttonEl.classList.remove('loading');
         buttonEl.classList.add('in-backlog');
-        buttonEl.innerHTML = `✓ Logged in Backlog`;
-        buttonEl.disabled = true;
+        buttonEl.innerHTML = `✓ Saved to Backlog!`;
       }
 
-      // 5. Update Card Status Pill
-      if (cardEl) {
-        let pillContainer = cardEl.querySelector('.card-pills-row');
-        if (!pillContainer) {
-          pillContainer = document.createElement('div');
-          pillContainer.className = 'card-pills-row';
-          const metaRow = cardEl.querySelector('.diag-meta-row');
-          if (metaRow) {
-            metaRow.insertAdjacentElement('afterend', pillContainer);
-          } else {
-            cardEl.appendChild(pillContainer);
-          }
-        }
-        const existingPill = pillContainer.querySelector('.pill-backlog');
-        if (existingPill) existingPill.remove();
-
-        const pill = document.createElement('div');
-        pill.className = 'diag-status-pill pill-backlog';
-        pill.innerHTML = `📋 LOGGED IN BACKLOG`;
-        pillContainer.appendChild(pill);
+      if (pillContainer) {
+        pillContainer.innerHTML = `<div class="diag-status-pill pill-backlog">✓ Saved to /tasks/backlog/BACKLOG.md</div>`;
       }
 
-      // 6. HUD Toast Notification
       this.showToast(
-        'PERSISTENT BACKLOG LOGGED',
-        `[BACKLOG-SYNC] Logged #${diagId.toUpperCase()} [${item.title.substring(0, 24)}...] into persistent system backlog.`,
+        'BACKLOG PERSISTED',
+        `Logged #${diagId.toUpperCase()} [${item.title}] into project folder /tasks/backlog/.`,
         '📋',
         'info'
       );
 
-      // 7. Runtime Action Log HUD Dock
-      this.logC2Action(`[BACKLOG-SYNC] Logged #${diagId.toUpperCase()} [${item.title}] ➔ System Backlog: PERSISTED`);
-    }, 180);
+      this.logC2Action(`[BACKLOG-SYNC] Logged #${diagId.toUpperCase()} [${item.title}] ➔ /tasks/backlog/`);
+
+      setTimeout(() => {
+        if (cardEl) {
+          cardEl.classList.add('card-disappearing');
+          setTimeout(() => {
+            cardEl.remove();
+            this.handledItems.add(diagId);
+            try {
+              localStorage.setItem('hub_handled_diagnostics', JSON.stringify([...this.handledItems]));
+            } catch (e) {}
+            this.updateCounters();
+
+            const c = document.getElementById('diagnostics-cards-container');
+            if (c && c.querySelectorAll('.stream-card').length === 0) {
+              this.render();
+            }
+          }, 550);
+        }
+      }, 700);
+
+    }, 380);
+  }
+
+  denyDiagnostic(diagId, buttonEl, cardEl) {
+    if (buttonEl && buttonEl.classList.contains('denying')) return;
+
+    const item = this.diagnostics.find(d => d.id === diagId);
+    if (!item) return;
+
+    sfx.playClick();
+
+    if (cardEl) {
+      cardEl.querySelectorAll('.btn-diag-action').forEach(b => {
+        b.disabled = true;
+        b.style.pointerEvents = 'none';
+      });
+    }
+
+    if (buttonEl) {
+      buttonEl.classList.add('denying');
+      buttonEl.innerHTML = `<span class="spinner-tactical"></span> Denying...`;
+    }
+
+    const pillContainer = cardEl ? cardEl.querySelector('.card-pills-row') : null;
+    if (pillContainer) {
+      pillContainer.innerHTML = `<div class="diag-status-pill" style="background:rgba(239,68,68,0.18);border:1px solid rgba(239,68,68,0.45);color:#fca5a5;">✕ REMOVED // Item Denied</div>`;
+    }
+
+    setTimeout(() => {
+      // POST to server
+      try {
+        fetch('/api/diagnostics/deny', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: diagId, title: item.title })
+        }).catch(() => {});
+      } catch (e) {}
+
+      this.showToast(
+        'RECOMMENDATION DENIED',
+        `"${item.title}" dismissed and removed from recommendations.`,
+        '✕',
+        'info'
+      );
+
+      this.logC2Action(`[ITEM DENIED] Dismissed #${diagId.toUpperCase()} [${item.title}]`);
+
+      setTimeout(() => {
+        if (cardEl) {
+          cardEl.classList.add('card-denied-disappearing');
+          setTimeout(() => {
+            cardEl.remove();
+            this.deniedItems.add(diagId);
+            try {
+              localStorage.setItem('hub_denied_diagnostics', JSON.stringify([...this.deniedItems]));
+            } catch (e) {}
+            this.updateCounters();
+
+            const c = document.getElementById('diagnostics-cards-container');
+            if (c && c.querySelectorAll('.stream-card').length === 0) {
+              this.render();
+            }
+          }, 450);
+        }
+      }, 400);
+
+    }, 280);
   }
 
   initC2ActionDock() {

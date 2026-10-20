@@ -641,8 +641,8 @@
           <button class="sidebar-footer-btn secondary" id="btn-sidebar-rerun-cadence" title="Re-run Sunday Executive Cadence Pipeline">
             <span>⚡</span> RERUN CADENCE
           </button>
-          <button class="sidebar-footer-btn primary" id="btn-sidebar-open-briefing" title="Open Full Executive Sunday Briefing Modal">
-            <span>📖</span> FULL BRIEFING
+          <button class="sidebar-footer-btn primary" id="btn-sidebar-footer-refresh" title="Re-sync All Live Feeds & Telemetry">
+            <span>🔄</span> SYNC FEEDS
           </button>
         </div>
 
@@ -745,39 +745,9 @@
       </div>
     </div>
 
-    <!-- EXECUTIVE SUNDAY WEEKLY BRIEFING MODAL -->
-    <div class="hud-modal-overlay" id="modal-executive-briefing">
-      <div class="hud-modal" style="max-width: 860px; width: 92%;">
-        <div class="modal-header-row">
-          <div style="display:flex;align-items:center;gap:12px;">
-            <span style="font-size:1.4rem;">🏛️</span>
-            <div>
-              <h3 class="modal-title" style="margin:0;" id="briefing-modal-title">EXECUTIVE WEEKLY BRIEFING // CADENCE</h3>
-              <p style="font-family:var(--font-mono);font-size:0.72rem;color:var(--text-muted);margin:3px 0 0 0;" id="briefing-modal-subtitle">
-                Autonomous Sunday 18:00 cross-domain aggregation across personal, family, property, athletic, and academic domains.
-              </p>
-            </div>
-          </div>
-          <button class="modal-close-btn" id="btn-close-briefing">&times;</button>
-        </div>
-
-        <div class="briefing-modal-body" id="briefing-modal-content">
-          <!-- Dynamic briefing cards rendered by JavaScript -->
-        </div>
-
-        <div class="alert-modal-footer">
-          <span class="alert-footer-note">⚡ Aggregated autonomously every Sunday at 18:00 America/New_York.</span>
-          <div style="display:flex;gap:8px;align-items:center;">
-            <button class="alert-bulk-btn" id="btn-modal-rerun-cadence">⚡ RE-RUN CADENCE</button>
-            <button class="launch-btn" id="btn-dismiss-briefing-modal">CLOSE</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
   </div>
 
   <!-- Boot Module Script -->
-  <script type="module" src="js/app.js?v=24.0"></script>
+  <script type="module" src="js/app.js?v=26.0"></script>
 </body>
 </html>

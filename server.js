@@ -245,7 +245,7 @@ app.post('/api/cadence/run', (req, res) => {
 });
 
 // ==========================================
-// C2 ACTIONS & PLATFORM BACKLOG APIS
+// C2 ACTIONS & PLATFORM BACKLOG APIS (ANTIGRAVITY TASK MIGRATION)
 // ==========================================
 
 // GET platform tasks
@@ -261,19 +261,84 @@ app.get('/api/tasks', (req, res) => {
   }
 });
 
-// POST dispatch platform task
+// POST dispatch platform task (migrates directly into project /tasks/ folder)
 app.post('/api/tasks', (req, res) => {
   try {
     const task = req.body;
     if (!task || !task.taskId) return res.status(400).json({ error: 'Missing task payload' });
+
+    // 1. Persist to core hub_state.json
     if (fs.existsSync(STATE_FILE)) {
       const data = JSON.parse(fs.readFileSync(STATE_FILE, 'utf-8'));
       if (!Array.isArray(data.platform_tasks)) data.platform_tasks = [];
+      data.platform_tasks = data.platform_tasks.filter(t => t.taskId !== task.taskId);
       data.platform_tasks.unshift(task);
       fs.writeFileSync(STATE_FILE, JSON.stringify(data, null, 2), 'utf-8');
-      return res.json({ success: true, task });
     }
-    res.status(404).json({ error: 'State file not found' });
+
+    // 2. Write physical Antigravity Task file in project folder under /tasks/active/
+    const tasksDir = path.join(__dirname, 'tasks', 'active');
+    fs.mkdirSync(tasksDir, { recursive: true });
+
+    const safeTitle = (task.title || 'agent-task').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    const taskFile = path.join(tasksDir, `${task.taskId}-${safeTitle}.md`);
+
+    const targetFilesList = (task.contextParameters?.targetFiles || []).length > 0
+      ? task.contextParameters.targetFiles.map(f => `  - \`${f}\``).join('\n')
+      : '  - (General codebase inspection)';
+
+    const taskMd = `# ⚡ [ANTIGRAVITY AGENT TASK] #${task.taskId}
+> **Status:** IN_PROGRESS (Working in Project)  
+> **Target Subagent:** \`${task.targetAgent}\`  
+> **Priority:** \`${task.priority || 'HIGH'}\`  
+> **Dispatched At:** \`${task.timestamp || new Date().toISOString()}\`  
+> **Source:** \`${task.sourceCategory || 'Platform Diagnostics'}\` (${task.origin || 'Executive Summary'})
+
+---
+
+## 🎯 Task Objective
+${task.simpleDescription || task.title}
+
+## 🔍 Technical Details & Diagnostics
+${task.technicalDescription || task.description || 'No additional technical notes provided.'}
+
+## 🛠️ Context & Subsystem Parameters
+- **Subsystem:** ${task.contextParameters?.subsystem || 'Core Subsystem'}
+- **Target Files:**
+${targetFilesList}
+- **Issue Reference:** ${task.contextParameters?.issue || task.title}
+
+---
+
+## 🤖 Antigravity Directives & Execution Instructions
+1. **Locate & Inspect:** Read and inspect the subsystem target files identified above.
+2. **Execute Resolution:** Implement the code fix, refactor, or telemetry integration.
+3. **Automated Verification:** Execute regression tests (\`node test_unified_system.js\`).
+4. **Transition State:** Mark task as completed once verified.
+`;
+
+    fs.writeFileSync(taskFile, taskMd, 'utf-8');
+    console.log(`[Antigravity C2] Wrote active agent task to ${taskFile}`);
+
+    // 3. Maintain tasks/INDEX.md in project root
+    const indexFile = path.join(__dirname, 'tasks', 'INDEX.md');
+    let indexContent = `# 🚀 Antigravity Agent Tasks & Project Backlog\n\n`;
+    indexContent += `Last Updated: ${new Date().toISOString()}\n\n`;
+    indexContent += `### Active In-Progress Tasks\n`;
+    indexContent += `- **[#${task.taskId}]** ${task.title} ➔ Agent: \`${task.targetAgent}\` ([File](./active/${task.taskId}-${safeTitle}.md))\n`;
+
+    try {
+      if (fs.existsSync(indexFile)) {
+        const existing = fs.readFileSync(indexFile, 'utf-8');
+        if (!existing.includes(task.taskId)) {
+          fs.appendFileSync(indexFile, `- **[#${task.taskId}]** ${task.title} ➔ Agent: \`${task.targetAgent}\` ([File](./active/${task.taskId}-${safeTitle}.md))\n`, 'utf-8');
+        }
+      } else {
+        fs.writeFileSync(indexFile, indexContent, 'utf-8');
+      }
+    } catch (e) {}
+
+    return res.json({ success: true, task, filePath: taskFile });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -292,11 +357,13 @@ app.get('/api/backlog', (req, res) => {
   }
 });
 
-// POST push item to platform backlog
+// POST push item to platform backlog (migrates directly into project /tasks/backlog/)
 app.post('/api/backlog', (req, res) => {
   try {
     const item = req.body;
     if (!item || !item.id) return res.status(400).json({ error: 'Missing backlog item' });
+
+    // 1. Persist in hub_state.json
     if (fs.existsSync(STATE_FILE)) {
       const data = JSON.parse(fs.readFileSync(STATE_FILE, 'utf-8'));
       if (!Array.isArray(data.platform_backlog)) data.platform_backlog = [];
@@ -307,9 +374,62 @@ app.post('/api/backlog', (req, res) => {
         data.platform_backlog.unshift(item);
       }
       fs.writeFileSync(STATE_FILE, JSON.stringify(data, null, 2), 'utf-8');
-      return res.json({ success: true, item });
     }
-    res.status(404).json({ error: 'State file not found' });
+
+    // 2. Write physical Antigravity Backlog entry in project folder under /tasks/backlog/
+    const backlogDir = path.join(__dirname, 'tasks', 'backlog');
+    fs.mkdirSync(backlogDir, { recursive: true });
+    const backlogFile = path.join(backlogDir, 'BACKLOG.md');
+
+    const entry = `\n### 📋 [${item.category || 'BACKLOG'}] ${item.title} (#${item.id.toUpperCase()})
+- **Origin:** ${item.origin || 'Executive Summary'}
+- **Logged At:** ${item.timestamp || new Date().toISOString()}
+- **Objective:** ${item.simpleDescription || item.description || item.title}
+- **Status:** \`PERSISTED_BACKLOG\`
+
+---
+`;
+
+    if (!fs.existsSync(backlogFile)) {
+      fs.writeFileSync(backlogFile, `# 📋 Antigravity Project Backlog\n\nPersistent items queued from Executive Summary.\n\n${entry}`, 'utf-8');
+    } else {
+      fs.appendFileSync(backlogFile, entry, 'utf-8');
+    }
+    console.log(`[Antigravity Backlog] Appended item #${item.id} to ${backlogFile}`);
+
+    return res.json({ success: true, item, filePath: backlogFile });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST deny/dismiss a diagnostic item
+app.post('/api/diagnostics/deny', (req, res) => {
+  try {
+    const { id, title } = req.body;
+    if (!id) return res.status(400).json({ error: 'Missing diagnostic id' });
+
+    if (fs.existsSync(STATE_FILE)) {
+      const data = JSON.parse(fs.readFileSync(STATE_FILE, 'utf-8'));
+      if (!Array.isArray(data.denied_diagnostics)) data.denied_diagnostics = [];
+      if (!data.denied_diagnostics.includes(id)) {
+        data.denied_diagnostics.push(id);
+      }
+      fs.writeFileSync(STATE_FILE, JSON.stringify(data, null, 2), 'utf-8');
+    }
+
+    // Optional: write to tasks/dismissed/DISMISSED.md
+    const dismissedDir = path.join(__dirname, 'tasks', 'dismissed');
+    fs.mkdirSync(dismissedDir, { recursive: true });
+    const dismissedFile = path.join(dismissedDir, 'DISMISSED.md');
+    const logLine = `- **[${new Date().toISOString()}]** Dismissed #${id}: ${title || 'Item'}\n`;
+    if (!fs.existsSync(dismissedFile)) {
+      fs.writeFileSync(dismissedFile, `# 🚫 Dismissed Recommendations\n\n${logLine}`, 'utf-8');
+    } else {
+      fs.appendFileSync(dismissedFile, logLine, 'utf-8');
+    }
+
+    return res.json({ success: true, id, message: 'Item dismissed and persisted to project folder.' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
