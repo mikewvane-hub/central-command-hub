@@ -181,22 +181,6 @@ export const DEFAULT_HUB_ALERTS = {
         message: 'Heart Rate Variability is 46 ms vs 65 ms target baseline. Autonomic nervous system fatigued. Throttle training to Zone 2 Active Recovery.'
       }
     ]
-  },
-  academic: {
-    deckName: 'Academic Research',
-    deckIcon: '📚',
-    count: 1,
-    severity: 'critical',
-    title: 'Draft Submission Deadline',
-    items: [
-      {
-        severity: 'CRITICAL',
-        code: 'ACADEMIC_DRAFT_T72H',
-        statute: 'Graduate Research Deadline',
-        title: 'Autonomous Multi-Domain Agent Architectures (Draft V2) Due in T-68h (Oct 22)',
-        message: 'Submission deadline is October 22, 2026 at 23:59 UTC. Complete section 4 methodology synthesis.'
-      }
-    ]
   }
 };
 
@@ -1404,13 +1388,11 @@ export class DashboardManager {
         "FAMILY: User Birthday (29 Mar 1993, in 161d), Wife Birthday (23 Apr 1996, in 186d), Anniversary (23 Sep).",
         "PROPERTY: Sierra Pines cash flow at +$1,120/mo Net ($2,450 Gross). Priority ticket: 'Perimeter Fence Wash & Gate Warranty Inspection'.",
         "ATHLETIC: Readiness Score 61/100. HRV at 46 ms (BELOW_TARGET). Directive: ⚠️ HRV at 46 ms (Target: 65 ms). Autonomic nervous system fatigued. Throttle training to Zone 2 Active Recovery.",
-        "ACADEMIC: Autonomous Multi-Domain Agent Architectures (Draft V2) due Oct 22 (T-68h).",
         "FLEET: Vehicles online. Telemetry calibrated — awaiting current odometer & tabs expiration from owner."
       ],
       upcoming_7d_milestones: [
         { category: "Family", detail: "📅 Family Sunday Meal Prep & Planning (2026-10-25)" },
         { category: "Family", detail: "📅 Mackie School Fall Conference (2026-10-23)" },
-        { category: "Academic", detail: "Autonomous Multi-Domain Agent Architectures (Draft V2) (Due 2026-10-22 • T-68h)" },
         { category: "Fleet", detail: "Garage bay online: Awaiting current odometer & registration input." }
       ],
       family_registry: {
@@ -1435,16 +1417,7 @@ export class DashboardManager {
         strength_progress: "1 / 4 sessions",
         recovery_directive: "⚠️ HRV at 46 ms (Target: 65 ms). Autonomic nervous system fatigued. Throttle training to Zone 2 Active Recovery."
       },
-      academic_queue: [
-        {
-          id: "draft_agentic_arch",
-          title: "Autonomous Multi-Domain Agent Architectures (Draft V2)",
-          deadline: "2026-10-22T23:59:00Z",
-          hours_remaining: 68.0,
-          urgency: "T_MINUS_72H",
-          target: "IEEE / ACM Software Engineering Submission"
-        }
-      ],
+      academic_queue: [],
       fleet_status: [
         { name: "2021 Chevy Colorado ZR2", odometer: "Pending Input", oil_life: "Pending Input", tabs_expiration: "Pending Input", status: "READY" },
         { name: "2021 Nissan Murano Midnight Edition", odometer: "Pending Input", oil_life: "Pending Input", tabs_expiration: "Pending Input", status: "READY" }
@@ -1483,15 +1456,8 @@ export class DashboardManager {
     }
 
     const chipAcademic = document.getElementById('chip-academic');
-    if (chipAcademic && briefing.academic_queue) {
-      const criticalDraft = briefing.academic_queue.find(d => d.urgency === 'T_MINUS_72H');
-      if (criticalDraft) {
-        chipAcademic.textContent = `📚 Academic: Draft T-72h (${criticalDraft.hours_remaining ? Math.round(criticalDraft.hours_remaining) + 'h' : 'Oct 22'})`;
-        chipAcademic.classList.add('alert');
-      } else {
-        chipAcademic.textContent = `📚 Academic: On Track`;
-        chipAcademic.classList.remove('alert');
-      }
+    if (chipAcademic) {
+      chipAcademic.style.display = 'none';
     }
 
     const chipFleet = document.getElementById('chip-fleet');

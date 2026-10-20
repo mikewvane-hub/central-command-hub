@@ -78,7 +78,6 @@ def generate_executive_weekly_briefing():
         f"FAMILY: User Birthday (29 Mar 1993, in {family_rep['milestones'][0]['days_until']}d), Wife Birthday (23 Apr 1996, in {family_rep['milestones'][1]['days_until']}d), Anniversary (23 Sep).",
         f"PROPERTY: Sierra Pines cash flow at +${financials.get('monthly_net', 1120):,}/mo Net (${financials.get('monthly_gross', 2450):,} Gross). Priority ticket: '{critical_ticket}'.",
         f"ATHLETIC: Readiness Score {health_rep['readiness_score']}/100. HRV at {health_rep['hrv']['current']} ms ({health_rep['hrv']['status']}). Directive: {health_rep['recovery_recommendation']}.",
-        f"ACADEMIC: {len(acad_rep.get('t72h_alerts', []))} draft(s) in critical T-72h window. Next submission due Oct 22.",
         f"FLEET: Colorado ZR2 oil life at 18% (service due); Nissan Murano WA State tabs expire Nov 30."
     ]
 
@@ -87,7 +86,7 @@ def generate_executive_weekly_briefing():
         "generated_at": now.isoformat(),
         "week_label": week_label,
         "cadence_window": week_label,
-        "summary": f"Executive briefing for {week_label} integrating Family Milestones, Property Cash Flow, Athletic Readiness, Academic Deadlines, and Fleet Telemetry.",
+        "summary": f"Executive briefing for {week_label} integrating Family Milestones, Property Cash Flow, Athletic Readiness, and Fleet Telemetry.",
         "highlights": highlights,
         "executive_highlights": highlights,
         "upcoming_7d_milestones": upcoming_7d,

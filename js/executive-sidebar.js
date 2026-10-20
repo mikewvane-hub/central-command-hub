@@ -51,20 +51,6 @@ export const PLATFORM_DIAGNOSTICS_DATA = [
     assignedAgent: 'telemetry-ingest'
   },
   {
-    id: 'diag-004',
-    category: 'SYSTEM FIX',
-    categoryClass: 'cat-fix',
-    origin: 'Academic Research Pipeline',
-    deckId: 'executive',
-    timestamp: '2026-10-19 12:05 UTC',
-    title: 'Research Paper Citation Helper',
-    technicalTitle: 'arXiv Citation Crawler Throttling',
-    description: 'Fix automatic citation downloader so academic research papers and bibliography references pull in smoothly.',
-    technicalDescription: 'Automated bibtex hydration for Autonomous Multi-Domain Agent Architectures (Draft V2) throttled at 3 req/sec. Exponential backoff required.',
-    status: 'IN_QUEUE',
-    assignedAgent: 'academic-cadence-agent'
-  },
-  {
     id: 'diag-005',
     category: 'NEW FEATURE',
     categoryClass: 'cat-feature',
@@ -122,15 +108,6 @@ export const AGENT_ROUTING_MAP = {
       issue: 'Clause Q workmanship warranty expiration checklist & gate latch proof'
     }
   },
-  'diag-004': {
-    targetAgent: 'academic-cadence-agent',
-    priority: 'MEDIUM',
-    contextParameters: {
-      subsystem: 'arXiv Citation Scraper',
-      targetFiles: ['agents/academic.py'],
-      issue: 'Bibtex crawler throttling & backoff'
-    }
-  },
   'diag-005': {
     targetAgent: 'executive-cadence-agent',
     priority: 'MEDIUM',
@@ -160,7 +137,6 @@ export const TILE_METADATA = {
   executive: { name: 'EXECUTIVE CADENCE', icon: '⭐', color: '#00f0ff' },
   core: { name: 'COMMAND PLATFORM', icon: '🌌', color: '#6366f1' },
   health: { name: 'HEALTH & READINESS', icon: '❤️', color: '#10b981' },
-  academic: { name: 'ACADEMIC & RESEARCH', icon: '🎓', color: '#00f0ff' },
   family: { name: 'FAMILY OPERATIONS', icon: '👨‍👩‍👧', color: '#f43f5e' }
 };
 
@@ -608,7 +584,7 @@ export class ExecutiveSidebarManager {
       ? this.dashboardMgr.alerts 
       : {};
 
-    const domainKeys = ['rental', 'garage', 'fleet', 'executive', 'trip', 'mackie', 'financial', 'health', 'academic'];
+    const domainKeys = ['rental', 'garage', 'fleet', 'executive', 'trip', 'mackie', 'financial', 'health'];
 
     domainKeys.forEach(deckId => {
       const group = domainAlerts[deckId];
@@ -617,6 +593,11 @@ export class ExecutiveSidebarManager {
       group.items.forEach(item => {
         const code = item.code || `${deckId}_${item.title}`;
         if (this.resolvedCodes.has(code)) return;
+
+        // Strictly exclude hallucinated academic / draft due dates
+        if (code.includes('ACADEMIC') || code.includes('agentic_arch') || item.title?.includes('Autonomous Multi-Domain') || item.title?.includes('Oct 22')) {
+          return;
+        }
 
         let priorityLevel = 'INFO';
         const sev = (item.severity || 'INFO').toUpperCase();
