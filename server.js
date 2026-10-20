@@ -111,7 +111,7 @@ app.get('/api/telemetry', async (req, res) => {
     {
       id: 'garage',
       name: 'Garage & Fleet Asset Command',
-      url: 'http://localhost:3009/',
+      url: `http://localhost:${PORT}/dashboards/garage/index.html`,
       type: 'local'
     }
   ];

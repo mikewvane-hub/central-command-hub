@@ -1,5 +1,5 @@
 # EXECUTIVE WEEKLY BRIEFING // WEEK OF OCTOBER 20 – OCTOBER 27, 2026
-*Generated on Tuesday, October 20, 2026 at 01:53 UTC | Cadence: Sunday 18:00*
+*Generated on Tuesday, October 20, 2026 at 02:40 UTC | Cadence: Sunday 18:00*
 
 ---
 

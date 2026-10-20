@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": "1.0.0-UNIFIED",
-    "last_updated": "2026-10-20T01:53:56.335108+00:00",
+    "last_updated": "2026-10-20T02:40:48.934325+00:00",
     "timezone": "America/New_York",
     "status": "ONLINE"
   },
@@ -216,7 +216,7 @@
       "statute_or_category": "Athletic Readiness",
       "due_date": "2026-10-20",
       "action_url": "health",
-      "created_at": "2026-10-20T01:53:56.220855+00:00",
+      "created_at": "2026-10-20T02:40:48.848015+00:00",
       "acknowledged": false,
       "dismissed": false
     },
@@ -272,7 +272,7 @@
       "statute_or_category": "Preventive Maintenance",
       "due_date": "2026-11-03",
       "action_url": "fleet",
-      "created_at": "2026-10-20T01:53:56.220855+00:00",
+      "created_at": "2026-10-20T02:40:48.848015+00:00",
       "acknowledged": false,
       "dismissed": false
     },
@@ -286,7 +286,7 @@
       "statute_or_category": "State Vehicle Registration",
       "due_date": "2026-11-30",
       "action_url": "fleet",
-      "created_at": "2026-10-20T01:53:56.233600+00:00",
+      "created_at": "2026-10-20T02:40:48.856704+00:00",
       "acknowledged": false,
       "dismissed": false
     },
@@ -300,14 +300,14 @@
       "statute_or_category": "Q4 Statutory Maintenance",
       "due_date": "2026-12-31",
       "action_url": "rental",
-      "created_at": "2026-10-20T01:53:56.233600+00:00",
+      "created_at": "2026-10-20T02:40:48.856704+00:00",
       "acknowledged": false,
       "dismissed": false
     }
   ],
   "executive_briefing": {
     "cadence": "SUNDAY_1800_EXECUTIVE_BRIEFING",
-    "generated_at": "2026-10-20T01:53:56.219855+00:00",
+    "generated_at": "2026-10-20T02:40:48.848015+00:00",
     "week_label": "Week of October 20 – October 27, 2026",
     "cadence_window": "Week of October 20 – October 27, 2026",
     "summary": "Executive briefing for Week of October 20 – October 27, 2026 integrating Family Milestones, Property Cash Flow, Athletic Readiness, and Fleet Telemetry.",
@@ -396,6 +396,27 @@
     "active_alerts_count": 7
   },
   "platform_tasks": [
+    {
+      "taskId": "TK-8141",
+      "uuid": "test-uuid-1792464049516",
+      "diagId": "diag-001",
+      "title": "Fix 3D Garage Lag",
+      "simpleDescription": "Speeds up loading when switching between 3D view and photo mode on your phone or laptop.",
+      "technicalDescription": "Three.js canvas context rebuild delay (~120ms) observed when toggling on mobile WebGL2 runtimes.",
+      "sourceCategory": "Platform Diagnostics",
+      "targetAgent": "scene-architect",
+      "priority": "HIGH",
+      "status": "IN_PROGRESS",
+      "timestamp": "2026-10-20T02:40:49.516Z",
+      "contextParameters": {
+        "subsystem": "Three.js / WebGL2 Context",
+        "targetFiles": [
+          "js/atomic-core.js",
+          "dashboards/garage/src/components/garage/ThreeDGarageScene.jsx"
+        ],
+        "issue": "Fix 3D Garage Lag"
+      }
+    },
     {
       "taskId": "TK-6310",
       "uuid": "test-uuid-1792461241888",
@@ -504,7 +525,7 @@
       "category": "NEW FEATURE",
       "origin": "Fleet Telemetry Console",
       "deckId": "garage",
-      "timestamp": "2026-10-20T01:54:01.910Z",
+      "timestamp": "2026-10-20T02:40:49.542Z",
       "status": "LOGGED_IN_BACKLOG"
     }
   ],

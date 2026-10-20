@@ -244,9 +244,9 @@ export class AtomicCoreVisualizer {
       try {
         const val = localStorage.getItem(key);
         if (key === 'hub_url_garage') {
-          if (!val || !val.includes('v=25.0')) {
-            localStorage.setItem('hub_url_garage', './dashboards/garage/index.html?v=25.0');
-            return './dashboards/garage/index.html?v=25.0';
+          if (!val || val.includes('localhost') || val.includes('127.0.0.1') || !val.includes('v=30.0')) {
+            localStorage.setItem('hub_url_garage', './dashboards/garage/index.html?v=30.0');
+            return './dashboards/garage/index.html?v=30.0';
           }
           return val;
         }
@@ -359,7 +359,7 @@ export class AtomicCoreVisualizer {
         inclination: { x: -0.34, y: 0.42, z: -0.18 },
         color: 0xf59e0b,
         glowHex: '#f59e0b',
-        url: resolveCloudUrl('hub_url_garage', './dashboards/garage/index.html?v=25.0'),
+        url: resolveCloudUrl('hub_url_garage', './dashboards/garage/index.html?v=30.0'),
         icon: '🛻'
       }
     ];

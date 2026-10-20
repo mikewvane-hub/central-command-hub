@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "sync:garage": "node scripts/sync-garage.js"
   },
   "keywords": [
     "command-hub",
