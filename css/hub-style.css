@@ -2767,7 +2767,7 @@ body::after {
   opacity: 0;
 }
 
-/* Priority Card Borders */
+/* Priority Card Borders (Fallbacks) */
 .stream-card.badge-p0 {
   border-left: 3px solid #ff3344;
 }
@@ -2790,6 +2790,221 @@ body::after {
 
 .stream-card.cat-feature {
   border-left: 3px solid #00f0ff;
+}
+
+/* ========================================================
+   TILE & CORE COLOR-CODED CARDS (Executive Summary HUD)
+   Visual alignment with Dashboard Launchpad Tiles & Atomic Cores
+   ======================================================== */
+
+/* 1. GARAGE & FLEET ASSETS (Amber / Gold #f59e0b) */
+.stream-card.tile-garage {
+  border-left: 4px solid #f59e0b !important;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(10, 19, 38, 0.88) 65%);
+  border-top-color: rgba(245, 158, 11, 0.35);
+  border-right-color: rgba(245, 158, 11, 0.2);
+  border-bottom-color: rgba(245, 158, 11, 0.2);
+}
+.stream-card.tile-garage:hover, .stream-card.tile-garage:focus {
+  border-color: #f59e0b !important;
+  border-left-width: 4px !important;
+  box-shadow: 0 4px 22px rgba(245, 158, 11, 0.42) !important;
+}
+.stream-card.tile-garage .card-origin-tag {
+  color: #fbbf24;
+}
+.stream-card.tile-garage .diag-cat-badge {
+  background: rgba(245, 158, 11, 0.22);
+  border: 1px solid #f59e0b;
+  color: #fbbf24;
+}
+
+/* 2. RENTAL OPERATIONS / JBLM (Sky Blue #38bdf8) */
+.stream-card.tile-rental {
+  border-left: 4px solid #38bdf8 !important;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.15) 0%, rgba(10, 19, 38, 0.88) 65%);
+  border-top-color: rgba(56, 189, 248, 0.35);
+  border-right-color: rgba(56, 189, 248, 0.2);
+  border-bottom-color: rgba(56, 189, 248, 0.2);
+}
+.stream-card.tile-rental:hover, .stream-card.tile-rental:focus {
+  border-color: #38bdf8 !important;
+  border-left-width: 4px !important;
+  box-shadow: 0 4px 22px rgba(56, 189, 248, 0.42) !important;
+}
+.stream-card.tile-rental .card-origin-tag {
+  color: #7dd3fc;
+}
+.stream-card.tile-rental .diag-cat-badge {
+  background: rgba(56, 189, 248, 0.22);
+  border: 1px solid #38bdf8;
+  color: #7dd3fc;
+}
+
+/* 3. FINANCIAL WEALTH & LIQUIDITY (Violet / Purple #8b5cf6) */
+.stream-card.tile-financial {
+  border-left: 4px solid #8b5cf6 !important;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(10, 19, 38, 0.88) 65%);
+  border-top-color: rgba(139, 92, 246, 0.35);
+  border-right-color: rgba(139, 92, 246, 0.2);
+  border-bottom-color: rgba(139, 92, 246, 0.2);
+}
+.stream-card.tile-financial:hover, .stream-card.tile-financial:focus {
+  border-color: #8b5cf6 !important;
+  border-left-width: 4px !important;
+  box-shadow: 0 4px 22px rgba(139, 92, 246, 0.42) !important;
+}
+.stream-card.tile-financial .card-origin-tag {
+  color: #c084fc;
+}
+.stream-card.tile-financial .diag-cat-badge {
+  background: rgba(139, 92, 246, 0.22);
+  border: 1px solid #8b5cf6;
+  color: #c084fc;
+}
+
+/* 4. RAINIER BASECAMP TRIP (Emerald Green #10b981) */
+.stream-card.tile-trip {
+  border-left: 4px solid #10b981 !important;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(10, 19, 38, 0.88) 65%);
+  border-top-color: rgba(16, 185, 129, 0.35);
+  border-right-color: rgba(16, 185, 129, 0.2);
+  border-bottom-color: rgba(16, 185, 129, 0.2);
+}
+.stream-card.tile-trip:hover, .stream-card.tile-trip:focus {
+  border-color: #10b981 !important;
+  border-left-width: 4px !important;
+  box-shadow: 0 4px 22px rgba(16, 185, 129, 0.42) !important;
+}
+.stream-card.tile-trip .card-origin-tag {
+  color: #6ee7b7;
+}
+.stream-card.tile-trip .diag-cat-badge {
+  background: rgba(16, 185, 129, 0.22);
+  border: 1px solid #10b981;
+  color: #6ee7b7;
+}
+
+/* 5. MACKIE'S BOARD & CHORES (Rose Pink #f43f5e) */
+.stream-card.tile-mackie {
+  border-left: 4px solid #f43f5e !important;
+  background: linear-gradient(135deg, rgba(244, 63, 94, 0.15) 0%, rgba(10, 19, 38, 0.88) 65%);
+  border-top-color: rgba(244, 63, 94, 0.35);
+  border-right-color: rgba(244, 63, 94, 0.2);
+  border-bottom-color: rgba(244, 63, 94, 0.2);
+}
+.stream-card.tile-mackie:hover, .stream-card.tile-mackie:focus {
+  border-color: #f43f5e !important;
+  border-left-width: 4px !important;
+  box-shadow: 0 4px 22px rgba(244, 63, 94, 0.42) !important;
+}
+.stream-card.tile-mackie .card-origin-tag {
+  color: #fda4af;
+}
+.stream-card.tile-mackie .diag-cat-badge {
+  background: rgba(244, 63, 94, 0.22);
+  border: 1px solid #f43f5e;
+  color: #fda4af;
+}
+
+/* 6. EXECUTIVE CADENCE & STRATEGY (Cyan / Aqua #00f0ff) */
+.stream-card.tile-executive {
+  border-left: 4px solid #00f0ff !important;
+  background: linear-gradient(135deg, rgba(0, 240, 255, 0.15) 0%, rgba(10, 19, 38, 0.88) 65%);
+  border-top-color: rgba(0, 240, 255, 0.35);
+  border-right-color: rgba(0, 240, 255, 0.2);
+  border-bottom-color: rgba(0, 240, 255, 0.2);
+}
+.stream-card.tile-executive:hover, .stream-card.tile-executive:focus {
+  border-color: #00f0ff !important;
+  border-left-width: 4px !important;
+  box-shadow: 0 4px 22px rgba(0, 240, 255, 0.42) !important;
+}
+.stream-card.tile-executive .card-origin-tag {
+  color: #38bdf8;
+}
+.stream-card.tile-executive .diag-cat-badge {
+  background: rgba(0, 240, 255, 0.22);
+  border: 1px solid #00f0ff;
+  color: #00f0ff;
+}
+
+/* 7. SYSTEM CORE / GALAXY Z FOLD PLATFORM (Indigo / Electric Blue #6366f1) */
+.stream-card.tile-core {
+  border-left: 4px solid #6366f1 !important;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(10, 19, 38, 0.88) 65%);
+  border-top-color: rgba(99, 102, 241, 0.35);
+  border-right-color: rgba(99, 102, 241, 0.2);
+  border-bottom-color: rgba(99, 102, 241, 0.2);
+}
+.stream-card.tile-core:hover, .stream-card.tile-core:focus {
+  border-color: #6366f1 !important;
+  border-left-width: 4px !important;
+  box-shadow: 0 4px 22px rgba(99, 102, 241, 0.42) !important;
+}
+.stream-card.tile-core .card-origin-tag {
+  color: #a5b4fc;
+}
+.stream-card.tile-core .diag-cat-badge {
+  background: rgba(99, 102, 241, 0.22);
+  border: 1px solid #6366f1;
+  color: #a5b4fc;
+}
+
+/* Tile Indicator Pill in Card Header */
+.tile-indicator-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.63rem;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  font-family: var(--font-tech);
+}
+.tile-garage .tile-indicator-pill {
+  background: rgba(245, 158, 11, 0.22);
+  border: 1px solid rgba(245, 158, 11, 0.7);
+  color: #fbbf24;
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.25);
+}
+.tile-rental .tile-indicator-pill {
+  background: rgba(56, 189, 248, 0.22);
+  border: 1px solid rgba(56, 189, 248, 0.7);
+  color: #7dd3fc;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.25);
+}
+.tile-financial .tile-indicator-pill {
+  background: rgba(139, 92, 246, 0.22);
+  border: 1px solid rgba(139, 92, 246, 0.7);
+  color: #c084fc;
+  box-shadow: 0 0 8px rgba(139, 92, 246, 0.25);
+}
+.tile-trip .tile-indicator-pill {
+  background: rgba(16, 185, 129, 0.22);
+  border: 1px solid rgba(16, 185, 129, 0.7);
+  color: #6ee7b7;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.25);
+}
+.tile-mackie .tile-indicator-pill {
+  background: rgba(244, 63, 94, 0.22);
+  border: 1px solid rgba(244, 63, 94, 0.7);
+  color: #fda4af;
+  box-shadow: 0 0 8px rgba(244, 63, 94, 0.25);
+}
+.tile-executive .tile-indicator-pill {
+  background: rgba(0, 240, 255, 0.22);
+  border: 1px solid rgba(0, 240, 255, 0.7);
+  color: #00f0ff;
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.25);
+}
+.tile-core .tile-indicator-pill {
+  background: rgba(99, 102, 241, 0.22);
+  border: 1px solid rgba(99, 102, 241, 0.7);
+  color: #a5b4fc;
+  box-shadow: 0 0 8px rgba(99, 102, 241, 0.25);
 }
 
 /* Card Header Strip */

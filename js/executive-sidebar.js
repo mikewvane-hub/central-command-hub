@@ -151,6 +151,19 @@ export const AGENT_ROUTING_MAP = {
   }
 };
 
+export const TILE_METADATA = {
+  garage: { name: 'GARAGE & FLEET', icon: '🔧', color: '#f59e0b' },
+  rental: { name: 'RENTAL OPS', icon: '🏠', color: '#38bdf8' },
+  financial: { name: 'WEALTH & ASSETS', icon: '📈', color: '#8b5cf6' },
+  trip: { name: 'RAINIER BASECAMP', icon: '🏔️', color: '#10b981' },
+  mackie: { name: "MACKIE'S BOARD", icon: '🎯', color: '#f43f5e' },
+  executive: { name: 'EXECUTIVE CADENCE', icon: '⭐', color: '#00f0ff' },
+  core: { name: 'COMMAND PLATFORM', icon: '🌌', color: '#6366f1' },
+  health: { name: 'HEALTH & READINESS', icon: '❤️', color: '#10b981' },
+  academic: { name: 'ACADEMIC & RESEARCH', icon: '🎓', color: '#00f0ff' },
+  family: { name: 'FAMILY OPERATIONS', icon: '👨‍👩‍👧', color: '#f43f5e' }
+};
+
 export class ExecutiveSidebarManager {
   constructor(options = {}) {
     this.visualizer = options.visualizer || null;
@@ -238,8 +251,88 @@ export class ExecutiveSidebarManager {
     // Bind Responsive Resize listener
     window.addEventListener('resize', () => this.handleResize());
 
+    // Flush any pending tasks from mobile/GitHub Pages sync to local disk
+    this.syncPendingActions();
+
     // Initial render
     this.render();
+  }
+
+  async syncPendingActions() {
+    try {
+      const pendingStr = localStorage.getItem('hub_pending_antigravity_sync');
+      if (!pendingStr) return;
+      const pending = JSON.parse(pendingStr);
+      if (!Array.isArray(pending) || pending.length === 0) return;
+
+      console.log(`[Antigravity Sync] Synchronizing ${pending.length} pending actions with project folder...`);
+      const remaining = [];
+      for (const item of pending) {
+        try {
+          const res = await fetch(item.endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(item.payload)
+          });
+          if (!res.ok) {
+            remaining.push(item);
+          }
+        } catch (e) {
+          remaining.push(item);
+        }
+      }
+      if (remaining.length === 0) {
+        localStorage.removeItem('hub_pending_antigravity_sync');
+        console.log('[Antigravity Sync] All pending actions synchronized successfully.');
+      } else {
+        localStorage.setItem('hub_pending_antigravity_sync', JSON.stringify(remaining));
+      }
+    } catch (e) {}
+  }
+
+  async postToAntigravityServer(endpoint, payload) {
+    // 1. Try direct relative fetch (works seamlessly when running on local server)
+    try {
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (res.ok) {
+        return await res.json();
+      }
+    } catch (e) {}
+
+    // 2. If relative fetch fails (e.g. browsing on GitHub Pages), attempt local LAN server endpoints
+    const fallbackHosts = [
+      'http://localhost:4000',
+      'http://192.168.1.154:4000'
+    ];
+    for (const host of fallbackHosts) {
+      try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 1200);
+        const res = await fetch(`${host}${endpoint}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          signal: controller.signal
+        });
+        clearTimeout(timeout);
+        if (res.ok) {
+          console.log(`[Antigravity Remote Sync] Dispatched to ${host}${endpoint}`);
+          return await res.json();
+        }
+      } catch (err) {}
+    }
+
+    // 3. Fallback: Queue in localStorage so it synchronizes automatically when connected
+    try {
+      const pending = JSON.parse(localStorage.getItem('hub_pending_antigravity_sync') || '[]');
+      pending.push({ endpoint, payload, time: Date.now() });
+      localStorage.setItem('hub_pending_antigravity_sync', JSON.stringify(pending));
+    } catch (e) {}
+    return null;
   }
 
   setupOutsideClickListener() {
@@ -641,22 +734,24 @@ export class ExecutiveSidebarManager {
     }
 
     container.innerHTML = items.map(item => {
-      const coreId = `${item.deckName.toUpperCase()}`;
+      const deckId = item.deckId || 'core';
+      const tileMeta = TILE_METADATA[deckId] || { name: item.deckName.toUpperCase(), icon: item.deckIcon || '⚡', color: '#00f0ff' };
+      const tileClass = `tile-${deckId}`;
       const badgeClass = item.priorityLevel === 'P0' ? 'badge-p0' : (item.priorityLevel === 'P1' ? 'badge-p1' : 'badge-info');
       const badgeLabel = item.priorityLevel === 'P0' ? 'P0 CRITICAL' : (item.priorityLevel === 'P1' ? 'P1 REQUIRED' : 'INFO');
       const ackClass = item.acknowledged ? 'acknowledged' : '';
 
       return `
-        <div class="stream-card directive-card ${badgeClass} ${ackClass}" 
+        <div class="stream-card directive-card ${tileClass} ${badgeClass} ${ackClass}" 
              data-code="${item.code}" 
-             data-deck="${item.deckId}" 
+             data-deck="${deckId}" 
              tabindex="0">
           
-          <!-- Card Header HUD Strip -->
+          <!-- Card Header HUD Strip: Tile Identification & Severity Badge -->
           <div class="card-header-strip">
-            <div class="card-origin-tag">
-              <span class="origin-icon">${item.deckIcon}</span>
-              <span class="origin-code">[${item.timestamp.split(' ')[1]} // ${coreId}]</span>
+            <div class="tile-indicator-pill">
+              <span>${tileMeta.icon}</span>
+              <span>${tileMeta.name}</span>
             </div>
             <div class="card-badge ${badgeClass}">${badgeLabel}</div>
           </div>
@@ -830,6 +925,9 @@ export class ExecutiveSidebarManager {
     }
 
     container.innerHTML = items.map(item => {
+      const deckId = item.deckId || 'core';
+      const tileMeta = TILE_METADATA[deckId] || { name: 'SYSTEM CORE', icon: '🌌', color: '#6366f1' };
+      const tileClass = `tile-${deckId}`;
       const catClass = item.categoryClass || 'cat-feature';
       const routing = AGENT_ROUTING_MAP[item.id] || {
         targetAgent: item.assignedAgent || 'antigravity-worker',
@@ -838,14 +936,17 @@ export class ExecutiveSidebarManager {
       };
 
       return `
-        <div class="stream-card diagnostic-card ${catClass}" 
+        <div class="stream-card diagnostic-card ${tileClass} ${catClass}" 
              data-id="${item.id}" 
-             data-deck="${item.deckId}" 
+             data-deck="${deckId}" 
              tabindex="0">
           
-          <!-- Category Tag & Origin -->
+          <!-- Category Tag, Tile Pill & Origin -->
           <div class="card-header-strip">
-            <span class="diag-cat-badge ${catClass}">[${item.category}]</span>
+            <div class="tile-indicator-pill">
+              <span>${tileMeta.icon}</span>
+              <span>${tileMeta.name}</span>
+            </div>
             <span class="diag-origin-tag">${item.origin}</span>
           </div>
 
@@ -1012,13 +1113,7 @@ export class ExecutiveSidebarManager {
       } catch (e) {}
 
       // POST to server (writes markdown task file into /tasks/active/ in project folder)
-      try {
-        fetch('/api/tasks', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        }).catch(() => {});
-      } catch (e) {}
+      this.postToAntigravityServer('/api/tasks', payload);
 
       try {
         if (this.broadcastChannel) {
@@ -1115,13 +1210,7 @@ export class ExecutiveSidebarManager {
       } catch (e) {}
 
       // POST to server (appends to /tasks/backlog/BACKLOG.md in project folder)
-      try {
-        fetch('/api/backlog', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(backlogItem)
-        }).catch(() => {});
-      } catch (e) {}
+      this.postToAntigravityServer('/api/backlog', backlogItem);
 
       sfx.playSuccess();
 
@@ -1192,14 +1281,8 @@ export class ExecutiveSidebarManager {
     }
 
     setTimeout(() => {
-      // POST to server
-      try {
-        fetch('/api/diagnostics/deny', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ id: diagId, title: item.title })
-        }).catch(() => {});
-      } catch (e) {}
+      // POST to server (appends to /tasks/dismissed/DISMISSED.md in project folder)
+      this.postToAntigravityServer('/api/diagnostics/deny', { id: diagId, title: item.title });
 
       this.showToast(
         'RECOMMENDATION DENIED',

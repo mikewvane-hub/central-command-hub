@@ -1,5 +1,5 @@
 # EXECUTIVE WEEKLY BRIEFING // WEEK OF OCTOBER 20 – OCTOBER 27, 2026
-*Generated on Tuesday, October 20, 2026 at 01:30 UTC | Cadence: Sunday 18:00*
+*Generated on Tuesday, October 20, 2026 at 01:47 UTC | Cadence: Sunday 18:00*
 
 ---
 
@@ -17,7 +17,7 @@
 | :--- | :--- |
 | **Family** | 📅 Family Sunday Meal Prep & Planning (2026-10-25) |
 | **Family** | 📅 Mackie School Fall Conference (2026-10-23) |
-| **Academic** | Autonomous Multi-Domain Agent Architectures (Draft V2) (Due 2026-10-22 • T-70.5h) |
+| **Academic** | Autonomous Multi-Domain Agent Architectures (Draft V2) (Due 2026-10-22 • T-70.2h) |
 | **Fleet** | 2021 Chevy Colorado ZR2 maintenance/registration action due. |
 
 **Core Family Milestones:**
