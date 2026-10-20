@@ -82,11 +82,71 @@ export const PLATFORM_DIAGNOSTICS_DATA = [
   }
 ];
 
+export const AGENT_ROUTING_MAP = {
+  'diag-001': {
+    targetAgent: 'scene-architect',
+    priority: 'HIGH',
+    contextParameters: {
+      subsystem: 'Three.js / WebGL2 Context',
+      targetFiles: ['js/atomic-core.js', 'dashboards/garage/src/components/garage/ThreeDGarageScene.jsx'],
+      issue: 'WebGL context reacquisition delay on mobile/desktop mode toggle'
+    }
+  },
+  'diag-003': {
+    targetAgent: 'telemetry-ingest',
+    priority: 'HIGH',
+    contextParameters: {
+      subsystem: 'OBD-II / ELM327 BLE Adapter',
+      targetFiles: ['src/services/telemetry/obd2TelemetrySchema.js', 'src/services/telemetry/telemetryService.js'],
+      issue: 'BLE stream ingestion for GM & Nissan transmission fluid thermal telemetry'
+    }
+  },
+  'diag-002': {
+    targetAgent: 'property-ops-cadence',
+    priority: 'HIGH',
+    contextParameters: {
+      subsystem: 'Rental Asset Warranty',
+      targetFiles: ['dashboards/rental/index.html'],
+      issue: 'Clause Q workmanship warranty expiration checklist & gate latch proof'
+    }
+  },
+  'diag-004': {
+    targetAgent: 'academic-cadence-agent',
+    priority: 'MEDIUM',
+    contextParameters: {
+      subsystem: 'arXiv Citation Scraper',
+      targetFiles: ['agents/academic.py'],
+      issue: 'Bibtex crawler throttling & backoff'
+    }
+  },
+  'diag-005': {
+    targetAgent: 'executive-cadence-agent',
+    priority: 'MEDIUM',
+    contextParameters: {
+      subsystem: 'Executive Cadence Engine',
+      targetFiles: ['agents/weekly_cadence_agent.py', 'server.js'],
+      issue: 'Automated Sunday 18:00 encrypted briefing dispatch'
+    }
+  },
+  'diag-006': {
+    targetAgent: 'device-optimizer',
+    priority: 'LOW',
+    contextParameters: {
+      subsystem: 'Galaxy Z Fold 8 Viewport Engine',
+      targetFiles: ['js/device-optimizer.js'],
+      issue: 'Dynamic safe-area viewport fold/unfold double reflow'
+    }
+  }
+};
+
 export class ExecutiveSidebarManager {
   constructor(options = {}) {
     this.visualizer = options.visualizer || null;
     this.dashboardMgr = options.dashboardMgr || null;
     
+    // Global reference for outside modules & diagnostics
+    window.executiveSidebarMgr = this;
+
     // Default open on wide desktop screens (>= 1400px), collapsed on smaller displays
     this.isDesktop = typeof window !== 'undefined' ? window.innerWidth >= 1400 : true;
     this.isExpanded = this.isDesktop;
@@ -96,6 +156,33 @@ export class ExecutiveSidebarManager {
     this.diagnostics = [...PLATFORM_DIAGNOSTICS_DATA];
     this.resolvedCodes = new Set();
     this.acknowledgedCodes = new Set();
+
+    // Persistent C2 actions & backlog state rehydration
+    try {
+      this.dispatchedTasks = JSON.parse(localStorage.getItem('c2-actions') || '[]');
+    } catch (e) {
+      this.dispatchedTasks = [];
+    }
+
+    try {
+      this.backlogItems = JSON.parse(localStorage.getItem('hub_platform_backlog_items') || '[]');
+    } catch (e) {
+      this.backlogItems = [];
+    }
+
+    if (typeof BroadcastChannel !== 'undefined') {
+      try {
+        this.broadcastChannel = new BroadcastChannel('antigravity_c2_actions');
+        this.broadcastChannel.onmessage = (event) => {
+          if (event.data?.type === 'TASK_DISPATCHED') {
+            try {
+              this.dispatchedTasks = JSON.parse(localStorage.getItem('c2-actions') || '[]');
+              this.render();
+            } catch (e) {}
+          }
+        };
+      } catch (e) {}
+    }
 
     this.container = null;
     this.backdrop = null;
@@ -117,11 +204,34 @@ export class ExecutiveSidebarManager {
     // Bind Stream & Filter Tabs
     this.setupStreamTabs();
 
+    // Setup outside click listener for automatic collapse
+    this.setupOutsideClickListener();
+
+    // Initialize Floating HUD Action Log Dock
+    this.initC2ActionDock();
+
     // Bind Responsive Resize listener
     window.addEventListener('resize', () => this.handleResize());
 
     // Initial render
     this.render();
+  }
+
+  setupOutsideClickListener() {
+    // When clicking anything else on the page (launchpad tiles, tabs, 3D canvas, background),
+    // automatically collapse the sidebar so it never blocks the view of opened modules.
+    document.addEventListener('click', (e) => {
+      if (!this.isExpanded) return;
+
+      const isInsideSidebar = e.target.closest('#executive-sidebar');
+      const isToggleBtn = e.target.closest('#sidebar-toggle-btn');
+      const isGlobalAlerts = e.target.closest('#btn-global-alerts');
+      const isRailBtn = e.target.closest('.rail-action-btn');
+
+      if (!isInsideSidebar && !isToggleBtn && !isGlobalAlerts && !isRailBtn) {
+        this.collapse();
+      }
+    }, true); // Capture phase ensures outside interaction triggers even if children invoke stopPropagation
   }
 
   handleResize() {
@@ -681,6 +791,41 @@ export class ExecutiveSidebarManager {
         ? 'cat-fix' 
         : (item.category === 'RENDER REGRESSION' ? 'cat-regression' : 'cat-feature');
 
+      const routing = AGENT_ROUTING_MAP[item.id] || {
+        targetAgent: item.assignedAgent || 'antigravity-worker',
+        priority: 'MEDIUM',
+        contextParameters: {}
+      };
+
+      const dispatchedTask = this.dispatchedTasks.find(t => t.diagId === item.id);
+      const isBacklog = this.backlogItems.some(b => b.id === item.id);
+
+      let dispatchedClass = '';
+      let dispatchedDisabled = '';
+      let dispatchedText = '⚡ Generate Agent Task';
+      if (dispatchedTask) {
+        dispatchedClass = 'dispatched';
+        dispatchedDisabled = 'disabled';
+        dispatchedText = `✓ Dispatched to ${dispatchedTask.targetAgent} (#${dispatchedTask.taskId})`;
+      }
+
+      let backlogClass = '';
+      let backlogDisabled = '';
+      let backlogText = '📋 Push to Backlog';
+      if (isBacklog) {
+        backlogClass = 'in-backlog';
+        backlogDisabled = 'disabled';
+        backlogText = '✓ Logged in Backlog';
+      }
+
+      let pillsHtml = '';
+      if (dispatchedTask) {
+        pillsHtml += `<div class="diag-status-pill pill-dispatched">🚀 TASK #${dispatchedTask.taskId} DISPATCHED ➔ ${dispatchedTask.targetAgent.toUpperCase()}</div>`;
+      }
+      if (isBacklog) {
+        pillsHtml += `<div class="diag-status-pill pill-backlog">📋 LOGGED IN BACKLOG</div>`;
+      }
+
       return `
         <div class="stream-card diagnostic-card ${catClass}" 
              data-id="${item.id}" 
@@ -700,16 +845,27 @@ export class ExecutiveSidebarManager {
           <!-- Metadata row -->
           <div class="diag-meta-row">
             <span class="diag-meta-time">⏱️ ${item.timestamp}</span>
-            <span class="diag-meta-agent">🤖 ${item.assignedAgent}</span>
+            <span class="diag-meta-agent">🤖 ${routing.targetAgent || item.assignedAgent}</span>
+          </div>
+
+          <!-- Status Pills Row -->
+          <div class="card-pills-row">
+            ${pillsHtml}
           </div>
 
           <!-- Quick Actions -->
           <div class="card-action-bar diag-actions">
-            <button class="btn-diag-action btn-gen-task" data-action="gen-task" title="Generate immediate Antigravity agent task">
-              ⚡ Generate Agent Task
+            <button class="btn-diag-action btn-gen-task ${dispatchedClass}" 
+                    data-action="gen-task" 
+                    ${dispatchedDisabled} 
+                    title="Generate immediate Antigravity agent task">
+              ${dispatchedText}
             </button>
-            <button class="btn-diag-action btn-push-backlog" data-action="push-backlog" title="Queue into Antigravity backlog state">
-              📋 Push to Backlog
+            <button class="btn-diag-action btn-push-backlog ${backlogClass}" 
+                    data-action="push-backlog" 
+                    ${backlogDisabled} 
+                    title="Queue into Antigravity backlog state">
+              ${backlogText}
             </button>
           </div>
 
@@ -745,8 +901,7 @@ export class ExecutiveSidebarManager {
       if (btnGenTask) {
         btnGenTask.addEventListener('click', (e) => {
           e.stopPropagation();
-          sfx.playWarp();
-          this.generateAgentTask(diagId);
+          this.generateAgentTask(diagId, btnGenTask, card);
         });
       }
 
@@ -754,35 +909,253 @@ export class ExecutiveSidebarManager {
       if (btnPushBacklog) {
         btnPushBacklog.addEventListener('click', (e) => {
           e.stopPropagation();
-          sfx.playClick();
-          this.pushToBacklog(diagId);
+          this.pushToBacklog(diagId, btnPushBacklog, card);
         });
       }
+
+      // Clicking card body navigates to node
+      card.addEventListener('click', (e) => {
+        if (e.target.closest('.btn-diag-action')) return;
+        sfx.playClick();
+        this.openNode(deckId, diagId);
+      });
     });
   }
 
-  generateAgentTask(diagId) {
+  generateAgentTask(diagId, buttonEl, cardEl) {
+    if (buttonEl && (buttonEl.classList.contains('loading') || buttonEl.classList.contains('dispatched'))) {
+      return;
+    }
+
     const item = this.diagnostics.find(d => d.id === diagId);
     if (!item) return;
 
-    this.showToast(
-      'AGENT TASK DISPATCHED', 
-      `Subagent [${item.assignedAgent}] assigned to task #${diagId.toUpperCase()} for ${item.origin}.`, 
-      '⚡', 
-      'success'
-    );
+    const routing = AGENT_ROUTING_MAP[diagId] || {
+      targetAgent: item.assignedAgent || 'antigravity-worker',
+      priority: 'MEDIUM',
+      contextParameters: { origin: item.origin, deckId: item.deckId }
+    };
+
+    const num = Math.floor(1000 + Math.random() * 9000);
+    const taskId = `TK-${num}`;
+    const uuid = (typeof crypto !== 'undefined' && crypto.randomUUID) 
+      ? crypto.randomUUID() 
+      : `task-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+
+    sfx.playClick();
+
+    if (buttonEl) {
+      buttonEl.classList.add('loading');
+      buttonEl.innerHTML = `<span class="spinner-tactical"></span> Dispatching to ${routing.targetAgent}...`;
+      buttonEl.disabled = true;
+    }
+
+    setTimeout(() => {
+      const payload = {
+        taskId: taskId,
+        uuid: uuid,
+        diagId: diagId,
+        title: item.title,
+        sourceCategory: "Platform Backlog",
+        targetAgent: routing.targetAgent,
+        priority: routing.priority,
+        status: "QUEUED",
+        timestamp: new Date().toISOString(),
+        contextParameters: routing.contextParameters || { origin: item.origin, deckId: item.deckId }
+      };
+
+      // 1. Update in-memory & persistent localStorage
+      this.dispatchedTasks = this.dispatchedTasks.filter(t => t.diagId !== diagId);
+      this.dispatchedTasks.unshift(payload);
+      try {
+        localStorage.setItem('c2-actions', JSON.stringify(this.dispatchedTasks));
+      } catch (e) {
+        console.warn('[C2 Dispatch] localStorage write error:', e);
+      }
+
+      // 2. Server persistence non-blocking
+      try {
+        fetch('/api/tasks', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        }).catch(() => {});
+      } catch (e) {}
+
+      // 3. BroadcastChannel sync
+      try {
+        if (this.broadcastChannel) {
+          this.broadcastChannel.postMessage({ type: 'TASK_DISPATCHED', payload });
+        }
+      } catch (e) {}
+
+      // 4. Audio Feedback
+      sfx.playWarp();
+
+      // 5. Update Button State
+      if (buttonEl) {
+        buttonEl.classList.remove('loading');
+        buttonEl.classList.add('dispatched');
+        buttonEl.innerHTML = `✓ Dispatched to ${routing.targetAgent} (#${taskId})`;
+        buttonEl.disabled = true;
+      }
+
+      // 6. Update Card Status Pill
+      if (cardEl) {
+        let pillContainer = cardEl.querySelector('.card-pills-row');
+        if (!pillContainer) {
+          pillContainer = document.createElement('div');
+          pillContainer.className = 'card-pills-row';
+          const metaRow = cardEl.querySelector('.diag-meta-row');
+          if (metaRow) {
+            metaRow.insertAdjacentElement('afterend', pillContainer);
+          } else {
+            cardEl.appendChild(pillContainer);
+          }
+        }
+        const existingPill = pillContainer.querySelector('.pill-dispatched');
+        if (existingPill) existingPill.remove();
+
+        const pill = document.createElement('div');
+        pill.className = 'diag-status-pill pill-dispatched';
+        pill.innerHTML = `🚀 TASK #${taskId} DISPATCHED ➔ ${routing.targetAgent.toUpperCase()}`;
+        pillContainer.appendChild(pill);
+      }
+
+      // 7. HUD Toast Notification
+      this.showToast(
+        'C2 AGENT TASK DISPATCHED',
+        `[C2-ACTION] Dispatched Agent Task #${taskId} [${item.title.substring(0, 24)}...] ➔ ${routing.targetAgent}: READY.`,
+        '⚡',
+        'success'
+      );
+
+      // 8. Runtime Action Log HUD Dock
+      this.logC2Action(`[C2-ACTION] Dispatched Agent Task #${taskId} [${item.title}] ➔ ${routing.targetAgent}: READY`);
+    }, 220);
   }
 
-  pushToBacklog(diagId) {
+  pushToBacklog(diagId, buttonEl, cardEl) {
+    if (buttonEl && (buttonEl.classList.contains('loading') || buttonEl.classList.contains('in-backlog'))) {
+      return;
+    }
+
     const item = this.diagnostics.find(d => d.id === diagId);
     if (!item) return;
 
-    this.showToast(
-      'PUSHED TO BACKLOG', 
-      `Logged to unified backlog repository under ${item.category} [${item.origin}].`, 
-      '📋', 
-      'info'
-    );
+    sfx.playClick();
+
+    if (buttonEl) {
+      buttonEl.classList.add('loading');
+      buttonEl.innerHTML = `<span class="spinner-tactical"></span> Pushing to Backlog...`;
+      buttonEl.disabled = true;
+    }
+
+    setTimeout(() => {
+      const backlogItem = {
+        id: diagId,
+        title: item.title,
+        category: item.category,
+        origin: item.origin,
+        deckId: item.deckId,
+        timestamp: new Date().toISOString(),
+        status: "LOGGED_IN_BACKLOG"
+      };
+
+      // 1. Update in-memory & persistent localStorage
+      this.backlogItems = this.backlogItems.filter(b => b.id !== diagId);
+      this.backlogItems.unshift(backlogItem);
+      try {
+        localStorage.setItem('hub_platform_backlog_items', JSON.stringify(this.backlogItems));
+      } catch (e) {
+        console.warn('[Backlog] localStorage write error:', e);
+      }
+
+      // 2. Server persistence non-blocking
+      try {
+        fetch('/api/backlog', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(backlogItem)
+        }).catch(() => {});
+      } catch (e) {}
+
+      // 3. Audio Feedback
+      sfx.playSuccess();
+
+      // 4. Update Button State
+      if (buttonEl) {
+        buttonEl.classList.remove('loading');
+        buttonEl.classList.add('in-backlog');
+        buttonEl.innerHTML = `✓ Logged in Backlog`;
+        buttonEl.disabled = true;
+      }
+
+      // 5. Update Card Status Pill
+      if (cardEl) {
+        let pillContainer = cardEl.querySelector('.card-pills-row');
+        if (!pillContainer) {
+          pillContainer = document.createElement('div');
+          pillContainer.className = 'card-pills-row';
+          const metaRow = cardEl.querySelector('.diag-meta-row');
+          if (metaRow) {
+            metaRow.insertAdjacentElement('afterend', pillContainer);
+          } else {
+            cardEl.appendChild(pillContainer);
+          }
+        }
+        const existingPill = pillContainer.querySelector('.pill-backlog');
+        if (existingPill) existingPill.remove();
+
+        const pill = document.createElement('div');
+        pill.className = 'diag-status-pill pill-backlog';
+        pill.innerHTML = `📋 LOGGED IN BACKLOG`;
+        pillContainer.appendChild(pill);
+      }
+
+      // 6. HUD Toast Notification
+      this.showToast(
+        'PERSISTENT BACKLOG LOGGED',
+        `[BACKLOG-SYNC] Logged #${diagId.toUpperCase()} [${item.title.substring(0, 24)}...] into persistent system backlog.`,
+        '📋',
+        'info'
+      );
+
+      // 7. Runtime Action Log HUD Dock
+      this.logC2Action(`[BACKLOG-SYNC] Logged #${diagId.toUpperCase()} [${item.title}] ➔ System Backlog: PERSISTED`);
+    }, 180);
+  }
+
+  initC2ActionDock() {
+    let dock = document.getElementById('c2-action-dock');
+    if (!dock) {
+      dock = document.createElement('div');
+      dock.id = 'c2-action-dock';
+      dock.className = 'c2-action-log-dock';
+      dock.innerHTML = `
+        <span class="c2-badge">C2 DISPATCH</span>
+        <span class="c2-log-msg" id="c2-log-msg">[IDLE] Telemetry & C2 Dispatch Pipeline Standing By...</span>
+      `;
+      document.body.appendChild(dock);
+    }
+  }
+
+  logC2Action(message) {
+    this.initC2ActionDock();
+    const msgEl = document.getElementById('c2-log-msg');
+    if (msgEl) {
+      msgEl.textContent = message;
+      msgEl.title = message;
+      const dock = document.getElementById('c2-action-dock');
+      if (dock) {
+        dock.style.borderColor = '#00f0ff';
+        dock.style.boxShadow = '0 8px 35px rgba(0, 240, 255, 0.45)';
+        setTimeout(() => {
+          dock.style.borderColor = '';
+          dock.style.boxShadow = '';
+        }, 2500);
+      }
+    }
   }
 
   refreshFeeds() {

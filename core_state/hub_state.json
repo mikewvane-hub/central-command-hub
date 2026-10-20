@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": "1.0.0-UNIFIED",
-    "last_updated": "2026-10-20T00:40:13.542827+00:00",
+    "last_updated": "2026-10-20T01:07:40.085516+00:00",
     "timezone": "America/New_York",
     "status": "ONLINE"
   },
@@ -234,7 +234,7 @@
       "statute_or_category": "Athletic Readiness",
       "due_date": "2026-10-20",
       "action_url": "health",
-      "created_at": "2026-10-20T00:40:13.290117+00:00",
+      "created_at": "2026-10-20T01:07:39.651952+00:00",
       "acknowledged": false,
       "dismissed": false
     },
@@ -304,7 +304,7 @@
       "statute_or_category": "Preventive Maintenance",
       "due_date": "2026-11-03",
       "action_url": "fleet",
-      "created_at": "2026-10-20T00:40:13.290117+00:00",
+      "created_at": "2026-10-20T01:07:39.651952+00:00",
       "acknowledged": false,
       "dismissed": false
     },
@@ -318,7 +318,7 @@
       "statute_or_category": "State Vehicle Registration",
       "due_date": "2026-11-30",
       "action_url": "fleet",
-      "created_at": "2026-10-20T00:40:13.326877+00:00",
+      "created_at": "2026-10-20T01:07:39.683899+00:00",
       "acknowledged": false,
       "dismissed": false
     },
@@ -332,7 +332,7 @@
       "statute_or_category": "Q4 Statutory Maintenance",
       "due_date": "2026-12-31",
       "action_url": "rental",
-      "created_at": "2026-10-20T00:40:13.326877+00:00",
+      "created_at": "2026-10-20T01:07:39.683899+00:00",
       "acknowledged": false,
       "dismissed": false
     },
@@ -341,48 +341,48 @@
       "domain": "academic",
       "severity": "CRITICAL",
       "code": "ACADEMIC_DRAFT_T72H_draft_agentic_arch",
-      "title": "Academic Draft Due in T-71h: Autonomous Multi-Domain Agent Architectures (Draft V2)",
+      "title": "Academic Draft Due in T-70h: Autonomous Multi-Domain Agent Architectures (Draft V2)",
       "message": "Draft deadline within T-72 hours (Oct 22, 23:59 UTC). Final revision required.",
       "statute_or_category": "Academic Submission",
       "due_date": "2026-10-22",
       "action_url": "academic",
-      "created_at": "2026-10-20T00:40:13.290117+00:00",
+      "created_at": "2026-10-20T01:07:39.651952+00:00",
       "acknowledged": false,
       "dismissed": false
     }
   ],
   "executive_briefing": {
     "cadence": "SUNDAY_1800_EXECUTIVE_BRIEFING",
-    "generated_at": "2026-10-20T00:40:13.289117+00:00",
-    "week_label": "Week of October 20 \u2013 October 27, 2026",
-    "cadence_window": "Week of October 20 \u2013 October 27, 2026",
-    "summary": "Executive briefing for Week of October 20 \u2013 October 27, 2026 integrating Family Milestones, Property Cash Flow, Athletic Readiness, Academic Deadlines, and Fleet Telemetry.",
+    "generated_at": "2026-10-20T01:07:39.647951+00:00",
+    "week_label": "Week of October 20 – October 27, 2026",
+    "cadence_window": "Week of October 20 – October 27, 2026",
+    "summary": "Executive briefing for Week of October 20 – October 27, 2026 integrating Family Milestones, Property Cash Flow, Athletic Readiness, Academic Deadlines, and Fleet Telemetry.",
     "highlights": [
       "FAMILY: User Birthday (29 Mar 1993, in 161d), Wife Birthday (23 Apr 1996, in 186d), Anniversary (23 Sep).",
       "PROPERTY: Sierra Pines cash flow at +$1,120/mo Net ($3,030 Gross). Priority ticket: 'Perimeter Fence Wash & Gate Warranty Inspection'.",
-      "ATHLETIC: Readiness Score 61/100. HRV at 46 ms (BELOW_TARGET). Directive: \u26a0\ufe0f HRV at 46 ms (Target: 65 ms). Autonomic nervous system fatigued. Throttle training to Zone 2 Active Recovery..",
+      "ATHLETIC: Readiness Score 61/100. HRV at 46 ms (BELOW_TARGET). Directive: ⚠️ HRV at 46 ms (Target: 65 ms). Autonomic nervous system fatigued. Throttle training to Zone 2 Active Recovery..",
       "ACADEMIC: 1 draft(s) in critical T-72h window. Next submission due Oct 22.",
       "FLEET: Colorado ZR2 oil life at 18% (service due); Nissan Murano WA State tabs expire Nov 30."
     ],
     "executive_highlights": [
       "FAMILY: User Birthday (29 Mar 1993, in 161d), Wife Birthday (23 Apr 1996, in 186d), Anniversary (23 Sep).",
       "PROPERTY: Sierra Pines cash flow at +$1,120/mo Net ($3,030 Gross). Priority ticket: 'Perimeter Fence Wash & Gate Warranty Inspection'.",
-      "ATHLETIC: Readiness Score 61/100. HRV at 46 ms (BELOW_TARGET). Directive: \u26a0\ufe0f HRV at 46 ms (Target: 65 ms). Autonomic nervous system fatigued. Throttle training to Zone 2 Active Recovery..",
+      "ATHLETIC: Readiness Score 61/100. HRV at 46 ms (BELOW_TARGET). Directive: ⚠️ HRV at 46 ms (Target: 65 ms). Autonomic nervous system fatigued. Throttle training to Zone 2 Active Recovery..",
       "ACADEMIC: 1 draft(s) in critical T-72h window. Next submission due Oct 22.",
       "FLEET: Colorado ZR2 oil life at 18% (service due); Nissan Murano WA State tabs expire Nov 30."
     ],
     "upcoming_7d_milestones": [
       {
         "category": "Family",
-        "detail": "\ud83d\udcc5 Family Sunday Meal Prep & Planning (2026-10-25)"
+        "detail": "📅 Family Sunday Meal Prep & Planning (2026-10-25)"
       },
       {
         "category": "Family",
-        "detail": "\ud83d\udcc5 Mackie School Fall Conference (2026-10-23)"
+        "detail": "📅 Mackie School Fall Conference (2026-10-23)"
       },
       {
         "category": "Academic",
-        "detail": "Autonomous Multi-Domain Agent Architectures (Draft V2) (Due 2026-10-22 \u2022 T-71.3h)"
+        "detail": "Autonomous Multi-Domain Agent Architectures (Draft V2) (Due 2026-10-22 • T-70.9h)"
       },
       {
         "category": "Fleet",
@@ -426,14 +426,14 @@
       "hrv_status": "BELOW_TARGET",
       "cardio_progress": "6.5 / 20 miles",
       "strength_progress": "1 / 4 sessions",
-      "recovery_directive": "\u26a0\ufe0f HRV at 46 ms (Target: 65 ms). Autonomic nervous system fatigued. Throttle training to Zone 2 Active Recovery."
+      "recovery_directive": "⚠️ HRV at 46 ms (Target: 65 ms). Autonomic nervous system fatigued. Throttle training to Zone 2 Active Recovery."
     },
     "academic_queue": [
       {
         "id": "draft_agentic_arch",
         "title": "Autonomous Multi-Domain Agent Architectures (Draft V2)",
         "deadline": "2026-10-22T23:59:00Z",
-        "hours_remaining": 71.3,
+        "hours_remaining": 70.9,
         "urgency": "T_MINUS_72H",
         "target": "IEEE / ACM Software Engineering Submission"
       },
@@ -441,7 +441,7 @@
         "id": "lit_review_defense",
         "title": "Comprehensive Literature Review & Defense Synthesis",
         "deadline": "2026-11-10T17:00:00Z",
-        "hours_remaining": 520.3,
+        "hours_remaining": 519.9,
         "urgency": "ON_TRACK",
         "target": null
       }
@@ -463,5 +463,54 @@
       }
     ],
     "active_alerts_count": 9
-  }
+  },
+  "platform_tasks": [
+    {
+      "taskId": "TK-9914",
+      "uuid": "test-uuid-1792458510476",
+      "diagId": "diag-001",
+      "title": "WebGL Context Re-Acquisition Delay",
+      "sourceCategory": "Platform Backlog",
+      "targetAgent": "scene-architect",
+      "priority": "HIGH",
+      "status": "QUEUED",
+      "timestamp": "2026-10-20T01:08:30.476Z",
+      "contextParameters": {
+        "subsystem": "Three.js / WebGL2 Context",
+        "targetFiles": [
+          "js/atomic-core.js",
+          "dashboards/garage/src/components/garage/ThreeDGarageScene.jsx"
+        ]
+      }
+    },
+    {
+      "taskId": "TK-5091",
+      "uuid": "test-uuid-1792458441676",
+      "diagId": "diag-001",
+      "title": "WebGL Context Re-Acquisition Delay",
+      "sourceCategory": "Platform Backlog",
+      "targetAgent": "scene-architect",
+      "priority": "HIGH",
+      "status": "QUEUED",
+      "timestamp": "2026-10-20T01:07:21.676Z",
+      "contextParameters": {
+        "subsystem": "Three.js / WebGL2 Context",
+        "targetFiles": [
+          "js/atomic-core.js",
+          "dashboards/garage/src/components/garage/ThreeDGarageScene.jsx"
+        ]
+      }
+    }
+  ],
+  "platform_backlog": [
+    {
+      "id": "diag-003",
+      "title": "OBD-II Bluetooth BLE Stream Integration",
+      "category": "FEATURE REQUEST",
+      "origin": "Fleet Telemetry Console",
+      "deckId": "garage",
+      "timestamp": "2026-10-20T01:08:30.543Z",
+      "status": "LOGGED_IN_BACKLOG"
+    }
+  ]
 }

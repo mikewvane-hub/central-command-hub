@@ -3251,4 +3251,117 @@ body::after {
   color: #00f0ff;
 }
 
+/* ==================================================================== */
+/* C2 ACTIONS & PLATFORM BACKLOG INTERACTIVE STATES                     */
+/* ==================================================================== */
+
+.btn-diag-action.loading {
+  opacity: 0.75;
+  cursor: wait !important;
+  pointer-events: none;
+}
+
+.btn-diag-action.dispatched {
+  background: rgba(16, 185, 129, 0.22) !important;
+  border-color: rgba(16, 185, 129, 0.6) !important;
+  color: #a7f3d0 !important;
+  cursor: default;
+  pointer-events: none;
+}
+
+.btn-diag-action.in-backlog {
+  background: rgba(168, 85, 247, 0.22) !important;
+  border-color: rgba(168, 85, 247, 0.6) !important;
+  color: #e9d5ff !important;
+  cursor: default;
+  pointer-events: none;
+}
+
+.diag-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.5px;
+  margin-top: 6px;
+  width: fit-content;
+}
+
+.diag-status-pill.pill-dispatched {
+  background: rgba(16, 185, 129, 0.16);
+  border: 1px solid rgba(16, 185, 129, 0.45);
+  color: #34d399;
+}
+
+.diag-status-pill.pill-backlog {
+  background: rgba(168, 85, 247, 0.16);
+  border: 1px solid rgba(168, 85, 247, 0.45);
+  color: #c084fc;
+}
+
+.spinner-tactical {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  border-top-color: #00f0ff;
+  border-radius: 50%;
+  animation: spinTactical 0.6s linear infinite;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+@keyframes spinTactical {
+  to { transform: rotate(360deg); }
+}
+
+/* Floating C2 Action Log HUD Pane */
+.c2-action-log-dock {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: 85;
+  background: rgba(4, 13, 24, 0.88);
+  border: 1px solid rgba(0, 240, 255, 0.32);
+  border-radius: 8px;
+  backdrop-filter: blur(12px);
+  padding: 7px 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.65), 0 0 15px rgba(0, 240, 255, 0.12);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.25s ease;
+  pointer-events: auto;
+}
+
+.c2-action-log-dock:hover {
+  border-color: #00f0ff;
+  box-shadow: 0 8px 35px rgba(0, 240, 255, 0.25);
+}
+
+.c2-action-log-dock .c2-badge {
+  background: rgba(0, 240, 255, 0.18);
+  border: 1px solid rgba(0, 240, 255, 0.45);
+  color: #00f0ff;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 0.65rem;
+}
+
+.c2-action-log-dock .c2-log-msg {
+  color: #cbd5e1;
+  max-width: 320px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
 

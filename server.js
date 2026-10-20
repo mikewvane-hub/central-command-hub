@@ -244,6 +244,77 @@ app.post('/api/cadence/run', (req, res) => {
   });
 });
 
+// ==========================================
+// C2 ACTIONS & PLATFORM BACKLOG APIS
+// ==========================================
+
+// GET platform tasks
+app.get('/api/tasks', (req, res) => {
+  try {
+    if (fs.existsSync(STATE_FILE)) {
+      const data = JSON.parse(fs.readFileSync(STATE_FILE, 'utf-8'));
+      return res.json({ tasks: data.platform_tasks || [] });
+    }
+    res.json({ tasks: [] });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST dispatch platform task
+app.post('/api/tasks', (req, res) => {
+  try {
+    const task = req.body;
+    if (!task || !task.taskId) return res.status(400).json({ error: 'Missing task payload' });
+    if (fs.existsSync(STATE_FILE)) {
+      const data = JSON.parse(fs.readFileSync(STATE_FILE, 'utf-8'));
+      if (!Array.isArray(data.platform_tasks)) data.platform_tasks = [];
+      data.platform_tasks.unshift(task);
+      fs.writeFileSync(STATE_FILE, JSON.stringify(data, null, 2), 'utf-8');
+      return res.json({ success: true, task });
+    }
+    res.status(404).json({ error: 'State file not found' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// GET platform backlog
+app.get('/api/backlog', (req, res) => {
+  try {
+    if (fs.existsSync(STATE_FILE)) {
+      const data = JSON.parse(fs.readFileSync(STATE_FILE, 'utf-8'));
+      return res.json({ backlog: data.platform_backlog || [] });
+    }
+    res.json({ backlog: [] });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST push item to platform backlog
+app.post('/api/backlog', (req, res) => {
+  try {
+    const item = req.body;
+    if (!item || !item.id) return res.status(400).json({ error: 'Missing backlog item' });
+    if (fs.existsSync(STATE_FILE)) {
+      const data = JSON.parse(fs.readFileSync(STATE_FILE, 'utf-8'));
+      if (!Array.isArray(data.platform_backlog)) data.platform_backlog = [];
+      const existingIdx = data.platform_backlog.findIndex(b => b.id === item.id);
+      if (existingIdx >= 0) {
+        data.platform_backlog[existingIdx] = item;
+      } else {
+        data.platform_backlog.unshift(item);
+      }
+      fs.writeFileSync(STATE_FILE, JSON.stringify(data, null, 2), 'utf-8');
+      return res.json({ success: true, item });
+    }
+    res.status(404).json({ error: 'State file not found' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`================================================================`);
   console.log(`🌌 ANTIGRAVITY CENTRAL COMMAND HUB ONLINE`);

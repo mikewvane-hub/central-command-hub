@@ -1112,6 +1112,11 @@ export class DashboardManager {
     console.log(`[Command Hub] Switching from ${this.activeDeck} to ${deckId}`);
     this.activeDeck = deckId;
 
+    // Auto-collapse Executive Summary sidebar to clear visual obstruction across views
+    if (window.executiveSidebarMgr && window.executiveSidebarMgr.isExpanded) {
+      window.executiveSidebarMgr.collapse();
+    }
+
     // 1. Update Navigation Tabs Active State
     document.querySelectorAll('.nav-tab-btn').forEach(tab => {
       const tabDeck = tab.dataset.deck;

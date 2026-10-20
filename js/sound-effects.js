@@ -7,7 +7,7 @@
 class SoundEffectsEngine {
   constructor() {
     this.ctx = null;
-    this.muted = localStorage.getItem('hub_sfx_muted') === 'true';
+    this.muted = typeof localStorage !== 'undefined' ? localStorage.getItem('hub_sfx_muted') === 'true' : false;
     this.masterGain = null;
   }
 
@@ -27,7 +27,9 @@ class SoundEffectsEngine {
 
   toggleMute() {
     this.muted = !this.muted;
-    localStorage.setItem('hub_sfx_muted', this.muted);
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('hub_sfx_muted', this.muted);
+    }
     if (this.masterGain) {
       this.masterGain.gain.setValueAtTime(this.muted ? 0 : 0.22, this.ctx.currentTime);
     }
