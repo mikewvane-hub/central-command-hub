@@ -227,15 +227,16 @@ export class DashboardManager {
     };
 
     const sanitizeGarageUrl = () => {
+      const LATEST_GARAGE_URL = './dashboards/garage/index.html?v=25.0';
       try {
         const stored = localStorage.getItem('hub_url_garage');
-        if (!stored || stored.includes(':3009') || stored.includes('localhost') || stored.startsWith('http://') || stored === '' || stored === './dashboards/garage/index.html') {
-          localStorage.setItem('hub_url_garage', './dashboards/garage/index.html?v=4.0');
-          return './dashboards/garage/index.html?v=4.0';
+        if (!stored || !stored.includes('v=25.0')) {
+          localStorage.setItem('hub_url_garage', LATEST_GARAGE_URL);
+          return LATEST_GARAGE_URL;
         }
         return stored;
       } catch (e) {
-        return './dashboards/garage/index.html?v=4.0';
+        return LATEST_GARAGE_URL;
       }
     };
 
@@ -1174,7 +1175,7 @@ export class DashboardManager {
 
     if (!iframe.src || iframe.src === 'about:blank' || iframe.getAttribute('src') === 'about:blank') {
       iframe.src = targetUrl;
-    } else if (deckId === 'garage' && !iframe.src.includes('dashboards/garage')) {
+    } else if (deckId === 'garage' && !iframe.src.includes('v=25.0')) {
       iframe.src = targetUrl;
     }
   }
@@ -1183,7 +1184,7 @@ export class DashboardManager {
     const iframe = document.getElementById(`iframe-${deckId}`);
     if (iframe) {
       sfx.playClick();
-      const targetUrl = this.urls[deckId] || (deckId === 'garage' ? './dashboards/garage/index.html' : '');
+      const targetUrl = this.urls[deckId] || (deckId === 'garage' ? './dashboards/garage/index.html?v=25.0' : '');
       if (targetUrl) {
         iframe.src = targetUrl;
       }
