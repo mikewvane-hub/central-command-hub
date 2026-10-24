@@ -218,12 +218,12 @@ export class DashboardManager {
     };
 
     const sanitizeGarageUrl = () => {
-      const LATEST_GARAGE_URL = './dashboards/garage/index.html?v=37.0';
+      const LATEST_GARAGE_URL = './dashboards/garage/index.html?v=38.0';
       try {
         const stored = localStorage.getItem('hub_url_garage');
         // If stored URL points to localhost/127.0.0.1 (which breaks on mobile/GitHub Pages),
         // or has old version, or is empty: ALWAYS reset to reliable relative path!
-        if (!stored || stored.includes('localhost') || stored.includes('127.0.0.1') || !stored.includes('v=37.0')) {
+        if (!stored || stored.includes('localhost') || stored.includes('127.0.0.1') || !stored.includes('v=38.0')) {
           localStorage.setItem('hub_url_garage', LATEST_GARAGE_URL);
           return LATEST_GARAGE_URL;
         }
@@ -296,6 +296,15 @@ export class DashboardManager {
         }
         const activeItems = allItems
           .filter(item => !this.dismissedAlerts.has(item.code) && !this.dismissedAlerts.has(item.id))
+          .filter(item => {
+            const code = (item.code || '').toUpperCase();
+            const title = (item.title || item.subject || '').toLowerCase();
+            // Filter out hallucinated Murano tabs / registration alerts (Registration is 05/31/2027 TN BVZ7440, nominal)
+            if (code.includes('MURANO') && (code.includes('TABS') || code.includes('REG') || code.includes('EXPIR'))) return false;
+            if (title.includes('murano') && (title.includes('tab') || title.includes('expir') || title.includes('due nov'))) return false;
+            if (code.includes('ACADEMIC_DRAFT') || title.includes('agentic arch') || title.includes('oct 22')) return false;
+            return true;
+          })
           .map((item, idx) => {
             const defItem = defaultByCode[item.code] || def.items?.[idx];
             let validTitle = item.title;
@@ -1259,7 +1268,7 @@ export class DashboardManager {
     const iframe = document.getElementById(`iframe-${deckId}`);
     if (iframe) {
       sfx.playClick();
-      const targetUrl = this.urls[deckId] || (deckId === 'garage' ? './dashboards/garage/index.html?v=37.0' : '');
+      const targetUrl = this.urls[deckId] || (deckId === 'garage' ? './dashboards/garage/index.html?v=38.0' : '');
       if (targetUrl) {
         iframe.src = targetUrl;
       }
@@ -1272,7 +1281,7 @@ export class DashboardManager {
     if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
       if (newUrl.includes('localhost') || newUrl.includes('127.0.0.1')) {
         console.warn(`[Hub Protection] Preventing localhost URL for ${deckId} in mobile/remote environment.`);
-        if (deckId === 'garage') newUrl = './dashboards/garage/index.html?v=37.0';
+        if (deckId === 'garage') newUrl = './dashboards/garage/index.html?v=38.0';
         else if (deckId === 'rental') newUrl = './dashboards/rental/index.html';
         else if (deckId === 'financial') newUrl = './dashboards/financial/index.html';
       }
@@ -1723,6 +1732,13 @@ export class DashboardManager {
             const alertCode = alert.code || alert.id;
             // CRITICAL: Skip any dismissed alerts!
             if (this.dismissedAlerts.has(alertCode)) return;
+
+            // Strictly filter out hallucinated Murano tabs / registration alerts (Registration is 05/31/2027 TN BVZ7440, nominal)
+            const codeUpper = (alertCode || '').toUpperCase();
+            const titleLower = (alert.title || alert.subject || '').toLowerCase();
+            if (codeUpper.includes('MURANO') && (codeUpper.includes('TABS') || codeUpper.includes('REG') || codeUpper.includes('EXPIR'))) return;
+            if (titleLower.includes('murano') && (titleLower.includes('tab') || titleLower.includes('expir') || titleLower.includes('due nov'))) return;
+            if (codeUpper.includes('ACADEMIC_DRAFT') || titleLower.includes('agentic arch') || titleLower.includes('oct 22')) return;
 
             const domainKey = alert.domain || 'executive';
             if (!this.alerts[domainKey]) {

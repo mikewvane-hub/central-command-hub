@@ -644,9 +644,7 @@ export class ExecutiveSidebarManager {
       'HEALTH_HRV_BELOW_TARGET': 'HRV Readiness Alert: 46 ms (Below 65 ms Baseline)',
       'HRV_BELOW_BASELINE': 'HRV Readiness Alert: 46 ms (Below 65 ms Baseline)',
       'CHEVY_COLORADO_ZR2_OIL_DECAY': '2021 Chevy Colorado ZR2 Oil Life at 18%',
-      'COLORADO_ZR2_OIL_18PCT': 'Colorado ZR2 Oil Life at 18% (Service Due Soon)',
-      'NISSAN_MURANO_MIDNIGHT_TABS_EXPIRING': '2021 Nissan Murano Midnight Edition Tabs Expire in 36 Days',
-      'MURANO_WA_TABS_EXPIRING': '2021 Murano Tabs Expiring in 42 Days'
+      'COLORADO_ZR2_OIL_18PCT': 'Colorado ZR2 Oil Life at 18% (Service Due Soon)'
     };
 
     const domainKeys = ['rental', 'garage', 'fleet', 'executive', 'trip', 'mackie', 'financial', 'health'];
@@ -663,6 +661,14 @@ export class ExecutiveSidebarManager {
 
         // Strictly exclude hallucinated academic / draft due dates
         if (code.includes('ACADEMIC') || code.includes('agentic_arch') || item.title?.includes('Autonomous Multi-Domain') || item.title?.includes('Oct 22')) {
+          return;
+        }
+
+        // Strictly exclude hallucinated Murano tab / registration alerts (Registration is verified 05/31/2027 TN BVZ7440, nominal)
+        if (code.includes('MURANO') && (code.includes('TABS') || code.includes('REG') || code.includes('EXPIR'))) {
+          return;
+        }
+        if (typeof item.title === 'string' && item.title.toLowerCase().includes('murano') && (item.title.toLowerCase().includes('tab') || item.title.toLowerCase().includes('expir') || item.title.toLowerCase().includes('due nov'))) {
           return;
         }
 

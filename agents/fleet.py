@@ -1,9 +1,9 @@
 """
 Domain Agent: fleet.py
-Manages vehicle maintenance, oil life decay, service intervals, and WA state registration.
+Manages vehicle maintenance, oil life decay, service intervals, and state vehicle registrations (WA / TN).
 Vehicles:
 - 2021 Chevy Colorado ZR2 (Overland / Utility Truck)
-- 2021 Nissan Murano Midnight Edition (Executive Family Crossover)
+- 2022 Nissan Murano Midnight Edition (Executive Family Crossover)
 """
 
 import os
@@ -60,4 +60,4 @@ if __name__ == "__main__":
     report = run_fleet_workflow()
     print("🛞 [FleetAgent] Vehicle Telemetry & Maintenance Report:")
     for v in report["vehicles"]:
-        print(f"  • {v['name']}: {v['odometer']} | Oil: {v['oil_life']} | WA Tabs: {v['tabs_expiration']} [{v['status']}]")
+        print(f"  • {v['name']}: {v['odometer']} | Oil: {v['oil_life']} | Registration: {v['tabs_expiration']} [{v['status']}]")

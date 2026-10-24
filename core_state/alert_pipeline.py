@@ -108,22 +108,25 @@ def evaluate_fleet_alerts(fleet_data: Dict[str, Any]) -> List[Dict[str, Any]]:
                 "dismissed": False
             })
 
-        # 2. WA State registration tabs
+        # 2. State registration tabs (WA / TN)
         reg = v.get("registration", {})
         tabs_exp = reg.get("tabs_expiration")
+        st = reg.get("state", "WA")
         if tabs_exp:
             try:
                 exp_dt = datetime.strptime(tabs_exp, "%Y-%m-%d").replace(tzinfo=timezone.utc)
                 days_left = (exp_dt - datetime.now(timezone.utc)).days
                 if days_left <= 45:
+                    reg_org = "Tennessee County Clerk" if st == "TN" else "WA DOL"
+                    reg_statute = "Tennessee Title 55 Registration" if st == "TN" else "WA State Vehicle Registration"
                     alerts.append({
                         "id": f"alert_{v_id}_tabs",
                         "domain": "fleet",
                         "severity": "WARNING",
                         "code": f"{v_id.upper()}_TABS_EXPIRING",
-                        "title": f"{v_name} Tabs Expire in {days_left} Days ({tabs_exp})",
-                        "message": f"WA DOL vehicle tab renewal due. Renew online to avoid penalty.",
-                        "statute_or_category": "State Vehicle Registration",
+                        "title": f"{v_name} Registration Expires in {days_left} Days ({tabs_exp})",
+                        "message": f"{reg_org} vehicle registration renewal due. Renew online or at county clerk to avoid penalty.",
+                        "statute_or_category": reg_statute,
                         "due_date": tabs_exp,
                         "action_url": "fleet",
                         "created_at": datetime.now(timezone.utc).isoformat(),
