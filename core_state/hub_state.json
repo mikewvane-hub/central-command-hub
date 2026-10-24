@@ -1,598 +1,626 @@
 {
-  "meta": {
-    "version": "1.0.0-UNIFIED",
-    "last_updated": "2026-10-24T20:25:27.642136+00:00",
-    "timezone": "America/New_York",
-    "status": "ONLINE"
-  },
-  "family": {
-    "milestones": [
-      {
-        "id": "bday_user",
-        "name": "User Birthday",
-        "date_of_birth": "1993-03-29",
-        "month_day": "03-29",
-        "relationship": "Self",
-        "notes": "Born 29 Mar 1993"
-      },
-      {
-        "id": "bday_wife",
-        "name": "Wife's Birthday",
-        "date_of_birth": "1996-04-23",
-        "month_day": "04-23",
-        "relationship": "Spouse",
-        "notes": "Born 23 Apr 1996"
-      },
-      {
-        "id": "anniversary",
-        "name": "Wedding Anniversary",
-        "date_of_birth": "2020-09-23",
-        "month_day": "09-23",
-        "relationship": "Couple",
-        "notes": "Anniversary 23 Sep"
-      }
-    ],
-    "google_calendar_sync": {
-      "enabled": true,
-      "last_sync": "2026-10-19T12:00:00Z",
-      "synced_calendars": [
-        "Family",
-        "Personal Milestones",
-        "Routine"
-      ],
-      "upcoming_events": [
-        {
-          "title": "Family Sunday Meal Prep & Planning",
-          "date": "2026-10-25T17:00:00Z",
-          "category": "Household"
-        },
-        {
-          "title": "Mackie School Fall Conference",
-          "date": "2026-10-23T14:30:00Z",
-          "category": "School"
-        }
-      ]
-    },
-    "weekly_cadence": {
-      "groceries_day": "Sunday",
-      "meal_plan_day": "Sunday 17:00",
-      "family_dinner": "Daily 18:30"
-    }
-  },
-  "fleet": {
-    "vehicles": [
-      {
-        "id": "chevy_colorado_zr2",
-        "name": "2021 Chevy Colorado ZR2",
-        "tag": "Expedition & Utility Truck",
-        "odometer": 38450,
-        "oil_life_pct": 18,
-        "last_service_date": "2026-06-15",
-        "last_service_mileage": 34200,
-        "service_milestones": {
-          "oil_and_filter": {
-            "due_mileage": 39200,
-            "status": "DUE_SOON",
-            "spec": "dexos2 / Full Synthetic 5W-30"
-          },
-          "five_tire_rotation": {
-            "due_mileage": 39000,
-            "status": "DUE_SOON",
-            "spec": "31-inch All-Terrain Pattern"
-          },
-          "dssv_damper_inspection": {
-            "due_mileage": 40000,
-            "status": "NOMINAL",
-            "spec": "Multimatic Spool-Valve Inspection"
-          },
-          "diff_and_transfer_case": {
-            "due_mileage": 45000,
-            "status": "NOMINAL",
-            "spec": "Front/Rear E-Locker + Transfer Case Fluids"
-          }
-        },
-        "registration": {
-          "state": "WA",
-          "tabs_expiration": "2027-02-28",
-          "days_remaining": 132,
-          "status": "CURRENT"
-        },
-        "insurance": {
-          "carrier": "USAA",
-          "policy_id": "WA-ZR2-8821",
-          "renewal_date": "2027-01-15",
-          "status": "ACTIVE"
-        }
-      },
-      {
-        "id": "nissan_murano_midnight",
-        "name": "2021 Nissan Murano Midnight Edition",
-        "tag": "Executive Family Crossover",
-        "odometer": 32180,
-        "oil_life_pct": 68,
-        "last_service_date": "2026-08-20",
-        "last_service_mileage": 30500,
-        "service_milestones": {
-          "oil_and_filter": {
-            "due_mileage": 35500,
-            "status": "NOMINAL",
-            "spec": "Full Synthetic 0W-20"
-          },
-          "cvt_fluid_flush": {
-            "due_mileage": 36000,
-            "status": "UPCOMING",
-            "spec": "Nissan NS-3 CVT Fluid Exchange"
-          },
-          "brake_fluid_service": {
-            "due_date": "2026-11-15",
-            "status": "UPCOMING_28D",
-            "spec": "DOT 4 High Temp Flush"
-          },
-          "cabin_microfilter": {
-            "due_mileage": 35000,
-            "status": "NOMINAL",
-            "spec": "HEPA Cabin Microfilter"
-          }
-        },
-        "registration": {
-          "state": "WA",
-          "tabs_expiration": "2026-11-30",
-          "days_remaining": 42,
-          "status": "EXPIRING_SOON"
-        },
-        "insurance": {
-          "carrier": "USAA",
-          "policy_id": "WA-MDNT-4912",
-          "renewal_date": "2027-01-15",
-          "status": "ACTIVE"
-        }
-      }
-    ]
-  },
-  "health": {
-    "athlete_profile": {
-      "hrv": {
-        "current": 46,
-        "target_baseline": 65,
-        "unit": "ms",
-        "status": "BELOW_TARGET",
-        "recovery_advice": "Active recovery / Zone 2 only today; sleep deficit detected."
-      },
-      "readiness_score": 61,
-      "resting_heart_rate": 56,
-      "sleep_hours_last_night": 6.2
-    },
-    "planned_athletic_load": {
-      "weekly_block": "Endurance Aerobic Base + Functional Strength",
-      "weekly_cardio_target_miles": 20,
-      "completed_cardio_miles": 6.5,
-      "planned_strength_sessions": 4,
-      "completed_strength_sessions": 1,
-      "next_session": {
-        "type": "Zone 2 Low-Intensity Aerobic Run (45 min)",
-        "date": "2026-10-20",
-        "load_intensity": "LOW_RECOVERY"
-      }
-    }
-  },
-  "academic": {
-    "deadlines": []
-  },
-  "rental": {
-    "property": "Sierra Pines // JBLM WA",
-    "status": "OCCUPIED_100%",
-    "financials": {
-      "monthly_gross": 3030,
-      "monthly_net": 1120,
-      "currency": "USD"
-    },
-    "maintenance_tickets": [
-      {
-        "id": "TICKET-7821",
-        "title": "Perimeter Fence Wash & Gate Warranty Inspection",
-        "statute": "Q4 Statutory Maintenance",
-        "deadline": "2026-12-31",
-        "severity": "CRITICAL",
-        "status": "CONTRACTOR_SCHEDULED"
-      },
-      {
-        "id": "TICKET-7822",
-        "title": "HVAC Winterization Filter Change",
-        "statute": "Annual Tenant Comfort PM",
-        "deadline": "2026-11-15",
-        "severity": "WARNING",
-        "status": "PENDING_DISPATCH"
-      }
-    ]
-  },
-  "alerts": [
-    {
-      "id": "alert_health_hrv",
-      "domain": "health",
-      "severity": "CRITICAL",
-      "code": "HEALTH_HRV_BELOW_TARGET",
-      "title": "HRV Readiness Alert: 46 ms (Below 65 ms Baseline)",
-      "message": "Athletic recovery compromised. Planned training load should be throttled to Zone 2 active recovery.",
-      "statute_or_category": "Athletic Readiness",
-      "due_date": "2026-10-24",
-      "action_url": "health",
-      "created_at": "2026-10-24T20:25:27.550891+00:00",
-      "acknowledged": false,
-      "dismissed": false
-    },
-    {
-      "id": "alert_rental_fence",
-      "domain": "rental",
-      "severity": "CRITICAL",
-      "code": "WARRANTY_EXPIRING_PM_FENCE",
-      "title": "Sierra Pines Fence Warranty Inspection Expiring",
-      "message": "Warranty period expires in Q4 2026. File contractor claim before Dec 31 to preserve $3,800 warranty coverage.",
-      "statute_or_category": "Contractor Warranty",
-      "due_date": "2026-12-31",
-      "action_url": "rental",
-      "created_at": "2026-10-15T10:00:00Z",
-      "acknowledged": false,
-      "dismissed": false
-    },
-    {
-      "id": "alert_murano_tabs",
-      "domain": "fleet",
-      "severity": "WARNING",
-      "code": "MURANO_WA_TABS_EXPIRING",
-      "title": "2021 Murano Tabs Expiring in 42 Days (Nov 30)",
-      "message": "WA State Department of Licensing renewal due. Verify emissions status and renew online before late penalty.",
-      "statute_or_category": "State Vehicle Registration",
-      "due_date": "2026-11-30",
-      "action_url": "fleet",
-      "created_at": "2026-10-18T12:00:00Z",
-      "acknowledged": false,
-      "dismissed": false
-    },
-    {
-      "id": "alert_zr2_oil",
-      "domain": "fleet",
-      "severity": "WARNING",
-      "code": "COLORADO_ZR2_OIL_18PCT",
-      "title": "Colorado ZR2 Oil Life at 18% (Service Due Soon)",
-      "message": "Full synthetic dexos oil change and 5-tire AT rotation recommended within the next 750 miles.",
-      "statute_or_category": "Vehicle Preventive Maintenance",
-      "due_date": "2026-11-10",
-      "action_url": "fleet",
-      "created_at": "2026-10-19T09:00:00Z",
-      "acknowledged": false,
-      "dismissed": false
-    },
-    {
-      "id": "alert_chevy_colorado_zr2_oil",
-      "domain": "fleet",
-      "severity": "WARNING",
-      "code": "CHEVY_COLORADO_ZR2_OIL_DECAY",
-      "title": "2021 Chevy Colorado ZR2 Oil Life at 18%",
-      "message": "Service interval approaching. Prepare synthetic oil & filter replacement.",
-      "statute_or_category": "Preventive Maintenance",
-      "due_date": "2026-11-07",
-      "action_url": "fleet",
-      "created_at": "2026-10-24T20:25:27.550891+00:00",
-      "acknowledged": false,
-      "dismissed": false
-    },
-    {
-      "id": "alert_nissan_murano_midnight_tabs",
-      "domain": "fleet",
-      "severity": "WARNING",
-      "code": "NISSAN_MURANO_MIDNIGHT_TABS_EXPIRING",
-      "title": "2021 Nissan Murano Midnight Edition Tabs Expire in 36 Days (2026-11-30)",
-      "message": "WA DOL vehicle tab renewal due. Renew online to avoid penalty.",
-      "statute_or_category": "State Vehicle Registration",
-      "due_date": "2026-11-30",
-      "action_url": "fleet",
-      "created_at": "2026-10-24T20:25:27.560260+00:00",
-      "acknowledged": false,
-      "dismissed": false
-    },
-    {
-      "id": "alert_rental_TICKET-7821",
-      "domain": "rental",
-      "severity": "CRITICAL",
-      "code": "RENTAL_ESCALATION_TICKET-7821",
-      "title": "Sierra Pines Maintenance Escalation: Perimeter Fence Wash & Gate Warranty Inspection",
-      "message": "Statutory requirement: Q4 Statutory Maintenance. Target resolution by 2026-12-31.",
-      "statute_or_category": "Q4 Statutory Maintenance",
-      "due_date": "2026-12-31",
-      "action_url": "rental",
-      "created_at": "2026-10-24T20:25:27.560260+00:00",
-      "acknowledged": false,
-      "dismissed": false
-    }
-  ],
-  "executive_briefing": {
-    "cadence": "SUNDAY_1800_EXECUTIVE_BRIEFING",
-    "generated_at": "2026-10-24T20:25:27.549890+00:00",
-    "week_label": "Week of October 24 – October 31, 2026",
-    "cadence_window": "Week of October 24 – October 31, 2026",
-    "summary": "Executive briefing for Week of October 24 – October 31, 2026 integrating Family Milestones, Property Cash Flow, Athletic Readiness, and Fleet Telemetry.",
-    "highlights": [
-      "FAMILY: User Birthday (29 Mar 1993, in 156d), Wife Birthday (23 Apr 1996, in 181d), Anniversary (23 Sep).",
-      "PROPERTY: Sierra Pines cash flow at +$1,120/mo Net ($3,030 Gross). Priority ticket: 'Perimeter Fence Wash & Gate Warranty Inspection'.",
-      "ATHLETIC: Readiness Score 61/100. HRV at 46 ms (BELOW_TARGET). Directive: ⚠️ HRV at 46 ms (Target: 65 ms). Autonomic nervous system fatigued. Throttle training to Zone 2 Active Recovery..",
-      "FLEET: Colorado ZR2 oil life at 18% (service due); Nissan Murano WA State tabs expire Nov 30."
-    ],
-    "executive_highlights": [
-      "FAMILY: User Birthday (29 Mar 1993, in 156d), Wife Birthday (23 Apr 1996, in 181d), Anniversary (23 Sep).",
-      "PROPERTY: Sierra Pines cash flow at +$1,120/mo Net ($3,030 Gross). Priority ticket: 'Perimeter Fence Wash & Gate Warranty Inspection'.",
-      "ATHLETIC: Readiness Score 61/100. HRV at 46 ms (BELOW_TARGET). Directive: ⚠️ HRV at 46 ms (Target: 65 ms). Autonomic nervous system fatigued. Throttle training to Zone 2 Active Recovery..",
-      "FLEET: Colorado ZR2 oil life at 18% (service due); Nissan Murano WA State tabs expire Nov 30."
-    ],
-    "upcoming_7d_milestones": [
-      {
-        "category": "Family",
-        "detail": "📅 Family Sunday Meal Prep & Planning (2026-10-25)"
-      },
-      {
-        "category": "Family",
-        "detail": "📅 Mackie School Fall Conference (2026-10-23)"
-      },
-      {
-        "category": "Fleet",
-        "detail": "2021 Chevy Colorado ZR2 maintenance/registration action due."
-      }
-    ],
-    "family_registry": {
-      "user_birthday": "1993-03-29",
-      "wife_birthday": "1996-04-23",
-      "anniversary": "September 23",
-      "milestone_countdowns": [
-        {
-          "event": "User Birthday (29 Mar 1993)",
-          "date": "March 29",
-          "days_until": 156,
-          "age_turning": 34
-        },
-        {
-          "event": "Wife's Birthday (23 Apr 1996)",
-          "date": "April 23",
-          "days_until": 181,
-          "age_turning": 31
-        },
-        {
-          "event": "Wedding Anniversary (23 Sep)",
-          "date": "September 23",
-          "days_until": 334
-        }
-      ]
-    },
-    "property_cashflow": {
-      "monthly_net": 1120,
-      "monthly_gross": 3030,
-      "pending_tickets_count": 2,
-      "critical_ticket": "Perimeter Fence Wash & Gate Warranty Inspection"
-    },
-    "athletic_readiness": {
-      "readiness_score": 61,
-      "hrv_current": 46,
-      "hrv_target": 65,
-      "hrv_status": "BELOW_TARGET",
-      "cardio_progress": "6.5 / 20 miles",
-      "strength_progress": "1 / 4 sessions",
-      "recovery_directive": "⚠️ HRV at 46 ms (Target: 65 ms). Autonomic nervous system fatigued. Throttle training to Zone 2 Active Recovery."
-    },
-    "academic_queue": [],
-    "fleet_status": [
-      {
-        "name": "2021 Chevy Colorado ZR2",
-        "odometer": "38,450 mi",
-        "oil_life": "18%",
-        "tabs_expiration": "2027-02-28",
-        "status": "SERVICE_SOON"
-      },
-      {
-        "name": "2021 Nissan Murano Midnight Edition",
-        "odometer": "32,180 mi",
-        "oil_life": "68%",
-        "tabs_expiration": "2026-11-30",
-        "status": "NOMINAL"
-      }
-    ],
-    "active_alerts_count": 7
-  },
-  "platform_tasks": [
-    {
-      "taskId": "TK-9859",
-      "uuid": "test-uuid-1792873532504",
-      "diagId": "diag-001",
-      "title": "Fix 3D Garage Lag",
-      "simpleDescription": "Speeds up loading when switching between 3D view and photo mode on your phone or laptop.",
-      "technicalDescription": "Three.js canvas context rebuild delay (~120ms) observed when toggling on mobile WebGL2 runtimes.",
-      "sourceCategory": "Platform Diagnostics",
-      "targetAgent": "scene-architect",
-      "priority": "HIGH",
-      "status": "IN_PROGRESS",
-      "timestamp": "2026-10-24T20:25:32.504Z",
-      "contextParameters": {
-        "subsystem": "Three.js / WebGL2 Context",
-        "targetFiles": [
-          "js/atomic-core.js",
-          "dashboards/garage/src/components/garage/ThreeDGarageScene.jsx"
-        ],
-        "issue": "Fix 3D Garage Lag"
-      }
-    },
-    {
-      "taskId": "TK-3028",
-      "uuid": "test-uuid-1792502118736",
-      "diagId": "diag-001",
-      "title": "Fix 3D Garage Lag",
-      "simpleDescription": "Speeds up loading when switching between 3D view and photo mode on your phone or laptop.",
-      "technicalDescription": "Three.js canvas context rebuild delay (~120ms) observed when toggling on mobile WebGL2 runtimes.",
-      "sourceCategory": "Platform Diagnostics",
-      "targetAgent": "scene-architect",
-      "priority": "HIGH",
-      "status": "IN_PROGRESS",
-      "timestamp": "2026-10-20T13:15:18.736Z",
-      "contextParameters": {
-        "subsystem": "Three.js / WebGL2 Context",
-        "targetFiles": [
-          "js/atomic-core.js",
-          "dashboards/garage/src/components/garage/ThreeDGarageScene.jsx"
-        ],
-        "issue": "Fix 3D Garage Lag"
-      }
-    },
-    {
-      "taskId": "TK-6187",
-      "uuid": "test-uuid-1792501757007",
-      "diagId": "diag-001",
-      "title": "Fix 3D Garage Lag",
-      "simpleDescription": "Speeds up loading when switching between 3D view and photo mode on your phone or laptop.",
-      "technicalDescription": "Three.js canvas context rebuild delay (~120ms) observed when toggling on mobile WebGL2 runtimes.",
-      "sourceCategory": "Platform Diagnostics",
-      "targetAgent": "scene-architect",
-      "priority": "HIGH",
-      "status": "IN_PROGRESS",
-      "timestamp": "2026-10-20T13:09:17.007Z",
-      "contextParameters": {
-        "subsystem": "Three.js / WebGL2 Context",
-        "targetFiles": [
-          "js/atomic-core.js",
-          "dashboards/garage/src/components/garage/ThreeDGarageScene.jsx"
-        ],
-        "issue": "Fix 3D Garage Lag"
-      }
-    },
-    {
-      "taskId": "TK-8141",
-      "uuid": "test-uuid-1792464049516",
-      "diagId": "diag-001",
-      "title": "Fix 3D Garage Lag",
-      "simpleDescription": "Speeds up loading when switching between 3D view and photo mode on your phone or laptop.",
-      "technicalDescription": "Three.js canvas context rebuild delay (~120ms) observed when toggling on mobile WebGL2 runtimes.",
-      "sourceCategory": "Platform Diagnostics",
-      "targetAgent": "scene-architect",
-      "priority": "HIGH",
-      "status": "IN_PROGRESS",
-      "timestamp": "2026-10-20T02:40:49.516Z",
-      "contextParameters": {
-        "subsystem": "Three.js / WebGL2 Context",
-        "targetFiles": [
-          "js/atomic-core.js",
-          "dashboards/garage/src/components/garage/ThreeDGarageScene.jsx"
-        ],
-        "issue": "Fix 3D Garage Lag"
-      }
-    },
-    {
-      "taskId": "TK-6310",
-      "uuid": "test-uuid-1792461241888",
-      "diagId": "diag-001",
-      "title": "Fix 3D Garage Lag",
-      "simpleDescription": "Speeds up loading when switching between 3D view and photo mode on your phone or laptop.",
-      "technicalDescription": "Three.js canvas context rebuild delay (~120ms) observed when toggling on mobile WebGL2 runtimes.",
-      "sourceCategory": "Platform Diagnostics",
-      "targetAgent": "scene-architect",
-      "priority": "HIGH",
-      "status": "IN_PROGRESS",
-      "timestamp": "2026-10-20T01:54:01.888Z",
-      "contextParameters": {
-        "subsystem": "Three.js / WebGL2 Context",
-        "targetFiles": [
-          "js/atomic-core.js",
-          "dashboards/garage/src/components/garage/ThreeDGarageScene.jsx"
-        ],
-        "issue": "Fix 3D Garage Lag"
-      }
-    },
-    {
-      "taskId": "TK-5973",
-      "uuid": "test-uuid-1792460850925",
-      "diagId": "diag-001",
-      "title": "Fix 3D Garage Lag",
-      "simpleDescription": "Speeds up loading when switching between 3D view and photo mode on your phone or laptop.",
-      "technicalDescription": "Three.js canvas context rebuild delay (~120ms) observed when toggling on mobile WebGL2 runtimes.",
-      "sourceCategory": "Platform Diagnostics",
-      "targetAgent": "scene-architect",
-      "priority": "HIGH",
-      "status": "IN_PROGRESS",
-      "timestamp": "2026-10-20T01:47:30.925Z",
-      "contextParameters": {
-        "subsystem": "Three.js / WebGL2 Context",
-        "targetFiles": [
-          "js/atomic-core.js",
-          "dashboards/garage/src/components/garage/ThreeDGarageScene.jsx"
-        ],
-        "issue": "Fix 3D Garage Lag"
-      }
-    },
-    {
-      "taskId": "TK-4474",
-      "uuid": "test-uuid-1792459832620",
-      "diagId": "diag-001",
-      "title": "Fix 3D Garage Lag",
-      "simpleDescription": "Speeds up loading when switching between 3D view and photo mode on your phone or laptop.",
-      "technicalDescription": "Three.js canvas context rebuild delay (~120ms) observed when toggling on mobile WebGL2 runtimes.",
-      "sourceCategory": "Platform Diagnostics",
-      "targetAgent": "scene-architect",
-      "priority": "HIGH",
-      "status": "IN_PROGRESS",
-      "timestamp": "2026-10-20T01:30:32.620Z",
-      "contextParameters": {
-        "subsystem": "Three.js / WebGL2 Context",
-        "targetFiles": [
-          "js/atomic-core.js",
-          "dashboards/garage/src/components/garage/ThreeDGarageScene.jsx"
-        ],
-        "issue": "Fix 3D Garage Lag"
-      }
-    },
-    {
-      "taskId": "TK-9914",
-      "uuid": "test-uuid-1792458510476",
-      "diagId": "diag-001",
-      "title": "WebGL Context Re-Acquisition Delay",
-      "sourceCategory": "Platform Backlog",
-      "targetAgent": "scene-architect",
-      "priority": "HIGH",
-      "status": "QUEUED",
-      "timestamp": "2026-10-20T01:08:30.476Z",
-      "contextParameters": {
-        "subsystem": "Three.js / WebGL2 Context",
-        "targetFiles": [
-          "js/atomic-core.js",
-          "dashboards/garage/src/components/garage/ThreeDGarageScene.jsx"
-        ]
-      }
-    },
-    {
-      "taskId": "TK-5091",
-      "uuid": "test-uuid-1792458441676",
-      "diagId": "diag-001",
-      "title": "WebGL Context Re-Acquisition Delay",
-      "sourceCategory": "Platform Backlog",
-      "targetAgent": "scene-architect",
-      "priority": "HIGH",
-      "status": "QUEUED",
-      "timestamp": "2026-10-20T01:07:21.676Z",
-      "contextParameters": {
-        "subsystem": "Three.js / WebGL2 Context",
-        "targetFiles": [
-          "js/atomic-core.js",
-          "dashboards/garage/src/components/garage/ThreeDGarageScene.jsx"
-        ]
-      }
-    }
-  ],
-  "platform_backlog": [
-    {
-      "id": "diag-003",
-      "title": "Wireless Car Diagnostics (OBD-II)",
-      "simpleDescription": "Connect phone to Chevy Colorado & Nissan Murano via Bluetooth to track transmission fluid temperature live.",
-      "category": "NEW FEATURE",
-      "origin": "Fleet Telemetry Console",
-      "deckId": "garage",
-      "timestamp": "2026-10-24T20:25:32.551Z",
-      "status": "LOGGED_IN_BACKLOG"
-    }
-  ],
-  "denied_diagnostics": [
-    "diag-002"
-  ]
+    "meta":  {
+                 "version":  "1.0.0-UNIFIED",
+                 "last_updated":  "2026-10-24T21:58:54.396429+00:00",
+                 "timezone":  "America/New_York",
+                 "status":  "ONLINE"
+             },
+    "family":  {
+                   "milestones":  [
+                                      {
+                                          "id":  "bday_user",
+                                          "name":  "User Birthday",
+                                          "date_of_birth":  "1993-03-29",
+                                          "month_day":  "03-29",
+                                          "relationship":  "Self",
+                                          "notes":  "Born 29 Mar 1993"
+                                      },
+                                      {
+                                          "id":  "bday_wife",
+                                          "name":  "Wife\u0027s Birthday",
+                                          "date_of_birth":  "1996-04-23",
+                                          "month_day":  "04-23",
+                                          "relationship":  "Spouse",
+                                          "notes":  "Born 23 Apr 1996"
+                                      },
+                                      {
+                                          "id":  "anniversary",
+                                          "name":  "Wedding Anniversary",
+                                          "date_of_birth":  "2020-09-23",
+                                          "month_day":  "09-23",
+                                          "relationship":  "Couple",
+                                          "notes":  "Anniversary 23 Sep"
+                                      }
+                                  ],
+                   "google_calendar_sync":  {
+                                                "enabled":  true,
+                                                "last_sync":  "2026-10-19T12:00:00Z",
+                                                "synced_calendars":  [
+                                                                         "Family",
+                                                                         "Personal Milestones",
+                                                                         "Routine"
+                                                                     ],
+                                                "upcoming_events":  [
+                                                                        {
+                                                                            "title":  "Family Sunday Meal Prep \u0026 Planning",
+                                                                            "date":  "2026-10-25T17:00:00Z",
+                                                                            "category":  "Household"
+                                                                        },
+                                                                        {
+                                                                            "title":  "Mackie School Fall Conference",
+                                                                            "date":  "2026-10-23T14:30:00Z",
+                                                                            "category":  "School"
+                                                                        }
+                                                                    ]
+                                            },
+                   "weekly_cadence":  {
+                                          "groceries_day":  "Sunday",
+                                          "meal_plan_day":  "Sunday 17:00",
+                                          "family_dinner":  "Daily 18:30"
+                                      }
+               },
+    "fleet":  {
+                  "vehicles":  [
+                                   {
+                                       "id":  "chevy_colorado_zr2",
+                                       "name":  "2021 Chevy Colorado ZR2",
+                                       "tag":  "Expedition \u0026 Utility Truck",
+                                       "odometer":  38450,
+                                       "oil_life_pct":  18,
+                                       "last_service_date":  "2026-06-15",
+                                       "last_service_mileage":  34200,
+                                       "service_milestones":  {
+                                                                  "oil_and_filter":  {
+                                                                                         "due_mileage":  39200,
+                                                                                         "status":  "DUE_SOON",
+                                                                                         "spec":  "dexos2 / Full Synthetic 5W-30"
+                                                                                     },
+                                                                  "five_tire_rotation":  {
+                                                                                             "due_mileage":  39000,
+                                                                                             "status":  "DUE_SOON",
+                                                                                             "spec":  "31-inch All-Terrain Pattern"
+                                                                                         },
+                                                                  "dssv_damper_inspection":  {
+                                                                                                 "due_mileage":  40000,
+                                                                                                 "status":  "NOMINAL",
+                                                                                                 "spec":  "Multimatic Spool-Valve Inspection"
+                                                                                             },
+                                                                  "diff_and_transfer_case":  {
+                                                                                                 "due_mileage":  45000,
+                                                                                                 "status":  "NOMINAL",
+                                                                                                 "spec":  "Front/Rear E-Locker + Transfer Case Fluids"
+                                                                                             }
+                                                              },
+                                       "registration":  {
+                                                            "state":  "WA",
+                                                            "tabs_expiration":  "2027-02-28",
+                                                            "days_remaining":  132,
+                                                            "status":  "CURRENT"
+                                                        },
+                                       "insurance":  {
+                                                         "carrier":  "USAA",
+                                                         "policy_id":  "WA-ZR2-8821",
+                                                         "renewal_date":  "2027-01-15",
+                                                         "status":  "ACTIVE"
+                                                     }
+                                   },
+                                   {
+                                       "id":  "nissan_murano_midnight",
+                                       "name":  "2021 Nissan Murano Midnight Edition",
+                                       "tag":  "Executive Family Crossover",
+                                       "odometer":  32180,
+                                       "oil_life_pct":  68,
+                                       "last_service_date":  "2026-08-20",
+                                       "last_service_mileage":  30500,
+                                       "service_milestones":  {
+                                                                  "oil_and_filter":  {
+                                                                                         "due_mileage":  35500,
+                                                                                         "status":  "NOMINAL",
+                                                                                         "spec":  "Full Synthetic 0W-20"
+                                                                                     },
+                                                                  "cvt_fluid_flush":  {
+                                                                                          "due_mileage":  36000,
+                                                                                          "status":  "UPCOMING",
+                                                                                          "spec":  "Nissan NS-3 CVT Fluid Exchange"
+                                                                                      },
+                                                                  "brake_fluid_service":  {
+                                                                                              "due_date":  "2026-11-15",
+                                                                                              "status":  "UPCOMING_28D",
+                                                                                              "spec":  "DOT 4 High Temp Flush"
+                                                                                          },
+                                                                  "cabin_microfilter":  {
+                                                                                            "due_mileage":  35000,
+                                                                                            "status":  "NOMINAL",
+                                                                                            "spec":  "HEPA Cabin Microfilter"
+                                                                                        }
+                                                              },
+                                       "registration":  {
+                                                            "state":  "WA",
+                                                            "tabs_expiration":  "2026-11-30",
+                                                            "days_remaining":  42,
+                                                            "status":  "EXPIRING_SOON"
+                                                        },
+                                       "insurance":  {
+                                                         "carrier":  "USAA",
+                                                         "policy_id":  "WA-MDNT-4912",
+                                                         "renewal_date":  "2027-01-15",
+                                                         "status":  "ACTIVE"
+                                                     }
+                                   }
+                               ]
+              },
+    "health":  {
+                   "athlete_profile":  {
+                                           "hrv":  {
+                                                       "current":  46,
+                                                       "target_baseline":  65,
+                                                       "unit":  "ms",
+                                                       "status":  "BELOW_TARGET",
+                                                       "recovery_advice":  "Active recovery / Zone 2 only today; sleep deficit detected."
+                                                   },
+                                           "readiness_score":  61,
+                                           "resting_heart_rate":  56,
+                                           "sleep_hours_last_night":  6.2
+                                       },
+                   "planned_athletic_load":  {
+                                                 "weekly_block":  "Endurance Aerobic Base + Functional Strength",
+                                                 "weekly_cardio_target_miles":  20,
+                                                 "completed_cardio_miles":  6.5,
+                                                 "planned_strength_sessions":  4,
+                                                 "completed_strength_sessions":  1,
+                                                 "next_session":  {
+                                                                      "type":  "Zone 2 Low-Intensity Aerobic Run (45 min)",
+                                                                      "date":  "2026-10-20",
+                                                                      "load_intensity":  "LOW_RECOVERY"
+                                                                  }
+                                             }
+               },
+    "academic":  {
+                     "deadlines":  [
+
+                                   ]
+                 },
+    "rental":  {
+                   "property":  "Sierra Pines // JBLM WA",
+                   "status":  "OCCUPIED_100%",
+                   "financials":  {
+                                      "monthly_gross":  3030,
+                                      "monthly_net":  1120,
+                                      "currency":  "USD"
+                                  },
+                   "maintenance_tickets":  [
+                                               {
+                                                   "id":  "TICKET-7821",
+                                                   "title":  "Perimeter Fence Wash \u0026 Gate Warranty Inspection",
+                                                   "statute":  "Q4 Statutory Maintenance",
+                                                   "deadline":  "2026-12-31",
+                                                   "severity":  "CRITICAL",
+                                                   "status":  "CONTRACTOR_SCHEDULED"
+                                               },
+                                               {
+                                                   "id":  "TICKET-7822",
+                                                   "title":  "HVAC Winterization Filter Change",
+                                                   "statute":  "Annual Tenant Comfort PM",
+                                                   "deadline":  "2026-11-15",
+                                                   "severity":  "WARNING",
+                                                   "status":  "PENDING_DISPATCH"
+                                               }
+                                           ]
+               },
+    "alerts":  [
+                   {
+                       "id":  "alert_health_hrv",
+                       "domain":  "health",
+                       "severity":  "CRITICAL",
+                       "code":  "HEALTH_HRV_BELOW_TARGET",
+                       "title":  "HRV Readiness Alert: 46 ms (Below 65 ms Baseline)",
+                       "message":  "Athletic recovery compromised. Planned training load should be throttled to Zone 2 active recovery.",
+                       "statute_or_category":  "Athletic Readiness",
+                       "due_date":  "2026-10-24",
+                       "action_url":  "health",
+                       "created_at":  "2026-10-24T21:58:54.297025+00:00",
+                       "acknowledged":  false,
+                       "dismissed":  false
+                   },
+                   {
+                       "id":  "alert_rental_fence",
+                       "domain":  "rental",
+                       "severity":  "CRITICAL",
+                       "code":  "WARRANTY_EXPIRING_PM_FENCE",
+                       "title":  "Sierra Pines Fence Warranty Inspection Expiring",
+                       "message":  "Warranty period expires in Q4 2026. File contractor claim before Dec 31 to preserve $3,800 warranty coverage.",
+                       "statute_or_category":  "Contractor Warranty",
+                       "due_date":  "2026-12-31",
+                       "action_url":  "rental",
+                       "created_at":  "2026-10-15T10:00:00Z",
+                       "acknowledged":  false,
+                       "dismissed":  false
+                   },
+                   {
+                       "id":  "alert_murano_tabs",
+                       "domain":  "fleet",
+                       "severity":  "WARNING",
+                       "code":  "MURANO_WA_TABS_EXPIRING",
+                       "title":  "2021 Murano Tabs Expiring in 42 Days (Nov 30)",
+                       "message":  "WA State Department of Licensing renewal due. Verify emissions status and renew online before late penalty.",
+                       "statute_or_category":  "State Vehicle Registration",
+                       "due_date":  "2026-11-30",
+                       "action_url":  "fleet",
+                       "created_at":  "2026-10-18T12:00:00Z",
+                       "acknowledged":  false,
+                       "dismissed":  false
+                   },
+                   {
+                       "id":  "alert_zr2_oil",
+                       "domain":  "fleet",
+                       "severity":  "WARNING",
+                       "code":  "COLORADO_ZR2_OIL_18PCT",
+                       "title":  "Colorado ZR2 Oil Life at 18% (Service Due Soon)",
+                       "message":  "Full synthetic dexos oil change and 5-tire AT rotation recommended within the next 750 miles.",
+                       "statute_or_category":  "Vehicle Preventive Maintenance",
+                       "due_date":  "2026-11-10",
+                       "action_url":  "fleet",
+                       "created_at":  "2026-10-19T09:00:00Z",
+                       "acknowledged":  false,
+                       "dismissed":  false
+                   },
+                   {
+                       "id":  "alert_chevy_colorado_zr2_oil",
+                       "domain":  "fleet",
+                       "severity":  "WARNING",
+                       "code":  "CHEVY_COLORADO_ZR2_OIL_DECAY",
+                       "title":  "2021 Chevy Colorado ZR2 Oil Life at 18%",
+                       "message":  "Service interval approaching. Prepare synthetic oil \u0026 filter replacement.",
+                       "statute_or_category":  "Preventive Maintenance",
+                       "due_date":  "2026-11-07",
+                       "action_url":  "fleet",
+                       "created_at":  "2026-10-24T21:58:54.297025+00:00",
+                       "acknowledged":  false,
+                       "dismissed":  false
+                   },
+                   {
+                       "id":  "alert_nissan_murano_midnight_tabs",
+                       "domain":  "fleet",
+                       "severity":  "WARNING",
+                       "code":  "NISSAN_MURANO_MIDNIGHT_TABS_EXPIRING",
+                       "title":  "2021 Nissan Murano Midnight Edition Tabs Expire in 36 Days (2026-11-30)",
+                       "message":  "WA DOL vehicle tab renewal due. Renew online to avoid penalty.",
+                       "statute_or_category":  "State Vehicle Registration",
+                       "due_date":  "2026-11-30",
+                       "action_url":  "fleet",
+                       "created_at":  "2026-10-24T21:58:54.307250+00:00",
+                       "acknowledged":  false,
+                       "dismissed":  false
+                   },
+                   {
+                       "id":  "alert_rental_TICKET-7821",
+                       "domain":  "rental",
+                       "severity":  "CRITICAL",
+                       "code":  "RENTAL_ESCALATION_TICKET-7821",
+                       "title":  "Sierra Pines Maintenance Escalation: Perimeter Fence Wash \u0026 Gate Warranty Inspection",
+                       "message":  "Statutory requirement: Q4 Statutory Maintenance. Target resolution by 2026-12-31.",
+                       "statute_or_category":  "Q4 Statutory Maintenance",
+                       "due_date":  "2026-12-31",
+                       "action_url":  "rental",
+                       "created_at":  "2026-10-24T21:58:54.307250+00:00",
+                       "acknowledged":  false,
+                       "dismissed":  false
+                   }
+               ],
+    "executive_briefing":  {
+                               "cadence":  "SUNDAY_1800_EXECUTIVE_BRIEFING",
+                               "generated_at":  "2026-10-24T21:58:54.297025+00:00",
+                               "week_label":  "Week of October 24 – October 31, 2026",
+                               "cadence_window":  "Week of October 24 – October 31, 2026",
+                               "summary":  "Executive briefing for Week of October 24 – October 31, 2026 integrating Family Milestones, Property Cash Flow, Athletic Readiness, and Fleet Telemetry.",
+                               "highlights":  [
+                                                  "FAMILY: User Birthday (29 Mar 1993, in 156d), Wife Birthday (23 Apr 1996, in 181d), Anniversary (23 Sep).",
+                                                  "PROPERTY: Sierra Pines cash flow at +$1,120/mo Net ($3,030 Gross). Priority ticket: \u0027Perimeter Fence Wash \u0026 Gate Warranty Inspection\u0027.",
+                                                  "ATHLETIC: Readiness Score 61/100. HRV at 46 ms (BELOW_TARGET). Directive: ⚠️ HRV at 46 ms (Target: 65 ms). Autonomic nervous system fatigued. Throttle training to Zone 2 Active Recovery..",
+                                                  "FLEET: Colorado ZR2 oil life at 18% (service due); Nissan Murano WA State tabs expire Nov 30."
+                                              ],
+                               "executive_highlights":  [
+                                                            "FAMILY: User Birthday (29 Mar 1993, in 156d), Wife Birthday (23 Apr 1996, in 181d), Anniversary (23 Sep).",
+                                                            "PROPERTY: Sierra Pines cash flow at +$1,120/mo Net ($3,030 Gross). Priority ticket: \u0027Perimeter Fence Wash \u0026 Gate Warranty Inspection\u0027.",
+                                                            "ATHLETIC: Readiness Score 61/100. HRV at 46 ms (BELOW_TARGET). Directive: ⚠️ HRV at 46 ms (Target: 65 ms). Autonomic nervous system fatigued. Throttle training to Zone 2 Active Recovery..",
+                                                            "FLEET: Colorado ZR2 oil life at 18% (service due); Nissan Murano WA State tabs expire Nov 30."
+                                                        ],
+                               "upcoming_7d_milestones":  [
+                                                              {
+                                                                  "category":  "Family",
+                                                                  "detail":  "📅 Family Sunday Meal Prep \u0026 Planning (2026-10-25)"
+                                                              },
+                                                              {
+                                                                  "category":  "Family",
+                                                                  "detail":  "📅 Mackie School Fall Conference (2026-10-23)"
+                                                              },
+                                                              {
+                                                                  "category":  "Fleet",
+                                                                  "detail":  "2021 Chevy Colorado ZR2 maintenance/registration action due."
+                                                              }
+                                                          ],
+                               "family_registry":  {
+                                                       "user_birthday":  "1993-03-29",
+                                                       "wife_birthday":  "1996-04-23",
+                                                       "anniversary":  "September 23",
+                                                       "milestone_countdowns":  [
+                                                                                    {
+                                                                                        "event":  "User Birthday (29 Mar 1993)",
+                                                                                        "date":  "March 29",
+                                                                                        "days_until":  156,
+                                                                                        "age_turning":  34
+                                                                                    },
+                                                                                    {
+                                                                                        "event":  "Wife\u0027s Birthday (23 Apr 1996)",
+                                                                                        "date":  "April 23",
+                                                                                        "days_until":  181,
+                                                                                        "age_turning":  31
+                                                                                    },
+                                                                                    {
+                                                                                        "event":  "Wedding Anniversary (23 Sep)",
+                                                                                        "date":  "September 23",
+                                                                                        "days_until":  334
+                                                                                    }
+                                                                                ]
+                                                   },
+                               "property_cashflow":  {
+                                                         "monthly_net":  1120,
+                                                         "monthly_gross":  3030,
+                                                         "pending_tickets_count":  2,
+                                                         "critical_ticket":  "Perimeter Fence Wash \u0026 Gate Warranty Inspection"
+                                                     },
+                               "athletic_readiness":  {
+                                                          "readiness_score":  61,
+                                                          "hrv_current":  46,
+                                                          "hrv_target":  65,
+                                                          "hrv_status":  "BELOW_TARGET",
+                                                          "cardio_progress":  "6.5 / 20 miles",
+                                                          "strength_progress":  "1 / 4 sessions",
+                                                          "recovery_directive":  "⚠️ HRV at 46 ms (Target: 65 ms). Autonomic nervous system fatigued. Throttle training to Zone 2 Active Recovery."
+                                                      },
+                               "academic_queue":  [
+
+                                                  ],
+                               "fleet_status":  [
+                                                    {
+                                                        "name":  "2021 Chevy Colorado ZR2",
+                                                        "odometer":  "38,450 mi",
+                                                        "oil_life":  "18%",
+                                                        "tabs_expiration":  "2027-02-28",
+                                                        "status":  "SERVICE_SOON"
+                                                    },
+                                                    {
+                                                        "name":  "2021 Nissan Murano Midnight Edition",
+                                                        "odometer":  "32,180 mi",
+                                                        "oil_life":  "68%",
+                                                        "tabs_expiration":  "2026-11-30",
+                                                        "status":  "NOMINAL"
+                                                    }
+                                                ],
+                               "active_alerts_count":  7
+                           },
+    "platform_tasks":  [
+                           {
+                               "taskId":  "TK-2598",
+                               "uuid":  "test-uuid-1792879142148",
+                               "diagId":  "diag-001",
+                               "title":  "Fix 3D Garage Lag",
+                               "simpleDescription":  "Speeds up loading when switching between 3D view and photo mode on your phone or laptop.",
+                               "technicalDescription":  "Three.js canvas context rebuild delay (~120ms) observed when toggling on mobile WebGL2 runtimes.",
+                               "sourceCategory":  "Platform Diagnostics",
+                               "targetAgent":  "scene-architect",
+                               "priority":  "HIGH",
+                               "status":  "IN_PROGRESS",
+                               "timestamp":  "2026-10-24T21:59:02.148Z",
+                               "contextParameters":  {
+                                                         "subsystem":  "Three.js / WebGL2 Context",
+                                                         "targetFiles":  [
+                                                                             "js/atomic-core.js",
+                                                                             "dashboards/garage/src/components/garage/ThreeDGarageScene.jsx"
+                                                                         ],
+                                                         "issue":  "Fix 3D Garage Lag"
+                                                     }
+                           },
+                           {
+                               "taskId":  "TK-9859",
+                               "uuid":  "test-uuid-1792873532504",
+                               "diagId":  "diag-001",
+                               "title":  "Fix 3D Garage Lag",
+                               "simpleDescription":  "Speeds up loading when switching between 3D view and photo mode on your phone or laptop.",
+                               "technicalDescription":  "Three.js canvas context rebuild delay (~120ms) observed when toggling on mobile WebGL2 runtimes.",
+                               "sourceCategory":  "Platform Diagnostics",
+                               "targetAgent":  "scene-architect",
+                               "priority":  "HIGH",
+                               "status":  "IN_PROGRESS",
+                               "timestamp":  "2026-10-24T20:25:32.504Z",
+                               "contextParameters":  {
+                                                         "subsystem":  "Three.js / WebGL2 Context",
+                                                         "targetFiles":  [
+                                                                             "js/atomic-core.js",
+                                                                             "dashboards/garage/src/components/garage/ThreeDGarageScene.jsx"
+                                                                         ],
+                                                         "issue":  "Fix 3D Garage Lag"
+                                                     }
+                           },
+                           {
+                               "taskId":  "TK-3028",
+                               "uuid":  "test-uuid-1792502118736",
+                               "diagId":  "diag-001",
+                               "title":  "Fix 3D Garage Lag",
+                               "simpleDescription":  "Speeds up loading when switching between 3D view and photo mode on your phone or laptop.",
+                               "technicalDescription":  "Three.js canvas context rebuild delay (~120ms) observed when toggling on mobile WebGL2 runtimes.",
+                               "sourceCategory":  "Platform Diagnostics",
+                               "targetAgent":  "scene-architect",
+                               "priority":  "HIGH",
+                               "status":  "IN_PROGRESS",
+                               "timestamp":  "2026-10-20T13:15:18.736Z",
+                               "contextParameters":  {
+                                                         "subsystem":  "Three.js / WebGL2 Context",
+                                                         "targetFiles":  [
+                                                                             "js/atomic-core.js",
+                                                                             "dashboards/garage/src/components/garage/ThreeDGarageScene.jsx"
+                                                                         ],
+                                                         "issue":  "Fix 3D Garage Lag"
+                                                     }
+                           },
+                           {
+                               "taskId":  "TK-6187",
+                               "uuid":  "test-uuid-1792501757007",
+                               "diagId":  "diag-001",
+                               "title":  "Fix 3D Garage Lag",
+                               "simpleDescription":  "Speeds up loading when switching between 3D view and photo mode on your phone or laptop.",
+                               "technicalDescription":  "Three.js canvas context rebuild delay (~120ms) observed when toggling on mobile WebGL2 runtimes.",
+                               "sourceCategory":  "Platform Diagnostics",
+                               "targetAgent":  "scene-architect",
+                               "priority":  "HIGH",
+                               "status":  "IN_PROGRESS",
+                               "timestamp":  "2026-10-20T13:09:17.007Z",
+                               "contextParameters":  {
+                                                         "subsystem":  "Three.js / WebGL2 Context",
+                                                         "targetFiles":  [
+                                                                             "js/atomic-core.js",
+                                                                             "dashboards/garage/src/components/garage/ThreeDGarageScene.jsx"
+                                                                         ],
+                                                         "issue":  "Fix 3D Garage Lag"
+                                                     }
+                           },
+                           {
+                               "taskId":  "TK-8141",
+                               "uuid":  "test-uuid-1792464049516",
+                               "diagId":  "diag-001",
+                               "title":  "Fix 3D Garage Lag",
+                               "simpleDescription":  "Speeds up loading when switching between 3D view and photo mode on your phone or laptop.",
+                               "technicalDescription":  "Three.js canvas context rebuild delay (~120ms) observed when toggling on mobile WebGL2 runtimes.",
+                               "sourceCategory":  "Platform Diagnostics",
+                               "targetAgent":  "scene-architect",
+                               "priority":  "HIGH",
+                               "status":  "IN_PROGRESS",
+                               "timestamp":  "2026-10-20T02:40:49.516Z",
+                               "contextParameters":  {
+                                                         "subsystem":  "Three.js / WebGL2 Context",
+                                                         "targetFiles":  [
+                                                                             "js/atomic-core.js",
+                                                                             "dashboards/garage/src/components/garage/ThreeDGarageScene.jsx"
+                                                                         ],
+                                                         "issue":  "Fix 3D Garage Lag"
+                                                     }
+                           },
+                           {
+                               "taskId":  "TK-6310",
+                               "uuid":  "test-uuid-1792461241888",
+                               "diagId":  "diag-001",
+                               "title":  "Fix 3D Garage Lag",
+                               "simpleDescription":  "Speeds up loading when switching between 3D view and photo mode on your phone or laptop.",
+                               "technicalDescription":  "Three.js canvas context rebuild delay (~120ms) observed when toggling on mobile WebGL2 runtimes.",
+                               "sourceCategory":  "Platform Diagnostics",
+                               "targetAgent":  "scene-architect",
+                               "priority":  "HIGH",
+                               "status":  "IN_PROGRESS",
+                               "timestamp":  "2026-10-20T01:54:01.888Z",
+                               "contextParameters":  {
+                                                         "subsystem":  "Three.js / WebGL2 Context",
+                                                         "targetFiles":  [
+                                                                             "js/atomic-core.js",
+                                                                             "dashboards/garage/src/components/garage/ThreeDGarageScene.jsx"
+                                                                         ],
+                                                         "issue":  "Fix 3D Garage Lag"
+                                                     }
+                           },
+                           {
+                               "taskId":  "TK-5973",
+                               "uuid":  "test-uuid-1792460850925",
+                               "diagId":  "diag-001",
+                               "title":  "Fix 3D Garage Lag",
+                               "simpleDescription":  "Speeds up loading when switching between 3D view and photo mode on your phone or laptop.",
+                               "technicalDescription":  "Three.js canvas context rebuild delay (~120ms) observed when toggling on mobile WebGL2 runtimes.",
+                               "sourceCategory":  "Platform Diagnostics",
+                               "targetAgent":  "scene-architect",
+                               "priority":  "HIGH",
+                               "status":  "IN_PROGRESS",
+                               "timestamp":  "2026-10-20T01:47:30.925Z",
+                               "contextParameters":  {
+                                                         "subsystem":  "Three.js / WebGL2 Context",
+                                                         "targetFiles":  [
+                                                                             "js/atomic-core.js",
+                                                                             "dashboards/garage/src/components/garage/ThreeDGarageScene.jsx"
+                                                                         ],
+                                                         "issue":  "Fix 3D Garage Lag"
+                                                     }
+                           },
+                           {
+                               "taskId":  "TK-4474",
+                               "uuid":  "test-uuid-1792459832620",
+                               "diagId":  "diag-001",
+                               "title":  "Fix 3D Garage Lag",
+                               "simpleDescription":  "Speeds up loading when switching between 3D view and photo mode on your phone or laptop.",
+                               "technicalDescription":  "Three.js canvas context rebuild delay (~120ms) observed when toggling on mobile WebGL2 runtimes.",
+                               "sourceCategory":  "Platform Diagnostics",
+                               "targetAgent":  "scene-architect",
+                               "priority":  "HIGH",
+                               "status":  "IN_PROGRESS",
+                               "timestamp":  "2026-10-20T01:30:32.620Z",
+                               "contextParameters":  {
+                                                         "subsystem":  "Three.js / WebGL2 Context",
+                                                         "targetFiles":  [
+                                                                             "js/atomic-core.js",
+                                                                             "dashboards/garage/src/components/garage/ThreeDGarageScene.jsx"
+                                                                         ],
+                                                         "issue":  "Fix 3D Garage Lag"
+                                                     }
+                           },
+                           {
+                               "taskId":  "TK-9914",
+                               "uuid":  "test-uuid-1792458510476",
+                               "diagId":  "diag-001",
+                               "title":  "WebGL Context Re-Acquisition Delay",
+                               "sourceCategory":  "Platform Backlog",
+                               "targetAgent":  "scene-architect",
+                               "priority":  "HIGH",
+                               "status":  "QUEUED",
+                               "timestamp":  "2026-10-20T01:08:30.476Z",
+                               "contextParameters":  {
+                                                         "subsystem":  "Three.js / WebGL2 Context",
+                                                         "targetFiles":  [
+                                                                             "js/atomic-core.js",
+                                                                             "dashboards/garage/src/components/garage/ThreeDGarageScene.jsx"
+                                                                         ]
+                                                     }
+                           },
+                           {
+                               "taskId":  "TK-5091",
+                               "uuid":  "test-uuid-1792458441676",
+                               "diagId":  "diag-001",
+                               "title":  "WebGL Context Re-Acquisition Delay",
+                               "sourceCategory":  "Platform Backlog",
+                               "targetAgent":  "scene-architect",
+                               "priority":  "HIGH",
+                               "status":  "QUEUED",
+                               "timestamp":  "2026-10-20T01:07:21.676Z",
+                               "contextParameters":  {
+                                                         "subsystem":  "Three.js / WebGL2 Context",
+                                                         "targetFiles":  [
+                                                                             "js/atomic-core.js",
+                                                                             "dashboards/garage/src/components/garage/ThreeDGarageScene.jsx"
+                                                                         ]
+                                                     }
+                           }
+                       ],
+    "platform_backlog":  [
+                             {
+                                 "id":  "diag-003",
+                                 "title":  "Wireless Car Diagnostics (OBD-II)",
+                                 "simpleDescription":  "Connect phone to Chevy Colorado \u0026 Nissan Murano via Bluetooth to track transmission fluid temperature live.",
+                                 "category":  "NEW FEATURE",
+                                 "origin":  "Fleet Telemetry Console",
+                                 "deckId":  "garage",
+                                 "timestamp":  "2026-10-24T21:59:02.200Z",
+                                 "status":  "LOGGED_IN_BACKLOG"
+                             }
+                         ],
+    "denied_diagnostics":  [
+                               "diag-002"
+                           ],
+    "dismissed_alerts":  [
+
+                         ]
 }

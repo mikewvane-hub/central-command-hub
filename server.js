@@ -189,10 +189,11 @@ app.get('/api/alerts', (req, res) => {
   try {
     if (fs.existsSync(STATE_FILE)) {
       const data = JSON.parse(fs.readFileSync(STATE_FILE, 'utf-8'));
-      const active = (data.alerts || []).filter(a => !a.dismissed);
-      return res.json({ alerts: active, count: active.length });
+      const dismissedList = Array.isArray(data.dismissed_alerts) ? data.dismissed_alerts : [];
+      const active = (data.alerts || []).filter(a => !a.dismissed && !dismissedList.includes(a.code) && !dismissedList.includes(a.id));
+      return res.json({ alerts: active, count: active.length, dismissed_codes: dismissedList });
     }
-    res.status(404).json({ alerts: [], count: 0 });
+    res.status(404).json({ alerts: [], count: 0, dismissed_codes: [] });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -205,17 +206,20 @@ app.post('/api/alerts/dismiss', (req, res) => {
     if (!code) return res.status(400).json({ error: 'Missing code' });
     if (fs.existsSync(STATE_FILE)) {
       const data = JSON.parse(fs.readFileSync(STATE_FILE, 'utf-8'));
-      let dismissed = false;
+      if (!Array.isArray(data.dismissed_alerts)) {
+        data.dismissed_alerts = [];
+      }
+      if (!data.dismissed_alerts.includes(code)) {
+        data.dismissed_alerts.push(code);
+      }
       (data.alerts || []).forEach(a => {
         if (a.code === code || a.id === code) {
           a.dismissed = true;
-          dismissed = true;
         }
       });
-      if (dismissed) {
-        fs.writeFileSync(STATE_FILE, JSON.stringify(data, null, 2), 'utf-8');
-      }
-      return res.json({ success: dismissed });
+      fs.writeFileSync(STATE_FILE, JSON.stringify(data, null, 2), 'utf-8');
+      const active = (data.alerts || []).filter(a => !a.dismissed && !data.dismissed_alerts.includes(a.code));
+      return res.json({ success: true, code, count: active.length, dismissed_codes: data.dismissed_alerts });
     }
     res.status(404).json({ error: 'State file not found' });
   } catch (err) {

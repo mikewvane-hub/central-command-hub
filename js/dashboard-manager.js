@@ -211,12 +211,12 @@ export class DashboardManager {
     };
 
     const sanitizeGarageUrl = () => {
-      const LATEST_GARAGE_URL = './dashboards/garage/index.html?v=32.0';
+      const LATEST_GARAGE_URL = './dashboards/garage/index.html?v=33.0';
       try {
         const stored = localStorage.getItem('hub_url_garage');
         // If stored URL points to localhost/127.0.0.1 (which breaks on mobile/GitHub Pages),
         // or has old version, or is empty: ALWAYS reset to reliable relative path!
-        if (!stored || stored.includes('localhost') || stored.includes('127.0.0.1') || !stored.includes('v=32.0')) {
+        if (!stored || stored.includes('localhost') || stored.includes('127.0.0.1') || !stored.includes('v=33.0')) {
           localStorage.setItem('hub_url_garage', LATEST_GARAGE_URL);
           return LATEST_GARAGE_URL;
         }
@@ -259,7 +259,11 @@ export class DashboardManager {
     const loadDismissedAlerts = () => {
       try {
         const raw = localStorage.getItem('hub_dismissed_alerts');
-        if (raw) return new Set(JSON.parse(raw));
+        const rawResolved = localStorage.getItem('hub_resolved_directives');
+        const set = new Set();
+        if (raw) JSON.parse(raw).forEach(c => set.add(c));
+        if (rawResolved) JSON.parse(rawResolved).forEach(c => set.add(c));
+        return set;
       } catch (e) {}
       return new Set();
     };
@@ -279,14 +283,14 @@ export class DashboardManager {
         const s = stored?.[deckId];
         const isSeen = this.seenDecks.has(deckId);
         const allItems = (s && Array.isArray(s.items) && s.items.length > 0) ? s.items : def.items;
-        const activeItems = allItems.filter(item => !this.dismissedAlerts.has(item.code));
+        const activeItems = allItems.filter(item => !this.dismissedAlerts.has(item.code) && !this.dismissedAlerts.has(item.id));
         alerts[deckId] = {
           deckName: def.deckName,
           deckIcon: def.deckIcon,
           count: activeItems.length,
           severity: (s && s.severity) ? s.severity : def.severity,
           title: (s && s.title) ? s.title : def.title,
-          items: allItems,
+          items: activeItems,
           acknowledged: isSeen
         };
       });
@@ -799,6 +803,33 @@ export class DashboardManager {
       localStorage.setItem('hub_dismissed_alerts', JSON.stringify([...this.dismissedAlerts]));
     } catch (e) {}
 
+    // Ensure hub_resolved_directives also stores this code for executive sidebar synchronization
+    try {
+      const rawResolved = localStorage.getItem('hub_resolved_directives');
+      const resolved = rawResolved ? JSON.parse(rawResolved) : [];
+      if (!resolved.includes(alertCode)) {
+        resolved.push(alertCode);
+        localStorage.setItem('hub_resolved_directives', JSON.stringify(resolved));
+      }
+    } catch (e) {}
+
+    // Filter out of memory alerts immediately
+    if (deckId && this.alerts[deckId] && Array.isArray(this.alerts[deckId].items)) {
+      this.alerts[deckId].items = this.alerts[deckId].items.filter(item => item.code !== alertCode && item.id !== alertCode);
+      this.alerts[deckId].count = this.alerts[deckId].items.length;
+    } else {
+      Object.keys(this.alerts).forEach(d => {
+        if (this.alerts[d] && Array.isArray(this.alerts[d].items)) {
+          this.alerts[d].items = this.alerts[d].items.filter(item => item.code !== alertCode && item.id !== alertCode);
+          this.alerts[d].count = this.alerts[d].items.length;
+        }
+      });
+    }
+
+    try {
+      localStorage.setItem('hub_alerts', JSON.stringify(this.alerts));
+    } catch (e) {}
+
     // Synchronize dismissal with backend unified state pipeline
     try {
       fetch('/api/alerts/dismiss', {
@@ -808,15 +839,15 @@ export class DashboardManager {
       }).catch(() => {});
     } catch (e) {}
 
-    const alertInfo = this.alerts[deckId];
-    const activeCount = this.getActiveItems(deckId).length;
-    if (alertInfo) {
-      alertInfo.count = activeCount;
-    }
+    const alertInfo = deckId ? this.alerts[deckId] : null;
+    const activeCount = deckId ? (this.alerts[deckId]?.count || 0) : this.getActiveTotalCount();
 
-    this.updateTabAlertIndicator(deckId, activeCount, alertInfo?.severity);
-    this.updateSubnavAlert(deckId);
+    if (deckId) {
+      this.updateTabAlertIndicator(deckId, activeCount, alertInfo?.severity);
+      this.updateSubnavAlert(deckId);
+    }
     this.updateGlobalAlertsBadge();
+    this.syncAllAlertsToVisualizer();
 
     if (this.onAlertChange && alertInfo) {
       this.onAlertChange(deckId, {
@@ -1163,7 +1194,7 @@ export class DashboardManager {
       iframe.src = targetUrl;
     } else if (deckId === 'garage') {
       const hasLocalhostMismatch = iframe.src.includes('localhost') && window.location.hostname !== 'localhost';
-      if (!iframe.src.includes('v=32.0') || hasLocalhostMismatch) {
+      if (!iframe.src.includes('v=33.0') || hasLocalhostMismatch) {
         iframe.src = targetUrl;
       }
     }
@@ -1173,7 +1204,7 @@ export class DashboardManager {
     const iframe = document.getElementById(`iframe-${deckId}`);
     if (iframe) {
       sfx.playClick();
-      const targetUrl = this.urls[deckId] || (deckId === 'garage' ? './dashboards/garage/index.html?v=32.0' : '');
+      const targetUrl = this.urls[deckId] || (deckId === 'garage' ? './dashboards/garage/index.html?v=33.0' : '');
       if (targetUrl) {
         iframe.src = targetUrl;
       }
@@ -1186,7 +1217,7 @@ export class DashboardManager {
     if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
       if (newUrl.includes('localhost') || newUrl.includes('127.0.0.1')) {
         console.warn(`[Hub Protection] Preventing localhost URL for ${deckId} in mobile/remote environment.`);
-        if (deckId === 'garage') newUrl = './dashboards/garage/index.html?v=32.0';
+        if (deckId === 'garage') newUrl = './dashboards/garage/index.html?v=33.0';
         else if (deckId === 'rental') newUrl = './dashboards/rental/index.html';
         else if (deckId === 'financial') newUrl = './dashboards/financial/index.html';
       }
@@ -1625,9 +1656,19 @@ export class DashboardManager {
       const resp = await fetch('/api/alerts', { cache: 'no-store' });
       if (resp.ok) {
         const data = await resp.json();
+        if (data && Array.isArray(data.dismissed_codes)) {
+          data.dismissed_codes.forEach(c => this.dismissedAlerts.add(c));
+          try {
+            localStorage.setItem('hub_dismissed_alerts', JSON.stringify([...this.dismissedAlerts]));
+          } catch (e) {}
+        }
         if (data && Array.isArray(data.alerts)) {
           // Merge unified alerts from hub_state into domain alerts
           data.alerts.forEach(alert => {
+            const alertCode = alert.code || alert.id;
+            // CRITICAL: Skip any dismissed alerts!
+            if (this.dismissedAlerts.has(alertCode)) return;
+
             const domainKey = alert.domain || 'executive';
             if (!this.alerts[domainKey]) {
               const domainMeta = DEFAULT_HUB_ALERTS[domainKey] || {
@@ -1645,8 +1686,7 @@ export class DashboardManager {
                 acknowledged: this.seenDecks.has(domainKey)
               };
             }
-            const items = this.alerts[domainKey].items || [];
-            const alertCode = alert.code || alert.id;
+            const items = (this.alerts[domainKey].items || []).filter(it => !this.dismissedAlerts.has(it.code) && !this.dismissedAlerts.has(it.id));
             const existingIdx = items.findIndex(it => it.code === alertCode);
             const alertItem = {
               severity: (alert.severity || 'WARNING').toUpperCase(),
@@ -1661,9 +1701,11 @@ export class DashboardManager {
               items.push(alertItem);
             }
             this.alerts[domainKey].items = items;
+            this.alerts[domainKey].count = items.length;
           });
 
           this.syncAllAlertsToVisualizer();
+          this.updateGlobalAlertsBadge();
         }
       }
     } catch (e) {

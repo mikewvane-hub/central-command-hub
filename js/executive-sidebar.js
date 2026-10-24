@@ -155,8 +155,28 @@ export class ExecutiveSidebarManager {
     this.currentFilter = 'all';        // 'all' | 'P0' | 'P1' | 'INFO'
     
     this.diagnostics = [...PLATFORM_DIAGNOSTICS_DATA];
-    this.resolvedCodes = new Set();
-    this.acknowledgedCodes = new Set();
+    
+    // Persistent resolved & acknowledged directives
+    try {
+      const rawResolved = localStorage.getItem('hub_resolved_directives');
+      this.resolvedCodes = rawResolved ? new Set(JSON.parse(rawResolved)) : new Set();
+    } catch (e) {
+      this.resolvedCodes = new Set();
+    }
+
+    try {
+      const rawDismissed = localStorage.getItem('hub_dismissed_alerts');
+      if (rawDismissed) {
+        JSON.parse(rawDismissed).forEach(c => this.resolvedCodes.add(c));
+      }
+    } catch (e) {}
+
+    try {
+      const rawAck = localStorage.getItem('hub_acknowledged_directives');
+      this.acknowledgedCodes = rawAck ? new Set(JSON.parse(rawAck)) : new Set();
+    } catch (e) {
+      this.acknowledgedCodes = new Set();
+    }
 
     // Persistent C2 actions & backlog state rehydration
     try {
@@ -584,6 +604,14 @@ export class ExecutiveSidebarManager {
       ? this.dashboardMgr.alerts 
       : {};
 
+    // Rehydrate resolved codes from localStorage to ensure cross-component synchronization
+    try {
+      const rawResolved = localStorage.getItem('hub_resolved_directives');
+      if (rawResolved) JSON.parse(rawResolved).forEach(c => this.resolvedCodes.add(c));
+      const rawDismissed = localStorage.getItem('hub_dismissed_alerts');
+      if (rawDismissed) JSON.parse(rawDismissed).forEach(c => this.resolvedCodes.add(c));
+    } catch (e) {}
+
     const domainKeys = ['rental', 'garage', 'fleet', 'executive', 'trip', 'mackie', 'financial', 'health'];
 
     domainKeys.forEach(deckId => {
@@ -592,7 +620,9 @@ export class ExecutiveSidebarManager {
 
       group.items.forEach(item => {
         const code = item.code || `${deckId}_${item.title}`;
-        if (this.resolvedCodes.has(code)) return;
+        if (this.resolvedCodes.has(code) || (this.dashboardMgr && this.dashboardMgr.dismissedAlerts && this.dashboardMgr.dismissedAlerts.has(code))) {
+          return;
+        }
 
         // Strictly exclude hallucinated academic / draft due dates
         if (code.includes('ACADEMIC') || code.includes('agentic_arch') || item.title?.includes('Autonomous Multi-Domain') || item.title?.includes('Oct 22')) {
@@ -707,6 +737,16 @@ export class ExecutiveSidebarManager {
         resetBtn.addEventListener('click', () => {
           this.resolvedCodes.clear();
           this.acknowledgedCodes.clear();
+          try {
+            localStorage.removeItem('hub_resolved_directives');
+            localStorage.removeItem('hub_acknowledged_directives');
+            localStorage.removeItem('hub_dismissed_alerts');
+            localStorage.removeItem('hub_alerts');
+          } catch (e) {}
+          if (this.dashboardMgr) {
+            this.dashboardMgr.dismissedAlerts.clear();
+            this.dashboardMgr.syncUnifiedAlerts();
+          }
           this.render();
           this.showToast('DIRECTIVES RESTORED', 'All active alerts and life ops items reset to monitoring state.', '🔄', 'info');
         });
@@ -810,7 +850,7 @@ export class ExecutiveSidebarManager {
         btnResolve.addEventListener('click', (e) => {
           e.stopPropagation();
           sfx.playSuccess();
-          this.resolveDirective(code, card);
+          this.resolveDirective(code, card, deckId);
         });
       }
 
@@ -824,7 +864,11 @@ export class ExecutiveSidebarManager {
   }
 
   acknowledgeDirective(code, cardElement) {
+    if (!code) return;
     this.acknowledgedCodes.add(code);
+    try {
+      localStorage.setItem('hub_acknowledged_directives', JSON.stringify([...this.acknowledgedCodes]));
+    } catch (e) {}
     if (cardElement) {
       cardElement.classList.add('acknowledged');
       const ackBtn = cardElement.querySelector('[data-action="ack"]');
@@ -833,8 +877,39 @@ export class ExecutiveSidebarManager {
     this.showToast('DIRECTIVE ACKNOWLEDGED', `Item ${code.substring(0, 24)}... marked as acknowledged.`, '👁️', 'info');
   }
 
-  resolveDirective(code, cardElement) {
+  resolveDirective(code, cardElement, deckId) {
+    if (!code) return;
     this.resolvedCodes.add(code);
+
+    // 1. Persist resolved state to localStorage
+    try {
+      localStorage.setItem('hub_resolved_directives', JSON.stringify([...this.resolvedCodes]));
+    } catch (e) {}
+
+    // 2. Synchronize with dashboardMgr dismissedAlerts
+    if (this.dashboardMgr) {
+      this.dashboardMgr.dismissAlert(code, deckId, false);
+    } else {
+      try {
+        const rawDismissed = localStorage.getItem('hub_dismissed_alerts');
+        const dismissed = rawDismissed ? JSON.parse(rawDismissed) : [];
+        if (!dismissed.includes(code)) {
+          dismissed.push(code);
+          localStorage.setItem('hub_dismissed_alerts', JSON.stringify(dismissed));
+        }
+      } catch (e) {}
+    }
+
+    // 3. Persist to server backend API
+    try {
+      fetch('/api/alerts/dismiss', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code })
+      }).catch(() => {});
+    } catch (e) {}
+
+    // 4. Update visual DOM and counters
     if (cardElement) {
       cardElement.classList.add('card-resolving');
       setTimeout(() => {
@@ -846,7 +921,7 @@ export class ExecutiveSidebarManager {
         }
       }, 300);
     }
-    this.showToast('DIRECTIVE RESOLVED', `Item successfully closed and cleared from active alerts pipeline.`, '✅', 'success');
+    this.showToast('DIRECTIVE RESOLVED', `Item successfully closed and permanently cleared from alerts pipeline.`, '✅', 'success');
   }
 
   openNode(deckId, code) {
