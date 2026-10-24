@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": "1.0.0-UNIFIED",
-    "last_updated": "2026-10-24T22:12:09.588790+00:00",
+    "last_updated": "2026-10-24T22:17:59.081632+00:00",
     "timezone": "America/New_York",
     "status": "ONLINE"
   },
@@ -106,44 +106,50 @@
       },
       {
         "id": "nissan_murano_midnight",
-        "name": "2021 Nissan Murano Midnight Edition",
+        "name": "2022 Nissan Murano Midnight Edition",
         "tag": "Executive Family Crossover",
-        "odometer": 32180,
-        "oil_life_pct": 68,
-        "last_service_date": "2026-08-20",
-        "last_service_mileage": 30500,
+        "vin": "5N1AZ2BJ3NC121540",
+        "plate": "BVZ7440",
+        "odometer": 51333,
+        "oil_life_pct": 72,
+        "last_service_date": "2026-08-15",
+        "last_service_mileage": 49000,
         "service_milestones": {
           "oil_and_filter": {
-            "due_mileage": 35500,
+            "due_mileage": 54000,
             "status": "NOMINAL",
             "spec": "Full Synthetic 0W-20"
           },
           "cvt_fluid_flush": {
-            "due_mileage": 36000,
-            "status": "UPCOMING",
+            "due_mileage": 60000,
+            "status": "MONITORED",
             "spec": "Nissan NS-3 CVT Fluid Exchange"
           },
           "brake_fluid_service": {
-            "due_date": "2026-11-15",
-            "status": "UPCOMING_28D",
+            "due_date": "2027-05-15",
+            "status": "NOMINAL",
             "spec": "DOT 4 High Temp Flush"
           },
           "cabin_microfilter": {
-            "due_mileage": 35000,
+            "due_mileage": 60000,
             "status": "NOMINAL",
             "spec": "HEPA Cabin Microfilter"
           }
         },
         "registration": {
-          "state": "WA",
-          "tabs_expiration": "2026-11-30",
-          "days_remaining": 42,
-          "status": "EXPIRING_SOON"
+          "state": "TN",
+          "county": "Montgomery",
+          "plate": "BVZ7440",
+          "title_number": "16300535596",
+          "tabs_expiration": "2027-05-31",
+          "days_remaining": 224,
+          "fees_paid": 125,
+          "status": "CURRENT"
         },
         "insurance": {
           "carrier": "USAA",
-          "policy_id": "WA-MDNT-4912",
-          "renewal_date": "2027-01-15",
+          "policy_id": "USAA-TN-9402158",
+          "renewal_date": "2027-05-01",
           "status": "ACTIVE"
         }
       }
@@ -216,7 +222,7 @@
       "statute_or_category": "Athletic Readiness",
       "due_date": "2026-10-24",
       "action_url": "health",
-      "created_at": "2026-10-24T22:12:09.419530+00:00",
+      "created_at": "2026-10-24T22:17:59.006662+00:00",
       "acknowledged": false,
       "dismissed": false
     },
@@ -272,7 +278,7 @@
       "statute_or_category": "Preventive Maintenance",
       "due_date": "2026-11-07",
       "action_url": "fleet",
-      "created_at": "2026-10-24T22:12:09.419530+00:00",
+      "created_at": "2026-10-24T22:17:59.006662+00:00",
       "acknowledged": false,
       "dismissed": false
     },
@@ -286,7 +292,7 @@
       "statute_or_category": "State Vehicle Registration",
       "due_date": "2026-11-30",
       "action_url": "fleet",
-      "created_at": "2026-10-24T22:12:09.435405+00:00",
+      "created_at": "2026-10-24T22:17:59.013672+00:00",
       "acknowledged": false,
       "dismissed": false
     },
@@ -300,14 +306,14 @@
       "statute_or_category": "Q4 Statutory Maintenance",
       "due_date": "2026-12-31",
       "action_url": "rental",
-      "created_at": "2026-10-24T22:12:09.435405+00:00",
+      "created_at": "2026-10-24T22:17:59.013672+00:00",
       "acknowledged": false,
       "dismissed": false
     }
   ],
   "executive_briefing": {
     "cadence": "SUNDAY_1800_EXECUTIVE_BRIEFING",
-    "generated_at": "2026-10-24T22:12:09.418234+00:00",
+    "generated_at": "2026-10-24T22:17:59.006662+00:00",
     "week_label": "Week of October 24 – October 31, 2026",
     "cadence_window": "Week of October 24 – October 31, 2026",
     "summary": "Executive briefing for Week of October 24 – October 31, 2026 integrating Family Milestones, Property Cash Flow, Athletic Readiness, and Fleet Telemetry.",
@@ -396,6 +402,27 @@
     "active_alerts_count": 7
   },
   "platform_tasks": [
+    {
+      "taskId": "TK-6192",
+      "uuid": "test-uuid-1792880285395",
+      "diagId": "diag-001",
+      "title": "Fix 3D Garage Lag",
+      "simpleDescription": "Speeds up loading when switching between 3D view and photo mode on your phone or laptop.",
+      "technicalDescription": "Three.js canvas context rebuild delay (~120ms) observed when toggling on mobile WebGL2 runtimes.",
+      "sourceCategory": "Platform Diagnostics",
+      "targetAgent": "scene-architect",
+      "priority": "HIGH",
+      "status": "IN_PROGRESS",
+      "timestamp": "2026-10-24T22:18:05.395Z",
+      "contextParameters": {
+        "subsystem": "Three.js / WebGL2 Context",
+        "targetFiles": [
+          "js/atomic-core.js",
+          "dashboards/garage/src/components/garage/ThreeDGarageScene.jsx"
+        ],
+        "issue": "Fix 3D Garage Lag"
+      }
+    },
     {
       "taskId": "TK-3713",
       "uuid": "test-uuid-1792879933986",
@@ -630,7 +657,7 @@
       "category": "NEW FEATURE",
       "origin": "Fleet Telemetry Console",
       "deckId": "garage",
-      "timestamp": "2026-10-24T22:12:14.018Z",
+      "timestamp": "2026-10-24T22:18:05.417Z",
       "status": "LOGGED_IN_BACKLOG"
     }
   ],

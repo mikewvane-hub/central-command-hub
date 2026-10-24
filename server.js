@@ -190,7 +190,13 @@ app.get('/api/alerts', (req, res) => {
     if (fs.existsSync(STATE_FILE)) {
       const data = JSON.parse(fs.readFileSync(STATE_FILE, 'utf-8'));
       const dismissedList = Array.isArray(data.dismissed_alerts) ? data.dismissed_alerts : [];
-      const active = (data.alerts || []).filter(a => !a.dismissed && !dismissedList.includes(a.code) && !dismissedList.includes(a.id));
+      const active = (data.alerts || [])
+        .filter(a => !a.dismissed && !dismissedList.includes(a.code) && !dismissedList.includes(a.id))
+        .map(a => ({
+          ...a,
+          title: a.title || a.subject || (a.code ? a.code.replace(/_/g, ' ') : 'Operational Alert'),
+          message: a.message || a.description || ''
+        }));
       return res.json({ alerts: active, count: active.length, dismissed_codes: dismissedList });
     }
     res.status(404).json({ alerts: [], count: 0, dismissed_codes: [] });

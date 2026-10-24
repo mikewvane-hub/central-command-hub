@@ -612,6 +612,30 @@ export class ExecutiveSidebarManager {
       if (rawDismissed) JSON.parse(rawDismissed).forEach(c => this.resolvedCodes.add(c));
     } catch (e) {}
 
+    const KNOWN_DIRECTIVE_TITLES = {
+      'PM_OVERDUE_PM_DRYER_VENT': 'Dryer Exhaust Vent & Lint Cleanout Overdue',
+      'PM_OVERDUE_PM_HVAC_TUNEUP': 'Gas Furnace Annual Tune-Up & Combustion Test Overdue',
+      'PM_OVERDUE_PM_SEPTIC_PUMP': 'Septic Tank Inspection & Pumping Overdue',
+      'PM_OVERDUE_PM_DUCT_CLEANING': 'Whole-House Air Duct & Sanitizer Fog Cleaning Overdue',
+      'PM_OVERDUE_PM_FRIDGE_WATER_COILS': 'Refrigerator Water Filter & Condenser Coil Vacuuming Overdue',
+      'PM_DUE_SOON_PM_GUTTER_ROOF_MOSS': 'Gutter Cleanout & Roof Moss Treatment Due',
+      'WARRANTY_EXPIRING_CAPEX_REFRIGERATOR': 'Whirlpool Refrigerator Store Warranty Expiring',
+      'WARRANTY_EXPIRING_PM_FENCE_WASH_GATE': 'Workmanship Warranty Expiring in 0d: 187 LF Dark Sequoia Vinyl Fence & 4 Gates',
+      'PM_DUE_SOON_PM_FENCE_WASH_GATE': 'Preventative Maintenance Due (0d): Fence Wash & Gate Hinge/Latch Alignment',
+      'RCW_59_18_650_OWNER_OCCUPANCY_TIMELINE': 'March 2027 Tenant Move-Out & June 2027 Owner Re-Occupancy Milestones',
+      'EXEC_ACTION_WA_NOTICE': 'WA Rental 90-Day Notice Packet Preparation',
+      'EXEC_ACTION_STRATEGIC_SYNC': 'Quarterly Family Operations & Calendar Alignment',
+      'TRIP_RAINIER_WEATHER': 'Mount Rainier National Park Weather & Trail Advisory',
+      'MACKIE_DINNER_MENU': 'Dinner Menu Finalization for Friday',
+      'MACKIE_GROCERY_RESTOCK': 'Weekly Grocery Restock Checklist',
+      'HEALTH_HRV_BELOW_TARGET': 'HRV Readiness Alert: 46 ms (Below 65 ms Baseline)',
+      'HRV_BELOW_BASELINE': 'HRV Readiness Alert: 46 ms (Below 65 ms Baseline)',
+      'CHEVY_COLORADO_ZR2_OIL_DECAY': '2021 Chevy Colorado ZR2 Oil Life at 18%',
+      'COLORADO_ZR2_OIL_18PCT': 'Colorado ZR2 Oil Life at 18% (Service Due Soon)',
+      'NISSAN_MURANO_MIDNIGHT_TABS_EXPIRING': '2021 Nissan Murano Midnight Edition Tabs Expire in 36 Days',
+      'MURANO_WA_TABS_EXPIRING': '2021 Murano Tabs Expiring in 42 Days'
+    };
+
     const domainKeys = ['rental', 'garage', 'fleet', 'executive', 'trip', 'mackie', 'financial', 'health'];
 
     domainKeys.forEach(deckId => {
@@ -619,7 +643,7 @@ export class ExecutiveSidebarManager {
       if (!group || !Array.isArray(group.items)) return;
 
       group.items.forEach(item => {
-        const code = item.code || `${deckId}_${item.title}`;
+        const code = item.code || `${deckId}_${item.title || item.subject || 'alert'}`;
         if (this.resolvedCodes.has(code) || (this.dashboardMgr && this.dashboardMgr.dismissedAlerts && this.dashboardMgr.dismissedAlerts.has(code))) {
           return;
         }
@@ -637,6 +661,21 @@ export class ExecutiveSidebarManager {
         // Filter out duplicates if garage/fleet share items
         if (directives.some(d => d.code === code)) return;
 
+        // Resolve crisp, human-readable subject (guaranteed never undefined)
+        let subject = item.title;
+        if (!subject || subject === 'undefined' || typeof subject !== 'string' || subject.trim().length === 0) {
+          subject = (item.subject && item.subject !== 'undefined')
+            ? item.subject
+            : (KNOWN_DIRECTIVE_TITLES[code] 
+               || (item.statute && item.statute !== 'undefined' ? item.statute : null)
+               || (code ? code.replace(/_/g, ' ') : `${group.deckName || deckId.toUpperCase()} Directive`));
+        }
+
+        let message = item.message;
+        if (!message || message === 'undefined' || typeof message !== 'string' || message.trim().length === 0) {
+          message = item.description || (item.statute ? `Reference: ${item.statute}` : 'Active operational directive requiring review.');
+        }
+
         directives.push({
           deckId: deckId === 'fleet' ? 'garage' : deckId,
           deckName: group.deckName || deckId.toUpperCase(),
@@ -644,8 +683,8 @@ export class ExecutiveSidebarManager {
           code: code,
           severity: sev,
           priorityLevel: priorityLevel, // 'P0', 'P1', 'INFO'
-          title: item.title,
-          message: item.message,
+          title: subject,
+          message: message,
           statute: item.statute || 'Central Hub Telemetry',
           timestamp: '2026-10-19 17:54 UTC',
           acknowledged: this.acknowledgedCodes.has(code)
@@ -777,13 +816,13 @@ export class ExecutiveSidebarManager {
             <div class="card-badge ${badgeClass}">${badgeLabel}</div>
           </div>
 
-          <!-- Card Title & Description -->
-          <div class="card-title">${item.title}</div>
-          <div class="card-message">${item.message}</div>
+          <!-- Card Title & Description (Guaranteed Never Undefined) -->
+          <div class="card-title">${item.title || item.subject || 'Priority Directive'}</div>
+          <div class="card-message">${item.message || item.description || ''}</div>
           
           <div class="card-statute-row">
             <span class="statute-label">REF:</span>
-            <span class="statute-val">${item.statute}</span>
+            <span class="statute-val">${item.statute || 'Central Hub Telemetry'}</span>
           </div>
 
           <!-- Action Items Execution Bar -->

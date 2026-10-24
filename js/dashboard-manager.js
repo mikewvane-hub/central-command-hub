@@ -40,42 +40,49 @@ export const DEFAULT_HUB_ALERTS = {
         severity: 'WARNING',
         code: 'PM_OVERDUE_PM_DRYER_VENT',
         statute: 'Fire Prevention Cleanout (Capitol Duct Cleaning)',
+        title: 'Dryer Exhaust Vent & Lint Cleanout Overdue',
         message: 'Preventative Maintenance Overdue (1038d): Dryer Exhaust Vent & Exterior Hood Lint Cleanout. Annual fire-hazard lint cleanout required.'
       },
       {
         severity: 'WARNING',
         code: 'PM_OVERDUE_PM_HVAC_TUNEUP',
         statute: 'Air Handlers Inc. (Annual Service)',
+        title: 'Gas Furnace Annual Tune-Up & Combustion Test Overdue',
         message: 'Preventative Maintenance Overdue (1035d): Gas Furnace Annual Tune-Up, Burner Service & CO Combustion Safety Test.'
       },
       {
         severity: 'WARNING',
         code: 'PM_OVERDUE_PM_SEPTIC_PUMP',
         statute: 'Thurston County Art. IV & WA DOH Standard (36m)',
+        title: 'Septic Tank Inspection & Pumping Overdue',
         message: 'Preventative Maintenance Overdue (454d): 1,150-Gal Concrete Septic Tank Inspection & Pumping (2-Compartment + Gravity Drainfield).'
       },
       {
         severity: 'WARNING',
         code: 'PM_OVERDUE_PM_DUCT_CLEANING',
         statute: 'NADCA Whole-House Standard (36m)',
+        title: 'Whole-House Air Duct & Sanitizer Fog Cleaning Overdue',
         message: 'Preventative Maintenance Overdue (307d): Whole-House Air Duct & Sanitizer Fog Cleaning. Target Apr 2027 turnover window.'
       },
       {
         severity: 'WARNING',
         code: 'PM_OVERDUE_PM_FRIDGE_WATER_COILS',
         statute: 'EveryDrop Filter #1 (Every 6m)',
+        title: 'Refrigerator Water Filter & Condenser Coil Vacuuming Overdue',
         message: 'Preventative Maintenance Overdue (11d): Whirlpool Refrigerator (WRF555SDFZ) Water Filter & Condenser Coil Vacuuming.'
       },
       {
         severity: 'WARNING',
         code: 'PM_DUE_SOON_PM_GUTTER_ROOF_MOSS',
         statute: 'Semi-Annual Cleanout (2026-11-01)',
+        title: 'Gutter Cleanout & Roof Moss Treatment Due',
         message: 'Preventative Maintenance Due in 20d: PNW Gutter Cleanout & Roof Moss Zinc/Oxygen Solution Treatment.'
       },
       {
         severity: 'WARNING',
         code: 'WARRANTY_EXPIRING_CAPEX_REFRIGERATOR',
         statute: 'Lowe\'s Warranty (WRF555SDFZ)',
+        title: 'Whirlpool Refrigerator Store Warranty Expiring',
         message: 'Warranty Expiring in 159d (2027-03-20): Whirlpool 24.7-cu ft French Door Refrigerator Replacement.'
       }
     ]
@@ -283,7 +290,26 @@ export class DashboardManager {
         const s = stored?.[deckId];
         const isSeen = this.seenDecks.has(deckId);
         const allItems = (s && Array.isArray(s.items) && s.items.length > 0) ? s.items : def.items;
-        const activeItems = allItems.filter(item => !this.dismissedAlerts.has(item.code) && !this.dismissedAlerts.has(item.id));
+        const defaultByCode = {};
+        if (def.items) {
+          def.items.forEach(it => { if (it.code) defaultByCode[it.code] = it; });
+        }
+        const activeItems = allItems
+          .filter(item => !this.dismissedAlerts.has(item.code) && !this.dismissedAlerts.has(item.id))
+          .map((item, idx) => {
+            const defItem = defaultByCode[item.code] || def.items?.[idx];
+            let validTitle = item.title;
+            if (!validTitle || validTitle === 'undefined' || typeof validTitle !== 'string') {
+              validTitle = item.subject && item.subject !== 'undefined'
+                ? item.subject
+                : (defItem?.title || item.statute || `${def.deckName} Directive #${idx + 1}`);
+            }
+            return {
+              ...item,
+              title: validTitle,
+              message: item.message || defItem?.message || ''
+            };
+          });
         alerts[deckId] = {
           deckName: def.deckName,
           deckIcon: def.deckIcon,
@@ -491,6 +517,11 @@ export class DashboardManager {
         message: `Active operational telemetry notification (${count} items).`
       }));
     }
+
+    suppliedItems = suppliedItems.map((it, idx) => ({
+      ...it,
+      title: (it.title && it.title !== 'undefined') ? it.title : (it.subject && it.subject !== 'undefined' ? it.subject : (it.statute || `${existing.deckName || deckId} Directive #${idx + 1}`))
+    }));
 
     const activeCount = suppliedItems.filter(i => !this.dismissedAlerts.has(i.code)).length;
 
@@ -746,7 +777,7 @@ export class DashboardManager {
               <button class="alert-card-dismiss-btn" data-code="${item.code}" data-deck="${item.deckId}" title="Dismiss this alert (✕)">✕</button>
             </div>
           </div>
-          <div class="alert-card-title">${item.title}</div>
+          <div class="alert-card-title">${item.title || item.subject || 'Operational Alert'}</div>
           <div class="alert-card-msg">${item.message}</div>
           <div class="alert-card-actions-row">
             <button class="alert-card-btn-dismiss" data-code="${item.code}" data-deck="${item.deckId}" title="Dismiss this alert without opening">
@@ -1715,9 +1746,9 @@ export class DashboardManager {
             const alertItem = {
               severity: (alert.severity || 'WARNING').toUpperCase(),
               code: alertCode,
-              statute: alert.statute || 'Unified Alert Pipeline',
-              title: alert.title,
-              message: alert.message
+              statute: alert.statute || alert.statute_or_category || 'Unified Alert Pipeline',
+              title: (alert.title && alert.title !== 'undefined') ? alert.title : (alert.subject && alert.subject !== 'undefined' ? alert.subject : `${domainKey.toUpperCase()} Directive`),
+              message: alert.message || alert.description || ''
             };
             if (existingIdx >= 0) {
               items[existingIdx] = alertItem;
