@@ -250,6 +250,13 @@ export class ExecutiveSidebarManager {
     // Flush any pending tasks from mobile/GitHub Pages sync to local disk
     this.syncPendingActions();
 
+    // Clear any lingering orbital hover highlights if mouse exits sidebar entirely
+    this.container.addEventListener('mouseleave', () => {
+      if (this.visualizer && typeof this.visualizer.clearAllPulseSpheres === 'function') {
+        this.visualizer.clearAllPulseSpheres();
+      }
+    });
+
     // Initial render
     this.render();
   }
@@ -514,6 +521,9 @@ export class ExecutiveSidebarManager {
 
   collapse() {
     this.isExpanded = false;
+    if (this.visualizer && typeof this.visualizer.clearAllPulseSpheres === 'function') {
+      this.visualizer.clearAllPulseSpheres();
+    }
     this.applyExpandedState(true);
   }
 
@@ -566,6 +576,9 @@ export class ExecutiveSidebarManager {
 
   setStream(streamName) {
     this.currentStream = streamName;
+    if (this.visualizer && typeof this.visualizer.clearAllPulseSpheres === 'function') {
+      this.visualizer.clearAllPulseSpheres();
+    }
     const tabDirectives = document.getElementById('tab-btn-directives');
     const tabDiagnostics = document.getElementById('tab-btn-diagnostics');
     const streamDirectives = document.getElementById('stream-directives');
@@ -846,6 +859,12 @@ export class ExecutiveSidebarManager {
   }
 
   bindDirectiveCardEvents(container) {
+    container.addEventListener('mouseleave', () => {
+      if (this.visualizer && typeof this.visualizer.clearAllPulseSpheres === 'function') {
+        this.visualizer.clearAllPulseSpheres();
+      }
+    });
+
     const cards = container.querySelectorAll('.stream-card');
 
     cards.forEach(card => {
@@ -966,6 +985,11 @@ export class ExecutiveSidebarManager {
   openNode(deckId, code) {
     if (this.visualizer && deckId) {
       this.visualizer.pulseSphere(deckId);
+      setTimeout(() => {
+        if (this.visualizer && typeof this.visualizer.clearPulseSphere === 'function') {
+          this.visualizer.clearPulseSphere(deckId);
+        }
+      }, 1000);
     }
 
     if (this.dashboardMgr) {
@@ -1091,6 +1115,12 @@ export class ExecutiveSidebarManager {
   }
 
   bindDiagnosticCardEvents(container) {
+    container.addEventListener('mouseleave', () => {
+      if (this.visualizer && typeof this.visualizer.clearAllPulseSpheres === 'function') {
+        this.visualizer.clearAllPulseSpheres();
+      }
+    });
+
     const cards = container.querySelectorAll('.stream-card');
 
     cards.forEach(card => {

@@ -448,6 +448,7 @@ export class AtomicCoreVisualizer {
     this.currentRotation = { x: 0.22, y: 0.32 };
     this.raycaster = null;
     this.hoveredDeck = null;
+    this.sidebarHoveredDeck = null;
     this.activeDeckId = 'core';
     this.sidebarWidth = typeof window !== 'undefined' && window.innerWidth >= 1400 ? 380 : 0;
     this.currentViewOffsetX = this.sidebarWidth > 0 ? (this.sidebarWidth / 2) : 0;
@@ -457,9 +458,9 @@ export class AtomicCoreVisualizer {
       try {
         const val = localStorage.getItem(key);
         if (key === 'hub_url_garage') {
-          if (!val || val.includes('localhost') || val.includes('127.0.0.1') || !val.includes('v=35.0')) {
-            localStorage.setItem('hub_url_garage', './dashboards/garage/index.html?v=35.0');
-            return './dashboards/garage/index.html?v=35.0';
+          if (!val || val.includes('localhost') || val.includes('127.0.0.1') || !val.includes('v=36.0')) {
+            localStorage.setItem('hub_url_garage', './dashboards/garage/index.html?v=36.0');
+            return './dashboards/garage/index.html?v=36.0';
           }
           return val;
         }
@@ -572,7 +573,7 @@ export class AtomicCoreVisualizer {
         inclination: { x: -0.34, y: 0.42, z: -0.18 },
         color: 0xf59e0b,
         glowHex: '#f59e0b',
-        url: resolveCloudUrl('hub_url_garage', './dashboards/garage/index.html?v=35.0'),
+        url: resolveCloudUrl('hub_url_garage', './dashboards/garage/index.html?v=36.0'),
         icon: '🛻'
       }
     ];
@@ -970,6 +971,7 @@ export class AtomicCoreVisualizer {
       circleEl.addEventListener('mouseleave', () => {
         if (this.hoveredDeck === dash.id) {
           this.hoveredDeck = null;
+    this.sidebarHoveredDeck = null;
         }
       });
 
@@ -981,6 +983,7 @@ export class AtomicCoreVisualizer {
         setTimeout(() => {
           if (this.hoveredDeck === dash.id) {
             this.hoveredDeck = null;
+    this.sidebarHoveredDeck = null;
           }
         }, 1200);
       }, { passive: true });
@@ -1171,7 +1174,7 @@ export class AtomicCoreVisualizer {
   }
 
   pulseSphere(deckId) {
-    this.hoveredDeck = deckId;
+    this.sidebarHoveredDeck = deckId;
     const el = this.electrons.find(e => e.dash.id === deckId);
     if (el) {
       if (el.ringMesh && el.ringMesh.material) {
@@ -1188,8 +1191,8 @@ export class AtomicCoreVisualizer {
   }
 
   clearPulseSphere(deckId) {
-    if (this.hoveredDeck === deckId) {
-      this.hoveredDeck = null;
+    if (this.sidebarHoveredDeck === deckId) {
+      this.sidebarHoveredDeck = null;
     }
     const el = this.electrons.find(e => e.dash.id === deckId);
     if (el) {
@@ -1205,6 +1208,23 @@ export class AtomicCoreVisualizer {
         el.domElement.classList.remove('sidebar-hover-pulse');
       }
     }
+  }
+
+  clearAllPulseSpheres() {
+    this.sidebarHoveredDeck = null;
+    this.electrons.forEach(el => {
+      if (el.ringMesh && el.ringMesh.material) {
+        const isFocus = (this.activeDeckId === 'core' || el.dash.id === this.activeDeckId);
+        el.ringMesh.material.opacity = isFocus ? 0.35 : 0.15;
+        el.ringMesh.material.color.setHex(el.dash.color);
+      }
+      if (el.glowMesh && el.glowMesh.material) {
+        el.glowMesh.material.opacity = 0.45;
+      }
+      if (el.domElement) {
+        el.domElement.classList.remove('sidebar-hover-pulse');
+      }
+    });
   }
 
   setFocusDeck(deckId) {
@@ -1282,8 +1302,10 @@ export class AtomicCoreVisualizer {
     // Update Electron Positions along their Orbits & Project 3D circles to screen
     this.electrons.forEach((el) => {
       const dash = el.dash;
-      const isHovered = (this.hoveredDeck === dash.id);
-      const speedMultiplier = isHovered ? 0.0 : 1.0;
+      const isCanvasHovered = (this.hoveredDeck === dash.id);
+      const isSidebarHovered = (this.sidebarHoveredDeck === dash.id);
+      // Direct mouse hover on canvas gently slows to 0.45x; sidebar hover highlights without freezing the orbit!
+      const speedMultiplier = isCanvasHovered ? 0.45 : 1.0;
       el.currentAngle += 0.016 * dash.speed * speedMultiplier * timeScale;
       
       const stretchX = dash.horizontalStretch || 1.4;
@@ -1318,8 +1340,8 @@ export class AtomicCoreVisualizer {
         // If in front of camera
         if (worldVec.z < 1.0 && screenX >= -80 && screenX <= width + 80 && screenY >= -80 && screenY <= height + 80) {
           el.domElement.style.display = 'flex';
-          // Keep ALL 6 spheres at the exact same uniform scale!
-          const isHovered = (this.hoveredDeck === dash.id);
+          // Keep ALL 6 spheres at uniform scale; slightly expand if hovered
+          const isHovered = isCanvasHovered || isSidebarHovered;
           const uniformScale = isHovered ? 1.08 : 1.0;
           const depthOpacity = isHovered ? 1.0 : Math.max(0.68, Math.min(1.0, 1.02 - (worldVec.z * 0.22)));
           const zIndex = isHovered ? 200 : Math.round((1.0 - worldVec.z) * 100);

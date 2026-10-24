@@ -78,7 +78,7 @@ def generate_executive_weekly_briefing():
         f"FAMILY: User Birthday (29 Mar 1993, in {family_rep['milestones'][0]['days_until']}d), Wife Birthday (23 Apr 1996, in {family_rep['milestones'][1]['days_until']}d), Anniversary (23 Sep).",
         f"PROPERTY: Sierra Pines cash flow at +${financials.get('monthly_net', 1120):,}/mo Net (${financials.get('monthly_gross', 2450):,} Gross). Priority ticket: '{critical_ticket}'.",
         f"ATHLETIC: Readiness Score {health_rep['readiness_score']}/100. HRV at {health_rep['hrv']['current']} ms ({health_rep['hrv']['status']}). Directive: {health_rep['recovery_recommendation']}.",
-        f"FLEET: Colorado ZR2 oil life at 18% (service due); Nissan Murano WA State tabs expire Nov 30."
+        f"FLEET: Colorado ZR2 oil life at 18% (service due); 2022 Nissan Murano TN registration current through May 2027."
     ]
 
     briefing_payload = {
@@ -162,7 +162,7 @@ def generate_executive_weekly_briefing():
 
 ## 🛞 Fleet Telemetry & Service Intervals
 - **2021 Chevy Colorado ZR2:** {fleet_rep['vehicles'][0]['odometer']} | Oil Life: {fleet_rep['vehicles'][0]['oil_life']} (Service Due Soon) | WA Tabs: {fleet_rep['vehicles'][0]['tabs_expiration']}
-- **2021 Nissan Murano Midnight:** {fleet_rep['vehicles'][1]['odometer']} | Oil Life: {fleet_rep['vehicles'][1]['oil_life']} | WA Tabs Expiring: **{fleet_rep['vehicles'][1]['tabs_expiration']}**
+- **2022 Nissan Murano Midnight:** {fleet_rep['vehicles'][1]['odometer']} | Oil Life: {fleet_rep['vehicles'][1]['oil_life']} | TN Registration (BVZ7440): **{fleet_rep['vehicles'][1]['tabs_expiration']} (Current)**
 
 ---
 *Autonomous aggregation completed by Central Command Hub Weekly Cadence Agent.*

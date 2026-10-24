@@ -1,5 +1,5 @@
 # EXECUTIVE WEEKLY BRIEFING // WEEK OF OCTOBER 24 – OCTOBER 31, 2026
-*Generated on Saturday, October 24, 2026 at 22:17 UTC | Cadence: Sunday 18:00*
+*Generated on Saturday, October 24, 2026 at 22:23 UTC | Cadence: Sunday 18:00*
 
 ---
 
@@ -7,7 +7,7 @@
 - FAMILY: User Birthday (29 Mar 1993, in 156d), Wife Birthday (23 Apr 1996, in 181d), Anniversary (23 Sep).
 - PROPERTY: Sierra Pines cash flow at +$1,120/mo Net ($3,030 Gross). Priority ticket: 'Perimeter Fence Wash & Gate Warranty Inspection'.
 - ATHLETIC: Readiness Score 61/100. HRV at 46 ms (BELOW_TARGET). Directive: ⚠️ HRV at 46 ms (Target: 65 ms). Autonomic nervous system fatigued. Throttle training to Zone 2 Active Recovery..
-- FLEET: Colorado ZR2 oil life at 18% (service due); Nissan Murano WA State tabs expire Nov 30.
+- FLEET: Colorado ZR2 oil life at 18% (service due); 2022 Nissan Murano TN registration current through May 2027.
 
 ---
 
@@ -43,7 +43,7 @@
 
 ## 🛞 Fleet Telemetry & Service Intervals
 - **2021 Chevy Colorado ZR2:** 38,450 mi | Oil Life: 18% (Service Due Soon) | WA Tabs: 2027-02-28
-- **2021 Nissan Murano Midnight:** 32,180 mi | Oil Life: 68% | WA Tabs Expiring: **2026-11-30**
+- **2022 Nissan Murano Midnight:** 51,333 mi | Oil Life: 72% | TN Registration (BVZ7440): **2027-05-31 (Current)**
 
 ---
 *Autonomous aggregation completed by Central Command Hub Weekly Cadence Agent.*

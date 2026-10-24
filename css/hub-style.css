@@ -3410,9 +3410,13 @@ body::after {
 /* ==================================================================== */
 
 .orbiting-dashboard-circle.sidebar-hover-pulse {
-  transform: scale(1.18) !important;
   z-index: 500 !important;
   opacity: 1 !important;
+}
+
+.orbiting-dashboard-circle.sidebar-hover-pulse .circle-inner-portal {
+  transform: scale(1.14);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .orbiting-dashboard-circle.sidebar-hover-pulse .circle-svg-art,
