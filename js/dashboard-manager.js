@@ -211,12 +211,12 @@ export class DashboardManager {
     };
 
     const sanitizeGarageUrl = () => {
-      const LATEST_GARAGE_URL = './dashboards/garage/index.html?v=33.0';
+      const LATEST_GARAGE_URL = './dashboards/garage/index.html?v=35.0';
       try {
         const stored = localStorage.getItem('hub_url_garage');
         // If stored URL points to localhost/127.0.0.1 (which breaks on mobile/GitHub Pages),
         // or has old version, or is empty: ALWAYS reset to reliable relative path!
-        if (!stored || stored.includes('localhost') || stored.includes('127.0.0.1') || !stored.includes('v=33.0')) {
+        if (!stored || stored.includes('localhost') || stored.includes('127.0.0.1') || !stored.includes('v=35.0')) {
           localStorage.setItem('hub_url_garage', LATEST_GARAGE_URL);
           return LATEST_GARAGE_URL;
         }
@@ -314,6 +314,7 @@ export class DashboardManager {
     this.syncUnifiedAlerts();
     this.checkAllTelemetry();
     this.syncAllAlertsToVisualizer();
+    this.scheduleBackgroundPreload();
 
     // Periodic telemetry ping every 30 seconds
     setInterval(() => this.checkAllTelemetry(), 30000);
@@ -1183,18 +1184,41 @@ export class DashboardManager {
     }
   }
 
+  scheduleBackgroundPreload() {
+    const queue = ['rental', 'financial', 'garage', 'executive', 'trip', 'mackie'];
+    let idx = 0;
+    const preloadNext = () => {
+      if (idx >= queue.length) return;
+      const deckId = queue[idx++];
+      const iframe = document.getElementById(`iframe-${deckId}`);
+      if (iframe) {
+        const currentSrc = iframe.getAttribute('src');
+        if (!currentSrc || currentSrc === 'about:blank') {
+          const targetUrl = this.urls[deckId] || iframe.getAttribute('data-src');
+          if (targetUrl) {
+            iframe.src = targetUrl;
+          }
+        }
+      }
+      setTimeout(preloadNext, 2500);
+    };
+    // Delay initial background preloading until 3.5s after boot to ensure 60 FPS 3D core stabilization
+    setTimeout(preloadNext, 3500);
+  }
+
   ensureIframeLoaded(deckId) {
     const iframe = document.getElementById(`iframe-${deckId}`);
     if (!iframe) return;
 
-    const targetUrl = this.urls[deckId];
+    const targetUrl = this.urls[deckId] || iframe.getAttribute('data-src');
     if (!targetUrl) return;
 
-    if (!iframe.src || iframe.src === 'about:blank' || iframe.getAttribute('src') === 'about:blank') {
+    const currentSrc = iframe.getAttribute('src');
+    if (!currentSrc || currentSrc === 'about:blank' || iframe.src === 'about:blank') {
       iframe.src = targetUrl;
     } else if (deckId === 'garage') {
       const hasLocalhostMismatch = iframe.src.includes('localhost') && window.location.hostname !== 'localhost';
-      if (!iframe.src.includes('v=33.0') || hasLocalhostMismatch) {
+      if (!iframe.src.includes('v=35.0') || hasLocalhostMismatch) {
         iframe.src = targetUrl;
       }
     }
@@ -1204,7 +1228,7 @@ export class DashboardManager {
     const iframe = document.getElementById(`iframe-${deckId}`);
     if (iframe) {
       sfx.playClick();
-      const targetUrl = this.urls[deckId] || (deckId === 'garage' ? './dashboards/garage/index.html?v=33.0' : '');
+      const targetUrl = this.urls[deckId] || (deckId === 'garage' ? './dashboards/garage/index.html?v=35.0' : '');
       if (targetUrl) {
         iframe.src = targetUrl;
       }
@@ -1217,7 +1241,7 @@ export class DashboardManager {
     if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
       if (newUrl.includes('localhost') || newUrl.includes('127.0.0.1')) {
         console.warn(`[Hub Protection] Preventing localhost URL for ${deckId} in mobile/remote environment.`);
-        if (deckId === 'garage') newUrl = './dashboards/garage/index.html?v=33.0';
+        if (deckId === 'garage') newUrl = './dashboards/garage/index.html?v=35.0';
         else if (deckId === 'rental') newUrl = './dashboards/rental/index.html';
         else if (deckId === 'financial') newUrl = './dashboards/financial/index.html';
       }

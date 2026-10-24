@@ -457,9 +457,9 @@ export class AtomicCoreVisualizer {
       try {
         const val = localStorage.getItem(key);
         if (key === 'hub_url_garage') {
-          if (!val || val.includes('localhost') || val.includes('127.0.0.1') || !val.includes('v=33.0')) {
-            localStorage.setItem('hub_url_garage', './dashboards/garage/index.html?v=33.0');
-            return './dashboards/garage/index.html?v=33.0';
+          if (!val || val.includes('localhost') || val.includes('127.0.0.1') || !val.includes('v=35.0')) {
+            localStorage.setItem('hub_url_garage', './dashboards/garage/index.html?v=35.0');
+            return './dashboards/garage/index.html?v=35.0';
           }
           return val;
         }
@@ -487,7 +487,7 @@ export class AtomicCoreVisualizer {
         code: 'DAILY BRIEF',
         orbitRadius: 5.2,
         horizontalStretch: 1.48,
-        speed: 0.28,
+        speed: 0.35,
         angle: 0.2,
         inclination: { x: 0.32, y: 0.35, z: 0.15 },
         color: 0x00f0ff,
@@ -503,7 +503,7 @@ export class AtomicCoreVisualizer {
         code: 'WA RENTAL',
         orbitRadius: 6.6,
         horizontalStretch: 1.54,
-        speed: 0.23,
+        speed: 0.30,
         angle: 2.1,
         inclination: { x: -0.30, y: 0.70, z: -0.26 },
         color: 0x38bdf8,
@@ -519,7 +519,7 @@ export class AtomicCoreVisualizer {
         code: 'WEALTH 24/7',
         orbitRadius: 8.0,
         horizontalStretch: 1.58,
-        speed: 0.19,
+        speed: 0.25,
         angle: 4.4,
         inclination: { x: 0.28, y: -0.60, z: 0.38 },
         color: 0x8b5cf6,
@@ -535,7 +535,7 @@ export class AtomicCoreVisualizer {
         code: 'OVERLAND',
         orbitRadius: 9.4,
         horizontalStretch: 1.62,
-        speed: 0.15,
+        speed: 0.20,
         angle: 3.2,
         inclination: { x: -0.26, y: -0.36, z: 0.34 },
         color: 0x10b981,
@@ -551,7 +551,7 @@ export class AtomicCoreVisualizer {
         code: 'CALENDAR & MEALS',
         orbitRadius: 10.8,
         horizontalStretch: 1.66,
-        speed: 0.12,
+        speed: 0.16,
         angle: 1.4,
         inclination: { x: 0.30, y: -0.26, z: -0.32 },
         color: 0xf43f5e,
@@ -567,12 +567,12 @@ export class AtomicCoreVisualizer {
         code: 'POWERTRAIN & TELEMETRY',
         orbitRadius: 12.2,
         horizontalStretch: 1.70,
-        speed: 0.10,
+        speed: 0.13,
         angle: 5.6,
         inclination: { x: -0.34, y: 0.42, z: -0.18 },
         color: 0xf59e0b,
         glowHex: '#f59e0b',
-        url: resolveCloudUrl('hub_url_garage', './dashboards/garage/index.html?v=33.0'),
+        url: resolveCloudUrl('hub_url_garage', './dashboards/garage/index.html?v=35.0'),
         icon: '🛻'
       }
     ];
@@ -1235,22 +1235,28 @@ export class AtomicCoreVisualizer {
     this.animationFrameId = requestAnimationFrame(() => this.animate());
 
     const time = performance.now() * 0.001;
+    if (!this.lastTime) this.lastTime = time;
+    let delta = time - this.lastTime;
+    this.lastTime = time;
+    if (delta > 0.1) delta = 0.1;
+    if (delta < 0.0005) delta = 0.0005;
+    const timeScale = delta * 60.0; // 1.0 baseline at 60 FPS
 
     // Smooth view offset interpolation for sidebar transitions
     if (Math.abs(this.targetViewOffsetX - this.currentViewOffsetX) > 0.15) {
-      this.currentViewOffsetX += (this.targetViewOffsetX - this.currentViewOffsetX) * 0.12;
+      this.currentViewOffsetX += (this.targetViewOffsetX - this.currentViewOffsetX) * Math.min(1.0, 0.12 * timeScale);
       this.applyViewOffset();
     }
 
     // Constant slow elegant rotation of the atomic structure itself when user is not dragging
     if (!this.isDragging) {
-      this.targetRotation.y += 0.0024;
+      this.targetRotation.y += 0.0024 * timeScale;
       this.targetRotation.x = 0.22 + Math.sin(time * 0.35) * 0.04;
     }
 
     // Smooth drag / rotation interpolation
-    this.currentRotation.x += (this.targetRotation.x - this.currentRotation.x) * 0.08;
-    this.currentRotation.y += (this.targetRotation.y - this.currentRotation.y) * 0.08;
+    this.currentRotation.x += (this.targetRotation.x - this.currentRotation.x) * Math.min(1.0, 0.08 * timeScale);
+    this.currentRotation.y += (this.targetRotation.y - this.currentRotation.y) * Math.min(1.0, 0.08 * timeScale);
 
     if (this.orbitalGroup) {
       this.orbitalGroup.rotation.x = this.currentRotation.x;
@@ -1259,12 +1265,12 @@ export class AtomicCoreVisualizer {
 
     // Spin Nucleus
     if (this.nucleusGroup) {
-      this.nucleusGroup.rotation.y += 0.015;
-      this.nucleusGroup.rotation.z += 0.008;
+      this.nucleusGroup.rotation.y += 0.015 * timeScale;
+      this.nucleusGroup.rotation.z += 0.008 * timeScale;
     }
 
     if (this.outerNucleusMesh) {
-      this.outerNucleusMesh.rotation.y -= 0.02;
+      this.outerNucleusMesh.rotation.y -= 0.02 * timeScale;
       const pulse = 1 + Math.sin(time * 3) * 0.08;
       this.outerNucleusMesh.scale.set(pulse, pulse, pulse);
     }
@@ -1278,7 +1284,7 @@ export class AtomicCoreVisualizer {
       const dash = el.dash;
       const isHovered = (this.hoveredDeck === dash.id);
       const speedMultiplier = isHovered ? 0.0 : 1.0;
-      el.currentAngle += 0.016 * dash.speed * speedMultiplier;
+      el.currentAngle += 0.016 * dash.speed * speedMultiplier * timeScale;
       
       const stretchX = dash.horizontalStretch || 1.4;
       const x = Math.cos(el.currentAngle) * (dash.orbitRadius * stretchX);
@@ -1286,13 +1292,13 @@ export class AtomicCoreVisualizer {
       el.mesh.position.set(x, 0, z);
 
       // Spin the custom 3D domain shape (wrench, house, mountain, gem, star, calendar)
-      el.mesh.rotation.y += 0.02;
-      el.mesh.rotation.x += 0.01;
-      el.mesh.rotation.z += 0.012;
+      el.mesh.rotation.y += 0.02 * timeScale;
+      el.mesh.rotation.x += 0.01 * timeScale;
+      el.mesh.rotation.z += 0.012 * timeScale;
 
       // Spin the glow
-      el.glowMesh.rotation.y += 0.04;
-      el.glowMesh.rotation.x += 0.02;
+      el.glowMesh.rotation.y += 0.04 * timeScale;
+      el.glowMesh.rotation.x += 0.02 * timeScale;
 
       // Subtle 3D pulsating quantum glow if sphere has active alerts/notifications
       if (el.hasAlert && el.glowMesh) {
