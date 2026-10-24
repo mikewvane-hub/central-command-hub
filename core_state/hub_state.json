@@ -144,14 +144,24 @@
           "tabs_expiration": "2027-05-31",
           "days_remaining": 224,
           "fees_paid": 125,
-          "status": "CURRENT"
+          "status": "CURRENT",
+          "title_control_number": "47231135",
+          "previous_title": "UNE90756",
+          "previous_state": "MO",
+          "date_title_issued": "2026-05-08",
+          "date_vehicle_acquired": "2024-03-02",
+          "odometer_brand": "ACTUAL MILEAGE",
+          "statutory_proof": "Tennessee Code Annotated § 55-3-101",
+          "department": "State of Tennessee Department of Revenue"
         },
         "insurance": {
           "carrier": "USAA",
           "policy_id": "USAA-TN-9402158",
           "renewal_date": "2027-05-01",
           "status": "ACTIVE"
-        }
+        },
+        "body_type": "4W",
+        "condition": "USED"
       }
     ]
   },

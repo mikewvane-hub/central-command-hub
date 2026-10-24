@@ -218,12 +218,12 @@ export class DashboardManager {
     };
 
     const sanitizeGarageUrl = () => {
-      const LATEST_GARAGE_URL = './dashboards/garage/index.html?v=38.0';
+      const LATEST_GARAGE_URL = './dashboards/garage/index.html?v=39.0';
       try {
         const stored = localStorage.getItem('hub_url_garage');
         // If stored URL points to localhost/127.0.0.1 (which breaks on mobile/GitHub Pages),
         // or has old version, or is empty: ALWAYS reset to reliable relative path!
-        if (!stored || stored.includes('localhost') || stored.includes('127.0.0.1') || !stored.includes('v=38.0')) {
+        if (!stored || stored.includes('localhost') || stored.includes('127.0.0.1') || !stored.includes('v=39.0')) {
           localStorage.setItem('hub_url_garage', LATEST_GARAGE_URL);
           return LATEST_GARAGE_URL;
         }
@@ -1268,7 +1268,7 @@ export class DashboardManager {
     const iframe = document.getElementById(`iframe-${deckId}`);
     if (iframe) {
       sfx.playClick();
-      const targetUrl = this.urls[deckId] || (deckId === 'garage' ? './dashboards/garage/index.html?v=38.0' : '');
+      const targetUrl = this.urls[deckId] || (deckId === 'garage' ? './dashboards/garage/index.html?v=39.0' : '');
       if (targetUrl) {
         iframe.src = targetUrl;
       }
@@ -1281,7 +1281,7 @@ export class DashboardManager {
     if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
       if (newUrl.includes('localhost') || newUrl.includes('127.0.0.1')) {
         console.warn(`[Hub Protection] Preventing localhost URL for ${deckId} in mobile/remote environment.`);
-        if (deckId === 'garage') newUrl = './dashboards/garage/index.html?v=38.0';
+        if (deckId === 'garage') newUrl = './dashboards/garage/index.html?v=39.0';
         else if (deckId === 'rental') newUrl = './dashboards/rental/index.html';
         else if (deckId === 'financial') newUrl = './dashboards/financial/index.html';
       }
