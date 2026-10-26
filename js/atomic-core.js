@@ -894,6 +894,15 @@ export class AtomicCoreVisualizer {
     });
 
     this.scene.add(this.orbitalGroup);
+
+    // Dynamic telemetry & status bar synchronization
+    const activeCount = this.dashboards.length;
+    const topMetric = document.getElementById('tactical-cores-count');
+    if (topMetric) topMetric.textContent = `${activeCount} ACTIVE CORES`;
+    const bottomStatus = document.getElementById('orbital-status-pill-text');
+    if (bottomStatus) {
+      bottomStatus.textContent = `${activeCount} ORBITAL SHAPES ACTIVE • PULSING SHAPES INDICATE ACTIVE ALERTS / NOTIFICATIONS`;
+    }
   }
 
   buildCosmicDust() {

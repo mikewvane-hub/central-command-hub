@@ -4,7 +4,7 @@
  */
 
 import { sfx } from './sound-effects.js?v=40.0';
-import { AtomicCoreVisualizer } from './atomic-core.js?v=40.0';
+import { AtomicCoreVisualizer } from './atomic-core.js?v=41.0';
 import { DashboardManager } from './dashboard-manager.js?v=40.0';
 import { VoiceCommandEngine } from './voice-command.js?v=40.0';
 import { DeviceOptimizer } from './device-optimizer.js?v=40.0';

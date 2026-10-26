@@ -19,3 +19,4 @@ Last Updated: 2026-10-20T01:30:32.642Z
 - **[#TK-4908]** Fix 3D Garage Lag ➔ Agent: `scene-architect` ([File](./active/TK-4908-fix-3d-garage-lag.md))
 - **[#TK-9414]** Fix 3D Garage Lag ➔ Agent: `scene-architect` ([File](./active/TK-9414-fix-3d-garage-lag.md))
 - **[#TK-1377]** Fix 3D Garage Lag ➔ Agent: `scene-architect` ([File](./active/TK-1377-fix-3d-garage-lag.md))
+- **[#TK-6754]** Fix 3D Garage Lag ➔ Agent: `scene-architect` ([File](./active/TK-6754-fix-3d-garage-lag.md))
