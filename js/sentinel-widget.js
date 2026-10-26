@@ -118,6 +118,77 @@ export class SentinelWidget {
       });
     }
 
+    // 4.5. Export Dossier for Claude / ChatGPT
+    const dossierBtn = document.getElementById('btn-sentinel-export-dossier');
+    if (dossierBtn) {
+      dossierBtn.addEventListener('click', async () => {
+        sfx.playClick();
+        dossierBtn.classList.add('loading');
+        dossierBtn.textContent = '⏳ GENERATING DOSSIER...';
+
+        try {
+          let markdown = '';
+          // 1. Try server endpoint first for full system topology & live alert data
+          try {
+            const resp = await fetch('/api/sentinel/export-dossier', { method: 'POST' });
+            if (resp.ok) {
+              const data = await resp.json();
+              if (data.markdown) {
+                markdown = data.markdown;
+              }
+            }
+          } catch (e) {}
+
+          // 2. Client fallback if server is unreachable
+          if (!markdown && this.engine && typeof this.engine.generateAuditDossier === 'function') {
+            markdown = this.engine.generateAuditDossier();
+          }
+
+          if (markdown) {
+            // Copy to clipboard
+            let copied = false;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              try {
+                await navigator.clipboard.writeText(markdown);
+                copied = true;
+              } catch (clipErr) {
+                console.warn('Clipboard writeText failed, using fallback:', clipErr);
+              }
+            }
+
+            if (!copied) {
+              // Textarea fallback
+              const ta = document.createElement('textarea');
+              ta.value = markdown;
+              ta.style.position = 'fixed';
+              ta.style.opacity = '0';
+              document.body.appendChild(ta);
+              ta.select();
+              document.execCommand('copy');
+              document.body.removeChild(ta);
+              copied = true;
+            }
+
+            sfx.playSuccess();
+            dossierBtn.textContent = '✓ COPIED TO CLIPBOARD!';
+            setTimeout(() => {
+              dossierBtn.textContent = '📋 COPY DOSSIER (CHATGPT / CLAUDE)';
+            }, 3000);
+          } else {
+            throw new Error('Dossier generation returned empty content');
+          }
+        } catch (err) {
+          console.error('[SentinelWidget] Dossier export error:', err);
+          dossierBtn.textContent = '⚠️ EXPORT FAILED';
+          setTimeout(() => {
+            dossierBtn.textContent = '📋 COPY DOSSIER (CHATGPT / CLAUDE)';
+          }, 2500);
+        } finally {
+          dossierBtn.classList.remove('loading');
+        }
+      });
+    }
+
     // 5. ESC Key listener
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && this.isOpen) {

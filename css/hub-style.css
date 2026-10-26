@@ -4021,6 +4021,18 @@ body::after {
   background: rgba(30, 41, 59, 0.95);
 }
 
+.sentinel-action-btn.dossier-btn {
+  background: rgba(139, 92, 246, 0.15);
+  border: 1px solid rgba(139, 92, 246, 0.5);
+  color: #c084fc;
+}
+
+.sentinel-action-btn.dossier-btn:hover {
+  background: rgba(139, 92, 246, 0.28);
+  border-color: #a855f7;
+  box-shadow: 0 0 12px rgba(139, 92, 246, 0.45);
+}
+
 .sentinel-action-btn.loading {
   opacity: 0.7;
   pointer-events: none;

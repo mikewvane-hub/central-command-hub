@@ -438,6 +438,68 @@ export class SentinelMaintenanceEngine {
     }
     return true;
   }
+
+  /**
+   * Generates a self-contained Markdown Audit Dossier for pasting into ChatGPT / Claude
+   */
+  generateAuditDossier() {
+    const timestamp = new Date().toISOString();
+    const metrics = this.bus.getAggregateMetrics();
+    const fleetHealth = this.bus.getFleetHealth();
+
+    let md = `# 🛡️ ANTIGRAVITY CENTRAL COMMAND HUB // SENTINEL AUDIT DOSSIER\n`;
+    md += `> **Audit Generated At:** \`${timestamp}\`  \n`;
+    md += `> **Auditing Subagent:** \`Sentinel-Daemon\` (Autonomous Watchdog)  \n`;
+    md += `> **Overall Fleet Health Score:** \`${metrics.fleetHealthScore}%\` (${metrics.healthyCount} Healthy, ${metrics.degradedCount} Degraded, ${metrics.downCount} Down)  \n`;
+    md += `> **Auto-Remediations Applied:** \`${this.remediationsCount}\`  \n`;
+    md += `> **Target AI Reviewers:** Claude 3.7 / Claude 3.5 Sonnet / ChatGPT 4o  \n\n`;
+
+    md += `---\n\n`;
+    md += `## 🎯 PROMPT & INSTRUCTIONS FOR EXTERNAL AI REVIEWER (CLAUDE / CHATGPT)\n\n`;
+    md += `You are an expert Systems Architect, Security Auditor, and Principal Full-Stack Engineer. Review this audit dossier for the **Antigravity Central Command Hub** multi-project fleet. Scrub and scrutinize the architecture, configurations, and state below to verify that there are no hidden flaws, vulnerabilities, or regressions:\n\n`;
+    md += `1. **Endpoint & Tunnel Resilience:** Verify that the 6 fleet projects have well-defined, non-conflicting port routes and graceful offline fallback mechanisms.\n`;
+    md += `2. **DOM & Self-Healing Integrity:** Validate that the autonomous watchdog mechanisms properly handle 3D orbit freezing, orphaned CSS pulse classes, and dangling listeners without main-thread locks.\n`;
+    md += `3. **Memory & Cache Safety:** Verify that telemetry queues, localStorage keys, and log files are strictly bounded with zero memory leak or disk exhaustion risks.\n`;
+    md += `4. **CORS & Iframe Isolation:** Confirm that header configurations allow secure responsive framing while preventing cross-origin clickjacking.\n`;
+    md += `5. **Operational Truth & Cadence Integrity:** Confirm that active alerts and executive cadence data contain no hallucinated dates, ungrounded deadlines, or orphan entities.\n\n`;
+    md += `Provide an assessment summarizing:\n`;
+    md += `- **Verdict:** (APPROVED / ACTION_REQUIRED)\n`;
+    md += `- **Strengths & Best Practices Observed**\n`;
+    md += `- **Identified Anomalies or Potential Edge Cases**\n`;
+    md += `- **Recommended Hardening Proposals**\n\n`;
+
+    md += `---\n\n`;
+    md += `## 🛰️ SATELLITE FLEET STATUS GRID\n\n`;
+    md += `| Subsystem ID | Project Name | Status | Port | Latency | DOM Integrity |\n`;
+    md += `| :--- | :--- | :--- | :--- | :--- | :--- |\n`;
+    Object.entries(FLEET_PROJECTS).forEach(([id, meta]) => {
+      const h = fleetHealth[id] || { status: 'HEALTHY', endpoints: {}, domIntegrity: {} };
+      const lat = h.endpoints?.latencyMs ? `${h.endpoints.latencyMs}ms` : 'Local/Cloud';
+      const dom = (h.domIntegrity?.brokenSelectors?.length || 0) === 0 ? '✓ Nominal' : '⚠️ Flagged';
+      md += `| \`${id}\` | **${meta.name}** | \`${h.status}\` | \`:${h.endpoints?.port || meta.defaultPort}\` | ${lat} | ${dom} |\n`;
+    });
+    md += `\n`;
+
+    md += `---\n\n`;
+    md += `## 📜 RECENT AUTO-REMEDIATION LEDGER & AUDIT TRAIL\n\n`;
+    if (this.auditHistory.length === 0) {
+      md += `*No recent remediation events logged. All systems operating nominal.*\n\n`;
+    } else {
+      md += `| Timestamp | Action | Level | Details |\n`;
+      md += `| :--- | :--- | :--- | :--- |\n`;
+      this.auditHistory.slice(0, 15).forEach(item => {
+        const timeStr = new Date(item.timestamp).toISOString();
+        const detailStr = item.details?.resultMessage || item.details?.reason || item.details?.details || JSON.stringify(item.details || {});
+        md += `| \`${timeStr}\` | \`${item.action}\` | \`${item.level}\` | ${detailStr} |\n`;
+      });
+      md += `\n`;
+    }
+
+    md += `---\n`;
+    md += `*End of Sentinel Audit Dossier. Ready for Claude / ChatGPT inspection.*  \n`;
+
+    return md;
+  }
 }
 
 export const sentinelEngine = new SentinelMaintenanceEngine();

@@ -289,6 +289,36 @@ async function runSentinelTestSuite() {
   assert(remediateRes.body.resultMessage, 'Remediation must return resultMessage');
   console.log(`  ✓ POST /api/sentinel/remediate: 200 OK ("${remediateRes.body.resultMessage}")`);
 
+  // 6D: Test Client-Side Dossier Generator
+  const clientDossier = engine.generateAuditDossier();
+  assert(clientDossier.includes('SENTINEL AUDIT DOSSIER'), 'Client dossier must include title');
+  assert(clientDossier.includes('INSTRUCTIONS FOR EXTERNAL AI REVIEWER (CLAUDE / CHATGPT)'), 'Client dossier must include instructions');
+  expectedProjects.forEach(pId => {
+    assert(clientDossier.includes(pId), `Client dossier must reference ${pId}`);
+  });
+  console.log(`  ✓ Client engine.generateAuditDossier() successfully generated standardized markdown.`);
+
+  // 6E: POST /api/sentinel/export-dossier (Full Server Audit Dossier for Claude / ChatGPT)
+  const dossierRes = await httpRequest({
+    hostname: '127.0.0.1',
+    port: serverPort,
+    path: '/api/sentinel/export-dossier',
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' }
+  });
+
+  assert.strictEqual(dossierRes.status, 200, 'POST /api/sentinel/export-dossier must return 200');
+  assert.strictEqual(dossierRes.body.success, true);
+  assert(dossierRes.body.markdown.length > 500, 'Dossier markdown must be rich and non-trivial');
+  assert(dossierRes.body.markdown.includes('INSTRUCTIONS FOR EXTERNAL AI REVIEWER (CLAUDE / CHATGPT)'));
+
+  const dossierFile = path.join(__dirname, 'SENTINEL_SYSTEM_AUDIT_DOSSIER.md');
+  assert(fs.existsSync(dossierFile), 'SENTINEL_SYSTEM_AUDIT_DOSSIER.md must exist on disk');
+  const diskDossier = fs.readFileSync(dossierFile, 'utf-8');
+  assert(diskDossier.includes('ANTIGRAVITY CENTRAL COMMAND HUB // SENTINEL SYSTEM AUDIT DOSSIER'));
+  console.log(`  ✓ POST /api/sentinel/export-dossier: 200 OK (${dossierRes.body.markdown.length} bytes generated)`);
+  console.log(`  ✓ Verified physical file write to SENTINEL_SYSTEM_AUDIT_DOSSIER.md for Claude / ChatGPT.`);
+
   console.log('\n🎉 ALL 6 SENTINEL TEST SUITES PASSED (100% VERIFICATION SUCCESS)!\n');
 }
 

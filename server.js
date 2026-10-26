@@ -578,6 +578,217 @@ app.post('/api/sentinel/remediate', (req, res) => {
   }
 });
 
+// Helper function to generate standardized Markdown Audit Dossier for Claude / ChatGPT
+function generateSentinelDossier() {
+  const timestamp = new Date().toISOString();
+  let state = {};
+  if (fs.existsSync(STATE_FILE)) {
+    try {
+      state = JSON.parse(fs.readFileSync(STATE_FILE, 'utf-8'));
+    } catch (e) {}
+  }
+
+  let auditEntries = [];
+  if (fs.existsSync(SENTINEL_LOG_FILE)) {
+    try {
+      const lines = fs.readFileSync(SENTINEL_LOG_FILE, 'utf-8').trim().split('\n').filter(Boolean);
+      auditEntries = lines.map(l => {
+        try { return JSON.parse(l); } catch (e) { return { raw: l }; }
+      });
+    } catch (e) {}
+  }
+
+  const lanIp = getLocalIp();
+  const activeAlerts = (state.alerts || []).filter(a => !a.dismissed && !(state.dismissed_alerts || []).includes(a.code));
+  const activeTasks = state.platform_tasks || [];
+  const backlogItems = state.platform_backlog || [];
+
+  const fleetProjects = [
+    {
+      id: 'fleet-asset-manager',
+      name: 'Garage And Fleet Asset Manager',
+      deckId: 'garage',
+      route: `http://localhost:${PORT}/dashboards/garage/index.html?v=40.0`,
+      port: 3009,
+      type: 'Local Subsystem',
+      desc: 'OBD-II vehicle telemetry, maintenance logs, 3D model visualization.'
+    },
+    {
+      id: 'rental-asset-explorer',
+      name: 'Dual-Engine Washington Real Estate Explorer',
+      deckId: 'rental',
+      route: `http://127.0.0.1:${PORT}/dashboards/rental/index.html`,
+      port: PORT,
+      type: 'Local Terminal',
+      desc: 'Property management, lease compliance, JBLM market scanner.'
+    },
+    {
+      id: 'financial-command-center',
+      name: 'Financial Command Center',
+      deckId: 'financial',
+      route: 'http://localhost:3008/',
+      port: 3008,
+      type: 'Local Service',
+      desc: 'Net worth tracker, liquidity buffers, high-yield asset allocation.'
+    },
+    {
+      id: 'mackie-mom-board',
+      name: "Wife's Custom Digital Dashboard (Mackie Mom Board)",
+      deckId: 'mackie',
+      route: 'https://daily-executive-dashboard.onrender.com/mackie/',
+      port: 4004,
+      type: 'Cloud Satellite',
+      desc: 'Family calendar, kids meal planner, routine tracking.'
+    },
+    {
+      id: 'daily-executive-briefing',
+      name: 'Executive Daily Briefing Setup',
+      deckId: 'executive',
+      route: 'https://daily-executive-dashboard.onrender.com/',
+      port: 4005,
+      type: 'Cloud Satellite',
+      desc: 'Chief of Staff weekly cadence, priority directives, high-impact highlights.'
+    },
+    {
+      id: 'family-road-trip-planner',
+      name: 'Custom Road Trip Dashboard (Rainier Basecamp)',
+      deckId: 'trip',
+      route: 'https://daily-executive-dashboard.onrender.com/trip-planner/',
+      port: 4006,
+      type: 'Cloud Satellite',
+      desc: 'Overland expedition routing, Pacific Northwest campsite permits.'
+    }
+  ];
+
+  let md = `# 🛡️ ANTIGRAVITY CENTRAL COMMAND HUB // SENTINEL SYSTEM AUDIT DOSSIER\n`;
+  md += `> **Audit Generated At:** \`${timestamp}\`  \n`;
+  md += `> **Auditing Subagent:** \`Sentinel-Daemon\` (Autonomous Telemetry & Self-Healing Watchdog)  \n`;
+  md += `> **System Topology:** Antigravity Central Command Hub (Quantum Atomic Architecture v2.5.0)  \n`;
+  md += `> **Runtime Environment:** Node.js \`${process.version}\` on \`${os.platform()} (${os.release()})\`  \n`;
+  md += `> **Network Bindings:** Local: \`http://localhost:${PORT}\` // LAN: \`http://${lanIp}:${PORT}\`  \n`;
+  md += `> **Target AI Reviewers:** Claude 3.7 / Claude 3.5 Sonnet / ChatGPT 4o  \n\n`;
+
+  md += `---\n\n`;
+  md += `## 🎯 PROMPT & INSTRUCTIONS FOR EXTERNAL AI REVIEWER (CLAUDE / CHATGPT)\n\n`;
+  md += `You are acting as an expert Systems Architect, Security Auditor, and Principal Full-Stack Engineer. Review this audit dossier for the **Antigravity Central Command Hub** multi-project fleet. Scrub and scrutinize the architecture, configurations, and state below to verify that there are no hidden flaws, vulnerabilities, or regressions:\n\n`;
+  md += `1. **Endpoint & Tunnel Resilience:** Verify that the 6 fleet projects have well-defined, non-conflicting port routes and graceful offline fallback mechanisms.\n`;
+  md += `2. **DOM & Self-Healing Integrity:** Validate that the autonomous watchdog mechanisms properly handle 3D orbit freezing, orphaned CSS pulse classes, and dangling listeners without main-thread locks.\n`;
+  md += `3. **Memory & Cache Safety:** Verify that telemetry queues, localStorage keys, and log files are strictly bounded with zero memory leak or disk exhaustion risks.\n`;
+  md += `4. **CORS & Iframe Isolation:** Confirm that header configurations allow secure responsive framing while preventing cross-origin clickjacking.\n`;
+  md += `5. **Operational Truth & Cadence Integrity:** Confirm that active alerts and executive cadence data contain no hallucinated dates, ungrounded deadlines, or orphan entities.\n\n`;
+  md += `Provide an assessment summarizing:\n`;
+  md += `- **Verdict:** (APPROVED / ACTION_REQUIRED)\n`;
+  md += `- **Strengths & Best Practices Observed**\n`;
+  md += `- **Identified Anomalies or Potential Edge Cases**\n`;
+  md += `- **Recommended Hardening Proposals**\n\n`;
+
+  md += `---\n\n`;
+  md += `## 🛰️ SATELLITE FLEET TOPOLOGY (6 CONNECTED PROJECTS)\n\n`;
+  md += `| Subsystem ID | Project Name | Route / URL | Port | Type | Domain Description |\n`;
+  md += `| :--- | :--- | :--- | :--- | :--- | :--- |\n`;
+  fleetProjects.forEach(p => {
+    md += `| \`${p.id}\` | **${p.name}** | \`${p.route}\` | \`:${p.port}\` | ${p.type} | ${p.desc} |\n`;
+  });
+  md += `\n`;
+
+  md += `---\n\n`;
+  md += `## ⚙️ SENTINEL SUBAGENT TELEMETRY & SELF-HEALING STATUS\n\n`;
+  md += `- **Watchdog Subagent Status:** \`ONLINE\`\n`;
+  md += `- **Uptime:** \`${Math.round(process.uptime())}s\` (~${(process.uptime() / 60).toFixed(1)} minutes)\n`;
+  md += `- **Autonomous Sweep Frequency:** Every 15 minutes (configurable 15–60 min)\n`;
+  md += `- **Total In-Memory Audit Capacity:** Capped at 60 records max (ring buffer)\n`;
+  md += `- **Disk Audit Log Capacity:** Capped at 500 lines max with auto-prune to 300\n`;
+  md += `- **Self-Healing Features Activated:**\n`;
+  md += `  - \`RESET_STALE_PULSE\`: Auto-triggers \`AtomicCoreVisualizer.clearAllPulseSpheres()\` when lingering hover states are detected on 3D orbits.\n`;
+  md += `  - \`PRUNE_PENDING_TASKS\`: Caps stale offline localStorage queues to prevent client storage overflow.\n`;
+  md += `  - \`RECONNECT_PROBE\`: Automated telemetry heartbeat probe when node drops to \`DOWN\` status.\n`;
+  md += `  - \`DOM_SURFACE_SCANNER\`: Headless scanner inspecting deck selectors, action attributes, and navigation anchors.\n\n`;
+
+  md += `---\n\n`;
+  md += `## 📜 RECENT AUTO-REMEDIATION LEDGER & AUDIT TRAIL\n\n`;
+  if (auditEntries.length === 0) {
+    md += `*No recent remediation events logged. System operating in nominal steady state.*\n\n`;
+  } else {
+    md += `| Timestamp | Action | Level | Details / Message |\n`;
+    md += `| :--- | :--- | :--- | :--- |\n`;
+    auditEntries.slice(-15).reverse().forEach(entry => {
+      const timeStr = entry.timestamp ? new Date(entry.timestamp).toISOString() : 'N/A';
+      const detailStr = entry.details?.resultMessage || entry.details?.reason || entry.details?.details || JSON.stringify(entry.details || {});
+      md += `| \`${timeStr}\` | \`${entry.action}\` | \`${entry.level}\` | ${detailStr} |\n`;
+    });
+    md += `\n`;
+  }
+
+  md += `---\n\n`;
+  md += `## 🚨 ACTIVE OPERATIONAL ALERTS & PLATFORM DIRECTIVES\n\n`;
+  md += `- **Active Alerts Count:** ${activeAlerts.length}\n`;
+  md += `- **Dismissed Items Count:** ${(state.dismissed_alerts || []).length}\n`;
+  md += `- **Active Platform Tasks:** ${activeTasks.length}\n`;
+  md += `- **Platform Backlog Items:** ${backlogItems.length}\n\n`;
+
+  if (activeAlerts.length > 0) {
+    md += `### Active Alerts Detail\n`;
+    activeAlerts.forEach((a, i) => {
+      md += `${i + 1}. **[${a.severity || 'WARNING'}] ${a.title || a.subject || a.code}**\n`;
+      md += `   - Code: \`${a.code || 'ALERT'}\` | Subsystem: \`${a.subsystem || a.deckId || 'General'}\`\n`;
+      md += `   - Details: ${a.message || a.description || 'No description provided'}\n`;
+      if (a.due_date) md += `   - Target Cadence: \`${a.due_date}\`\n`;
+    });
+    md += `\n`;
+  }
+
+  md += `---\n\n`;
+  md += `## 🏗️ CORE CODEBASE INVENTORY & ARCHITECTURAL CHECKSUMS\n\n`;
+  md += `- **Frontend UI Shell:** \`index.html\` (Cache Buster: \`v=40.0\`)\n`;
+  md += `- **Styling System:** \`css/hub-style.css\` & \`css/atomic-theme.css\` (Cyber-tactical theme)\n`;
+  md += `- **Client Modules (ESM):**\n`;
+  md += `  - \`js/app.js\`: Central orchestrator and subsystem lifecycle\n`;
+  md += `  - \`js/telemetry-bus.js\`: Standardized inter-agent event broker\n`;
+  md += `  - \`js/sentinel-maintenance.js\`: Autonomous watchdog and self-healing engine\n`;
+  md += `  - \`js/sentinel-widget.js\`: Collapsible diagnostic matrix HUD overlay\n`;
+  md += `  - \`js/atomic-core.js\`: Three.js 3D quantum atomic orbital simulation\n`;
+  md += `  - \`js/dashboard-manager.js\`: Dynamic deck iframe router & alert sync\n`;
+  md += `  - \`js/executive-sidebar.js\`: Executive cadence sidebar & C2 backlog dispatch\n`;
+  md += `- **Backend Server:** \`server.js\` (Express + Node.js REST API on port \`${PORT}\`)\n`;
+  md += `- **Persistence Engine:** \`core_state/hub_state.json\` & SQLite \`core_state/hub_state.db\`\n\n`;
+
+  md += `---\n`;
+  md += `*End of Sentinel System Audit Dossier. Ready for Claude / ChatGPT inspection.*  \n`;
+
+  return md;
+}
+
+// GET & POST export dossier endpoint for Claude / ChatGPT
+const DOSSIER_FILE = path.join(__dirname, 'SENTINEL_SYSTEM_AUDIT_DOSSIER.md');
+
+app.get('/api/sentinel/export-dossier', (req, res) => {
+  try {
+    const md = generateSentinelDossier();
+    fs.writeFileSync(DOSSIER_FILE, md, 'utf-8');
+    res.json({
+      success: true,
+      filePath: 'SENTINEL_SYSTEM_AUDIT_DOSSIER.md',
+      markdown: md
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/sentinel/export-dossier', (req, res) => {
+  try {
+    const md = generateSentinelDossier();
+    fs.writeFileSync(DOSSIER_FILE, md, 'utf-8');
+    res.json({
+      success: true,
+      filePath: 'SENTINEL_SYSTEM_AUDIT_DOSSIER.md',
+      markdown: md
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`================================================================`);
   console.log(`🌌 ANTIGRAVITY CENTRAL COMMAND HUB ONLINE`);

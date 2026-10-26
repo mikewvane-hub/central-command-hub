@@ -743,12 +743,15 @@
 
         <!-- Action / Maintenance Control Bar -->
         <div class="sentinel-actions-bar">
-          <div style="display:flex;gap:10px;align-items:center;">
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
             <button class="sentinel-action-btn primary" id="btn-sentinel-run-sweep" title="Trigger immediate autonomous maintenance sweep">
               ⚡ RUN SENTINEL SWEEP
             </button>
             <button class="sentinel-action-btn secondary" id="btn-sentinel-auto-heal" title="Auto-remediate stale pulse states and cache locks">
               🛠️ AUTO-HEAL DOM &amp; PULSE
+            </button>
+            <button class="sentinel-action-btn dossier-btn" id="btn-sentinel-export-dossier" title="Generate and copy clean Markdown audit dossier for ChatGPT / Claude">
+              📋 COPY DOSSIER (CHATGPT / CLAUDE)
             </button>
           </div>
           <div class="sentinel-interval-badge">
