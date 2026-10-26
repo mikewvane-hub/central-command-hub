@@ -190,6 +190,7 @@ async function main() {
     'voice-command.js',
     'device-optimizer.js',
     'executive-sidebar.js',
+    'date-utils.js',
     'telemetry-bus.js',
     'sentinel-maintenance.js',
     'sentinel-widget.js'

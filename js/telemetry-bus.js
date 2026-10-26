@@ -11,31 +11,38 @@ export const FLEET_PROJECTS = {
     deckId: 'garage',
     name: 'Garage & Fleet Asset Command',
     category: 'Vehicle Telemetry & Powertrain',
-    defaultPort: 4001,
-    url: './dashboards/garage/index.html'
+    type: 'local',
+    defaultPort: 3009,
+    url: './dashboards/garage/index.html?v=40.0',
+    devUrl: 'http://localhost:3009/'
   },
   'rental-asset-explorer': {
     id: 'rental-asset-explorer',
     deckId: 'rental',
     name: 'Washington Real Estate & Rental Ops',
     category: 'Property Management & Acquisition',
-    defaultPort: 4002,
-    url: './dashboards/rental/index.html'
+    type: 'local',
+    defaultPort: 4000,
+    url: './dashboards/rental/index.html',
+    devUrl: 'http://localhost:5173/'
   },
   'financial-command-center': {
     id: 'financial-command-center',
     deckId: 'financial',
     name: 'Financial Wealth Console',
     category: 'Wealth & Asset Allocation',
-    defaultPort: 4003,
-    url: './dashboards/financial/index.html'
+    type: 'local',
+    defaultPort: 3008,
+    url: './dashboards/financial/index.html',
+    devUrl: 'http://localhost:3008/'
   },
   'mackie-mom-board': {
     id: 'mackie-mom-board',
     deckId: 'mackie',
     name: "Mackie's Daily Board",
     category: 'Family Routines & Meal Planner',
-    defaultPort: 4004,
+    type: 'cloud',
+    defaultPort: 443,
     url: 'https://daily-executive-dashboard.onrender.com/mackie/'
   },
   'daily-executive-briefing': {
@@ -43,7 +50,8 @@ export const FLEET_PROJECTS = {
     deckId: 'executive',
     name: 'Executive Daily Briefing',
     category: 'Chief of Staff Command',
-    defaultPort: 4005,
+    type: 'cloud',
+    defaultPort: 443,
     url: 'https://daily-executive-dashboard.onrender.com/'
   },
   'family-road-trip-planner': {
@@ -51,7 +59,8 @@ export const FLEET_PROJECTS = {
     deckId: 'trip',
     name: 'Rainier Basecamp & Road Trip Planner',
     category: 'Overland Expedition Logistics',
-    defaultPort: 4006,
+    type: 'cloud',
+    defaultPort: 443,
     url: 'https://daily-executive-dashboard.onrender.com/trip-planner/'
   }
 };
@@ -338,9 +347,12 @@ export class TelemetryBus {
     let healthyCount = 0;
     let degradedCount = 0;
     let downCount = 0;
+    let staleCount = 0;
     let totalIssues = 0;
 
     const totalProjects = Object.keys(FLEET_PROJECTS).length;
+    const now = Date.now();
+    const STALE_THRESHOLD_MS = 30 * 60 * 1000; // 30 minutes
 
     Object.keys(FLEET_PROJECTS).forEach((pId) => {
       const report = this.fleetState.get(pId);
@@ -348,9 +360,19 @@ export class TelemetryBus {
         downCount++;
         return;
       }
-      if (report.status === 'HEALTHY') healthyCount++;
-      else if (report.status === 'DEGRADED') degradedCount++;
-      else downCount++;
+
+      // Check for stale telemetry (heartbeat older than 30m)
+      const isStale = report.timestamp && (now - report.timestamp > STALE_THRESHOLD_MS);
+      if (isStale) {
+        staleCount++;
+        degradedCount++;
+      } else if (report.status === 'HEALTHY') {
+        healthyCount++;
+      } else if (report.status === 'DEGRADED') {
+        degradedCount++;
+      } else {
+        downCount++;
+      }
 
       if (Array.isArray(report.activeIssues)) {
         totalIssues += report.activeIssues.length;
@@ -371,8 +393,10 @@ export class TelemetryBus {
       healthyCount,
       degradedCount,
       downCount,
+      staleCount,
       totalIssues,
       status: score >= 90 ? 'HEALTHY' : (score >= 60 ? 'DEGRADED' : 'DOWN'),
+      calculationFormula: 'Math.round(((healthy * 1.0 + degraded * 0.5) / totalProjects) * 100)',
       timestamp: Date.now()
     };
   }

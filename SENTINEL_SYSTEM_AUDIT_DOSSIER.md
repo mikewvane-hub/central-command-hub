@@ -1,5 +1,5 @@
 # 🛡️ ANTIGRAVITY CENTRAL COMMAND HUB // SENTINEL SYSTEM AUDIT DOSSIER
-> **Audit Generated At:** `2026-10-26T20:10:53.095Z`  
+> **Audit Generated At:** `2026-10-26T20:38:10.955Z`  
 > **Auditing Subagent:** `Sentinel-Daemon` (Autonomous Telemetry & Self-Healing Watchdog)  
 > **System Topology:** Antigravity Central Command Hub (Quantum Atomic Architecture v2.5.0)  
 > **Runtime Environment:** Node.js `v24.21.0` on `win32 (10.0.26300)`  
@@ -33,16 +33,16 @@ Provide an assessment summarizing:
 | `fleet-asset-manager` | **Garage And Fleet Asset Manager** | `http://localhost:4000/dashboards/garage/index.html?v=40.0` | `:3009` | Local Subsystem | OBD-II vehicle telemetry, maintenance logs, 3D model visualization. |
 | `rental-asset-explorer` | **Dual-Engine Washington Real Estate Explorer** | `http://127.0.0.1:4000/dashboards/rental/index.html` | `:4000` | Local Terminal | Property management, lease compliance, JBLM market scanner. |
 | `financial-command-center` | **Financial Command Center** | `http://localhost:3008/` | `:3008` | Local Service | Net worth tracker, liquidity buffers, high-yield asset allocation. |
-| `mackie-mom-board` | **Wife's Custom Digital Dashboard (Mackie Mom Board)** | `https://daily-executive-dashboard.onrender.com/mackie/` | `:4004` | Cloud Satellite | Family calendar, kids meal planner, routine tracking. |
-| `daily-executive-briefing` | **Executive Daily Briefing Setup** | `https://daily-executive-dashboard.onrender.com/` | `:4005` | Cloud Satellite | Chief of Staff weekly cadence, priority directives, high-impact highlights. |
-| `family-road-trip-planner` | **Custom Road Trip Dashboard (Rainier Basecamp)** | `https://daily-executive-dashboard.onrender.com/trip-planner/` | `:4006` | Cloud Satellite | Overland expedition routing, Pacific Northwest campsite permits. |
+| `mackie-mom-board` | **Wife's Custom Digital Dashboard (Mackie Mom Board)** | `https://daily-executive-dashboard.onrender.com/mackie/` | `:443` | Cloud Satellite | Family calendar, kids meal planner, routine tracking. |
+| `daily-executive-briefing` | **Executive Daily Briefing Setup** | `https://daily-executive-dashboard.onrender.com/` | `:443` | Cloud Satellite | Chief of Staff weekly cadence, priority directives, high-impact highlights. |
+| `family-road-trip-planner` | **Custom Road Trip Dashboard (Rainier Basecamp)** | `https://daily-executive-dashboard.onrender.com/trip-planner/` | `:443` | Cloud Satellite | Overland expedition routing, Pacific Northwest campsite permits. |
 
 ---
 
 ## ⚙️ SENTINEL SUBAGENT TELEMETRY & SELF-HEALING STATUS
 
 - **Watchdog Subagent Status:** `ONLINE`
-- **Uptime:** `5s` (~0.1 minutes)
+- **Uptime:** `34s` (~0.6 minutes)
 - **Autonomous Sweep Frequency:** Every 15 minutes (configurable 15–60 min)
 - **Total In-Memory Audit Capacity:** Capped at 60 records max (ring buffer)
 - **Disk Audit Log Capacity:** Capped at 500 lines max with auto-prune to 300
@@ -58,6 +58,8 @@ Provide an assessment summarizing:
 
 | Timestamp | Action | Level | Details / Message |
 | :--- | :--- | :--- | :--- |
+| `2026-10-26T20:38:10.950Z` | `PRUNE_LOGS` | `REMEDIATED` | Pruned sentinel-audit.log to 50 entries |
+| `2026-10-26T20:38:10.944Z` | `TEST_SYNTHETIC_AUDIT` | `REMEDIATED` | Automated self-healing unit test verification |
 | `2026-10-26T20:10:53.087Z` | `PRUNE_LOGS` | `REMEDIATED` | Pruned sentinel-audit.log to 50 entries |
 | `2026-10-26T20:10:53.080Z` | `TEST_SYNTHETIC_AUDIT` | `REMEDIATED` | Automated self-healing unit test verification |
 | `2026-10-26T20:02:39.959Z` | `PRUNE_LOGS` | `REMEDIATED` | Pruned sentinel-audit.log to 50 entries |
@@ -69,7 +71,7 @@ Provide an assessment summarizing:
 
 - **Active Alerts Count:** 5
 - **Dismissed Items Count:** 0
-- **Active Platform Tasks:** 14
+- **Active Platform Tasks:** 15
 - **Platform Backlog Items:** 1
 
 ### Active Alerts Detail
@@ -98,16 +100,22 @@ Provide an assessment summarizing:
 
 ## 🏗️ CORE CODEBASE INVENTORY & ARCHITECTURAL CHECKSUMS
 
-- **Frontend UI Shell:** `index.html` (Cache Buster: `v=40.0`)
+- **Frontend UI Shell:** `index.html` (Cache Buster: `v=40.0`, Sandboxed Iframes)
 - **Styling System:** `css/hub-style.css` & `css/atomic-theme.css` (Cyber-tactical theme)
 - **Client Modules (ESM):**
   - `js/app.js`: Central orchestrator and subsystem lifecycle
-  - `js/telemetry-bus.js`: Standardized inter-agent event broker
-  - `js/sentinel-maintenance.js`: Autonomous watchdog and self-healing engine
+  - `js/date-utils.js`: Isomorphic date calculation, timezone-safe countdown engine, & leap-year handling
+  - `js/telemetry-bus.js`: Standardized inter-agent event broker with validated fleet port mappings
+  - `js/sentinel-maintenance.js`: Autonomous watchdog, bounded sweeps, and self-healing engine
   - `js/sentinel-widget.js`: Collapsible diagnostic matrix HUD overlay
   - `js/atomic-core.js`: Three.js 3D quantum atomic orbital simulation
   - `js/dashboard-manager.js`: Dynamic deck iframe router & alert sync
   - `js/executive-sidebar.js`: Executive cadence sidebar & C2 backlog dispatch
+- **Security & Isolation Architecture:**
+  - Content-Security-Policy `frame-ancestors 'self' http://localhost:* http://127.0.0.1:* https://*.onrender.com`
+  - `X-Frame-Options: SAMEORIGIN`, `X-Content-Type-Options: nosniff`
+  - Hardened iframe sandbox: `allow-scripts allow-same-origin allow-forms allow-popups` (no `allow-top-navigation`)
+  - Sensitive asset protection: Direct HTTP access to `/core_state/` yields `403 Forbidden`
 - **Backend Server:** `server.js` (Express + Node.js REST API on port `4000`)
 - **Persistence Engine:** `core_state/hub_state.json` & SQLite `core_state/hub_state.db`
 

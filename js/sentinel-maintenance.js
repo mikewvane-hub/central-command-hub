@@ -18,6 +18,8 @@ export class SentinelMaintenanceEngine {
     this.sweepIntervalMs = options.sweepIntervalMs || (15 * 60 * 1000);
     this.timerId = null;
     this.isRunning = false;
+    this.isSweeping = false;
+    this.reconnectAttempts = new Map();
     this.isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined';
     this.auditLogStorageKey = 'sentinel_audit_log';
     this.auditHistory = [];
@@ -48,7 +50,15 @@ export class SentinelMaintenanceEngine {
         this.auditHistory = this.auditHistory.slice(-60);
       }
       localStorage.setItem(this.auditLogStorageKey, JSON.stringify(this.auditHistory));
-    } catch (e) {}
+    } catch (e) {
+      if (e.name === 'QuotaExceededError' || e.code === 22) {
+        console.warn('[Sentinel] LocalStorage quota exceeded. Pruning audit history to 20 entries.');
+        this.auditHistory = this.auditHistory.slice(-20);
+        try {
+          localStorage.setItem(this.auditLogStorageKey, JSON.stringify(this.auditHistory));
+        } catch (err2) {}
+      }
+    }
   }
 
   logAudit(action, details = {}, level = 'INFO') {
@@ -116,46 +126,55 @@ export class SentinelMaintenanceEngine {
    * Full autonomous maintenance & telemetry sweep
    */
   async runSweep() {
-    const sweepId = `sweep-${Date.now()}`;
-    const startTime = Date.now();
-    this.lastSweepTimestamp = startTime;
+    if (this.isSweeping) {
+      console.warn('🛡️ [Sentinel-Daemon] Sweep already in progress. Skipping overlapping execution.');
+      return null;
+    }
+    this.isSweeping = true;
+    try {
+      const sweepId = `sweep-${Date.now()}`;
+      const startTime = Date.now();
+      this.lastSweepTimestamp = startTime;
 
-    this.logAudit('SWEEP_STARTED', { sweepId }, 'INFO');
+      this.logAudit('SWEEP_STARTED', { sweepId }, 'INFO');
 
-    // 1. Audit and verify satellite endpoints & tunnels
-    const endpointResults = await this.auditEndpoints();
+      // 1. Audit and verify satellite endpoints & tunnels
+      const endpointResults = await this.auditEndpoints();
 
-    // 2. Headless DOM and Link Surface audit
-    const domResults = this.auditDomSurface();
+      // 2. Headless DOM and Link Surface audit
+      const domResults = this.auditDomSurface();
 
-    // 3. Self-healing & Auto-remediation passes
-    const remediationResults = this.performSelfHealing(domResults, endpointResults);
+      // 3. Self-healing & Auto-remediation passes
+      const remediationResults = this.performSelfHealing(domResults, endpointResults);
 
-    // 4. Critical flaw nomination
-    const nominationResults = this.nominateCriticalFlaws(endpointResults, domResults);
+      // 4. Critical flaw nomination
+      const nominationResults = this.nominateCriticalFlaws(endpointResults, domResults);
 
-    const sweepDuration = Date.now() - startTime;
-    const summary = {
-      sweepId,
-      timestamp: startTime,
-      durationMs: sweepDuration,
-      endpointResults,
-      domResults,
-      remediationResults,
-      nominationResults,
-      aggregateMetrics: this.bus.getAggregateMetrics()
-    };
+      const sweepDuration = Date.now() - startTime;
+      const summary = {
+        sweepId,
+        timestamp: startTime,
+        durationMs: sweepDuration,
+        endpointResults,
+        domResults,
+        remediationResults,
+        nominationResults,
+        aggregateMetrics: this.bus.getAggregateMetrics()
+      };
 
-    this.logAudit('SWEEP_COMPLETED', {
-      durationMs: sweepDuration,
-      healthyCount: summary.aggregateMetrics.healthyCount,
-      degradedCount: summary.aggregateMetrics.degradedCount,
-      downCount: summary.aggregateMetrics.downCount,
-      remediationsApplied: remediationResults.applied.length
-    }, remediationResults.applied.length > 0 ? 'REMEDIATED' : 'INFO');
+      this.logAudit('SWEEP_COMPLETED', {
+        durationMs: sweepDuration,
+        healthyCount: summary.aggregateMetrics.healthyCount,
+        degradedCount: summary.aggregateMetrics.degradedCount,
+        downCount: summary.aggregateMetrics.downCount,
+        remediationsApplied: remediationResults.applied.length
+      }, remediationResults.applied.length > 0 ? 'REMEDIATED' : 'INFO');
 
-    this.bus.publish('SWEEP_COMPLETED', summary);
-    return summary;
+      this.bus.publish('SWEEP_COMPLETED', summary);
+      return summary;
+    } finally {
+      this.isSweeping = false;
+    }
   }
 
   /**
@@ -225,23 +244,23 @@ export class SentinelMaintenanceEngine {
       return { ok: true, status: 200, timedOut: false };
     }
 
-    // Relative local paths are always inherently online
-    if (url.startsWith('./') || url.startsWith('/dashboards')) {
-      return { ok: true, status: 200, timedOut: false };
-    }
-
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 3500);
 
+      const isRelative = url.startsWith('./') || (url.startsWith('/') && !url.startsWith('//'));
+      const fetchMode = isRelative ? 'same-origin' : 'no-cors';
+
       const resp = await fetch(url, {
-        method: 'HEAD',
-        mode: 'no-cors',
+        method: isRelative ? 'HEAD' : 'GET',
+        mode: fetchMode,
         signal: controller.signal,
         cache: 'no-store'
       });
       clearTimeout(timeoutId);
-      return { ok: true, status: resp.status || 200, timedOut: false };
+
+      const ok = isRelative ? (resp.status >= 200 && resp.status < 400) : true;
+      return { ok, status: resp.status || 200, timedOut: false };
     } catch (err) {
       const isTimeout = err.name === 'AbortError';
       return { ok: false, status: isTimeout ? 408 : 503, timedOut: isTimeout };
@@ -349,19 +368,28 @@ export class SentinelMaintenanceEngine {
       } catch (e) {}
     }
 
-    // Remediation C: Auto-remedy tunnel drop by issuing reconnect telemetry ping
+    // Remediation C: Auto-remedy tunnel drop by issuing reconnect telemetry ping (bounded to 3 attempts)
     if (endpointResults) {
       Object.entries(endpointResults).forEach(([projectId, report]) => {
         if (report.status === 'DOWN') {
-          // Attempt automatic reconnect trigger
-          if (this.dashboardMgr && typeof this.dashboardMgr.checkAllTelemetry === 'function') {
-            this.dashboardMgr.checkAllTelemetry();
-            applied.push({
-              type: 'RECONNECT_PROBE',
-              details: `Issued immediate reconnect telemetry ping for ${FLEET_PROJECTS[projectId]?.name || projectId}.`
-            });
-            this.logAudit('RECONNECT_PROBE', { projectId }, 'REMEDIATED');
+          const attempts = this.reconnectAttempts.get(projectId) || 0;
+          if (attempts < 3) {
+            this.reconnectAttempts.set(projectId, attempts + 1);
+            if (this.dashboardMgr && typeof this.dashboardMgr.checkAllTelemetry === 'function') {
+              this.dashboardMgr.checkAllTelemetry();
+              applied.push({
+                type: 'RECONNECT_PROBE',
+                details: `Issued reconnect probe attempt #${attempts + 1}/3 for ${FLEET_PROJECTS[projectId]?.name || projectId}.`
+              });
+              this.logAudit('RECONNECT_PROBE', { projectId, attempt: attempts + 1 }, 'REMEDIATED');
+            }
+          } else {
+            // Retries bounded; avoid unbounded retry loop
+            this.logAudit('RECONNECT_RETRIES_EXHAUSTED', { projectId, attempts }, 'NOMINATED');
           }
+        } else {
+          // Reset counter on successful recovery
+          this.reconnectAttempts.delete(projectId);
         }
       });
     }

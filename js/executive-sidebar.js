@@ -6,6 +6,7 @@
  */
 
 import { sfx } from './sound-effects.js';
+import { enrichAlertCountdown } from './date-utils.js';
 
 export const PLATFORM_DIAGNOSTICS_DATA = [
   {
@@ -633,8 +634,8 @@ export class ExecutiveSidebarManager {
       'PM_OVERDUE_PM_FRIDGE_WATER_COILS': 'Refrigerator Water Filter & Condenser Coil Vacuuming Overdue',
       'PM_DUE_SOON_PM_GUTTER_ROOF_MOSS': 'Gutter Cleanout & Roof Moss Treatment Due',
       'WARRANTY_EXPIRING_CAPEX_REFRIGERATOR': 'Whirlpool Refrigerator Store Warranty Expiring',
-      'WARRANTY_EXPIRING_PM_FENCE_WASH_GATE': 'Workmanship Warranty Expiring in 0d: 187 LF Dark Sequoia Vinyl Fence & 4 Gates',
-      'PM_DUE_SOON_PM_FENCE_WASH_GATE': 'Preventative Maintenance Due (0d): Fence Wash & Gate Hinge/Latch Alignment',
+      'WARRANTY_EXPIRING_PM_FENCE_WASH_GATE': 'Fence & Gates Workmanship Warranty Review',
+      'PM_DUE_SOON_PM_FENCE_WASH_GATE': 'Annual Fence Wash & Gate Alignment PM',
       'RCW_59_18_650_OWNER_OCCUPANCY_TIMELINE': 'March 2027 Tenant Move-Out & June 2027 Owner Re-Occupancy Milestones',
       'EXEC_ACTION_WA_NOTICE': 'WA Rental 90-Day Notice Packet Preparation',
       'EXEC_ACTION_STRATEGIC_SYNC': 'Quarterly Family Operations & Calendar Alignment',
@@ -695,19 +696,22 @@ export class ExecutiveSidebarManager {
           message = item.description || (item.statute ? `Reference: ${item.statute}` : 'Active operational directive requiring review.');
         }
 
-        directives.push({
+        const baseDirective = {
           deckId: deckId === 'fleet' ? 'garage' : deckId,
           deckName: group.deckName || deckId.toUpperCase(),
           deckIcon: group.deckIcon || '⚡',
           code: code,
           severity: sev,
           priorityLevel: priorityLevel, // 'P0', 'P1', 'INFO'
+          dueDate: item.dueDate || item.due_date,
           title: subject,
           message: message,
           statute: item.statute || 'Central Hub Telemetry',
           timestamp: '2026-10-19 17:54 UTC',
           acknowledged: this.acknowledgedCodes.has(code)
-        });
+        };
+
+        directives.push(enrichAlertCountdown(baseDirective));
       });
     });
 

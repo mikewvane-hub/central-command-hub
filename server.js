@@ -33,20 +33,39 @@ const PORT = process.env.PORT || 4000;
 
 app.use(express.json());
 
-// Enable CORS, permissive headers for iframes, and disable caching for instant updates
+// Security, Framing & Anti-Clickjacking headers
 app.use((req, res, next) => {
+  // Explicit CSP frame-ancestors: restricts framing to trusted origins and local host
+  res.setHeader(
+    'Content-Security-Policy',
+    "frame-ancestors 'self' http://localhost:* http://127.0.0.1:* https://*.onrender.com;"
+  );
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+
+  // CORS headers (for API telemetry & inter-subagent communication)
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+
+  // Zero-caching headers for real-time responsiveness
   res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
   res.setHeader('Pragma', 'no-cache');
   res.setHeader('Expires', '0');
-  // Allow framing from authorized domains or self
-  res.removeHeader('X-Frame-Options');
+
   if (req.method === 'OPTIONS') {
     return res.sendStatus(204);
   }
   next();
+});
+
+// Protect sensitive internal state directory from direct unauthenticated static browsing
+app.use('/core_state', (req, res) => {
+  res.status(403).json({
+    error: 'Access Denied',
+    message: 'Direct browsing of internal core_state files is restricted. Use authorized /api endpoints.'
+  });
 });
 
 // Serve static assets with zero caching
@@ -636,7 +655,7 @@ function generateSentinelDossier() {
       name: "Wife's Custom Digital Dashboard (Mackie Mom Board)",
       deckId: 'mackie',
       route: 'https://daily-executive-dashboard.onrender.com/mackie/',
-      port: 4004,
+      port: 443,
       type: 'Cloud Satellite',
       desc: 'Family calendar, kids meal planner, routine tracking.'
     },
@@ -645,7 +664,7 @@ function generateSentinelDossier() {
       name: 'Executive Daily Briefing Setup',
       deckId: 'executive',
       route: 'https://daily-executive-dashboard.onrender.com/',
-      port: 4005,
+      port: 443,
       type: 'Cloud Satellite',
       desc: 'Chief of Staff weekly cadence, priority directives, high-impact highlights.'
     },
@@ -654,7 +673,7 @@ function generateSentinelDossier() {
       name: 'Custom Road Trip Dashboard (Rainier Basecamp)',
       deckId: 'trip',
       route: 'https://daily-executive-dashboard.onrender.com/trip-planner/',
-      port: 4006,
+      port: 443,
       type: 'Cloud Satellite',
       desc: 'Overland expedition routing, Pacific Northwest campsite permits.'
     }
@@ -739,16 +758,22 @@ function generateSentinelDossier() {
 
   md += `---\n\n`;
   md += `## 🏗️ CORE CODEBASE INVENTORY & ARCHITECTURAL CHECKSUMS\n\n`;
-  md += `- **Frontend UI Shell:** \`index.html\` (Cache Buster: \`v=40.0\`)\n`;
+  md += `- **Frontend UI Shell:** \`index.html\` (Cache Buster: \`v=40.0\`, Sandboxed Iframes)\n`;
   md += `- **Styling System:** \`css/hub-style.css\` & \`css/atomic-theme.css\` (Cyber-tactical theme)\n`;
   md += `- **Client Modules (ESM):**\n`;
   md += `  - \`js/app.js\`: Central orchestrator and subsystem lifecycle\n`;
-  md += `  - \`js/telemetry-bus.js\`: Standardized inter-agent event broker\n`;
-  md += `  - \`js/sentinel-maintenance.js\`: Autonomous watchdog and self-healing engine\n`;
+  md += `  - \`js/date-utils.js\`: Isomorphic date calculation, timezone-safe countdown engine, & leap-year handling\n`;
+  md += `  - \`js/telemetry-bus.js\`: Standardized inter-agent event broker with validated fleet port mappings\n`;
+  md += `  - \`js/sentinel-maintenance.js\`: Autonomous watchdog, bounded sweeps, and self-healing engine\n`;
   md += `  - \`js/sentinel-widget.js\`: Collapsible diagnostic matrix HUD overlay\n`;
   md += `  - \`js/atomic-core.js\`: Three.js 3D quantum atomic orbital simulation\n`;
   md += `  - \`js/dashboard-manager.js\`: Dynamic deck iframe router & alert sync\n`;
   md += `  - \`js/executive-sidebar.js\`: Executive cadence sidebar & C2 backlog dispatch\n`;
+  md += `- **Security & Isolation Architecture:**\n`;
+  md += `  - Content-Security-Policy \`frame-ancestors 'self' http://localhost:* http://127.0.0.1:* https://*.onrender.com\`\n`;
+  md += `  - \`X-Frame-Options: SAMEORIGIN\`, \`X-Content-Type-Options: nosniff\`\n`;
+  md += `  - Hardened iframe sandbox: \`allow-scripts allow-same-origin allow-forms allow-popups\` (no \`allow-top-navigation\`)\n`;
+  md += `  - Sensitive asset protection: Direct HTTP access to \`/core_state/\` yields \`403 Forbidden\`\n`;
   md += `- **Backend Server:** \`server.js\` (Express + Node.js REST API on port \`${PORT}\`)\n`;
   md += `- **Persistence Engine:** \`core_state/hub_state.json\` & SQLite \`core_state/hub_state.db\`\n\n`;
 

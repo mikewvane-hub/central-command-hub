@@ -6,6 +6,37 @@
  */
 
 import { sfx } from './sound-effects.js';
+import { enrichAlertCountdown } from './date-utils.js';
+
+/**
+ * Validates a target dashboard URL against allowed schemes and formats.
+ * Strictly prevents javascript:, data:, file:, and path-traversal attacks.
+ * @param {string} url
+ * @returns {{ valid: boolean, sanitized?: string, reason?: string, type?: string }}
+ */
+export function validateDashboardUrl(url) {
+  if (!url || typeof url !== 'string') return { valid: false, reason: 'URL must be a non-empty string' };
+  const trimmed = url.trim();
+
+  // Allow safe relative paths
+  if (trimmed.startsWith('./') || (trimmed.startsWith('/') && !trimmed.startsWith('//'))) {
+    if (trimmed.includes('..') || trimmed.includes('\\')) {
+      return { valid: false, reason: 'Path traversal or backslashes not permitted in relative paths' };
+    }
+    return { valid: true, sanitized: trimmed, type: 'relative' };
+  }
+
+  // Allow HTTP / HTTPS schemes only
+  try {
+    const parsed = new URL(trimmed);
+    if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+      return { valid: false, reason: `Protocol "${parsed.protocol}" is not permitted. Only HTTP and HTTPS are allowed.` };
+    }
+    return { valid: true, sanitized: parsed.href, type: 'remote' };
+  } catch (e) {
+    return { valid: false, reason: 'Malformed URL format.' };
+  }
+}
 
 export const DEFAULT_HUB_ALERTS = {
   rental: {
@@ -19,20 +50,23 @@ export const DEFAULT_HUB_ALERTS = {
         severity: 'CRITICAL',
         code: 'WARRANTY_EXPIRING_PM_FENCE_WASH_GATE',
         statute: 'Superior Fence & Rail (Clause Q)',
-        title: 'Workmanship Warranty Expiring in 0d: 187 LF Dark Sequoia Vinyl Fence & 4 Gates',
-        message: 'Vendor 3-Yr Workmanship Warranty expires on 2026-10-12. Inspect all 4 gates, latches, hinges & posts immediately and submit warranty claims.'
+        dueDate: '2026-10-12',
+        title: 'Workmanship Warranty: 187 LF Dark Sequoia Vinyl Fence & 4 Gates',
+        message: 'Vendor 3-Yr Workmanship Warranty (expired on 2026-10-12). Inspect all 4 gates, latches, hinges & posts immediately and submit warranty claims.'
       },
       {
         severity: 'WARNING',
         code: 'PM_DUE_SOON_PM_FENCE_WASH_GATE',
         statute: 'PM Timer (Annual — 12m)',
-        title: 'Preventative Maintenance Due (0d): Fence Wash & Gate Hinge/Latch Alignment',
+        dueDate: '2026-10-12',
+        title: 'Preventative Maintenance: Fence Wash & Gate Hinge/Latch Alignment',
         message: '187 LF vinyl fence wash and gate hinge/latch alignment due. Verify gate swing and latch engagement.'
       },
       {
         severity: 'WARNING',
         code: 'RCW_59_18_650_OWNER_OCCUPANCY_TIMELINE',
         statute: 'RCW 59.18.650(1)(k) & (2)(d) / RCW 59.18.280',
+        dueDate: '2026-12-31',
         title: 'March 2027 Tenant Move-Out & June 2027 Owner Re-Occupancy Milestones',
         message: '1) Serve 90-day Owner Occupancy notice by 2026-12-31 to prevent automatic month-to-month holdover. 2) Security deposit refund mandated within 14 days of vacate. 3) Schedule E make-ready repairs in Apr–May 2027.'
       },
@@ -40,50 +74,57 @@ export const DEFAULT_HUB_ALERTS = {
         severity: 'WARNING',
         code: 'PM_OVERDUE_PM_DRYER_VENT',
         statute: 'Fire Prevention Cleanout (Capitol Duct Cleaning)',
+        dueDate: '2023-12-15',
         title: 'Dryer Exhaust Vent & Lint Cleanout Overdue',
-        message: 'Preventative Maintenance Overdue (1038d): Dryer Exhaust Vent & Exterior Hood Lint Cleanout. Annual fire-hazard lint cleanout required.'
+        message: 'Annual fire-hazard lint cleanout required: Dryer Exhaust Vent & Exterior Hood Lint Cleanout.'
       },
       {
         severity: 'WARNING',
         code: 'PM_OVERDUE_PM_HVAC_TUNEUP',
         statute: 'Air Handlers Inc. (Annual Service)',
+        dueDate: '2023-12-18',
         title: 'Gas Furnace Annual Tune-Up & Combustion Test Overdue',
-        message: 'Preventative Maintenance Overdue (1035d): Gas Furnace Annual Tune-Up, Burner Service & CO Combustion Safety Test.'
+        message: 'Gas Furnace Annual Tune-Up, Burner Service & CO Combustion Safety Test required.'
       },
       {
         severity: 'WARNING',
         code: 'PM_OVERDUE_PM_SEPTIC_PUMP',
         statute: 'Thurston County Art. IV & WA DOH Standard (36m)',
+        dueDate: '2025-07-15',
         title: 'Septic Tank Inspection & Pumping Overdue',
-        message: 'Preventative Maintenance Overdue (454d): 1,150-Gal Concrete Septic Tank Inspection & Pumping (2-Compartment + Gravity Drainfield).'
+        message: '1,150-Gal Concrete Septic Tank Inspection & Pumping (2-Compartment + Gravity Drainfield).'
       },
       {
         severity: 'WARNING',
         code: 'PM_OVERDUE_PM_DUCT_CLEANING',
         statute: 'NADCA Whole-House Standard (36m)',
+        dueDate: '2025-12-09',
         title: 'Whole-House Air Duct & Sanitizer Fog Cleaning Overdue',
-        message: 'Preventative Maintenance Overdue (307d): Whole-House Air Duct & Sanitizer Fog Cleaning. Target Apr 2027 turnover window.'
+        message: 'Whole-House Air Duct & Sanitizer Fog Cleaning. Target Apr 2027 turnover window.'
       },
       {
         severity: 'WARNING',
         code: 'PM_OVERDUE_PM_FRIDGE_WATER_COILS',
         statute: 'EveryDrop Filter #1 (Every 6m)',
+        dueDate: '2026-10-01',
         title: 'Refrigerator Water Filter & Condenser Coil Vacuuming Overdue',
-        message: 'Preventative Maintenance Overdue (11d): Whirlpool Refrigerator (WRF555SDFZ) Water Filter & Condenser Coil Vacuuming.'
+        message: 'Whirlpool Refrigerator (WRF555SDFZ) Water Filter & Condenser Coil Vacuuming due.'
       },
       {
         severity: 'WARNING',
         code: 'PM_DUE_SOON_PM_GUTTER_ROOF_MOSS',
         statute: 'Semi-Annual Cleanout (2026-11-01)',
+        dueDate: '2026-11-01',
         title: 'Gutter Cleanout & Roof Moss Treatment Due',
-        message: 'Preventative Maintenance Due in 20d: PNW Gutter Cleanout & Roof Moss Zinc/Oxygen Solution Treatment.'
+        message: 'Semi-annual cleanout due: PNW Gutter Cleanout & Roof Moss Zinc/Oxygen Solution Treatment.'
       },
       {
         severity: 'WARNING',
         code: 'WARRANTY_EXPIRING_CAPEX_REFRIGERATOR',
         statute: 'Lowe\'s Warranty (WRF555SDFZ)',
+        dueDate: '2027-03-20',
         title: 'Whirlpool Refrigerator Store Warranty Expiring',
-        message: 'Warranty Expiring in 159d (2027-03-20): Whirlpool 24.7-cu ft French Door Refrigerator Replacement.'
+        message: 'Whirlpool 24.7-cu ft French Door Refrigerator Replacement store warranty expires 2027-03-20.'
       }
     ]
   },
@@ -98,6 +139,7 @@ export const DEFAULT_HUB_ALERTS = {
         severity: 'WARNING',
         code: 'EXEC_ACTION_WA_NOTICE',
         statute: 'Q4 2026 Milestone',
+        dueDate: '2026-12-31',
         title: 'WA Rental 90-Day Notice Packet Preparation',
         message: 'Prepare written statutory Owner Occupancy notice and coordinate with property manager before Dec 31 statutory cutoff.'
       },
@@ -105,6 +147,7 @@ export const DEFAULT_HUB_ALERTS = {
         severity: 'INFO',
         code: 'EXEC_ACTION_STRATEGIC_SYNC',
         statute: 'Family Strategic Review',
+        dueDate: '2026-10-26',
         title: 'Quarterly Family Operations & Calendar Alignment',
         message: 'Review upcoming expedition dates, Mackie Board routines, and investment cashflow milestones.'
       }
@@ -313,11 +356,12 @@ export class DashboardManager {
                 ? item.subject
                 : (defItem?.title || item.statute || `${def.deckName} Directive #${idx + 1}`);
             }
-            return {
+            return enrichAlertCountdown({
               ...item,
+              dueDate: item.dueDate || defItem?.dueDate,
               title: validTitle,
               message: item.message || defItem?.message || ''
-            };
+            });
           });
         alerts[deckId] = {
           deckName: def.deckName,
@@ -1277,22 +1321,32 @@ export class DashboardManager {
 
   setUrl(deckId, newUrl) {
     if (!newUrl) return;
+
+    // Validate URL scheme and format to block unsafe protocols (javascript:, data:, file:)
+    const validation = validateDashboardUrl(newUrl);
+    if (!validation.valid) {
+      console.warn(`[Security Warning] Blocked invalid dashboard URL for "${deckId}": ${validation.reason}`);
+      return;
+    }
+    const safeUrl = validation.sanitized || newUrl;
+
     // On mobile / non-localhost environments, prevent breaking relative dashboard paths with localhost
+    let finalUrl = safeUrl;
     if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
-      if (newUrl.includes('localhost') || newUrl.includes('127.0.0.1')) {
+      if (finalUrl.includes('localhost') || finalUrl.includes('127.0.0.1')) {
         console.warn(`[Hub Protection] Preventing localhost URL for ${deckId} in mobile/remote environment.`);
-        if (deckId === 'garage') newUrl = './dashboards/garage/index.html?v=40.0';
-        else if (deckId === 'rental') newUrl = './dashboards/rental/index.html';
-        else if (deckId === 'financial') newUrl = './dashboards/financial/index.html';
+        if (deckId === 'garage') finalUrl = './dashboards/garage/index.html?v=40.0';
+        else if (deckId === 'rental') finalUrl = './dashboards/rental/index.html';
+        else if (deckId === 'financial') finalUrl = './dashboards/financial/index.html';
       }
     }
-    this.urls[deckId] = newUrl;
+    this.urls[deckId] = finalUrl;
     try {
-      localStorage.setItem(`hub_url_${deckId}`, newUrl);
+      localStorage.setItem(`hub_url_${deckId}`, finalUrl);
     } catch (e) {}
     const iframe = document.getElementById(`iframe-${deckId}`);
     if (iframe) {
-      iframe.src = newUrl;
+      iframe.src = finalUrl;
     }
   }
 
@@ -1759,13 +1813,14 @@ export class DashboardManager {
             }
             const items = (this.alerts[domainKey].items || []).filter(it => !this.dismissedAlerts.has(it.code) && !this.dismissedAlerts.has(it.id));
             const existingIdx = items.findIndex(it => it.code === alertCode);
-            const alertItem = {
+            const alertItem = enrichAlertCountdown({
               severity: (alert.severity || 'WARNING').toUpperCase(),
               code: alertCode,
               statute: alert.statute || alert.statute_or_category || 'Unified Alert Pipeline',
+              dueDate: alert.due_date || alert.dueDate,
               title: (alert.title && alert.title !== 'undefined') ? alert.title : (alert.subject && alert.subject !== 'undefined' ? alert.subject : `${domainKey.toUpperCase()} Directive`),
               message: alert.message || alert.description || ''
-            };
+            });
             if (existingIdx >= 0) {
               items[existingIdx] = alertItem;
             } else {
