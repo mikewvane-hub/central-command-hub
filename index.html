@@ -11,8 +11,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@500;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet" />
 
   <!-- Core Stylesheets -->
-  <link rel="stylesheet" href="css/hub-style.css?v=39.0" />
-  <link rel="stylesheet" href="css/atomic-theme.css?v=39.0" />
+  <link rel="stylesheet" href="css/hub-style.css?v=40.0" />
+  <link rel="stylesheet" href="css/atomic-theme.css?v=40.0" />
 
   <!-- Three.js 3D Engine for Atomic Simulation -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -717,9 +717,86 @@
       </div>
     </div>
 
+    <!-- SENTINEL AUTONOMOUS MAINTENANCE & TELEMETRY MATRIX MODAL -->
+    <div class="hud-modal-overlay" id="modal-sentinel-matrix">
+      <div class="hud-modal sentinel-matrix-modal">
+        <div class="modal-header-row">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div class="sentinel-emblem-beacon">
+              <span class="sentinel-matrix-pulse"></span>
+              <span class="sentinel-matrix-icon">🛡️</span>
+            </div>
+            <div>
+              <h3 class="modal-title" style="margin:0;">SENTINEL AUTONOMOUS MAINTENANCE &amp; TELEMETRY MATRIX</h3>
+              <p style="font-family:var(--font-mono);font-size:0.72rem;color:var(--text-muted);margin:3px 0 0 0;">
+                Subagent Watchdog // Real-time fleet health, self-healing remediation, and tunnel integrity
+              </p>
+            </div>
+          </div>
+          <button class="modal-close-btn" id="btn-close-sentinel">&times;</button>
+        </div>
+
+        <!-- Radial Status Beacon & Fleet Overview Container -->
+        <div class="sentinel-radial-card" id="sentinel-radial-container">
+          <!-- Populated dynamically by SentinelWidget -->
+        </div>
+
+        <!-- Action / Maintenance Control Bar -->
+        <div class="sentinel-actions-bar">
+          <div style="display:flex;gap:10px;align-items:center;">
+            <button class="sentinel-action-btn primary" id="btn-sentinel-run-sweep" title="Trigger immediate autonomous maintenance sweep">
+              ⚡ RUN SENTINEL SWEEP
+            </button>
+            <button class="sentinel-action-btn secondary" id="btn-sentinel-auto-heal" title="Auto-remediate stale pulse states and cache locks">
+              🛠️ AUTO-HEAL DOM &amp; PULSE
+            </button>
+          </div>
+          <div class="sentinel-interval-badge">
+            <span class="status-beacon"></span>
+            <span>AUTONOMOUS SWEEPS: EVERY 15M</span>
+          </div>
+        </div>
+
+        <!-- Main Grid & Feed Split View -->
+        <div class="sentinel-body-split">
+          <!-- Node Status Grid (6 Connected Projects) -->
+          <div class="sentinel-column-left">
+            <div class="sentinel-section-header">
+              <span>SATELLITE FLEET NODES (6 CONNECTED PROJECTS)</span>
+              <span class="sentinel-count-pill" id="sentinel-nodes-count">6 ACTIVE</span>
+            </div>
+            <div class="sentinel-node-grid" id="sentinel-node-grid">
+              <!-- Dynamically populated 6 satellite node cards -->
+            </div>
+          </div>
+
+          <!-- Live Auto-Remediation & Audit Feed -->
+          <div class="sentinel-column-right">
+            <div class="sentinel-section-header">
+              <span>SENTINEL AUDIT &amp; SELF-HEALING FEED</span>
+              <span class="sentinel-feed-tag">LIVE TELEMETRY</span>
+            </div>
+            <div class="sentinel-audit-feed" id="sentinel-audit-feed">
+              <!-- Dynamically populated live auto-remediations & logs -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="alert-modal-footer">
+          <span class="alert-footer-note">
+            🛡️ Sentinel Daemon runs autonomously in background. Continuous self-repair &amp; tunnel watchdog active.
+          </span>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <button class="launch-btn" id="btn-dismiss-sentinel-modal">CLOSE MATRIX</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <!-- Boot Module Script -->
-  <script type="module" src="js/app.js?v=39.0"></script>
+  <script type="module" src="js/app.js?v=40.0"></script>
 </body>
 </html>

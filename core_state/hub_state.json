@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": "1.0.0-UNIFIED",
-    "last_updated": "2026-10-24T22:23:16.876034+00:00",
+    "last_updated": "2026-10-26T20:02:58.828239+00:00",
     "timezone": "America/New_York",
     "status": "ONLINE"
   },
@@ -151,7 +151,7 @@
           "date_title_issued": "2026-05-08",
           "date_vehicle_acquired": "2024-03-02",
           "odometer_brand": "ACTUAL MILEAGE",
-          "statutory_proof": "Tennessee Code Annotated § 55-3-101",
+          "statutory_proof": "Tennessee Code Annotated \u00a7 55-3-101",
           "department": "State of Tennessee Department of Revenue"
         },
         "insurance": {
@@ -230,9 +230,9 @@
       "title": "HRV Readiness Alert: 46 ms (Below 65 ms Baseline)",
       "message": "Athletic recovery compromised. Planned training load should be throttled to Zone 2 active recovery.",
       "statute_or_category": "Athletic Readiness",
-      "due_date": "2026-10-24",
+      "due_date": "2026-10-26",
       "action_url": "health",
-      "created_at": "2026-10-24T22:23:16.789301+00:00",
+      "created_at": "2026-10-26T20:02:58.751808+00:00",
       "acknowledged": false,
       "dismissed": false
     },
@@ -272,9 +272,9 @@
       "title": "2021 Chevy Colorado ZR2 Oil Life at 18%",
       "message": "Service interval approaching. Prepare synthetic oil & filter replacement.",
       "statute_or_category": "Preventive Maintenance",
-      "due_date": "2026-11-07",
+      "due_date": "2026-11-09",
       "action_url": "fleet",
-      "created_at": "2026-10-24T22:23:16.789301+00:00",
+      "created_at": "2026-10-26T20:02:58.751808+00:00",
       "acknowledged": false,
       "dismissed": false
     },
@@ -288,37 +288,37 @@
       "statute_or_category": "Q4 Statutory Maintenance",
       "due_date": "2026-12-31",
       "action_url": "rental",
-      "created_at": "2026-10-24T22:23:16.796782+00:00",
+      "created_at": "2026-10-26T20:02:58.763190+00:00",
       "acknowledged": false,
       "dismissed": false
     }
   ],
   "executive_briefing": {
     "cadence": "SUNDAY_1800_EXECUTIVE_BRIEFING",
-    "generated_at": "2026-10-24T22:23:16.789301+00:00",
-    "week_label": "Week of October 24 – October 31, 2026",
-    "cadence_window": "Week of October 24 – October 31, 2026",
-    "summary": "Executive briefing for Week of October 24 – October 31, 2026 integrating Family Milestones, Property Cash Flow, Athletic Readiness, and Fleet Telemetry.",
+    "generated_at": "2026-10-26T20:02:58.751808+00:00",
+    "week_label": "Week of October 26 \u2013 November 02, 2026",
+    "cadence_window": "Week of October 26 \u2013 November 02, 2026",
+    "summary": "Executive briefing for Week of October 26 \u2013 November 02, 2026 integrating Family Milestones, Property Cash Flow, Athletic Readiness, and Fleet Telemetry.",
     "highlights": [
-      "FAMILY: User Birthday (29 Mar 1993, in 156d), Wife Birthday (23 Apr 1996, in 181d), Anniversary (23 Sep).",
+      "FAMILY: User Birthday (29 Mar 1993, in 154d), Wife Birthday (23 Apr 1996, in 179d), Anniversary (23 Sep).",
       "PROPERTY: Sierra Pines cash flow at +$1,120/mo Net ($3,030 Gross). Priority ticket: 'Perimeter Fence Wash & Gate Warranty Inspection'.",
-      "ATHLETIC: Readiness Score 61/100. HRV at 46 ms (BELOW_TARGET). Directive: ⚠️ HRV at 46 ms (Target: 65 ms). Autonomic nervous system fatigued. Throttle training to Zone 2 Active Recovery..",
+      "ATHLETIC: Readiness Score 61/100. HRV at 46 ms (BELOW_TARGET). Directive: \u26a0\ufe0f HRV at 46 ms (Target: 65 ms). Autonomic nervous system fatigued. Throttle training to Zone 2 Active Recovery..",
       "FLEET: Colorado ZR2 oil life at 18% (service due); 2022 Nissan Murano TN registration current through May 2027."
     ],
     "executive_highlights": [
-      "FAMILY: User Birthday (29 Mar 1993, in 156d), Wife Birthday (23 Apr 1996, in 181d), Anniversary (23 Sep).",
+      "FAMILY: User Birthday (29 Mar 1993, in 154d), Wife Birthday (23 Apr 1996, in 179d), Anniversary (23 Sep).",
       "PROPERTY: Sierra Pines cash flow at +$1,120/mo Net ($3,030 Gross). Priority ticket: 'Perimeter Fence Wash & Gate Warranty Inspection'.",
-      "ATHLETIC: Readiness Score 61/100. HRV at 46 ms (BELOW_TARGET). Directive: ⚠️ HRV at 46 ms (Target: 65 ms). Autonomic nervous system fatigued. Throttle training to Zone 2 Active Recovery..",
+      "ATHLETIC: Readiness Score 61/100. HRV at 46 ms (BELOW_TARGET). Directive: \u26a0\ufe0f HRV at 46 ms (Target: 65 ms). Autonomic nervous system fatigued. Throttle training to Zone 2 Active Recovery..",
       "FLEET: Colorado ZR2 oil life at 18% (service due); 2022 Nissan Murano TN registration current through May 2027."
     ],
     "upcoming_7d_milestones": [
       {
         "category": "Family",
-        "detail": "📅 Family Sunday Meal Prep & Planning (2026-10-25)"
+        "detail": "\ud83d\udcc5 Family Sunday Meal Prep & Planning (2026-10-25)"
       },
       {
         "category": "Family",
-        "detail": "📅 Mackie School Fall Conference (2026-10-23)"
+        "detail": "\ud83d\udcc5 Mackie School Fall Conference (2026-10-23)"
       },
       {
         "category": "Fleet",
@@ -333,19 +333,19 @@
         {
           "event": "User Birthday (29 Mar 1993)",
           "date": "March 29",
-          "days_until": 156,
+          "days_until": 154,
           "age_turning": 34
         },
         {
           "event": "Wife's Birthday (23 Apr 1996)",
           "date": "April 23",
-          "days_until": 181,
+          "days_until": 179,
           "age_turning": 31
         },
         {
           "event": "Wedding Anniversary (23 Sep)",
           "date": "September 23",
-          "days_until": 334
+          "days_until": 332
         }
       ]
     },
@@ -362,7 +362,7 @@
       "hrv_status": "BELOW_TARGET",
       "cardio_progress": "6.5 / 20 miles",
       "strength_progress": "1 / 4 sessions",
-      "recovery_directive": "⚠️ HRV at 46 ms (Target: 65 ms). Autonomic nervous system fatigued. Throttle training to Zone 2 Active Recovery."
+      "recovery_directive": "\u26a0\ufe0f HRV at 46 ms (Target: 65 ms). Autonomic nervous system fatigued. Throttle training to Zone 2 Active Recovery."
     },
     "academic_queue": [],
     "fleet_status": [
@@ -381,9 +381,30 @@
         "status": "NOMINAL"
       }
     ],
-    "active_alerts_count": 7
+    "active_alerts_count": 5
   },
   "platform_tasks": [
+    {
+      "taskId": "TK-6142",
+      "uuid": "test-uuid-1793044964876",
+      "diagId": "diag-001",
+      "title": "Fix 3D Garage Lag",
+      "simpleDescription": "Speeds up loading when switching between 3D view and photo mode on your phone or laptop.",
+      "technicalDescription": "Three.js canvas context rebuild delay (~120ms) observed when toggling on mobile WebGL2 runtimes.",
+      "sourceCategory": "Platform Diagnostics",
+      "targetAgent": "scene-architect",
+      "priority": "HIGH",
+      "status": "IN_PROGRESS",
+      "timestamp": "2026-10-26T20:02:44.876Z",
+      "contextParameters": {
+        "subsystem": "Three.js / WebGL2 Context",
+        "targetFiles": [
+          "js/atomic-core.js",
+          "dashboards/garage/src/components/garage/ThreeDGarageScene.jsx"
+        ],
+        "issue": "Fix 3D Garage Lag"
+      }
+    },
     {
       "taskId": "TK-6278",
       "uuid": "test-uuid-1792880600947",
@@ -660,7 +681,7 @@
       "category": "NEW FEATURE",
       "origin": "Fleet Telemetry Console",
       "deckId": "garage",
-      "timestamp": "2026-10-24T22:23:20.975Z",
+      "timestamp": "2026-10-26T20:02:44.904Z",
       "status": "LOGGED_IN_BACKLOG"
     }
   ],

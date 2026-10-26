@@ -183,7 +183,17 @@ async function main() {
 
   // 6. Test syntax of client JavaScript files
   console.log('\n▶ [6/6] Validating Client JavaScript Modules syntax...');
-  const jsFiles = ['dashboard-manager.js', 'app.js', 'atomic-core.js', 'voice-command.js', 'device-optimizer.js', 'executive-sidebar.js'];
+  const jsFiles = [
+    'dashboard-manager.js',
+    'app.js',
+    'atomic-core.js',
+    'voice-command.js',
+    'device-optimizer.js',
+    'executive-sidebar.js',
+    'telemetry-bus.js',
+    'sentinel-maintenance.js',
+    'sentinel-widget.js'
+  ];
   for (const f of jsFiles) {
     const checkRes = await runCommand('node', ['--check', `js/${f}`], __dirname);
     if (checkRes.code !== 0) {

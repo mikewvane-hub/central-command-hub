@@ -3,13 +3,16 @@
  * Main Application Orchestrator
  */
 
-import { sfx } from './sound-effects.js?v=39.0';
-import { AtomicCoreVisualizer } from './atomic-core.js?v=39.0';
-import { DashboardManager } from './dashboard-manager.js?v=39.0';
-import { VoiceCommandEngine } from './voice-command.js?v=39.0';
-import { DeviceOptimizer } from './device-optimizer.js?v=39.0';
-import { renderQRCode } from './qr-generator.js?v=39.0';
-import { ExecutiveSidebarManager } from './executive-sidebar.js?v=39.0';
+import { sfx } from './sound-effects.js?v=40.0';
+import { AtomicCoreVisualizer } from './atomic-core.js?v=40.0';
+import { DashboardManager } from './dashboard-manager.js?v=40.0';
+import { VoiceCommandEngine } from './voice-command.js?v=40.0';
+import { DeviceOptimizer } from './device-optimizer.js?v=40.0';
+import { renderQRCode } from './qr-generator.js?v=40.0';
+import { ExecutiveSidebarManager } from './executive-sidebar.js?v=40.0';
+import { telemetryBus } from './telemetry-bus.js?v=40.0';
+import { SentinelMaintenanceEngine } from './sentinel-maintenance.js?v=40.0';
+import { SentinelWidget } from './sentinel-widget.js?v=40.0';
 
 class CentralCommandHubApp {
   constructor() {
@@ -17,6 +20,9 @@ class CentralCommandHubApp {
     this.dashboardMgr = null;
     this.voiceEngine = null;
     this.deviceOptimizer = null;
+    this.sidebarMgr = null;
+    this.sentinelEngine = null;
+    this.sentinelWidget = null;
 
     document.addEventListener('DOMContentLoaded', () => this.boot());
   }
@@ -55,6 +61,24 @@ class CentralCommandHubApp {
       visualizer: this.visualizer,
       dashboardMgr: this.dashboardMgr
     });
+
+    // 3.5. Initialize Sentinel Autonomous Maintenance Engine & HUD Widget
+    this.sentinelEngine = new SentinelMaintenanceEngine({
+      bus: telemetryBus,
+      dashboardMgr: this.dashboardMgr,
+      visualizer: this.visualizer,
+      sidebarMgr: this.sidebarMgr,
+      sweepIntervalMs: 15 * 60 * 1000
+    });
+
+    this.sentinelWidget = new SentinelWidget({
+      bus: telemetryBus,
+      engine: this.sentinelEngine,
+      dashboardMgr: this.dashboardMgr
+    });
+
+    // Start Sentinel autonomous sweeps
+    this.sentinelEngine.start();
 
     // 3. Initialize Adaptive Device Optimizer (Z Fold 8 vs Laptop)
     this.deviceOptimizer = new DeviceOptimizer((mode) => {
@@ -196,6 +220,12 @@ class CentralCommandHubApp {
             this.dashboardMgr.closeAlertCenter();
             break;
           }
+          const sentinelModal = document.getElementById('modal-sentinel-matrix');
+          if (sentinelModal && sentinelModal.classList.contains('open')) {
+            if (this.sentinelWidget) this.sentinelWidget.closeModal();
+            sfx.playClick();
+            break;
+          }
           this.dashboardMgr.switchDeck('core');
           break;
         }
@@ -281,7 +311,7 @@ class CentralCommandHubApp {
         };
 
         if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(currentUrl)
+          navigator.clipboard.writeText(targetUrl)
             .then(onSuccess)
             .catch(() => fallbackCopy());
         } else {
