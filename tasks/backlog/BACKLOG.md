@@ -114,3 +114,19 @@ Persistent items queued from Executive Summary.
 - **Status:** `PERSISTED_BACKLOG`
 
 ---
+
+### 📋 [NEW FEATURE] Wireless Car Diagnostics (OBD-II) (#DIAG-003)
+- **Origin:** Fleet Telemetry Console
+- **Logged At:** 2026-10-26T20:49:55.647Z
+- **Objective:** Connect phone to Chevy Colorado & Nissan Murano via Bluetooth to track transmission fluid temperature live.
+- **Status:** `PERSISTED_BACKLOG`
+
+---
+
+### 📋 [NEW FEATURE] Wireless Car Diagnostics (OBD-II) (#DIAG-003)
+- **Origin:** Fleet Telemetry Console
+- **Logged At:** 2026-10-26T20:50:29.166Z
+- **Objective:** Connect phone to Chevy Colorado & Nissan Murano via Bluetooth to track transmission fluid temperature live.
+- **Status:** `PERSISTED_BACKLOG`
+
+---

@@ -1,5 +1,5 @@
 # 🛡️ ANTIGRAVITY CENTRAL COMMAND HUB // SENTINEL SYSTEM AUDIT DOSSIER
-> **Audit Generated At:** `2026-10-26T20:38:10.955Z`  
+> **Audit Generated At:** `2026-10-26T20:50:28.939Z`  
 > **Auditing Subagent:** `Sentinel-Daemon` (Autonomous Telemetry & Self-Healing Watchdog)  
 > **System Topology:** Antigravity Central Command Hub (Quantum Atomic Architecture v2.5.0)  
 > **Runtime Environment:** Node.js `v24.21.0` on `win32 (10.0.26300)`  
@@ -42,7 +42,7 @@ Provide an assessment summarizing:
 ## ⚙️ SENTINEL SUBAGENT TELEMETRY & SELF-HEALING STATUS
 
 - **Watchdog Subagent Status:** `ONLINE`
-- **Uptime:** `34s` (~0.6 minutes)
+- **Uptime:** `13s` (~0.2 minutes)
 - **Autonomous Sweep Frequency:** Every 15 minutes (configurable 15–60 min)
 - **Total In-Memory Audit Capacity:** Capped at 60 records max (ring buffer)
 - **Disk Audit Log Capacity:** Capped at 500 lines max with auto-prune to 300
@@ -52,12 +52,20 @@ Provide an assessment summarizing:
   - `RECONNECT_PROBE`: Automated telemetry heartbeat probe when node drops to `DOWN` status.
   - `DOM_SURFACE_SCANNER`: Headless scanner inspecting deck selectors, action attributes, and navigation anchors.
 
+- **AI Model Hierarchy & Token Optimization Policy:**
+  - **Lead Orchestrator:** Gemini Highest Tier (`Gemini 2.5 Pro` / `pro`) for primary reasoning & architecture
+  - **Subagent Tier 1 (Lightweight):** `flash_lite` (Default for logs, telemetry, search, formatting)
+  - **Subagent Tier 2 (Balanced):** `flash` (Standard coding, unit testing, component refactoring)
+  - **Subagent Tier 3 (Strictly Gated):** `pro` (Complex multi-system architectural synthesis only)
+
 ---
 
 ## 📜 RECENT AUTO-REMEDIATION LEDGER & AUDIT TRAIL
 
 | Timestamp | Action | Level | Details / Message |
 | :--- | :--- | :--- | :--- |
+| `2026-10-26T20:50:28.927Z` | `PRUNE_LOGS` | `REMEDIATED` | Pruned sentinel-audit.log to 50 entries |
+| `2026-10-26T20:50:28.915Z` | `TEST_SYNTHETIC_AUDIT` | `REMEDIATED` | Automated self-healing unit test verification |
 | `2026-10-26T20:38:10.950Z` | `PRUNE_LOGS` | `REMEDIATED` | Pruned sentinel-audit.log to 50 entries |
 | `2026-10-26T20:38:10.944Z` | `TEST_SYNTHETIC_AUDIT` | `REMEDIATED` | Automated self-healing unit test verification |
 | `2026-10-26T20:10:53.087Z` | `PRUNE_LOGS` | `REMEDIATED` | Pruned sentinel-audit.log to 50 entries |
@@ -71,7 +79,7 @@ Provide an assessment summarizing:
 
 - **Active Alerts Count:** 5
 - **Dismissed Items Count:** 0
-- **Active Platform Tasks:** 15
+- **Active Platform Tasks:** 17
 - **Platform Backlog Items:** 1
 
 ### Active Alerts Detail

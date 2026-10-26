@@ -84,6 +84,7 @@ export const PLATFORM_DIAGNOSTICS_DATA = [
 export const AGENT_ROUTING_MAP = {
   'diag-001': {
     targetAgent: 'scene-architect',
+    modelTier: 'flash',
     priority: 'HIGH',
     contextParameters: {
       subsystem: 'Three.js / WebGL2 Context',
@@ -93,6 +94,7 @@ export const AGENT_ROUTING_MAP = {
   },
   'diag-003': {
     targetAgent: 'telemetry-ingest',
+    modelTier: 'flash_lite',
     priority: 'HIGH',
     contextParameters: {
       subsystem: 'OBD-II / ELM327 BLE Adapter',
@@ -102,6 +104,7 @@ export const AGENT_ROUTING_MAP = {
   },
   'diag-002': {
     targetAgent: 'property-ops-cadence',
+    modelTier: 'flash_lite',
     priority: 'HIGH',
     contextParameters: {
       subsystem: 'Rental Asset Warranty',
@@ -111,6 +114,7 @@ export const AGENT_ROUTING_MAP = {
   },
   'diag-005': {
     targetAgent: 'executive-cadence-agent',
+    modelTier: 'flash',
     priority: 'MEDIUM',
     contextParameters: {
       subsystem: 'Executive Cadence Engine',
@@ -120,6 +124,7 @@ export const AGENT_ROUTING_MAP = {
   },
   'diag-006': {
     targetAgent: 'device-optimizer',
+    modelTier: 'flash_lite',
     priority: 'LOW',
     contextParameters: {
       subsystem: 'Galaxy Z Fold 8 Viewport Engine',
@@ -1234,6 +1239,7 @@ export class ExecutiveSidebarManager {
         technicalDescription: item.technicalDescription || item.description,
         sourceCategory: "Platform Diagnostics",
         targetAgent: routing.targetAgent,
+        modelTier: routing.modelTier || 'flash_lite',
         priority: routing.priority || 'HIGH',
         status: "IN_PROGRESS",
         timestamp: new Date().toISOString(),

@@ -322,6 +322,7 @@ app.post('/api/tasks', (req, res) => {
     const taskMd = `# ⚡ [ANTIGRAVITY AGENT TASK] #${task.taskId}
 > **Status:** IN_PROGRESS (Working in Project)  
 > **Target Subagent:** \`${task.targetAgent}\`  
+> **Compute Model Tier:** \`${task.modelTier || 'flash_lite'}\` (Token-Optimized)  
 > **Priority:** \`${task.priority || 'HIGH'}\`  
 > **Dispatched At:** \`${task.timestamp || new Date().toISOString()}\`  
 > **Source:** \`${task.sourceCategory || 'Platform Diagnostics'}\` (${task.origin || 'Executive Summary'})
@@ -723,6 +724,11 @@ function generateSentinelDossier() {
   md += `  - \`RECONNECT_PROBE\`: Automated telemetry heartbeat probe when node drops to \`DOWN\` status.\n`;
   md += `  - \`DOM_SURFACE_SCANNER\`: Headless scanner inspecting deck selectors, action attributes, and navigation anchors.\n\n`;
 
+  md += `- **AI Model Hierarchy & Token Optimization Policy:**\n`;
+  md += `  - **Lead Orchestrator:** Gemini Highest Tier (\`Gemini 2.5 Pro\` / \`pro\`) for primary reasoning & architecture\n`;
+  md += `  - **Subagent Tier 1 (Lightweight):** \`flash_lite\` (Default for logs, telemetry, search, formatting)\n`;
+  md += `  - **Subagent Tier 2 (Balanced):** \`flash\` (Standard coding, unit testing, component refactoring)\n`;
+  md += `  - **Subagent Tier 3 (Strictly Gated):** \`pro\` (Complex multi-system architectural synthesis only)\n\n`;
   md += `---\n\n`;
   md += `## 📜 RECENT AUTO-REMEDIATION LEDGER & AUDIT TRAIL\n\n`;
   if (auditEntries.length === 0) {
