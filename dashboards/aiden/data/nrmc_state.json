@@ -80,7 +80,7 @@
             }
           ],
           "notes": "Automated test suite verification note.",
-          "last_updated": "2026-11-04T13:23:21.722Z",
+          "last_updated": "2026-11-04T13:39:22.988Z",
           "checklists_completed": []
         },
         {
@@ -908,66 +908,288 @@
           "id": "VAC_01",
           "stage": "Birth (Hospital Discharge)",
           "vaccine": "Hepatitis B (HepB) Dose #1",
-          "description": "Protects against Hepatitis B virus infection of the liver. Standard first dose administered within 24 hours of birth.",
+          "mandate_tier": "MANDATORY",
+          "mandate_badge": "🛡️ MANDATORY",
+          "mandate_label": "Daycare & School Mandate",
+          "mandate_color": "emerald",
+          "is_hospital_auto": true,
           "target_date": "2026-11-15",
           "administered_date": null,
-          "clinic": "Naval Hospital / Labor & Delivery Nursery",
+          "date_administered": null,
+          "clinic": "Naval Hospital / Regional Military Medical Center Nursery",
           "lot_number": null,
           "provider": null,
           "status": "SCHEDULED",
-          "date_administered": null
+          "description": "First dose of Hepatitis B vaccine administered within 24 hours of birth. Protects against lifelong chronic liver disease and hepatitis B virus transmission. Routinely administered by labor & delivery nursing staff prior to hospital discharge.",
+          "components": [
+            {
+              "name": "Hepatitis B (HepB) #1",
+              "disease": "Hepatitis B Virus (Chronic liver failure, cirrhosis, hepatocellular carcinoma)",
+              "tier": "MANDATORY",
+              "isMandatory": true,
+              "authority": "CDC ACIP / WA DOH / DoD CDC (Mandated for Child Care & K-12 Entry)",
+              "route": "Intramuscular injection (Anterolateral thigh)",
+              "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/hep-b.html"
+            }
+          ],
+          "seasonal_prophylaxis": {
+            "name": "Nirsevimab (Beyfortus) RSV Monoclonal Antibody",
+            "status": "CLINICAL_ELECTIVE",
+            "badge": "📋 SEASONAL PROPHYLAXIS",
+            "note": "Infants born during RSV Season (Oct-Mar): CDC & AAP recommend 1 dose before hospital discharge if mother did not receive maternal RSV vaccine (Abrysvo) at 32-36 weeks. Non-mandated passive antibody.",
+            "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/rsv-infant.html"
+          }
         },
         {
           "id": "VAC_02",
           "stage": "1 Month",
           "vaccine": "Hepatitis B (HepB) Dose #2",
-          "description": "Second dose in the standard HepB series. Administered between 1 and 2 months of age.",
+          "mandate_tier": "MANDATORY",
+          "mandate_badge": "🛡️ MANDATORY",
+          "mandate_label": "Daycare & School Mandate",
+          "mandate_color": "emerald",
+          "is_hospital_auto": false,
           "target_date": "2026-12-15",
           "administered_date": null,
+          "date_administered": null,
           "clinic": "Madigan AMC Pediatric Clinic",
           "lot_number": null,
           "provider": null,
           "status": "SCHEDULED",
-          "date_administered": null
+          "description": "Second dose in the standard HepB primary series. Administered between 1 and 2 months of age at the pediatric well-child clinic.",
+          "components": [
+            {
+              "name": "Hepatitis B (HepB) #2",
+              "disease": "Hepatitis B Virus",
+              "tier": "MANDATORY",
+              "isMandatory": true,
+              "authority": "CDC ACIP / WA DOH / DoD CDC (Mandated for Child Care Entry)",
+              "route": "Intramuscular injection",
+              "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/hep-b.html"
+            }
+          ]
         },
         {
           "id": "VAC_03",
           "stage": "2 Months (Major Pediatric Sortie)",
-          "vaccine": "DTaP #1, IPV #1, Hib #1, PCV15/20 #1, Rotavirus (RV) #1",
-          "description": "Pentavalent / Hexavalent composite primary immunization: Diphtheria, Tetanus, Pertussis, Inactivated Poliovirus, Haemophilus influenzae type b, Pneumococcal Conjugate (PCV), Oral Rotavirus.",
-          "target_date": "2027-01-15",
+          "vaccine": "Pentavalent: DTaP #1, IPV #1, Hib #1, PCV15/20 #1 + Rotavirus #1",
+          "mandate_tier": "SPLIT_MANDATORY_RECOMMENDED",
+          "mandate_badge": "🛡️ 4 MANDATORY + ⭐ 1 RECOMMENDED",
+          "mandate_label": "4 Daycare Mandated • 1 Non-Mandated Standard",
+          "mandate_color": "cyan",
+          "is_hospital_auto": false,
+          "target_date": "2027-01-14",
           "administered_date": null,
+          "date_administered": null,
           "clinic": "Madigan AMC Pediatric Clinic",
           "lot_number": null,
           "provider": null,
           "status": "SCHEDULED",
-          "date_administered": null
+          "description": "First major infant multi-antigen sortie. Combines 4 daycare-mandatory immunizations (DTaP, IPV, Hib, Pneumococcal PCV) with 1 universally recommended oral vaccine (Rotavirus). Clinics frequently utilize combination formulations (e.g. Pediarix: DTaP-IPV-HepB or Vaxelis: DTaP-IPV-Hib-HepB) to reduce total physical pokes to 2-3 injections.",
+          "components": [
+            {
+              "name": "DTaP #1",
+              "disease": "Diphtheria, Tetanus, Pertussis (Whooping Cough)",
+              "tier": "MANDATORY",
+              "isMandatory": true,
+              "authority": "Mandatory for Daycare / DoD CDC / K-12 Entry (WA State WAC 246-105)",
+              "route": "Intramuscular injection",
+              "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/dtap.html"
+            },
+            {
+              "name": "IPV #1",
+              "disease": "Inactivated Poliovirus (Infantile Paralytic Poliomyelitis)",
+              "tier": "MANDATORY",
+              "isMandatory": true,
+              "authority": "Mandatory for Daycare / DoD CDC / K-12 Entry",
+              "route": "Intramuscular injection",
+              "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/ipv.html"
+            },
+            {
+              "name": "Hib #1",
+              "disease": "Haemophilus influenzae type b (Severe bacterial meningitis & epiglottitis)",
+              "tier": "MANDATORY",
+              "isMandatory": true,
+              "authority": "Mandatory for Daycare / DoD CDC / K-12 Entry",
+              "route": "Intramuscular injection",
+              "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/hib.html"
+            },
+            {
+              "name": "PCV15/20 #1",
+              "disease": "Pneumococcal Conjugate (PCV15 Vaxneuvance or PCV20 Prevnar 20 per latest ACIP guidelines)",
+              "tier": "MANDATORY",
+              "isMandatory": true,
+              "authority": "Mandatory for Daycare / DoD CDC / K-12 Entry",
+              "route": "Intramuscular injection",
+              "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/pcv.html"
+            },
+            {
+              "name": "Rotavirus (RV) #1",
+              "disease": "Rotavirus (Severe infant dehydrating diarrhea and acute viral gastroenteritis)",
+              "tier": "RECOMMENDED_STANDARD",
+              "isMandatory": false,
+              "authority": "Universal CDC/AAP Infant Recommendation (EXEMPT from WA State & Daycare entry mandates)",
+              "route": "Oral liquid drops (Needle-free oral administration)",
+              "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/rotavirus.html"
+            }
+          ]
         },
         {
           "id": "VAC_04",
           "stage": "4 Months",
-          "vaccine": "DTaP #2, IPV #2, Hib #2, PCV #2, Rotavirus (RV) #2",
-          "description": "Second series boosters for DTaP, Polio, Hib, Pneumococcal, and Rotavirus.",
+          "vaccine": "DTaP #2, IPV #2, Hib #2, PCV #2 + Rotavirus #2",
+          "mandate_tier": "SPLIT_MANDATORY_RECOMMENDED",
+          "mandate_badge": "🛡️ 4 MANDATORY + ⭐ 1 RECOMMENDED",
+          "mandate_label": "4 Daycare Mandated • 1 Non-Mandated Standard",
+          "mandate_color": "cyan",
+          "is_hospital_auto": false,
           "target_date": "2027-03-15",
           "administered_date": null,
+          "date_administered": null,
           "clinic": "Madigan AMC Pediatric Clinic",
           "lot_number": null,
           "provider": null,
           "status": "SCHEDULED",
-          "date_administered": null
+          "description": "Second series primary booster sortie. Strengthens adaptive immunity against DTaP, Polio, Hib, and Pneumococcal (all daycare mandated) plus dose 2 of oral Rotavirus drops.",
+          "components": [
+            {
+              "name": "DTaP #2",
+              "disease": "Diphtheria, Tetanus, Pertussis",
+              "tier": "MANDATORY",
+              "isMandatory": true,
+              "authority": "Mandatory for Daycare / DoD CDC / School Entry",
+              "route": "Intramuscular injection",
+              "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/dtap.html"
+            },
+            {
+              "name": "IPV #2",
+              "disease": "Inactivated Poliovirus",
+              "tier": "MANDATORY",
+              "isMandatory": true,
+              "authority": "Mandatory for Daycare / DoD CDC / School Entry",
+              "route": "Intramuscular injection",
+              "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/ipv.html"
+            },
+            {
+              "name": "Hib #2",
+              "disease": "Haemophilus influenzae type b",
+              "tier": "MANDATORY",
+              "isMandatory": true,
+              "authority": "Mandatory for Daycare / DoD CDC / School Entry",
+              "route": "Intramuscular injection",
+              "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/hib.html"
+            },
+            {
+              "name": "PCV #2",
+              "disease": "Pneumococcal Disease (PCV15 or PCV20)",
+              "tier": "MANDATORY",
+              "isMandatory": true,
+              "authority": "Mandatory for Daycare / DoD CDC / School Entry",
+              "route": "Intramuscular injection",
+              "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/pcv.html"
+            },
+            {
+              "name": "Rotavirus (RV) #2",
+              "disease": "Rotavirus Gastroenteritis",
+              "tier": "RECOMMENDED_STANDARD",
+              "isMandatory": false,
+              "authority": "Universal CDC/AAP Infant Recommendation (Exempt from Daycare Mandates)",
+              "route": "Oral liquid drops (Needle-free)",
+              "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/rotavirus.html"
+            }
+          ]
         },
         {
           "id": "VAC_05",
           "stage": "6 Months",
-          "vaccine": "DTaP #3, IPV #3, Hib #3, PCV #3, RV #3, HepB #3 + Seasonal Flu / COVID-19",
-          "description": "Third primary series completion, final infant Rotavirus and HepB booster, plus seasonal influenza and COVID-19 clearance.",
-          "target_date": "2027-05-15",
+          "vaccine": "DTaP #3, IPV #3, Hib #3, PCV #3, HepB #3 + [RV #3] + Seasonal Flu & COVID-19",
+          "mandate_tier": "SPLIT_MANDATORY_ELECTIVE",
+          "mandate_badge": "🛡️ 5 MANDATORY + ⭐ 1 STANDARD + 📋 2 PARENT ELECTIVE",
+          "mandate_label": "5 Daycare Mandated • 1 Standard • 2 Seasonal Elective",
+          "mandate_color": "amber",
+          "is_hospital_auto": false,
+          "target_date": "2027-05-14",
           "administered_date": null,
+          "date_administered": null,
           "clinic": "Madigan AMC Pediatric Clinic",
           "lot_number": null,
           "provider": null,
           "status": "SCHEDULED",
-          "date_administered": null
+          "description": "Third primary series completion sortie (DTaP #3, IPV #3, Hib #3, PCV #3, HepB #3 - all daycare mandated). Also unlocks the age eligibility window (6 months+) for annual seasonal influenza and COVID-19 parent elective vaccinations.",
+          "components": [
+            {
+              "name": "DTaP #3",
+              "disease": "Diphtheria, Tetanus, Pertussis",
+              "tier": "MANDATORY",
+              "isMandatory": true,
+              "authority": "Mandatory for Daycare / DoD CDC / School Entry",
+              "route": "Intramuscular injection",
+              "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/dtap.html"
+            },
+            {
+              "name": "IPV #3",
+              "disease": "Inactivated Poliovirus",
+              "tier": "MANDATORY",
+              "isMandatory": true,
+              "authority": "Mandatory for Daycare / DoD CDC / School Entry",
+              "route": "Intramuscular injection",
+              "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/ipv.html"
+            },
+            {
+              "name": "Hib #3",
+              "disease": "Haemophilus influenzae type b",
+              "tier": "MANDATORY",
+              "isMandatory": true,
+              "authority": "Mandatory for Daycare / DoD CDC / School Entry (if 4-dose brand)",
+              "route": "Intramuscular injection",
+              "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/hib.html"
+            },
+            {
+              "name": "PCV #3",
+              "disease": "Pneumococcal Disease",
+              "tier": "MANDATORY",
+              "isMandatory": true,
+              "authority": "Mandatory for Daycare / DoD CDC / School Entry",
+              "route": "Intramuscular injection",
+              "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/pcv.html"
+            },
+            {
+              "name": "HepB #3",
+              "disease": "Hepatitis B Virus (Final infant primary dose)",
+              "tier": "MANDATORY",
+              "isMandatory": true,
+              "authority": "Mandatory for Daycare / DoD CDC / School Entry",
+              "route": "Intramuscular injection",
+              "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/hep-b.html"
+            },
+            {
+              "name": "Rotavirus (RV) #3",
+              "disease": "Rotavirus Gastroenteritis",
+              "tier": "RECOMMENDED_STANDARD",
+              "isMandatory": false,
+              "authority": "CDC/AAP Standard (Only required if RotaTeq RV5 3-dose; omitted if Rotarix RV1 2-dose)",
+              "route": "Oral liquid drops",
+              "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/rotavirus.html"
+            },
+            {
+              "name": "Annual Influenza (Flu)",
+              "disease": "Seasonal Influenza A & B (Prevents severe respiratory hospitalization)",
+              "tier": "SEASONAL_ELECTIVE",
+              "isMandatory": false,
+              "authority": "Strongly Advised by AAP/CDC (Parent Discretion, Non-Mandated in WA State/DoD CDCs). First-time infants receive 2 doses separated by 4 weeks.",
+              "route": "Intramuscular injection",
+              "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/flu.html"
+            },
+            {
+              "name": "COVID-19 Pediatric",
+              "disease": "SARS-CoV-2 (Updated annual pediatric formulation)",
+              "tier": "PARENT_ELECTIVE",
+              "isMandatory": false,
+              "authority": "Recommended by CDC/AAP for 6M+ (Parent Discretion, Non-Mandated for Daycare)",
+              "route": "Intramuscular injection",
+              "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/covid-19.html"
+            }
+          ]
         }
       ],
       "growth_telemetry": {
@@ -1152,9 +1374,15 @@
       },
       "tummy_time_tracker": {
         "daily_target_minutes": 25,
-        "today_completed_minutes": 0,
-        "total_lifetime_sessions": 0,
-        "history": []
+        "today_completed_minutes": 10,
+        "total_lifetime_sessions": 1,
+        "history": [
+          {
+            "date": "2026-11-04",
+            "minutes": 10,
+            "notes": "Automated tummy test"
+          }
+        ]
       },
       "developmental_milestones": [
         {
@@ -1243,8 +1471,38 @@
       "action": "SYSTEM_CALIBRATED",
       "actor": "ORCHESTRATOR",
       "details": "Newborn Readiness & Milestone Command calibrated for Aiden James Vane. Synthetic growth vitals purged."
+    },
+    {
+      "timestamp": "2026-11-04T13:39:22.989Z",
+      "action": "TASK_STATUS_UPDATE",
+      "actor": "OPERATOR",
+      "details": "Task A1 (Hospital Administration Intake & Paternity Verification) updated to PENDING"
+    },
+    {
+      "timestamp": "2026-11-04T13:39:23.003Z",
+      "action": "GROWTH_MEASUREMENT_LOG",
+      "actor": "PEDIATRIC_TELEMETRY",
+      "details": "Added growth record: 8.4 lbs, 20.9 in, 14.6 in head circumference"
+    },
+    {
+      "timestamp": "2026-11-04T13:39:23.015Z",
+      "action": "TUMMY_TIME_LOG",
+      "actor": "CAREGIVER",
+      "details": "Logged 10 minutes of tummy time. Daily total: 10 min."
+    },
+    {
+      "timestamp": "2026-11-04T13:39:35.729Z",
+      "action": "DOCUMENT_VAULTED",
+      "actor": "OPERATOR",
+      "details": "Vaulted document \"CDC Vaccine Card - HepB #1\" (37 bytes) under CLINICAL"
+    },
+    {
+      "timestamp": "2026-11-04T13:39:35.762Z",
+      "action": "DOCUMENT_VAULTED",
+      "actor": "OPERATOR",
+      "details": "Vaulted document \"SS-5 Receipt (Redacted)\" (37 bytes) under LEGAL"
     }
   ],
-  "last_updated": "2026-11-04T13:23:27.179Z",
+  "last_updated": "2026-11-04T13:39:35.781Z",
   "vault_documents": []
 }

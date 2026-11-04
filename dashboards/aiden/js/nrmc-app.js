@@ -1053,16 +1053,122 @@ class NrmcDashboardApp {
           const isComplete = v.status === 'COMPLETE';
           const statusClass =
             isComplete ? 'pill-emerald' : v.status === 'SCHEDULED' ? 'pill-cyan' : 'pill-amber';
+
+          const badgeClass =
+            v.mandate_color === 'emerald'
+              ? 'vax-badge-mandate'
+              : v.mandate_color === 'cyan'
+              ? 'vax-badge-split'
+              : 'vax-badge-elective';
+
+          const componentsList = Array.isArray(v.components) ? v.components : [];
+
+          const chipsHtml = componentsList
+            .map((comp) => {
+              const chipClass = comp.isMandatory
+                ? 'vax-chip-mandate'
+                : comp.tier === 'RECOMMENDED_STANDARD'
+                ? 'vax-chip-standard'
+                : 'vax-chip-elective';
+              const icon = comp.isMandatory ? '🛡️' : comp.tier === 'RECOMMENDED_STANDARD' ? '⭐' : '📋';
+              return `<span class="vax-chip ${chipClass}" title="${comp.disease} (${comp.route || 'IM'})">${icon} ${comp.name}</span>`;
+            })
+            .join('');
+
+          const seasonalHtml = v.seasonal_prophylaxis
+            ? `<span class="vax-chip vax-chip-elective" title="${v.seasonal_prophylaxis.note}">📋 ${v.seasonal_prophylaxis.name}</span>`
+            : '';
+
+          const drawerRowsHtml = componentsList
+            .map(
+              (comp) => `
+            <tr>
+              <td style="font-family:var(--font-mono); font-weight:700; color:var(--cyan-telemetry);">${comp.name}</td>
+              <td style="color:#cbd5e1;">${comp.disease}</td>
+              <td>
+                <span class="vax-chip ${comp.isMandatory ? 'vax-chip-mandate' : comp.tier === 'RECOMMENDED_STANDARD' ? 'vax-chip-standard' : 'vax-chip-elective'}">
+                  ${comp.isMandatory ? '🛡️ Mandatory' : comp.tier === 'RECOMMENDED_STANDARD' ? '⭐ AAP Standard' : '📋 Parent Elective'}
+                </span>
+              </td>
+              <td style="font-family:var(--font-mono); font-size:0.7rem; color:var(--text-muted);">${comp.route || 'IM Injection'}</td>
+              <td>
+                ${comp.vis_url ? `<a href="${comp.vis_url}" target="_blank" rel="noopener noreferrer" class="vax-vis-link">CDC VIS ↗</a>` : '—'}
+              </td>
+            </tr>
+          `
+            )
+            .join('');
+
+          const seasonalBoxHtml = v.seasonal_prophylaxis
+            ? `
+            <div style="margin-top:10px; padding:8px 10px; background:rgba(245, 158, 11, 0.08); border-left:3px solid var(--amber-warning); border-radius:4px; font-size:0.75rem;">
+              <div style="font-weight:700; color:var(--amber-warning);">${v.seasonal_prophylaxis.badge}: ${v.seasonal_prophylaxis.name}</div>
+              <div style="color:#cbd5e1; margin-top:3px;">${v.seasonal_prophylaxis.note}</div>
+              ${v.seasonal_prophylaxis.vis_url ? `<div style="margin-top:4px;"><a href="${v.seasonal_prophylaxis.vis_url}" target="_blank" rel="noopener noreferrer" class="vax-vis-link">CDC RSV VIS Statement ↗</a></div>` : ''}
+            </div>
+          `
+            : '';
+
           return `
           <tr>
-            <td style="font-family:var(--font-mono); font-weight:700; color:var(--cyan-telemetry);">${v.stage}</td>
-            <td style="font-weight:600;">${v.vaccine}</td>
-            <td style="font-family:var(--font-mono); color:var(--text-muted);">${v.target_date || 'TBD'} ${v.date_administered ? `(Administered: ${v.date_administered})` : ''}</td>
-            <td><span class="countdown-pill ${statusClass}">${v.status}</span></td>
-            <td>
-              <button class="hud-btn hud-btn-sm ${isComplete ? 'hud-btn-emerald' : 'hud-btn-primary'} vac-toggle-btn" data-vac-id="${v.id}" title="${isComplete ? 'Vaccine recorded. Click to uncheck' : 'Click to record vaccine as administered today'}">
-                ${isComplete ? '✓ GIVEN' : 'MARK GIVEN'}
+            <td style="vertical-align:top;">
+              <div style="font-family:var(--font-mono); font-weight:800; color:var(--cyan-telemetry); font-size:0.85rem;">${v.stage}</div>
+              <div style="font-family:var(--font-mono); font-size:0.68rem; color:var(--text-muted); margin-top:2px;">Sortie ID: ${v.id}</div>
+              ${v.is_hospital_auto ? `<span class="countdown-pill pill-cyan" style="font-size:0.6rem; margin-top:4px; display:inline-block;">HOSPITAL AUTO-ADMIN</span>` : ''}
+            </td>
+            <td style="vertical-align:top;">
+              <div style="font-weight:700; font-size:0.88rem; color:var(--ghost-white); line-height:1.3;">${v.vaccine}</div>
+              <div class="vax-chips-container">
+                ${chipsHtml}
+                ${seasonalHtml}
+              </div>
+              <button class="vax-drawer-toggle-btn" data-drawer-id="drawer-${v.id}">
+                <span>🔍 ANTIGEN BREAKDOWN &amp; VIS</span>
               </button>
+              
+              <div id="drawer-${v.id}" class="vax-components-drawer">
+                <table class="vax-component-table">
+                  <thead>
+                    <tr>
+                      <th>Antigen</th>
+                      <th>Protects Against</th>
+                      <th>Regulatory Status</th>
+                      <th>Route</th>
+                      <th>Official CDC VIS</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${drawerRowsHtml}
+                  </tbody>
+                </table>
+                ${seasonalBoxHtml}
+              </div>
+            </td>
+            <td style="vertical-align:top;">
+              <div class="vax-mandate-badge ${badgeClass}">
+                ${v.mandate_badge || 'CLINICAL SPEC'}
+              </div>
+              <div style="font-family:var(--font-mono); font-size:0.7rem; color:var(--text-muted); margin-top:4px; line-height:1.3;">
+                ${v.mandate_label || ''}
+              </div>
+            </td>
+            <td style="vertical-align:top; font-family:var(--font-mono); font-size:0.78rem;">
+              <div style="color:var(--cyan-telemetry); font-weight:700;">${v.target_date || 'TBD'}</div>
+              ${v.date_administered ? `<div style="color:var(--emerald-nominal); font-size:0.7rem; margin-top:3px;">Administered: ${v.date_administered}</div>` : ''}
+              <div style="color:var(--text-muted); font-size:0.7rem; margin-top:2px;">${v.clinic || 'Madigan AMC'}</div>
+            </td>
+            <td style="vertical-align:top;">
+              <span class="countdown-pill ${statusClass}">${v.status}</span>
+            </td>
+            <td style="vertical-align:top; white-space:nowrap;">
+              <div style="display:flex; flex-direction:column; gap:6px;">
+                <button class="hud-btn hud-btn-sm ${isComplete ? 'hud-btn-emerald' : 'hud-btn-primary'} vac-toggle-btn" data-vac-id="${v.id}" title="${isComplete ? 'Vaccine recorded. Click to uncheck' : 'Click to record vaccine as administered today'}">
+                  ${isComplete ? '✓ GIVEN' : 'MARK GIVEN'}
+                </button>
+                <button class="hud-btn hud-btn-sm vax-dossier-btn" data-vac-id="${v.id}" style="font-size:0.65rem;" title="View clinical dossier and CDC forms">
+                  SORTIE DOSSIER
+                </button>
+              </div>
             </td>
           </tr>
         `;
@@ -1207,7 +1313,31 @@ class NrmcDashboardApp {
         return;
       }
 
-      // 7. Card click opens action modal
+      // 7. Vaccine Drawer Breakdown Toggle
+      const drawerBtn = e.target.closest('.vax-drawer-toggle-btn');
+      if (drawerBtn && drawerBtn.dataset.drawerId) {
+        e.stopPropagation();
+        e.preventDefault();
+        const drawer = document.getElementById(drawerBtn.dataset.drawerId);
+        if (drawer) {
+          drawer.classList.toggle('open');
+          const isOpen = drawer.classList.contains('open');
+          const span = drawerBtn.querySelector('span');
+          if (span) span.textContent = isOpen ? '▲ COLLAPSE BREAKDOWN' : '🔍 ANTIGEN BREAKDOWN & VIS';
+        }
+        return;
+      }
+
+      // 8. Vaccine Dossier Modal
+      const dossierBtn = e.target.closest('.vax-dossier-btn');
+      if (dossierBtn && dossierBtn.dataset.vacId) {
+        e.stopPropagation();
+        e.preventDefault();
+        this.openActionModal(dossierBtn.dataset.vacId);
+        return;
+      }
+
+      // 9. Card click opens action modal
       const card = e.target.closest('.task-matrix-card, .glidepath-milestone-card, .swimlane-node-card');
       if (card && card.dataset.taskId) {
         this.openActionModal(card.dataset.taskId);
@@ -1617,6 +1747,37 @@ class NrmcDashboardApp {
       }
     });
 
+    // Check vaccine glidepath if not a standard modular task
+    if (!task && this.state.modules?.module_e?.vaccine_glidepath) {
+      const vac = this.state.modules.module_e.vaccine_glidepath.find(v => v.id.toUpperCase() === taskId.toUpperCase());
+      if (vac) {
+        task = {
+          id: vac.id,
+          title: `${vac.stage} — ${vac.vaccine}`,
+          category: `Pediatric Immunization (${vac.mandate_badge || 'CDC ACIP'})`,
+          priority: vac.mandate_tier === 'MANDATORY' ? 'CRITICAL' : 'HIGH',
+          status: vac.status,
+          timeframe: vac.target_date || 'TBD',
+          sla: vac.mandate_label || 'CDC ACIP Recommended Timing',
+          notes: vac.description || '',
+          checklists: vac.components ? vac.components.map(c => `${c.name}: ${c.disease} [${c.tier === 'MANDATORY' ? '🛡️ MANDATORY' : c.tier === 'RECOMMENDED_STANDARD' ? '⭐ RECOMMENDED STANDARD' : '📋 ELECTIVE'}] (${c.route || 'IM'})`) : [],
+          checklists_completed: vac.status === 'COMPLETE' ? (vac.components ? vac.components.map(c => `${c.name}: ${c.disease} [${c.tier === 'MANDATORY' ? '🛡️ MANDATORY' : c.tier === 'RECOMMENDED_STANDARD' ? '⭐ RECOMMENDED STANDARD' : '📋 ELECTIVE'}] (${c.route || 'IM'})`) : []) : [],
+          portals: [
+            { name: "CDC ACIP Child Immunization Schedule", url: "https://www.cdc.gov/vaccines/schedules/hcp/imz/child-adolescent.html" },
+            { name: "WA State Child Care Immunization Requirements", url: "https://doh.wa.gov/you-and-your-family/immunization/childcare-and-school" },
+            { name: "DoD Instruction 6060.02 (Child Development Programs)", url: "https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/606002p.pdf" }
+          ],
+          form_downloads: vac.components ? vac.components.filter(c => c.vis_url).map(c => ({
+            name: `${c.name} Official CDC Vaccine Information Statement (VIS)`,
+            file: "vaccine_records.txt",
+            official_url: c.vis_url
+          })) : [],
+          is_vaccine: true,
+          vaccine_data: vac
+        };
+      }
+    }
+
     if (!task) return;
     this.selectedTask = task;
 
@@ -1848,7 +2009,22 @@ class NrmcDashboardApp {
       }
     });
 
-    if (!target) return;
+    if (!target) {
+      if (this.state.modules?.module_e?.vaccine_glidepath) {
+        const vac = this.state.modules.module_e.vaccine_glidepath.find(v => v.id.toUpperCase() === taskId.toUpperCase());
+        if (vac) {
+          await this.toggleVaccineComplete(vac.id);
+          if (this.selectedTask && this.selectedTask.id.toUpperCase() === taskId.toUpperCase()) {
+            this.selectedTask.status = vac.status;
+            this.updateModalSealButton(vac.status === 'COMPLETE');
+            const statusSelect = document.getElementById('modal-status-select');
+            if (statusSelect) statusSelect.value = vac.status;
+          }
+          return;
+        }
+      }
+      return;
+    }
 
     const willComplete = target.status !== 'COMPLETE';
     target.status = willComplete ? 'COMPLETE' : 'PENDING';
@@ -2214,7 +2390,23 @@ class NrmcDashboardApp {
   async updateTaskStatus(taskId, newStatus) {
     if (!this.selectedTask) return;
     this.selectedTask.status = newStatus;
-    await this.syncTaskUpdate(taskId, { status: newStatus });
+    if (this.selectedTask.is_vaccine) {
+      const vac = this.state.modules?.module_e?.vaccine_glidepath?.find(v => v.id.toUpperCase() === taskId.toUpperCase());
+      if (vac) {
+        vac.status = newStatus;
+        vac.date_administered = newStatus === 'COMPLETE' ? new Date().toISOString().split('T')[0] : null;
+        try {
+          await fetch(this.apiUrl(`/api/v1/nrmc/vaccine/${vac.id}`), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: vac.status, date_administered: vac.date_administered })
+          });
+          this.broadcastFleetTelemetry();
+        } catch (e) {}
+      }
+    } else {
+      await this.syncTaskUpdate(taskId, { status: newStatus });
+    }
     this.render();
     this.showToast(`Task ${taskId} marked as ${newStatus}`);
   }

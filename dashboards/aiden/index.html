@@ -619,9 +619,67 @@
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
           </svg>
-          MODULE E: PEDIATRIC CLINICAL SCHEDULE & WELL-CHILD TRACKER
+          MODULE E: PEDIATRIC CLINICAL SCHEDULE &amp; WELL-CHILD TRACKER
         </div>
         <span class="countdown-pill pill-cyan">CDC/AAP VACCINE GLIDEPATH • WHO GROWTH STANDARDS</span>
+      </div>
+
+      <!-- Vaccine Mandate & Regulatory Directive Box -->
+      <div class="vaccine-mandate-directive-box">
+        <div class="mandate-directive-header">
+          <div class="mandate-directive-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            U.S. PEDIATRIC IMMUNIZATION REGULATORY &amp; CLINICAL DELINEATION (CDC ACIP / AAP / WA DOH / DOD)
+          </div>
+          <a href="https://www.cdc.gov/vaccines/schedules/hcp/imz/child-adolescent.html" target="_blank" rel="noopener noreferrer" class="hud-btn hud-btn-sm" style="color:var(--cyan-telemetry); border-color:var(--cyan-telemetry);">
+            OFFICIAL CDC ACIP SCHEDULE ↗
+          </a>
+        </div>
+        <div class="mandate-box-grid">
+          <!-- Tier 1 -->
+          <div class="mandate-box-card border-mandate">
+            <div class="mandate-box-tag mandate-tag-mandate">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              TIER 1: MANDATORY (DAYCARE, DOD CDC &amp; SCHOOL)
+            </div>
+            <div class="mandate-box-desc">
+              Legally mandated by Washington State (WAC 246-105) and DoD Child Development Centers (DoDI 6060.02 / Waller Hall CDC). Enforces herd immunity against life-threatening transmissible pathogens.
+            </div>
+            <div class="mandate-box-applies">
+              <strong>Vaccines:</strong> HepB, DTaP, Polio (IPV), Hib, Pneumococcal (PCV15/20)
+            </div>
+          </div>
+
+          <!-- Tier 2 -->
+          <div class="mandate-box-card border-standard">
+            <div class="mandate-box-tag mandate-tag-standard">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              TIER 2: AAP RECOMMENDED STANDARD (NON-MANDATED)
+            </div>
+            <div class="mandate-box-desc">
+              Universal clinical standard of care recommended by CDC and AAP for all healthy infants to prevent severe dehydration and hospitalization. Exempt from school &amp; daycare entry mandates.
+            </div>
+            <div class="mandate-box-applies">
+              <strong>Vaccines:</strong> Rotavirus (Oral RV liquid drops — needle-free)
+            </div>
+          </div>
+
+          <!-- Tier 3 -->
+          <div class="mandate-box-card border-elective">
+            <div class="mandate-box-tag mandate-tag-elective">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+              TIER 3: PARENT ELECTIVE &amp; SEASONAL DISCRETION
+            </div>
+            <div class="mandate-box-desc">
+              Strongly recommended clinical options governed by seasonal birth timing and parental consent. Not mandated by civilian law or military child development centers.
+            </div>
+            <div class="mandate-box-applies">
+              <strong>Sorties:</strong> RSV Passive Antibody (Nirsevimab at birth in-season), Annual Influenza (6M+), COVID-19 (6M+)
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="clinical-subgrid">
@@ -640,11 +698,12 @@
             <table class="tactical-table">
               <thead>
                 <tr>
-                  <th>Milestone</th>
-                  <th>Immunization Series</th>
+                  <th>Milestone / Visit</th>
+                  <th>Immunization Sortie &amp; Antigen Components</th>
+                  <th>Mandate &amp; Regulatory Status</th>
                   <th>Target Date</th>
                   <th>Status</th>
-                  <th>Action</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody id="vaccine-table-body">

@@ -1290,6 +1290,154 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator:hover {
   opacity: 1;
 }
 
+/* ==================================================================== */
+/* 🏛️ VACCINE MANDATE DIRECTIVE & COMPLIANCE HUD STYLING                */
+/* ==================================================================== */
+
+.vaccine-mandate-directive-box {
+  background: rgba(14, 16, 22, 0.95);
+  border: 1px solid var(--border-cyan);
+  border-radius: var(--hud-radius);
+  padding: 16px 18px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+}
+
+.mandate-box-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 10px;
+}
+
+.mandate-box-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+.mandate-box-card {
+  background: rgba(18, 19, 24, 0.85);
+  border-radius: 6px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: all var(--transition-fast);
+}
+
+.mandate-box-card.border-mandate {
+  border-left: 3px solid var(--emerald-nominal);
+  background: rgba(16, 185, 129, 0.04);
+}
+
+.mandate-box-card.border-standard {
+  border-left: 3px solid #c084fc;
+  background: rgba(139, 92, 246, 0.04);
+}
+
+.mandate-box-card.border-elective {
+  border-left: 3px solid var(--amber-warning);
+  background: rgba(245, 158, 11, 0.04);
+}
+
+.mandate-card-badge {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mandate-card-badge.text-emerald { color: #6ee7b7; }
+.mandate-card-badge.text-cyan { color: #67e8f9; }
+.mandate-card-badge.text-violet { color: #c084fc; }
+.mandate-card-badge.text-amber { color: #fcd34d; }
+
+.mandate-card-desc {
+  font-size: 0.78rem;
+  color: var(--ghost-white);
+  line-height: 1.45;
+}
+
+/* Antigen Component Chips */
+.vax-chip-mandate {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: rgba(16, 185, 129, 0.15);
+  color: #6ee7b7;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+.vax-chip-standard {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: rgba(139, 92, 246, 0.15);
+  color: #c084fc;
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+.vax-chip-elective {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: rgba(245, 158, 11, 0.15);
+  color: #fcd34d;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+.vax-components-drawer {
+  background: rgba(10, 11, 14, 0.95);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 12px 16px;
+  margin-top: 8px;
+}
+
+.vax-component-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+}
+
+.vax-component-table th {
+  text-align: left;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--cyan-telemetry);
+  padding: 6px 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.vax-component-table td {
+  padding: 7px 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
 .milestone-header-row {
   display: flex;
   align-items: center;
@@ -1762,6 +1910,261 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator:hover {
   border-color: var(--emerald-nominal);
   transform: translateY(-1px);
 }
+
+/* ==================================================================== */
+/* 💉 U.S. VACCINE MANDATE & REGULATORY POLICY DIRECTIVE STYLES          */
+/* ==================================================================== */
+
+.vaccine-mandate-directive-box {
+  background: rgba(12, 14, 20, 0.85);
+  border: 1px solid var(--border-cyan);
+  border-left: 4px solid var(--cyan-telemetry);
+  border-radius: var(--hud-radius);
+  padding: 16px 20px;
+  margin-bottom: 20px;
+}
+
+.mandate-directive-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.mandate-directive-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--cyan-telemetry);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.mandate-box-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.mandate-box-card {
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 6px;
+  padding: 12px 14px;
+  border-left: 3px solid;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mandate-box-card.border-mandate {
+  border-left-color: var(--emerald-nominal);
+  border-top: 1px solid rgba(16, 185, 129, 0.2);
+  border-right: 1px solid rgba(16, 185, 129, 0.1);
+  border-bottom: 1px solid rgba(16, 185, 129, 0.1);
+}
+
+.mandate-box-card.border-standard {
+  border-left-color: var(--cyan-telemetry);
+  border-top: 1px solid rgba(0, 229, 255, 0.2);
+  border-right: 1px solid rgba(0, 229, 255, 0.1);
+  border-bottom: 1px solid rgba(0, 229, 255, 0.1);
+}
+
+.mandate-box-card.border-elective {
+  border-left-color: var(--amber-warning);
+  border-top: 1px solid rgba(245, 158, 11, 0.2);
+  border-right: 1px solid rgba(245, 158, 11, 0.1);
+  border-bottom: 1px solid rgba(245, 158, 11, 0.1);
+}
+
+.mandate-box-tag {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mandate-tag-mandate {
+  color: var(--emerald-nominal);
+}
+
+.mandate-tag-standard {
+  color: var(--cyan-telemetry);
+}
+
+.mandate-tag-elective {
+  color: var(--amber-warning);
+}
+
+.mandate-box-desc {
+  font-size: 0.78rem;
+  color: #cbd5e1;
+  line-height: 1.45;
+}
+
+.mandate-box-applies {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+/* Vaccine Table Badges & Chips */
+.vax-mandate-badge {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.vax-badge-mandate {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.45);
+  color: var(--emerald-nominal);
+}
+
+.vax-badge-split {
+  background: rgba(0, 229, 255, 0.12);
+  border: 1px solid rgba(0, 229, 255, 0.4);
+  color: var(--cyan-telemetry);
+}
+
+.vax-badge-elective {
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  color: var(--amber-warning);
+}
+
+.vax-chips-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 6px;
+}
+
+.vax-chip {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.vax-chip-mandate {
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  color: #6ee7b7;
+}
+
+.vax-chip-standard {
+  background: rgba(0, 229, 255, 0.1);
+  border: 1px solid rgba(0, 229, 255, 0.35);
+  color: #7dd3fc;
+}
+
+.vax-chip-elective {
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  color: #fcd34d;
+}
+
+/* Expandable Component Drawer in Table */
+.vax-drawer-toggle-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-subtle);
+  color: var(--cyan-telemetry);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 6px;
+}
+
+.vax-drawer-toggle-btn:hover {
+  background: rgba(0, 229, 255, 0.12);
+  border-color: var(--cyan-telemetry);
+  color: var(--ghost-white);
+}
+
+.vax-components-drawer {
+  display: none;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid var(--border-cyan);
+  border-radius: 6px;
+  padding: 12px;
+  margin-top: 10px;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.vax-components-drawer.open {
+  display: block;
+}
+
+.vax-component-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.75rem;
+}
+
+.vax-component-table th {
+  background: rgba(255, 255, 255, 0.04);
+  padding: 6px 10px;
+  color: var(--cyan-telemetry);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.vax-component-table td {
+  padding: 6px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  color: var(--ghost-white);
+}
+
+.vax-component-table tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.vax-vis-link {
+  color: var(--cyan-telemetry);
+  text-decoration: underline;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+}
+
+.vax-vis-link:hover {
+  color: #fff;
+  text-shadow: 0 0 6px var(--cyan-telemetry);
+}
+
 
 
 
