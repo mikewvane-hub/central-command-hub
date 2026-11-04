@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": "1.0.0-UNIFIED",
-    "last_updated": "2026-11-04T13:11:31.762407+00:00",
+    "last_updated": "2026-11-04T13:24:41.427011+00:00",
     "timezone": "America/New_York",
     "status": "ONLINE"
   },
@@ -232,7 +232,7 @@
       "statute_or_category": "Athletic Readiness",
       "due_date": "2026-11-04",
       "action_url": "health",
-      "created_at": "2026-11-04T13:11:31.664259+00:00",
+      "created_at": "2026-11-04T13:24:41.256216+00:00",
       "acknowledged": false,
       "dismissed": false
     },
@@ -274,7 +274,7 @@
       "statute_or_category": "Preventive Maintenance",
       "due_date": "2026-11-18",
       "action_url": "fleet",
-      "created_at": "2026-11-04T13:11:31.664259+00:00",
+      "created_at": "2026-11-04T13:24:41.256216+00:00",
       "acknowledged": false,
       "dismissed": false
     },
@@ -288,24 +288,82 @@
       "statute_or_category": "Q4 Statutory Maintenance",
       "due_date": "2026-12-31",
       "action_url": "rental",
-      "created_at": "2026-11-04T13:11:31.678366+00:00",
+      "created_at": "2026-11-04T13:24:41.256216+00:00",
+      "acknowledged": false,
+      "dismissed": false
+    },
+    {
+      "id": "alert_aiden_tricare_grace",
+      "domain": "aiden",
+      "severity": "CRITICAL",
+      "code": "AIDEN_TRICARE_GRACE_ACTIVE",
+      "title": "TRICARE 90-Day Newborn Grace Window Active",
+      "message": "TRICARE 90-day grace clock active from delivery (2026-11-15). Mandatory DEERS enrollment required by 2027-02-13 to finalize PCM assignment at Madigan AMC and prevent Point of Service cost-shares.",
+      "statute_or_category": "TRICARE Prime Enrollment",
+      "due_date": "2027-02-13",
+      "action_url": "aiden",
+      "created_at": "2026-11-04T13:24:41.256216+00:00",
+      "acknowledged": false,
+      "dismissed": false
+    },
+    {
+      "id": "alert_aiden_immediate_sortie",
+      "domain": "aiden",
+      "severity": "CRITICAL",
+      "code": "AIDEN_IMMEDIATE_SORTIE_QUEUE",
+      "title": "Baby Aiden Immediate Sortie Queue (Hospital & T-0 to T+72h)",
+      "message": "Delivery scheduled in 11 days (2026-11-15). 11 clinical, vital records, and immunization sortie tasks armed in NRMC Module A & E.",
+      "statute_or_category": "Immediate Sortie / Vital Records",
+      "due_date": "2026-11-15",
+      "action_url": "aiden",
+      "created_at": "2026-11-04T13:24:41.256216+00:00",
+      "acknowledged": false,
+      "dismissed": false
+    },
+    {
+      "id": "alert_aiden_rapids_appointment",
+      "domain": "aiden",
+      "severity": "WARNING",
+      "code": "AIDEN_RAPIDS_APPOINTMENT_STANDBY",
+      "title": "RAPIDS Appointment Booked (2026-12-05 - JBLM Waller Hall)",
+      "message": "Appointment confirmed (Code: DMDC-AIDEN-7749). Verify certified birth certificate physical arrival prior to DEERS enrollment appointment.",
+      "statute_or_category": "DEERS / DD Form 1172-2",
+      "due_date": "2026-12-05",
+      "action_url": "aiden",
+      "created_at": "2026-11-04T13:24:41.256216+00:00",
+      "acknowledged": false,
+      "dismissed": false
+    },
+    {
+      "id": "alert_aiden_529_dca",
+      "domain": "aiden",
+      "severity": "INFO",
+      "code": "AIDEN_529_CONTRIBUTION_SCHEDULED",
+      "title": "529 College Savings Auto-DCA Active ($500/mo)",
+      "message": "WA GET / DreamAhead 529 automated monthly contribution scheduled upon SSN receipt. Generational wealth compounding nominal.",
+      "statute_or_category": "Generational Wealth Architecture",
+      "due_date": "2026-11-30",
+      "action_url": "aiden",
+      "created_at": "2026-11-04T13:24:41.256216+00:00",
       "acknowledged": false,
       "dismissed": false
     }
   ],
   "executive_briefing": {
     "cadence": "SUNDAY_1800_EXECUTIVE_BRIEFING",
-    "generated_at": "2026-11-04T13:11:31.663245+00:00",
+    "generated_at": "2026-11-04T13:24:41.225772+00:00",
     "week_label": "Week of November 04 \u2013 November 11, 2026",
     "cadence_window": "Week of November 04 \u2013 November 11, 2026",
-    "summary": "Executive briefing for Week of November 04 \u2013 November 11, 2026 integrating Family Milestones, Property Cash Flow, Athletic Readiness, and Fleet Telemetry.",
+    "summary": "Executive briefing for Week of November 04 \u2013 November 11, 2026 integrating Baby Aiden NRMC Sortie, Family Milestones, Property Cash Flow, Athletic Readiness, and Fleet Telemetry.",
     "highlights": [
+      "BABY AIDEN // NRMC: DOB in 11 days (2026-11-15). Immediate Sortie armed (11 tasks & vaccines queued for next 14 days). TRICARE 90-day grace clock stands by.",
       "FAMILY: User Birthday (29 Mar 1993, in 145d), Wife Birthday (23 Apr 1996, in 170d), Anniversary (23 Sep).",
       "PROPERTY: Sierra Pines cash flow at +$1,120/mo Net ($3,030 Gross). Priority ticket: 'Perimeter Fence Wash & Gate Warranty Inspection'.",
       "ATHLETIC: Readiness Score 61/100. HRV at 46 ms (BELOW_TARGET). Directive: \u26a0\ufe0f HRV at 46 ms (Target: 65 ms). Autonomic nervous system fatigued. Throttle training to Zone 2 Active Recovery..",
       "FLEET: Colorado ZR2 oil life at 18% (service due); 2022 Nissan Murano TN registration current through May 2027."
     ],
     "executive_highlights": [
+      "BABY AIDEN // NRMC: DOB in 11 days (2026-11-15). Immediate Sortie armed (11 tasks & vaccines queued for next 14 days). TRICARE 90-day grace clock stands by.",
       "FAMILY: User Birthday (29 Mar 1993, in 145d), Wife Birthday (23 Apr 1996, in 170d), Anniversary (23 Sep).",
       "PROPERTY: Sierra Pines cash flow at +$1,120/mo Net ($3,030 Gross). Priority ticket: 'Perimeter Fence Wash & Gate Warranty Inspection'.",
       "ATHLETIC: Readiness Score 61/100. HRV at 46 ms (BELOW_TARGET). Directive: \u26a0\ufe0f HRV at 46 ms (Target: 65 ms). Autonomic nervous system fatigued. Throttle training to Zone 2 Active Recovery..",
@@ -323,8 +381,365 @@
       {
         "category": "Fleet",
         "detail": "2021 Chevy Colorado ZR2 maintenance/registration action due."
+      },
+      {
+        "category": "Baby Aiden",
+        "priority": "HIGH",
+        "due_date": "2026-11-15",
+        "days_remaining": 11,
+        "detail": "[HIGH] Hospital Administration Intake & Paternity Verification (Target 2026-11-15 \u2022 T-11d)"
+      },
+      {
+        "category": "Baby Aiden",
+        "priority": "HIGH",
+        "due_date": "2026-11-15",
+        "days_remaining": 11,
+        "detail": "[HIGH] Social Security Card Request Form Tracking (Form SS-5) (Target 2026-11-15 \u2022 T-11d)"
+      },
+      {
+        "category": "Baby Aiden",
+        "priority": "CRITICAL",
+        "due_date": "2026-11-15",
+        "days_remaining": 11,
+        "detail": "[CRITICAL] TRICARE 90-Day Newborn Grace Window Initialization (Target 2026-11-15 \u2022 T-11d)"
+      },
+      {
+        "category": "Baby Aiden",
+        "priority": "MEDIUM",
+        "due_date": "2026-11-15",
+        "days_remaining": 11,
+        "detail": "[MEDIUM] SGLI / FSGLI Automatic Coverage Verification ($10,000 at Birth) (Target 2026-11-15 \u2022 T-11d)"
+      },
+      {
+        "category": "Baby Aiden",
+        "priority": "HIGH",
+        "due_date": "2026-11-15",
+        "days_remaining": 11,
+        "detail": "[HIGH] Dependent Care Flexible Spending Account (DCFSA) QLE Enrollment (Target 2026-11-15 \u2022 T-11d)"
+      },
+      {
+        "category": "Baby Aiden",
+        "priority": "HIGH",
+        "due_date": "2026-11-15",
+        "days_remaining": 11,
+        "detail": "[HIGH] Hepatitis B (HepB) Dose #1 (Target 2026-11-15 \u2022 T-11d)"
+      },
+      {
+        "category": "Baby Aiden",
+        "priority": "CRITICAL",
+        "due_date": "2026-11-16",
+        "days_remaining": 12,
+        "detail": "[CRITICAL] Certified Birth Certificate Order Tracker (5-8 Official Copies) (Target 2026-11-16 \u2022 T-12d)"
+      },
+      {
+        "category": "Baby Aiden",
+        "priority": "HIGH",
+        "due_date": "2026-11-16",
+        "days_remaining": 12,
+        "detail": "[HIGH] Newborn Metabolic Screening Card (Heel Prick Test) (Target 2026-11-16 \u2022 T-12d)"
+      },
+      {
+        "category": "Baby Aiden",
+        "priority": "HIGH",
+        "due_date": "2026-11-16",
+        "days_remaining": 12,
+        "detail": "[HIGH] Newborn Hearing Screening Clearance (OAE & AABR) (Target 2026-11-16 \u2022 T-12d)"
+      },
+      {
+        "category": "Baby Aiden",
+        "priority": "HIGH",
+        "due_date": "2026-11-17",
+        "days_remaining": 13,
+        "detail": "[HIGH] Hospital Discharge Summary Packet & Signed Physician Summary (Target 2026-11-17 \u2022 T-13d)"
+      },
+      {
+        "category": "Baby Aiden",
+        "priority": "CRITICAL",
+        "due_date": "2026-11-18",
+        "days_remaining": 14,
+        "detail": "[CRITICAL] DEERS Enrollment & RAPIDS Appointment Engine (Target 2026-11-18 \u2022 T-14d)"
       }
     ],
+    "upcoming_14d_tasks": [
+      {
+        "category": "Family",
+        "detail": "\ud83d\udcc5 Family Sunday Meal Prep & Planning (2026-10-25)"
+      },
+      {
+        "category": "Family",
+        "detail": "\ud83d\udcc5 Mackie School Fall Conference (2026-10-23)"
+      },
+      {
+        "category": "Fleet",
+        "detail": "2021 Chevy Colorado ZR2 maintenance/registration action due."
+      },
+      {
+        "category": "Baby Aiden",
+        "priority": "HIGH",
+        "due_date": "2026-11-15",
+        "days_remaining": 11,
+        "detail": "[HIGH] Hospital Administration Intake & Paternity Verification (Target 2026-11-15 \u2022 T-11d)"
+      },
+      {
+        "category": "Baby Aiden",
+        "priority": "HIGH",
+        "due_date": "2026-11-15",
+        "days_remaining": 11,
+        "detail": "[HIGH] Social Security Card Request Form Tracking (Form SS-5) (Target 2026-11-15 \u2022 T-11d)"
+      },
+      {
+        "category": "Baby Aiden",
+        "priority": "CRITICAL",
+        "due_date": "2026-11-15",
+        "days_remaining": 11,
+        "detail": "[CRITICAL] TRICARE 90-Day Newborn Grace Window Initialization (Target 2026-11-15 \u2022 T-11d)"
+      },
+      {
+        "category": "Baby Aiden",
+        "priority": "MEDIUM",
+        "due_date": "2026-11-15",
+        "days_remaining": 11,
+        "detail": "[MEDIUM] SGLI / FSGLI Automatic Coverage Verification ($10,000 at Birth) (Target 2026-11-15 \u2022 T-11d)"
+      },
+      {
+        "category": "Baby Aiden",
+        "priority": "HIGH",
+        "due_date": "2026-11-15",
+        "days_remaining": 11,
+        "detail": "[HIGH] Dependent Care Flexible Spending Account (DCFSA) QLE Enrollment (Target 2026-11-15 \u2022 T-11d)"
+      },
+      {
+        "category": "Baby Aiden",
+        "priority": "HIGH",
+        "due_date": "2026-11-15",
+        "days_remaining": 11,
+        "detail": "[HIGH] Hepatitis B (HepB) Dose #1 (Target 2026-11-15 \u2022 T-11d)"
+      },
+      {
+        "category": "Baby Aiden",
+        "priority": "CRITICAL",
+        "due_date": "2026-11-16",
+        "days_remaining": 12,
+        "detail": "[CRITICAL] Certified Birth Certificate Order Tracker (5-8 Official Copies) (Target 2026-11-16 \u2022 T-12d)"
+      },
+      {
+        "category": "Baby Aiden",
+        "priority": "HIGH",
+        "due_date": "2026-11-16",
+        "days_remaining": 12,
+        "detail": "[HIGH] Newborn Metabolic Screening Card (Heel Prick Test) (Target 2026-11-16 \u2022 T-12d)"
+      },
+      {
+        "category": "Baby Aiden",
+        "priority": "HIGH",
+        "due_date": "2026-11-16",
+        "days_remaining": 12,
+        "detail": "[HIGH] Newborn Hearing Screening Clearance (OAE & AABR) (Target 2026-11-16 \u2022 T-12d)"
+      },
+      {
+        "category": "Baby Aiden",
+        "priority": "HIGH",
+        "due_date": "2026-11-17",
+        "days_remaining": 13,
+        "detail": "[HIGH] Hospital Discharge Summary Packet & Signed Physician Summary (Target 2026-11-17 \u2022 T-13d)"
+      },
+      {
+        "category": "Baby Aiden",
+        "priority": "CRITICAL",
+        "due_date": "2026-11-18",
+        "days_remaining": 14,
+        "detail": "[CRITICAL] DEERS Enrollment & RAPIDS Appointment Engine (Target 2026-11-18 \u2022 T-14d)"
+      }
+    ],
+    "aiden_nrmc": {
+      "profile": {
+        "baby_name": "Aiden James Vane",
+        "dob": "2026-11-15",
+        "sex": "male",
+        "birth_weight_lbs": null,
+        "birth_length_in": null,
+        "birth_head_circ_in": null,
+        "hospital": "Naval Hospital / Regional Military Medical Center",
+        "pediatrician": "Dr. Sarah Vance, MD, FAAP",
+        "pcm_clinic": "Madigan AMC Pediatric Clinic",
+        "rank": "PVT",
+        "pay_grade": "E-1",
+        "commission_target": "2LT Direct Commission at Age 18",
+        "branch": "US ARMY",
+        "days_until_dob": 11
+      },
+      "days_until_dob": 11,
+      "upcoming_14d_tasks": [
+        {
+          "id": "A1",
+          "title": "Hospital Administration Intake & Paternity Verification",
+          "category": "Vital Records",
+          "module": "Hospital & T-0 to T+72 Hours (Immediate Sortie)",
+          "priority": "HIGH",
+          "status": "PENDING",
+          "timeframe": "T-0 to T+12h",
+          "due_date": "2026-11-15",
+          "days_remaining": 11,
+          "sla": "Within 24 hours of delivery",
+          "detail": "Hospital Administration Intake & Paternity Verification (Target: 2026-11-15 \u2022 T-11d)"
+        },
+        {
+          "id": "A2",
+          "title": "Social Security Card Request Form Tracking (Form SS-5)",
+          "category": "Federal Identity",
+          "module": "Hospital & T-0 to T+72 Hours (Immediate Sortie)",
+          "priority": "HIGH",
+          "status": "PENDING",
+          "timeframe": "T-0 to T+24h",
+          "due_date": "2026-11-15",
+          "days_remaining": 11,
+          "sla": "2-4 weeks delivery from SSA",
+          "detail": "Social Security Card Request Form Tracking (Form SS-5) (Target: 2026-11-15 \u2022 T-11d)"
+        },
+        {
+          "id": "A7",
+          "title": "TRICARE 90-Day Newborn Grace Window Initialization",
+          "category": "Military Medical",
+          "module": "Hospital & T-0 to T+72 Hours (Immediate Sortie)",
+          "priority": "CRITICAL",
+          "status": "PENDING",
+          "timeframe": "T-0 to T+90d",
+          "due_date": "2026-11-15",
+          "days_remaining": 11,
+          "sla": "90 calendar days from Date of Birth",
+          "detail": "TRICARE 90-Day Newborn Grace Window Initialization (Target: 2026-11-15 \u2022 T-11d)"
+        },
+        {
+          "id": "B3",
+          "title": "SGLI / FSGLI Automatic Coverage Verification ($10,000 at Birth)",
+          "category": "Life Insurance",
+          "module": "Military Personnel & Administrative (T+3 to T+60 Days)",
+          "priority": "MEDIUM",
+          "status": "PENDING",
+          "timeframe": "T-0 to T+30d",
+          "due_date": "2026-11-15",
+          "days_remaining": 11,
+          "sla": "Automatic under federal law (38 U.S.C. 1967)",
+          "detail": "SGLI / FSGLI Automatic Coverage Verification ($10,000 at Birth) (Target: 2026-11-15 \u2022 T-11d)"
+        },
+        {
+          "id": "D2",
+          "title": "Dependent Care Flexible Spending Account (DCFSA) QLE Enrollment",
+          "category": "Tax Advantage",
+          "module": "Financial Architecture & Wealth Seeding",
+          "priority": "HIGH",
+          "status": "PENDING",
+          "timeframe": "T-0 to T+60d (60-Day Window)",
+          "due_date": "2026-11-15",
+          "days_remaining": 11,
+          "sla": "Must enroll within 60 calendar days of birth QLE",
+          "detail": "Dependent Care Flexible Spending Account (DCFSA) QLE Enrollment (Target: 2026-11-15 \u2022 T-11d)"
+        },
+        {
+          "id": "VAC_01",
+          "title": "Hepatitis B (HepB) Dose #1",
+          "category": "Pediatric Immunization",
+          "module": "Pediatric Clinical Schedule",
+          "priority": "HIGH",
+          "status": "SCHEDULED",
+          "timeframe": "At Birth",
+          "due_date": "2026-11-15",
+          "days_remaining": 11,
+          "sla": "Administered prior to hospital discharge",
+          "detail": "Hepatitis B (HepB) Dose #1 (Target: 2026-11-15 \u2022 T-11d)"
+        },
+        {
+          "id": "A3",
+          "title": "Certified Birth Certificate Order Tracker (5-8 Official Copies)",
+          "category": "Vital Records",
+          "module": "Hospital & T-0 to T+72 Hours (Immediate Sortie)",
+          "priority": "CRITICAL",
+          "status": "PENDING",
+          "timeframe": "T+24h to T+14d",
+          "due_date": "2026-11-16",
+          "days_remaining": 12,
+          "sla": "5-10 business days processing",
+          "detail": "Certified Birth Certificate Order Tracker (5-8 Official Copies) (Target: 2026-11-16 \u2022 T-12d)"
+        },
+        {
+          "id": "A4",
+          "title": "Newborn Metabolic Screening Card (Heel Prick Test)",
+          "category": "Clinical Clearance",
+          "module": "Hospital & T-0 to T+72 Hours (Immediate Sortie)",
+          "priority": "HIGH",
+          "status": "PENDING",
+          "timeframe": "T+24h to T+48h",
+          "due_date": "2026-11-16",
+          "days_remaining": 12,
+          "sla": "Sample collected prior to hospital discharge",
+          "detail": "Newborn Metabolic Screening Card (Heel Prick Test) (Target: 2026-11-16 \u2022 T-12d)"
+        },
+        {
+          "id": "A5",
+          "title": "Newborn Hearing Screening Clearance (OAE & AABR)",
+          "category": "Clinical Clearance",
+          "module": "Hospital & T-0 to T+72 Hours (Immediate Sortie)",
+          "priority": "HIGH",
+          "status": "PENDING",
+          "timeframe": "T+12h to T+48h",
+          "due_date": "2026-11-16",
+          "days_remaining": 12,
+          "sla": "Both ears tested prior to discharge",
+          "detail": "Newborn Hearing Screening Clearance (OAE & AABR) (Target: 2026-11-16 \u2022 T-12d)"
+        },
+        {
+          "id": "A6",
+          "title": "Hospital Discharge Summary Packet & Signed Physician Summary",
+          "category": "Clinical Documentation",
+          "module": "Hospital & T-0 to T+72 Hours (Immediate Sortie)",
+          "priority": "HIGH",
+          "status": "PENDING",
+          "timeframe": "T+48h to T+72h",
+          "due_date": "2026-11-17",
+          "days_remaining": 13,
+          "sla": "Obtained at bedside prior to discharge",
+          "detail": "Hospital Discharge Summary Packet & Signed Physician Summary (Target: 2026-11-17 \u2022 T-13d)"
+        },
+        {
+          "id": "B1",
+          "title": "DEERS Enrollment & RAPIDS Appointment Engine",
+          "category": "DEERS / Personnel",
+          "module": "Military Personnel & Administrative (T+3 to T+60 Days)",
+          "priority": "CRITICAL",
+          "status": "PENDING",
+          "timeframe": "T+3 to T+30d",
+          "due_date": "2026-11-18",
+          "days_remaining": 14,
+          "sla": "Complete within 30 days of birth",
+          "detail": "DEERS Enrollment & RAPIDS Appointment Engine (Target: 2026-11-18 \u2022 T-14d)"
+        }
+      ],
+      "command_anchors": {
+        "tricare_grace": {
+          "start_date": "2026-11-15",
+          "grace_days": 90,
+          "deadline": "2027-02-13",
+          "status": "PRIME_PENDING",
+          "details": "Under TRICARE policy, a newborn is covered as TRICARE Prime/Select for the first 90 days from birth. By Day 90, formal DEERS and TRICARE enrollment must be finalized to prevent retroactive Point of Service cost-shares.",
+          "days_until_deadline": 101
+        },
+        "rapids_appointment": {
+          "scheduled_date": "2026-12-05T10:00:00",
+          "location": "JBLM Waller Hall RAPIDS ID & DEERS Center",
+          "confirmation_code": "DMDC-AIDEN-7749",
+          "status": "CONFIRMED",
+          "url": "https://rapids-appointments.dmdc.osd.mil",
+          "days_until_appointment": 31
+        }
+      },
+      "financial_telemetry": {
+        "deers_enrolled": false,
+        "tricare_status": "PRIME_PENDING",
+        "ssn_status": "PENDING_APPLICATION",
+        "five_two_nine_active": false,
+        "custodial_account_active": false
+      }
+    },
     "family_registry": {
       "user_birthday": "1993-03-29",
       "wife_birthday": "1996-04-23",
@@ -381,7 +796,7 @@
         "status": "NOMINAL"
       }
     ],
-    "active_alerts_count": 5
+    "active_alerts_count": 9
   },
   "platform_tasks": [
     {
@@ -836,5 +1251,204 @@
     "diag-002",
     "diag-003"
   ],
-  "dismissed_alerts": []
+  "dismissed_alerts": [],
+  "aiden": {
+    "domain": "aiden",
+    "timestamp": "2026-11-04T13:24:41.236939+00:00",
+    "profile": {
+      "baby_name": "Aiden James Vane",
+      "dob": "2026-11-15",
+      "sex": "male",
+      "birth_weight_lbs": null,
+      "birth_length_in": null,
+      "birth_head_circ_in": null,
+      "hospital": "Naval Hospital / Regional Military Medical Center",
+      "pediatrician": "Dr. Sarah Vance, MD, FAAP",
+      "pcm_clinic": "Madigan AMC Pediatric Clinic",
+      "rank": "PVT",
+      "pay_grade": "E-1",
+      "commission_target": "2LT Direct Commission at Age 18",
+      "branch": "US ARMY",
+      "days_until_dob": 11
+    },
+    "days_until_dob": 11,
+    "upcoming_14d_tasks": [
+      {
+        "id": "A1",
+        "title": "Hospital Administration Intake & Paternity Verification",
+        "category": "Vital Records",
+        "module": "Hospital & T-0 to T+72 Hours (Immediate Sortie)",
+        "priority": "HIGH",
+        "status": "PENDING",
+        "timeframe": "T-0 to T+12h",
+        "due_date": "2026-11-15",
+        "days_remaining": 11,
+        "sla": "Within 24 hours of delivery",
+        "detail": "Hospital Administration Intake & Paternity Verification (Target: 2026-11-15 \u2022 T-11d)"
+      },
+      {
+        "id": "A2",
+        "title": "Social Security Card Request Form Tracking (Form SS-5)",
+        "category": "Federal Identity",
+        "module": "Hospital & T-0 to T+72 Hours (Immediate Sortie)",
+        "priority": "HIGH",
+        "status": "PENDING",
+        "timeframe": "T-0 to T+24h",
+        "due_date": "2026-11-15",
+        "days_remaining": 11,
+        "sla": "2-4 weeks delivery from SSA",
+        "detail": "Social Security Card Request Form Tracking (Form SS-5) (Target: 2026-11-15 \u2022 T-11d)"
+      },
+      {
+        "id": "A7",
+        "title": "TRICARE 90-Day Newborn Grace Window Initialization",
+        "category": "Military Medical",
+        "module": "Hospital & T-0 to T+72 Hours (Immediate Sortie)",
+        "priority": "CRITICAL",
+        "status": "PENDING",
+        "timeframe": "T-0 to T+90d",
+        "due_date": "2026-11-15",
+        "days_remaining": 11,
+        "sla": "90 calendar days from Date of Birth",
+        "detail": "TRICARE 90-Day Newborn Grace Window Initialization (Target: 2026-11-15 \u2022 T-11d)"
+      },
+      {
+        "id": "B3",
+        "title": "SGLI / FSGLI Automatic Coverage Verification ($10,000 at Birth)",
+        "category": "Life Insurance",
+        "module": "Military Personnel & Administrative (T+3 to T+60 Days)",
+        "priority": "MEDIUM",
+        "status": "PENDING",
+        "timeframe": "T-0 to T+30d",
+        "due_date": "2026-11-15",
+        "days_remaining": 11,
+        "sla": "Automatic under federal law (38 U.S.C. 1967)",
+        "detail": "SGLI / FSGLI Automatic Coverage Verification ($10,000 at Birth) (Target: 2026-11-15 \u2022 T-11d)"
+      },
+      {
+        "id": "D2",
+        "title": "Dependent Care Flexible Spending Account (DCFSA) QLE Enrollment",
+        "category": "Tax Advantage",
+        "module": "Financial Architecture & Wealth Seeding",
+        "priority": "HIGH",
+        "status": "PENDING",
+        "timeframe": "T-0 to T+60d (60-Day Window)",
+        "due_date": "2026-11-15",
+        "days_remaining": 11,
+        "sla": "Must enroll within 60 calendar days of birth QLE",
+        "detail": "Dependent Care Flexible Spending Account (DCFSA) QLE Enrollment (Target: 2026-11-15 \u2022 T-11d)"
+      },
+      {
+        "id": "VAC_01",
+        "title": "Hepatitis B (HepB) Dose #1",
+        "category": "Pediatric Immunization",
+        "module": "Pediatric Clinical Schedule",
+        "priority": "HIGH",
+        "status": "SCHEDULED",
+        "timeframe": "At Birth",
+        "due_date": "2026-11-15",
+        "days_remaining": 11,
+        "sla": "Administered prior to hospital discharge",
+        "detail": "Hepatitis B (HepB) Dose #1 (Target: 2026-11-15 \u2022 T-11d)"
+      },
+      {
+        "id": "A3",
+        "title": "Certified Birth Certificate Order Tracker (5-8 Official Copies)",
+        "category": "Vital Records",
+        "module": "Hospital & T-0 to T+72 Hours (Immediate Sortie)",
+        "priority": "CRITICAL",
+        "status": "PENDING",
+        "timeframe": "T+24h to T+14d",
+        "due_date": "2026-11-16",
+        "days_remaining": 12,
+        "sla": "5-10 business days processing",
+        "detail": "Certified Birth Certificate Order Tracker (5-8 Official Copies) (Target: 2026-11-16 \u2022 T-12d)"
+      },
+      {
+        "id": "A4",
+        "title": "Newborn Metabolic Screening Card (Heel Prick Test)",
+        "category": "Clinical Clearance",
+        "module": "Hospital & T-0 to T+72 Hours (Immediate Sortie)",
+        "priority": "HIGH",
+        "status": "PENDING",
+        "timeframe": "T+24h to T+48h",
+        "due_date": "2026-11-16",
+        "days_remaining": 12,
+        "sla": "Sample collected prior to hospital discharge",
+        "detail": "Newborn Metabolic Screening Card (Heel Prick Test) (Target: 2026-11-16 \u2022 T-12d)"
+      },
+      {
+        "id": "A5",
+        "title": "Newborn Hearing Screening Clearance (OAE & AABR)",
+        "category": "Clinical Clearance",
+        "module": "Hospital & T-0 to T+72 Hours (Immediate Sortie)",
+        "priority": "HIGH",
+        "status": "PENDING",
+        "timeframe": "T+12h to T+48h",
+        "due_date": "2026-11-16",
+        "days_remaining": 12,
+        "sla": "Both ears tested prior to discharge",
+        "detail": "Newborn Hearing Screening Clearance (OAE & AABR) (Target: 2026-11-16 \u2022 T-12d)"
+      },
+      {
+        "id": "A6",
+        "title": "Hospital Discharge Summary Packet & Signed Physician Summary",
+        "category": "Clinical Documentation",
+        "module": "Hospital & T-0 to T+72 Hours (Immediate Sortie)",
+        "priority": "HIGH",
+        "status": "PENDING",
+        "timeframe": "T+48h to T+72h",
+        "due_date": "2026-11-17",
+        "days_remaining": 13,
+        "sla": "Obtained at bedside prior to discharge",
+        "detail": "Hospital Discharge Summary Packet & Signed Physician Summary (Target: 2026-11-17 \u2022 T-13d)"
+      },
+      {
+        "id": "B1",
+        "title": "DEERS Enrollment & RAPIDS Appointment Engine",
+        "category": "DEERS / Personnel",
+        "module": "Military Personnel & Administrative (T+3 to T+60 Days)",
+        "priority": "CRITICAL",
+        "status": "PENDING",
+        "timeframe": "T+3 to T+30d",
+        "due_date": "2026-11-18",
+        "days_remaining": 14,
+        "sla": "Complete within 30 days of birth",
+        "detail": "DEERS Enrollment & RAPIDS Appointment Engine (Target: 2026-11-18 \u2022 T-14d)"
+      }
+    ],
+    "upcoming_7d_tasks": [],
+    "command_anchors": {
+      "tricare_grace": {
+        "start_date": "2026-11-15",
+        "grace_days": 90,
+        "deadline": "2027-02-13",
+        "status": "PRIME_PENDING",
+        "details": "Under TRICARE policy, a newborn is covered as TRICARE Prime/Select for the first 90 days from birth. By Day 90, formal DEERS and TRICARE enrollment must be finalized to prevent retroactive Point of Service cost-shares.",
+        "days_until_deadline": 101
+      },
+      "rapids_appointment": {
+        "scheduled_date": "2026-12-05T10:00:00",
+        "location": "JBLM Waller Hall RAPIDS ID & DEERS Center",
+        "confirmation_code": "DMDC-AIDEN-7749",
+        "status": "CONFIRMED",
+        "url": "https://rapids-appointments.dmdc.osd.mil",
+        "days_until_appointment": 31
+      }
+    },
+    "financial_telemetry": {
+      "deers_enrolled": false,
+      "tricare_status": "PRIME_PENDING",
+      "ssn_status": "PENDING_APPLICATION",
+      "five_two_nine_active": false,
+      "custodial_account_active": false
+    },
+    "action_required": true,
+    "highlights": [
+      "BABY AIDEN // NRMC: DOB in 11 days (2026-11-15). Immediate Sortie armed (11 tasks & vaccines queued for upcoming 14 days).",
+      "TRICARE GRACE: 90-day newborn coverage window begins on delivery (2026-11-15) with hard DEERS cutoff on 2027-02-13 (T-101d).",
+      "RAPIDS DEERS C2: Appointment confirmed at JBLM Waller Hall RAPIDS ID & DEERS Center on 2026-12-05 (T-31d, Code: DMDC-AIDEN-7749).",
+      "PEDIATRIC CLINICAL: Primary Care aligned at Madigan AMC Pediatric Clinic under Dr. Sarah Vance, MD, FAAP."
+    ]
+  }
 }

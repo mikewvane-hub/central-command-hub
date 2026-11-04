@@ -111,7 +111,7 @@ class StateManager:
         now_iso = datetime.now(timezone.utc).isoformat()
 
         # Update domain states
-        for domain_name in ["fleet", "family", "academic", "health", "rental"]:
+        for domain_name in ["fleet", "family", "academic", "health", "rental", "aiden"]:
             if domain_name in state:
                 cur.execute("""
                     INSERT INTO domain_state (domain, payload_json, updated_at)

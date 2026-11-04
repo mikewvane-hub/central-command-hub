@@ -201,7 +201,76 @@ app.get('/api/briefing', (req, res) => {
   try {
     if (fs.existsSync(STATE_FILE)) {
       const data = JSON.parse(fs.readFileSync(STATE_FILE, 'utf-8'));
-      return res.json(data.executive_briefing || {});
+      const briefing = data.executive_briefing || {};
+
+      // Enrich with Baby Aiden weekly sorties if active in upcoming 7 days
+      try {
+        const aidenPath = getAidenStatePath();
+        if (aidenPath && fs.existsSync(aidenPath)) {
+          const aState = JSON.parse(fs.readFileSync(aidenPath, 'utf-8'));
+          const dob = aState.profile?.dob || '2026-11-15';
+          const now = new Date();
+          now.setHours(0, 0, 0, 0);
+
+          function addDaysH(dateStr, days) {
+            const parts = dateStr.split('-');
+            const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10) + days);
+            const y = d.getFullYear();
+            const m = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${y}-${m}-${day}`;
+          }
+
+          const taskSpecs = {
+            'A1': { days: 0, title: 'Hospital Administration Intake & Paternity Verification' },
+            'A2': { days: 0, title: 'Social Security Card SS-5 Request' },
+            'A3': { days: 3, title: 'Order 5-8 Certified Birth Certificates' },
+            'A4': { days: 1, title: 'Newborn Metabolic Screening (Heel Prick)' },
+            'A5': { days: 1, title: 'Bilateral Hearing Screening' },
+            'A6': { days: 2, title: 'Hospital Discharge Summary Verification' },
+            'A7': { days: 90, title: 'TRICARE 90-Day Grace Window Deadline' },
+            'B1': { days: 20, title: 'DEERS Enrollment & RAPIDS Appointment' },
+            'B2': { days: 30, title: 'TRICARE Prime & PCM Selection' },
+            'B3': { days: 5, title: 'SGLI / FSGLI Auto-Coverage Verification' },
+            'B4': { days: 25, title: 'DD Form 93 Record of Emergency Data' },
+            'B5': { days: 50, title: 'eMILPO / IPPS-A Dependent Profile & BAH' },
+            'D3': { days: 10, title: '529 College Savings Plan Setup' }
+          };
+
+          const rapidsAppt = aState.command_anchors?.rapids_appointment?.scheduled_date;
+          if (rapidsAppt) taskSpecs['B1'].customDate = rapidsAppt.slice(0, 10);
+
+          if (!Array.isArray(briefing.upcoming_7d_milestones)) {
+            briefing.upcoming_7d_milestones = [];
+          }
+
+          // Remove any stale Baby Aiden items before re-injecting fresh current-week ones
+          briefing.upcoming_7d_milestones = briefing.upcoming_7d_milestones.filter(m => m.category !== 'Baby Aiden');
+
+          Object.values(aState.modules || {}).forEach(mod => {
+            if (Array.isArray(mod.tasks)) {
+              mod.tasks.forEach(t => {
+                const spec = taskSpecs[t.id];
+                if (!spec) return;
+                const calDate = spec.customDate || addDaysH(dob, spec.days || 0);
+                const targetDateObj = new Date(calDate + 'T00:00:00');
+                const diffDays = Math.round((targetDateObj - now) / (1000 * 60 * 60 * 24));
+                if (diffDays >= -14 && diffDays <= 7 && t.status !== 'COMPLETE') {
+                  const statusLbl = `T${diffDays >= 0 ? '+' : ''}${diffDays}d`;
+                  briefing.upcoming_7d_milestones.push({
+                    category: 'Baby Aiden',
+                    detail: `${spec.title} (Target ${calDate} • ${statusLbl})`
+                  });
+                }
+              });
+            }
+          });
+        }
+      } catch (err) {
+        console.warn('[Briefing Aiden Ingest Warning]:', err.message);
+      }
+
+      return res.json(briefing);
     }
     res.status(404).json({ error: 'Briefing not found' });
   } catch (err) {

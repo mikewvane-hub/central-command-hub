@@ -3,9 +3,9 @@
     "baby_name": "Aiden James Vane",
     "dob": "2026-11-15",
     "sex": "male",
-    "birth_weight_lbs": 7.8,
-    "birth_length_in": 20.2,
-    "birth_head_circ_in": 14.1,
+    "birth_weight_lbs": null,
+    "birth_length_in": null,
+    "birth_head_circ_in": null,
     "hospital": "Naval Hospital / Regional Military Medical Center",
     "pediatrician": "Dr. Sarah Vance, MD, FAAP",
     "pcm_clinic": "Madigan AMC Pediatric Clinic",
@@ -80,7 +80,7 @@
             }
           ],
           "notes": "Automated test suite verification note.",
-          "last_updated": "2026-11-04T03:34:03.358Z",
+          "last_updated": "2026-11-04T13:23:21.722Z",
           "checklists_completed": []
         },
         {
@@ -910,10 +910,10 @@
           "vaccine": "Hepatitis B (HepB) Dose #1",
           "description": "Protects against Hepatitis B virus infection of the liver. Standard first dose administered within 24 hours of birth.",
           "target_date": "2026-11-15",
-          "administered_date": "2026-11-15",
+          "administered_date": null,
           "clinic": "Naval Hospital / Labor & Delivery Nursery",
-          "lot_number": "ENG-B-9941A",
-          "provider": "RN E. Miller",
+          "lot_number": null,
+          "provider": null,
           "status": "SCHEDULED",
           "date_administered": null
         },
@@ -926,7 +926,7 @@
           "administered_date": null,
           "clinic": "Madigan AMC Pediatric Clinic",
           "lot_number": null,
-          "provider": "Pediatric Team",
+          "provider": null,
           "status": "SCHEDULED",
           "date_administered": null
         },
@@ -939,7 +939,7 @@
           "administered_date": null,
           "clinic": "Madigan AMC Pediatric Clinic",
           "lot_number": null,
-          "provider": "Dr. Sarah Vance, MD",
+          "provider": null,
           "status": "SCHEDULED",
           "date_administered": null
         },
@@ -952,7 +952,7 @@
           "administered_date": null,
           "clinic": "Madigan AMC Pediatric Clinic",
           "lot_number": null,
-          "provider": "Pediatric Team",
+          "provider": null,
           "status": "SCHEDULED",
           "date_administered": null
         },
@@ -965,132 +965,14 @@
           "administered_date": null,
           "clinic": "Madigan AMC Pediatric Clinic",
           "lot_number": null,
-          "provider": "Dr. Sarah Vance, MD",
+          "provider": null,
           "status": "SCHEDULED",
           "date_administered": null
         }
       ],
       "growth_telemetry": {
         "unit_mode": "imperial",
-        "measurements": [
-          {
-            "id": "GROWTH_0",
-            "date": "2026-11-15",
-            "age_days": 0,
-            "age_months": 0,
-            "weight_lbs": 7.8,
-            "length_in": 20.2,
-            "head_circ_in": 14.1,
-            "weight_percentile": 52,
-            "length_percentile": 68,
-            "head_percentile": 60,
-            "notes": "Birth measurements recorded at delivery. Strong APGAR scores (9/9)."
-          },
-          {
-            "id": "GROWTH_1",
-            "date": "2026-11-20",
-            "age_days": 5,
-            "age_months": 0.17,
-            "weight_lbs": 7.5,
-            "length_in": 20.2,
-            "head_circ_in": 14.2,
-            "weight_percentile": 47,
-            "length_percentile": 68,
-            "head_percentile": 63,
-            "notes": "Day 5 newborn check. Physiological weight drop (3.8%), well within 7-10% normal tolerance."
-          },
-          {
-            "id": "GROWTH_2",
-            "date": "2026-11-29",
-            "age_days": 14,
-            "age_months": 0.47,
-            "weight_lbs": 8.1,
-            "length_in": 20.6,
-            "head_circ_in": 14.4,
-            "weight_percentile": 55,
-            "length_percentile": 71,
-            "head_percentile": 65,
-            "notes": "2-week clinical sortie. Regained and exceeded birth weight. Vigorous feeding."
-          },
-          {
-            "id": "GROWTH_1793757808281",
-            "date": "2026-11-04",
-            "age_days": 0,
-            "age_months": 0,
-            "weight_lbs": 8.4,
-            "length_in": 20.9,
-            "head_circ_in": 14.6,
-            "weight_percentile": 61,
-            "length_percentile": 63,
-            "head_percentile": 59,
-            "notes": "Automated test vitals entry"
-          },
-          {
-            "id": "GROWTH_1793760900274",
-            "date": "2026-11-04",
-            "age_days": 0,
-            "age_months": 0,
-            "weight_lbs": 8.4,
-            "length_in": 20.9,
-            "head_circ_in": 14.6,
-            "weight_percentile": 61,
-            "length_percentile": 63,
-            "head_percentile": 59,
-            "notes": "Automated test vitals entry"
-          },
-          {
-            "id": "GROWTH_1793761312206",
-            "date": "2026-11-04",
-            "age_days": 0,
-            "age_months": 0,
-            "weight_lbs": 8.4,
-            "length_in": 20.9,
-            "head_circ_in": 14.6,
-            "weight_percentile": 61,
-            "length_percentile": 63,
-            "head_percentile": 59,
-            "notes": "Automated test vitals entry"
-          },
-          {
-            "id": "GROWTH_1793762118372",
-            "date": "2026-11-04",
-            "age_days": 0,
-            "age_months": 0,
-            "weight_lbs": 8.4,
-            "length_in": 20.9,
-            "head_circ_in": 14.6,
-            "weight_percentile": 61,
-            "length_percentile": 63,
-            "head_percentile": 59,
-            "notes": "Automated test vitals entry"
-          },
-          {
-            "id": "GROWTH_1793762964662",
-            "date": "2026-11-04",
-            "age_days": 0,
-            "age_months": 0,
-            "weight_lbs": 8.4,
-            "length_in": 20.9,
-            "head_circ_in": 14.6,
-            "weight_percentile": 61,
-            "length_percentile": 63,
-            "head_percentile": 59,
-            "notes": "Automated test vitals entry"
-          },
-          {
-            "id": "GROWTH_1793763243366",
-            "date": "2026-11-04",
-            "age_days": 0,
-            "age_months": 0,
-            "weight_lbs": 8.4,
-            "length_in": 20.9,
-            "head_circ_in": 14.6,
-            "weight_percentile": 61,
-            "length_percentile": 63,
-            "head_percentile": 59,
-            "notes": "Automated test vitals entry"
-          }
-        ],
+        "measurements": [],
         "who_standards_boys_0_12m": {
           "weight_kg": {
             "0": {
@@ -1270,55 +1152,9 @@
       },
       "tummy_time_tracker": {
         "daily_target_minutes": 25,
-        "today_completed_minutes": 75,
-        "total_lifetime_sessions": 18,
-        "history": [
-          {
-            "date": "2026-11-04",
-            "minutes": 10,
-            "notes": "Automated tummy test"
-          },
-          {
-            "date": "2026-11-04",
-            "minutes": 10,
-            "notes": "Automated tummy test"
-          },
-          {
-            "date": "2026-11-04",
-            "minutes": 10,
-            "notes": "Automated tummy test"
-          },
-          {
-            "date": "2026-11-04",
-            "minutes": 10,
-            "notes": "Automated tummy test"
-          },
-          {
-            "date": "2026-11-04",
-            "minutes": 10,
-            "notes": "Automated tummy test"
-          },
-          {
-            "date": "2026-11-04",
-            "minutes": 10,
-            "notes": "Automated tummy test"
-          },
-          {
-            "date": "2026-11-28",
-            "minutes": 20,
-            "notes": "Active head lifting, supported on parent chest."
-          },
-          {
-            "date": "2026-11-29",
-            "minutes": 22,
-            "notes": "Play mat session with high contrast black/white cards."
-          },
-          {
-            "date": "2026-11-30",
-            "minutes": 25,
-            "notes": "Target met. Good chin elevation and neck stability."
-          }
-        ]
+        "today_completed_minutes": 0,
+        "total_lifetime_sessions": 0,
+        "history": []
       },
       "developmental_milestones": [
         {
@@ -1403,204 +1239,12 @@
   ],
   "audit_trail": [
     {
-      "timestamp": "2026-11-15T08:00:00Z",
-      "action": "SYSTEM_INITIALIZE",
+      "timestamp": "2026-11-04T13:23:35.632Z",
+      "action": "SYSTEM_CALIBRATED",
       "actor": "ORCHESTRATOR",
-      "details": "Newborn Readiness & Milestone Command initialized for Baby Aiden."
-    },
-    {
-      "timestamp": "2026-11-15T12:00:00Z",
-      "action": "VACCINE_LOG",
-      "actor": "CLINICAL",
-      "details": "Hepatitis B Dose #1 recorded as COMPLETE."
-    },
-    {
-      "timestamp": "2026-11-18T16:00:00Z",
-      "action": "TASK_UPDATE",
-      "actor": "FINANCIAL",
-      "details": "529 Plan established and initial seed executed."
-    },
-    {
-      "timestamp": "2026-11-04T02:03:28.274Z",
-      "action": "TASK_STATUS_UPDATE",
-      "actor": "OPERATOR",
-      "details": "Task A1 (Hospital Administration Intake & Paternity Verification) updated to COMPLETE"
-    },
-    {
-      "timestamp": "2026-11-04T02:03:28.281Z",
-      "action": "GROWTH_MEASUREMENT_LOG",
-      "actor": "PEDIATRIC_TELEMETRY",
-      "details": "Added growth record: 8.4 lbs, 20.9 in, 14.6 in head circumference"
-    },
-    {
-      "timestamp": "2026-11-04T02:03:28.286Z",
-      "action": "TUMMY_TIME_LOG",
-      "actor": "CAREGIVER",
-      "details": "Logged 10 minutes of tummy time. Daily total: 25 min."
-    },
-    {
-      "timestamp": "2026-11-04T02:46:15.082Z",
-      "action": "TASK_STATUS_UPDATE",
-      "actor": "OPERATOR",
-      "details": "Task B1 (DEERS Enrollment & RAPIDS Appointment Engine) updated to IN_FLIGHT"
-    },
-    {
-      "timestamp": "2026-11-04T02:46:15.735Z",
-      "action": "TASK_STATUS_UPDATE",
-      "actor": "OPERATOR",
-      "details": "Task B1 (DEERS Enrollment & RAPIDS Appointment Engine) updated to IN_FLIGHT"
-    },
-    {
-      "timestamp": "2026-11-04T02:46:18.157Z",
-      "action": "TASK_STATUS_UPDATE",
-      "actor": "OPERATOR",
-      "details": "Task B1 (DEERS Enrollment & RAPIDS Appointment Engine) updated to IN_FLIGHT"
-    },
-    {
-      "timestamp": "2026-11-04T02:46:21.224Z",
-      "action": "TASK_STATUS_UPDATE",
-      "actor": "OPERATOR",
-      "details": "Task B1 (DEERS Enrollment & RAPIDS Appointment Engine) updated to IN_FLIGHT"
-    },
-    {
-      "timestamp": "2026-11-04T02:46:21.640Z",
-      "action": "TASK_STATUS_UPDATE",
-      "actor": "OPERATOR",
-      "details": "Task B1 (DEERS Enrollment & RAPIDS Appointment Engine) updated to IN_FLIGHT"
-    },
-    {
-      "timestamp": "2026-11-04T02:47:28.881Z",
-      "action": "TASK_STATUS_UPDATE",
-      "actor": "OPERATOR",
-      "details": "Task B3 (SGLI / FSGLI Automatic Coverage Verification ($10,000 at Birth)) updated to PENDING"
-    },
-    {
-      "timestamp": "2026-11-04T02:55:00.269Z",
-      "action": "TASK_STATUS_UPDATE",
-      "actor": "OPERATOR",
-      "details": "Task A1 (Hospital Administration Intake & Paternity Verification) updated to COMPLETE"
-    },
-    {
-      "timestamp": "2026-11-04T02:55:00.274Z",
-      "action": "GROWTH_MEASUREMENT_LOG",
-      "actor": "PEDIATRIC_TELEMETRY",
-      "details": "Added growth record: 8.4 lbs, 20.9 in, 14.6 in head circumference"
-    },
-    {
-      "timestamp": "2026-11-04T02:55:00.281Z",
-      "action": "TUMMY_TIME_LOG",
-      "actor": "CAREGIVER",
-      "details": "Logged 10 minutes of tummy time. Daily total: 35 min."
-    },
-    {
-      "timestamp": "2026-11-04T03:01:52.202Z",
-      "action": "TASK_STATUS_UPDATE",
-      "actor": "OPERATOR",
-      "details": "Task A1 (Hospital Administration Intake & Paternity Verification) updated to COMPLETE"
-    },
-    {
-      "timestamp": "2026-11-04T03:01:52.206Z",
-      "action": "GROWTH_MEASUREMENT_LOG",
-      "actor": "PEDIATRIC_TELEMETRY",
-      "details": "Added growth record: 8.4 lbs, 20.9 in, 14.6 in head circumference"
-    },
-    {
-      "timestamp": "2026-11-04T03:01:52.210Z",
-      "action": "TUMMY_TIME_LOG",
-      "actor": "CAREGIVER",
-      "details": "Logged 10 minutes of tummy time. Daily total: 45 min."
-    },
-    {
-      "timestamp": "2026-11-04T03:15:18.357Z",
-      "action": "TASK_STATUS_UPDATE",
-      "actor": "OPERATOR",
-      "details": "Task A1 (Hospital Administration Intake & Paternity Verification) updated to PENDING"
-    },
-    {
-      "timestamp": "2026-11-04T03:15:18.372Z",
-      "action": "GROWTH_MEASUREMENT_LOG",
-      "actor": "PEDIATRIC_TELEMETRY",
-      "details": "Added growth record: 8.4 lbs, 20.9 in, 14.6 in head circumference"
-    },
-    {
-      "timestamp": "2026-11-04T03:15:18.381Z",
-      "action": "TUMMY_TIME_LOG",
-      "actor": "CAREGIVER",
-      "details": "Logged 10 minutes of tummy time. Daily total: 55 min."
-    },
-    {
-      "timestamp": "2026-11-04T03:15:44.347Z",
-      "action": "TASK_STATUS_UPDATE",
-      "actor": "OPERATOR",
-      "details": "Task A1 (Hospital Administration Intake & Paternity Verification) updated to COMPLETE"
-    },
-    {
-      "timestamp": "2026-11-04T03:15:44.482Z",
-      "action": "TASK_STATUS_UPDATE",
-      "actor": "OPERATOR",
-      "details": "Task A1 (Hospital Administration Intake & Paternity Verification) updated to PENDING"
-    },
-    {
-      "timestamp": "2026-11-04T03:29:24.648Z",
-      "action": "TASK_STATUS_UPDATE",
-      "actor": "OPERATOR",
-      "details": "Task A1 (Hospital Administration Intake & Paternity Verification) updated to PENDING"
-    },
-    {
-      "timestamp": "2026-11-04T03:29:24.662Z",
-      "action": "GROWTH_MEASUREMENT_LOG",
-      "actor": "PEDIATRIC_TELEMETRY",
-      "details": "Added growth record: 8.4 lbs, 20.9 in, 14.6 in head circumference"
-    },
-    {
-      "timestamp": "2026-11-04T03:29:24.677Z",
-      "action": "TUMMY_TIME_LOG",
-      "actor": "CAREGIVER",
-      "details": "Logged 10 minutes of tummy time. Daily total: 65 min."
-    },
-    {
-      "timestamp": "2026-11-04T03:33:41.719Z",
-      "action": "DOCUMENT_VAULTED",
-      "actor": "OPERATOR",
-      "details": "Vaulted document \"CDC Vaccine Card - HepB #1\" (37 bytes) under CLINICAL"
-    },
-    {
-      "timestamp": "2026-11-04T03:33:41.774Z",
-      "action": "DOCUMENT_VAULTED",
-      "actor": "OPERATOR",
-      "details": "Vaulted document \"SS-5 Receipt (Redacted)\" (37 bytes) under LEGAL"
-    },
-    {
-      "timestamp": "2026-11-04T03:33:54.120Z",
-      "action": "DOCUMENT_VAULTED",
-      "actor": "OPERATOR",
-      "details": "Vaulted document \"CDC Vaccine Card - HepB #1\" (37 bytes) under CLINICAL"
-    },
-    {
-      "timestamp": "2026-11-04T03:33:54.162Z",
-      "action": "DOCUMENT_VAULTED",
-      "actor": "OPERATOR",
-      "details": "Vaulted document \"SS-5 Receipt (Redacted)\" (37 bytes) under LEGAL"
-    },
-    {
-      "timestamp": "2026-11-04T03:34:03.358Z",
-      "action": "TASK_STATUS_UPDATE",
-      "actor": "OPERATOR",
-      "details": "Task A1 (Hospital Administration Intake & Paternity Verification) updated to PENDING"
-    },
-    {
-      "timestamp": "2026-11-04T03:34:03.366Z",
-      "action": "GROWTH_MEASUREMENT_LOG",
-      "actor": "PEDIATRIC_TELEMETRY",
-      "details": "Added growth record: 8.4 lbs, 20.9 in, 14.6 in head circumference"
-    },
-    {
-      "timestamp": "2026-11-04T03:34:03.375Z",
-      "action": "TUMMY_TIME_LOG",
-      "actor": "CAREGIVER",
-      "details": "Logged 10 minutes of tummy time. Daily total: 75 min."
+      "details": "Newborn Readiness & Milestone Command calibrated for Aiden James Vane. Synthetic growth vitals purged."
     }
   ],
-  "last_updated": "2026-11-04T03:34:03.375Z",
+  "last_updated": "2026-11-04T13:23:27.179Z",
   "vault_documents": []
 }

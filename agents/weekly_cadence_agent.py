@@ -5,6 +5,7 @@ Executes every Sunday at 18:00 (or on demand) to aggregate:
 2. Property cash flow and pending maintenance (Sierra Pines / JBLM).
 3. Training readiness and planned athletic load (HRV recovery & workout block).
 4. Academic deadlines & vehicle telemetry.
+5. Baby Aiden NRMC upcoming 14-day immediate sortie tasks, clinical milestones, and command anchors.
 Publishes the Executive Weekly Briefing to hub_state.json, SQLite, and the Executive Dashboard.
 """
 
@@ -30,6 +31,7 @@ from family import run_family_workflow
 from fleet import run_fleet_workflow
 from academic import run_academic_workflow
 from health import run_health_workflow
+from aiden import run_aiden_workflow
 
 
 def generate_executive_weekly_briefing():
@@ -41,14 +43,15 @@ def generate_executive_weekly_briefing():
 
     print(f"🚀 [WeeklyCadenceAgent] Running Sunday 18:00 Cadence Synthesis ({week_label})...")
 
-    # 1. Run Alert Pipeline
-    active_alerts = run_pipeline()
-
-    # 2. Collect domain workflows
+    # 1. Collect domain workflows
     family_rep = run_family_workflow()
     fleet_rep = run_fleet_workflow()
     acad_rep = run_academic_workflow()
     health_rep = run_health_workflow()
+    aiden_rep = run_aiden_workflow()
+
+    # 2. Run Alert Pipeline (with all domains rehydrated in hub_state)
+    active_alerts = run_pipeline()
 
     # 3. Read rental property financials
     rental_data = hub_state.get_domain("rental") or {}
@@ -56,25 +59,51 @@ def generate_executive_weekly_briefing():
     tickets = rental_data.get("maintenance_tickets", [])
     critical_ticket = next((t["title"] for t in tickets if t.get("severity") == "CRITICAL"), "None")
 
-    # 4. Synthesize 7-day deadlines & milestones
+    # 4. Synthesize deadlines & upcoming 14-day tasks
     upcoming_7d = []
-    # Add family milestones
+    upcoming_14d = []
+
+    # Family milestones
     for item in family_rep.get("upcoming_7d", []):
-        upcoming_7d.append({"category": "Family", "detail": item})
-    # Add academic deadlines in next 7d
+        entry = {"category": "Family", "detail": item}
+        upcoming_7d.append(entry)
+        upcoming_14d.append(entry)
+
+    # Academic deadlines
     for d in acad_rep.get("deadlines", []):
         if d.get("hours_remaining") is not None and 0 <= d.get("hours_remaining") <= 168:
-            upcoming_7d.append({
+            entry = {
                 "category": "Academic",
                 "detail": f"{d['title']} (Due {d['deadline'][:10]} • T-{d['hours_remaining']}h)"
-            })
-    # Add vehicle tabs if within 45 days
+            }
+            upcoming_7d.append(entry)
+            upcoming_14d.append(entry)
+
+    # Vehicle tabs / service
     for v in fleet_rep.get("vehicles", []):
         if "expiring" in v.get("status", "").lower() or v.get("status") == "SERVICE_SOON":
-            upcoming_7d.append({"category": "Fleet", "detail": f"{v['name']} maintenance/registration action due."})
+            entry = {"category": "Fleet", "detail": f"{v['name']} maintenance/registration action due."}
+            upcoming_7d.append(entry)
+            upcoming_14d.append(entry)
+
+    # Baby Aiden 14-day upcoming sortie tasks & clinical milestones
+    aiden_tasks = aiden_rep.get("upcoming_14d_tasks", [])
+    for t in aiden_tasks:
+        entry = {
+            "category": "Baby Aiden",
+            "priority": t.get("priority", "HIGH"),
+            "due_date": t.get("due_date"),
+            "days_remaining": t.get("days_remaining"),
+            "detail": f"[{t.get('priority', 'HIGH')}] {t['title']} (Target {t['due_date']} • T-{t['days_remaining']}d)"
+        }
+        upcoming_14d.append(entry)
+        # Include in executive upcoming view
+        upcoming_7d.append(entry)
 
     # 5. Build structured highlights
+    aiden_profile = aiden_rep.get("profile", {})
     highlights = [
+        f"BABY AIDEN // NRMC: DOB in {aiden_rep.get('days_until_dob', 11)} days ({aiden_profile.get('dob', '2026-11-15')}). Immediate Sortie armed ({len(aiden_tasks)} tasks & vaccines queued for next 14 days). TRICARE 90-day grace clock stands by.",
         f"FAMILY: User Birthday (29 Mar 1993, in {family_rep['milestones'][0]['days_until']}d), Wife Birthday (23 Apr 1996, in {family_rep['milestones'][1]['days_until']}d), Anniversary (23 Sep).",
         f"PROPERTY: Sierra Pines cash flow at +${financials.get('monthly_net', 1120):,}/mo Net (${financials.get('monthly_gross', 2450):,} Gross). Priority ticket: '{critical_ticket}'.",
         f"ATHLETIC: Readiness Score {health_rep['readiness_score']}/100. HRV at {health_rep['hrv']['current']} ms ({health_rep['hrv']['status']}). Directive: {health_rep['recovery_recommendation']}.",
@@ -86,10 +115,18 @@ def generate_executive_weekly_briefing():
         "generated_at": now.isoformat(),
         "week_label": week_label,
         "cadence_window": week_label,
-        "summary": f"Executive briefing for {week_label} integrating Family Milestones, Property Cash Flow, Athletic Readiness, and Fleet Telemetry.",
+        "summary": f"Executive briefing for {week_label} integrating Baby Aiden NRMC Sortie, Family Milestones, Property Cash Flow, Athletic Readiness, and Fleet Telemetry.",
         "highlights": highlights,
         "executive_highlights": highlights,
         "upcoming_7d_milestones": upcoming_7d,
+        "upcoming_14d_tasks": upcoming_14d,
+        "aiden_nrmc": {
+            "profile": aiden_profile,
+            "days_until_dob": aiden_rep.get("days_until_dob"),
+            "upcoming_14d_tasks": aiden_tasks,
+            "command_anchors": aiden_rep.get("command_anchors", {}),
+            "financial_telemetry": aiden_rep.get("financial_telemetry", {})
+        },
         "family_registry": {
             "user_birthday": "1993-03-29",
             "wife_birthday": "1996-04-23",
@@ -122,6 +159,10 @@ def generate_executive_weekly_briefing():
     hub_state.save_json(state)
 
     # 7. Write clean Markdown artifact for display
+    anchors = aiden_rep.get("command_anchors", {})
+    tricare = anchors.get("tricare_grace", {})
+    rapids = anchors.get("rapids_appointment", {})
+
     md_content = f"""# EXECUTIVE WEEKLY BRIEFING // {week_label.upper()}
 *Generated on {now.strftime('%A, %B %d, %Y at %H:%M UTC')} | Cadence: Sunday 18:00*
 
@@ -132,7 +173,20 @@ def generate_executive_weekly_briefing():
 
 ---
 
-## 📅 Upcoming 7-Day Deadlines & Family Milestones
+## 👶 Baby Aiden // Newborn Readiness & Milestone Command (NRMC)
+- **Status:** Expected Delivery in **{aiden_rep.get('days_until_dob', 11)} Days** ({aiden_profile.get('dob', '2026-11-15')})
+- **Pediatric PCM Alignment:** {aiden_profile.get('pediatrician', 'Dr. Sarah Vance, MD')} @ {aiden_profile.get('pcm_clinic', 'Madigan AMC Pediatric Clinic')}
+- **TRICARE 90-Day Grace Clock:** Target Delivery ({aiden_profile.get('dob')}) &rarr; Hard Cutoff: {tricare.get('deadline', '2027-02-13')}
+- **RAPIDS Appointment:** {rapids.get('scheduled_date', '2026-12-05')[:10]} @ {rapids.get('location', 'JBLM Waller Hall')} (Confirmation: `{rapids.get('confirmation_code', 'DMDC-AIDEN-7749')}`)
+- **Upcoming 14-Day Sortie & Clinical Tasks ({len(aiden_tasks)} items):**
+
+| Priority | Task / Milestone | Due Date | SLA / Timeframe |
+| :--- | :--- | :--- | :--- |
+{chr(10).join(f"| **{t.get('priority', 'HIGH')}** | {t['title']} | {t['due_date']} (T-{t['days_remaining']}d) | {t.get('timeframe', 'At Birth')} |" for t in aiden_tasks)}
+
+---
+
+## 📅 Upcoming Deadlines & Operations Milestones
 | Category | Event / Deadline Details |
 | :--- | :--- |
 {chr(10).join(f"| **{m['category']}** | {m['detail']} |" for m in upcoming_7d)}

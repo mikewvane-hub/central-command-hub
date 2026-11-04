@@ -161,6 +161,87 @@ def evaluate_rental_alerts(rental_data: Dict[str, Any]) -> List[Dict[str, Any]]:
     return alerts
 
 
+def evaluate_aiden_alerts(aiden_data: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """Evaluate Baby Aiden NRMC operational directives, TRICARE grace, and immediate sortie queues."""
+    alerts = []
+    now = datetime.now(timezone.utc)
+    anchors = aiden_data.get("command_anchors", {})
+    upcoming = aiden_data.get("upcoming_14d_tasks", [])
+    profile = aiden_data.get("profile", {})
+    dob_str = profile.get("dob", "2026-11-15")
+
+    # 1. TRICARE 90-Day Newborn Grace Window Alert (CRITICAL)
+    tricare = anchors.get("tricare_grace", {})
+    deadline = tricare.get("deadline", "2027-02-13")
+    alerts.append({
+        "id": "alert_aiden_tricare_grace",
+        "domain": "aiden",
+        "severity": "CRITICAL",
+        "code": "AIDEN_TRICARE_GRACE_ACTIVE",
+        "title": "TRICARE 90-Day Newborn Grace Window Active",
+        "message": f"TRICARE 90-day grace clock active from delivery ({dob_str}). Mandatory DEERS enrollment required by {deadline} to finalize PCM assignment at Madigan AMC and prevent Point of Service cost-shares.",
+        "statute_or_category": "TRICARE Prime Enrollment",
+        "due_date": deadline,
+        "action_url": "aiden",
+        "created_at": now.isoformat(),
+        "acknowledged": False,
+        "dismissed": False
+    })
+
+    # 2. Immediate Sortie Queue Alert (CRITICAL)
+    if upcoming:
+        alerts.append({
+            "id": "alert_aiden_immediate_sortie",
+            "domain": "aiden",
+            "severity": "CRITICAL",
+            "code": "AIDEN_IMMEDIATE_SORTIE_QUEUE",
+            "title": "Baby Aiden Immediate Sortie Queue (Hospital & T-0 to T+72h)",
+            "message": f"Delivery scheduled in {aiden_data.get('days_until_dob', 11)} days ({dob_str}). {len(upcoming)} clinical, vital records, and immunization sortie tasks armed in NRMC Module A & E.",
+            "statute_or_category": "Immediate Sortie / Vital Records",
+            "due_date": dob_str,
+            "action_url": "aiden",
+            "created_at": now.isoformat(),
+            "acknowledged": False,
+            "dismissed": False
+        })
+
+    # 3. RAPIDS DEERS Appointment Standby (WARNING)
+    rapids = anchors.get("rapids_appointment", {})
+    rapids_date = rapids.get("scheduled_date", "2026-12-05")
+    alerts.append({
+        "id": "alert_aiden_rapids_appointment",
+        "domain": "aiden",
+        "severity": "WARNING",
+        "code": "AIDEN_RAPIDS_APPOINTMENT_STANDBY",
+        "title": f"RAPIDS Appointment Booked ({rapids_date[:10]} - JBLM Waller Hall)",
+        "message": f"Appointment confirmed (Code: {rapids.get('confirmation_code', 'DMDC-AIDEN-7749')}). Verify certified birth certificate physical arrival prior to DEERS enrollment appointment.",
+        "statute_or_category": "DEERS / DD Form 1172-2",
+        "due_date": rapids_date[:10],
+        "action_url": "aiden",
+        "created_at": now.isoformat(),
+        "acknowledged": False,
+        "dismissed": False
+    })
+
+    # 4. 529 College Savings Auto-DCA (INFO)
+    alerts.append({
+        "id": "alert_aiden_529_dca",
+        "domain": "aiden",
+        "severity": "INFO",
+        "code": "AIDEN_529_CONTRIBUTION_SCHEDULED",
+        "title": "529 College Savings Auto-DCA Active ($500/mo)",
+        "message": "WA GET / DreamAhead 529 automated monthly contribution scheduled upon SSN receipt. Generational wealth compounding nominal.",
+        "statute_or_category": "Generational Wealth Architecture",
+        "due_date": "2026-11-30",
+        "action_url": "aiden",
+        "created_at": now.isoformat(),
+        "acknowledged": False,
+        "dismissed": False
+    })
+
+    return alerts
+
+
 def run_pipeline() -> List[Dict[str, Any]]:
     """Executes full standardized evaluation across all domains and updates hub_state."""
     state = hub_state.load_json()
@@ -181,6 +262,10 @@ def run_pipeline() -> List[Dict[str, Any]]:
     # 4. Rental
     if "rental" in state:
         all_generated.extend(evaluate_rental_alerts(state["rental"]))
+
+    # 5. Baby Aiden // NRMC
+    if "aiden" in state:
+        all_generated.extend(evaluate_aiden_alerts(state["aiden"]))
 
     # Preserve dismissal status if alert was already dismissed by user
     existing_alerts = {a.get("code"): a for a in state.get("alerts", [])}

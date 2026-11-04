@@ -1074,10 +1074,10 @@ body::after {
   padding: 40px 0 60px 0;
 }
 
-/* Visual Flight Path Guideline */
+/* Visual Flight Path Guideline - Positioned directly at node connector level (above card boxes, never traversing text) */
 .runway-guideline {
   position: absolute;
-  top: 50%;
+  top: 39px;
   left: 0;
   right: 0;
   height: 4px;
@@ -1089,23 +1089,23 @@ body::after {
     #EF4444 85%, 
     #00E5FF 100%
   );
-  box-shadow: 0 0 12px rgba(0, 229, 255, 0.6);
+  box-shadow: 0 0 14px rgba(0, 229, 255, 0.7);
   border-radius: 2px;
-  transform: translateY(-50%);
   z-index: 1;
 }
 
 /* Current Position Radar Line */
 .runway-current-marker {
   position: absolute;
-  top: -20px;
-  bottom: -20px;
+  top: 0;
+  bottom: 0;
   left: 35px;
   width: 2px;
   background: var(--cyan-telemetry);
   box-shadow: 0 0 15px var(--cyan-telemetry);
-  z-index: 5;
+  z-index: 2;
   pointer-events: none;
+  opacity: 0.85;
 }
 
 .runway-current-beacon {
@@ -1189,18 +1189,19 @@ body::after {
 .glidepath-milestone-card {
   width: 250px;
   min-width: 250px;
-  background: var(--bg-card);
+  background: var(--bg-carbon);
   border: 1px solid var(--border-subtle);
   border-radius: var(--hud-radius);
   padding: 14px;
   position: relative;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.7);
   cursor: pointer;
   transition: all var(--transition-fast);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   gap: 10px;
+  z-index: 4;
 }
 
 .glidepath-milestone-card:hover {
@@ -1208,18 +1209,20 @@ body::after {
   border-color: var(--cyan-telemetry);
   transform: translateY(-5px);
   box-shadow: 0 10px 25px rgba(0, 229, 255, 0.25);
+  z-index: 6;
 }
 
 .milestone-node-connector {
   position: absolute;
   top: -16px;
   left: 20px;
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   background: var(--bg-jet);
   border: 2px solid var(--cyan-telemetry);
-  box-shadow: 0 0 8px var(--cyan-telemetry);
+  box-shadow: 0 0 10px var(--cyan-telemetry);
+  z-index: 5;
 }
 
 .milestone-node-connector.complete {
@@ -1233,6 +1236,58 @@ body::after {
   border-color: var(--crimson-alert);
   box-shadow: 0 0 10px var(--crimson-alert);
   animation: pulse-glow 1.5s infinite;
+}
+
+/* Hospital Protocol vs Direct Parent Action Badges */
+.pill-hospital-auto {
+  background: rgba(99, 102, 241, 0.16);
+  color: #a5b4fc;
+  border: 1px solid rgba(129, 140, 248, 0.45);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 2px 7px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 0 6px rgba(99, 102, 241, 0.2);
+}
+
+.pill-parent-action {
+  background: rgba(0, 229, 255, 0.16);
+  color: #00E5FF;
+  border: 1px solid rgba(0, 229, 255, 0.55);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  padding: 2px 7px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 0 8px rgba(0, 229, 255, 0.3);
+}
+
+/* Dark mode inputs and calendar picker indicator */
+input[type="date"],
+input[type="datetime-local"] {
+  color-scheme: dark !important;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+  opacity: 0.85;
+  transition: opacity 0.2s ease;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover,
+input[type="datetime-local"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
 }
 
 .milestone-header-row {

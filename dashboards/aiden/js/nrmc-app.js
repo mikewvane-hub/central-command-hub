@@ -299,101 +299,141 @@ class NrmcDashboardApp {
     this.renderDocumentVault();
   }
 
-  // Unified Chronological Milestones Matrix
+  // Unified Chronological Milestones Matrix (Dynamically calibrated to Aiden's DOB)
   getAllMilestones() {
     if (!this.state) return [];
     const list = [];
     const dob = this.state.profile?.dob || '2026-11-15';
+    const rapidsAppt = this.state.command_anchors?.rapids_appointment?.scheduled_date;
+    const rapidsDateOnly = rapidsAppt ? rapidsAppt.slice(0, 10) : this.addDays(dob, 20);
 
-    const taskDateMapping = {
-      'A1': { date: '2026-11-15', offset: 'T-0', category: 'military', lane: 'military' },
-      'A2': { date: '2026-11-15', offset: 'T-0', category: 'identity', lane: 'identity' },
-      'A3': { date: '2026-11-18', offset: 'T+3d', category: 'military', lane: 'military' },
-      'A4': { date: '2026-11-16', offset: 'T+1d', category: 'clinical', lane: 'clinical' },
-      'A5': { date: '2026-11-16', offset: 'T+1d', category: 'clinical', lane: 'clinical' },
-      'A6': { date: '2026-11-17', offset: 'T+2d', category: 'clinical', lane: 'clinical' },
-      'A7': { date: '2027-02-13', offset: 'T+90d', category: 'military', lane: 'military', isDeadline: true },
-      'B1': { date: '2026-12-05', offset: 'T+20d', category: 'military', lane: 'military' },
-      'B2': { date: '2026-12-15', offset: 'T+30d', category: 'military', lane: 'military' },
-      'B3': { date: '2026-11-20', offset: 'T+5d', category: 'military', lane: 'military' },
-      'B4': { date: '2026-12-10', offset: 'T+25d', category: 'military', lane: 'military' },
-      'B5': { date: '2027-01-05', offset: 'T+50d', category: 'military', lane: 'military' },
-      'C1': { date: '2026-12-20', offset: 'T+35d', category: 'identity', lane: 'identity' },
-      'C2': { date: '2026-12-20', offset: 'T+35d', category: 'identity', lane: 'identity' },
-      'C3': { date: '2026-12-28', offset: 'T+43d', category: 'identity', lane: 'identity' },
-      'C4': { date: '2027-02-13', offset: 'T+90d', category: 'identity', lane: 'identity' },
-      'C5': { date: '2027-02-13', offset: 'T+90d', category: 'identity', lane: 'identity' },
-      'C6': { date: '2027-02-13', offset: 'T+90d', category: 'identity', lane: 'identity' },
-      'C7': { date: '2027-02-13', offset: 'T+90d', category: 'identity', lane: 'identity' },
-      'D1': { date: '2026-12-30', offset: 'T+45d', category: 'financial', lane: 'wealth' },
-      'D2': { date: '2027-01-14', offset: 'T+60d', category: 'financial', lane: 'wealth', isDeadline: true },
-      'D3': { date: '2026-11-25', offset: 'T+10d', category: 'financial', lane: 'wealth' },
-      'D4': { date: '2027-02-13', offset: 'T+90d', category: 'financial', lane: 'wealth' },
-      'D5': { date: '2039-11-15', offset: 'Age 13', category: 'financial', lane: 'wealth' }
+    // Specification mapping: relative day offsets from Aiden's actual DOB
+    const taskSpecs = {
+      'A1': { days: 0, offset: 'T-0', category: 'military', lane: 'military', isHospitalAuto: true },
+      'A2': { days: 0, offset: 'T-0', category: 'identity', lane: 'identity', isHospitalAuto: true },
+      'A3': { days: 3, offset: 'T+3d', category: 'military', lane: 'military', isHospitalAuto: false },
+      'A4': { days: 1, offset: 'T+1d', category: 'clinical', lane: 'clinical', isHospitalAuto: true },
+      'A5': { days: 1, offset: 'T+1d', category: 'clinical', lane: 'clinical', isHospitalAuto: true },
+      'A6': { days: 2, offset: 'T+2d', category: 'clinical', lane: 'clinical', isHospitalAuto: false },
+      'A7': { days: 90, offset: 'T+90d', category: 'military', lane: 'military', isDeadline: true, isHospitalAuto: false },
+      'B1': { customDate: rapidsDateOnly, days: 20, offset: 'T+20d', category: 'military', lane: 'military', isHospitalAuto: false },
+      'B2': { days: 30, offset: 'T+30d', category: 'military', lane: 'military', isHospitalAuto: false },
+      'B3': { days: 5, offset: 'T+5d', category: 'military', lane: 'military', isHospitalAuto: true },
+      'B4': { days: 25, offset: 'T+25d', category: 'military', lane: 'military', isHospitalAuto: false },
+      'B5': { days: 50, offset: 'T+50d', category: 'military', lane: 'military', isHospitalAuto: false },
+      'C1': { days: 35, offset: 'T+35d', category: 'identity', lane: 'identity', isHospitalAuto: false },
+      'C2': { days: 35, offset: 'T+35d', category: 'identity', lane: 'identity', isHospitalAuto: false },
+      'C3': { days: 43, offset: 'T+43d', category: 'identity', lane: 'identity', isHospitalAuto: false },
+      'C4': { days: 90, offset: 'T+90d', category: 'identity', lane: 'identity', isHospitalAuto: false },
+      'C5': { days: 90, offset: 'T+90d', category: 'identity', lane: 'identity', isHospitalAuto: false },
+      'C6': { days: 90, offset: 'T+90d', category: 'identity', lane: 'identity', isHospitalAuto: false },
+      'C7': { days: 90, offset: 'T+90d', category: 'identity', lane: 'identity', isHospitalAuto: false },
+      'D1': { days: 45, offset: 'T+45d', category: 'financial', lane: 'wealth', isHospitalAuto: false },
+      'D2': { days: 60, offset: 'T+60d', category: 'financial', lane: 'wealth', isDeadline: true, isHospitalAuto: false },
+      'D3': { days: 10, offset: 'T+10d', category: 'financial', lane: 'wealth', isHospitalAuto: false },
+      'D4': { days: 90, offset: 'T+90d', category: 'financial', lane: 'wealth', isHospitalAuto: false },
+      'D5': { years: 13, offset: 'Age 13', category: 'financial', lane: 'wealth', isHospitalAuto: false }
     };
 
     // Tasks from modules A-D
     Object.values(this.state.modules || {}).forEach((mod) => {
       if (Array.isArray(mod.tasks)) {
         mod.tasks.forEach((t) => {
-          const map = taskDateMapping[t.id] || { date: '2026-12-01', offset: 'T+15d', category: 'military', lane: 'military' };
+          const spec = taskSpecs[t.id] || { days: 15, offset: 'T+15d', category: 'military', lane: 'military', isHospitalAuto: false };
+          let calDate = '';
+          if (spec.customDate) {
+            calDate = spec.customDate;
+          } else if (spec.years) {
+            calDate = this.addYears(dob, spec.years);
+          } else {
+            calDate = this.addDays(dob, spec.days !== undefined ? spec.days : 0);
+          }
+
           list.push({
             id: t.id,
             title: t.title,
-            category: map.category,
-            lane: map.lane,
-            date: map.date,
-            offset: map.offset,
+            category: spec.category,
+            lane: spec.lane,
+            date: calDate,
+            dateFormatted: this.formatDateDisplay(calDate),
+            offset: spec.offset,
             priority: t.priority || 'NORMAL',
             status: t.status || 'PENDING',
             sla: t.sla || '',
             forms: t.forms || [],
-            isDeadline: !!map.isDeadline,
+            isDeadline: !!spec.isDeadline,
+            isHospitalAuto: !!spec.isHospitalAuto,
             taskRef: t
           });
         });
       }
     });
 
-    // Vaccines from Module E
+    // Vaccines from Module E (dynamically tied to DOB)
+    const vaccineSpecs = {
+      'VAC_01': { days: 0, offset: 'T-0 (Birth)', isHospitalAuto: true },
+      'VAC_02': { days: 30, offset: 'T+30d (1M)', isHospitalAuto: false },
+      'VAC_03': { days: 60, offset: 'T+60d (2M)', isHospitalAuto: false },
+      'VAC_04': { days: 120, offset: 'T+120d (4M)', isHospitalAuto: false },
+      'VAC_05': { days: 180, offset: 'T+180d (6M)', isHospitalAuto: false }
+    };
+
     const vaccines = this.state.modules?.module_e?.vaccine_glidepath || [];
     vaccines.forEach((v) => {
+      const vSpec = vaccineSpecs[v.id] || { days: 0, offset: v.stage.split(' ')[0], isHospitalAuto: false };
+      const vDate = this.addDays(dob, vSpec.days);
       list.push({
         id: v.id,
         title: `${v.stage}: ${v.vaccine}`,
         category: 'clinical',
         lane: 'clinical',
-        date: v.target_date || '2026-11-15',
-        offset: v.stage.split(' ')[0],
+        date: vDate,
+        dateFormatted: this.formatDateDisplay(vDate),
+        offset: vSpec.offset,
         priority: 'HIGH',
         status: v.status || 'PENDING',
         sla: 'Clinical Immunization Series',
         forms: ['CDC Immunization Record'],
         isDeadline: false,
+        isHospitalAuto: !!vSpec.isHospitalAuto,
         vaccineRef: v
       });
     });
 
-    // Clinical Growth Checks
-    const growth = this.state.modules?.module_e?.growth_telemetry?.measurements || [];
-    growth.forEach((g) => {
-      list.push({
-        id: g.id,
-        title: `Clinical Growth Vitals (${g.weight_lbs} lbs / ${g.length_in} in)`,
-        category: 'clinical',
-        lane: 'clinical',
-        date: g.date,
-        offset: `T+${g.age_days}d`,
-        priority: 'NORMAL',
-        status: 'COMPLETE',
-        sla: 'Pediatric Well-Child Screening',
-        forms: ['WHO Growth Chart Entry'],
-        isDeadline: false,
-        growthRef: g
-      });
-    });
+    // NOTE: Synthetic growth vitals purged per directive. Actual clinical growth checks
+    // are tracked in Module E Pediatric Growth Telemetry & WHO curves without polluting sorties.
 
     return list.sort((a, b) => new Date(a.date) - new Date(b.date));
+  }
+
+  // Date calculation helpers without timezone shift
+  addDays(dateStr, days) {
+    if (!dateStr) return '';
+    const parts = dateStr.split('-');
+    const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10) + days);
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+  }
+
+  addYears(dateStr, years) {
+    if (!dateStr) return '';
+    const parts = dateStr.split('-');
+    const d = new Date(parseInt(parts[0], 10) + years, parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+  }
+
+  formatDateDisplay(dateStr) {
+    if (!dateStr) return '';
+    const parts = dateStr.split('-');
+    if (parts.length < 3) return dateStr;
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const monthIdx = parseInt(parts[1], 10) - 1;
+    return `${months[monthIdx]} ${parseInt(parts[2], 10)}, ${parts[0]}`;
   }
 
   // View 1: Render Mission Glidepath (Horizontal Flight Trajectory)
@@ -404,6 +444,10 @@ class NrmcDashboardApp {
     let items = this.getAllMilestones();
     if (this.currentFilter === 'critical') {
       items = items.filter((m) => m.priority === 'CRITICAL' || m.isDeadline);
+    } else if (this.currentFilter === 'parent-action') {
+      items = items.filter((m) => !m.isHospitalAuto);
+    } else if (this.currentFilter === 'hospital-auto') {
+      items = items.filter((m) => m.isHospitalAuto);
     } else if (this.currentFilter !== 'all') {
       items = items.filter((m) => m.category === this.currentFilter);
     }
@@ -427,18 +471,25 @@ class NrmcDashboardApp {
           docPromptHtml = `<button class="vault-prompt-badge need-doc prompt-upload-btn" data-task-id="${m.id}" title="OPSEC Prompt: File supporting record or clinic slip">📎 FILE RECORD</button>`;
         }
 
+        const autoBadge = m.isHospitalAuto
+          ? `<span class="pill-hospital-auto" title="Executed automatically by hospital clinical staff">🏥 HOSPITAL PROTOCOL</span>`
+          : `<span class="pill-parent-action" title="Requires direct parent action and intervention">⚡ DIRECT PARENT ACTION</span>`;
+
         return `
         <div class="glidepath-milestone-card ${isComplete ? 'milestone-card-complete' : ''}" data-task-id="${m.id}" data-category="${m.category}">
           <div class="milestone-node-connector ${connectorClass}"></div>
-          <div class="milestone-header-row">
+          <div class="milestone-header-row" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
             <span class="milestone-time-badge">${m.offset}</span>
             <div style="display:flex; align-items:center; gap:6px;">
               ${docPromptHtml}
               <span class="countdown-pill ${priorityPill}">${m.isDeadline ? '🚨 DEADLINE' : m.priority}</span>
             </div>
           </div>
+          <div style="margin-bottom:6px;">
+            ${autoBadge}
+          </div>
           <div class="milestone-card-title">${m.title}</div>
-          <div class="milestone-card-date">Target: <strong>${m.date}</strong> ${m.sla ? `• ${m.sla}` : ''}</div>
+          <div class="milestone-card-date">Target: <strong>${m.dateFormatted || m.date}</strong> (${m.offset}) ${m.sla ? `• ${m.sla}` : ''}</div>
           <div class="milestone-card-footer">
             <button class="hud-check-toggle-sm ${isComplete ? 'is-complete' : ''}" data-task-id="${m.id}" title="${isComplete ? 'Task Sealed. Click to reopen' : 'Click to seal task as complete'}">
               ${isComplete ? '✓ SEALED' : '◯ COMPLETE'}
@@ -565,12 +616,17 @@ class NrmcDashboardApp {
     } else {
       list.innerHTML = matches
         .map((m) => {
+          const isComplete = m.status === 'COMPLETE';
           const priorityPill = m.isDeadline ? 'pill-crimson' : m.priority === 'HIGH' ? 'pill-amber' : 'pill-cyan';
+          const autoBadge = m.isHospitalAuto
+            ? `<span class="pill-hospital-auto" style="font-size:0.6rem;">🏥 HOSPITAL PROTOCOL</span>`
+            : `<span class="pill-parent-action" style="font-size:0.6rem;">⚡ DIRECT PARENT ACTION</span>`;
           return `
           <div style="background:rgba(18,19,24,0.9); border:1px solid var(--border-subtle); padding:12px; border-radius:6px; margin-bottom:8px; display:flex; align-items:center; justify-content:space-between; gap:12px;">
             <div>
-              <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+              <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px; flex-wrap:wrap;">
                 <span class="countdown-pill ${priorityPill}">${m.isDeadline ? 'HARD DEADLINE' : m.priority}</span>
+                ${autoBadge}
                 <span style="font-family:var(--font-mono); font-size:0.75rem; color:var(--cyan-telemetry);">${m.offset}</span>
                 <strong style="color:var(--ghost-white); font-size:0.95rem;">${m.title}</strong>
               </div>
@@ -1366,9 +1422,79 @@ class NrmcDashboardApp {
     }
 
     const cfgDobInput = document.getElementById('cfg-baby-dob');
+    const cfgDobTextInput = document.getElementById('cfg-baby-dob-text');
     if (cfgDobInput) {
-      cfgDobInput.addEventListener('input', () => this.previewRecalculation());
+      cfgDobInput.addEventListener('input', () => {
+        if (cfgDobTextInput) cfgDobTextInput.value = cfgDobInput.value;
+        this.previewRecalculation();
+      });
+      cfgDobInput.addEventListener('change', () => {
+        if (cfgDobTextInput) cfgDobTextInput.value = cfgDobInput.value;
+        this.previewRecalculation();
+      });
     }
+
+    if (cfgDobTextInput) {
+      cfgDobTextInput.addEventListener('input', () => {
+        const val = cfgDobTextInput.value.trim();
+        if (/^\d{4}-\d{2}-\d{2}$/.test(val)) {
+          if (cfgDobInput) cfgDobInput.value = val;
+          this.previewRecalculation();
+        }
+      });
+    }
+
+    const pickDobBtn = document.getElementById('btn-pick-dob');
+    if (pickDobBtn && cfgDobInput) {
+      pickDobBtn.addEventListener('click', () => {
+        if (typeof cfgDobInput.showPicker === 'function') {
+          cfgDobInput.showPicker();
+        } else {
+          cfgDobInput.focus();
+        }
+      });
+    }
+
+    document.querySelectorAll('.btn-quick-dob').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        let val = btn.dataset.val;
+        if (val === 'today') {
+          const now = new Date();
+          const y = now.getFullYear();
+          const m = String(now.getMonth() + 1).padStart(2, '0');
+          const d = String(now.getDate()).padStart(2, '0');
+          val = `${y}-${m}-${d}`;
+        }
+        if (cfgDobInput) cfgDobInput.value = val;
+        if (cfgDobTextInput) cfgDobTextInput.value = val;
+        this.previewRecalculation();
+      });
+    });
+
+    const cfgRapidsInput = document.getElementById('cfg-rapids-date');
+    const pickRapidsBtn = document.getElementById('btn-pick-rapids');
+    if (pickRapidsBtn && cfgRapidsInput) {
+      pickRapidsBtn.addEventListener('click', () => {
+        if (typeof cfgRapidsInput.showPicker === 'function') {
+          cfgRapidsInput.showPicker();
+        } else {
+          cfgRapidsInput.focus();
+        }
+      });
+    }
+
+    const clearRapidsBtn = document.getElementById('btn-clear-rapids');
+    if (clearRapidsBtn && cfgRapidsInput) {
+      clearRapidsBtn.addEventListener('click', () => {
+        cfgRapidsInput.value = '';
+      });
+    }
+
+    document.querySelectorAll('.btn-quick-rapids').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (cfgRapidsInput) cfgRapidsInput.value = btn.dataset.val;
+      });
+    });
 
     // Close modals on Escape key
     document.addEventListener('keydown', (e) => {
@@ -2208,14 +2334,20 @@ class NrmcDashboardApp {
 
     const nameInput = document.getElementById('cfg-baby-name');
     const dobInput = document.getElementById('cfg-baby-dob');
+    const dobTextInput = document.getElementById('cfg-baby-dob-text');
     const rapidsInput = document.getElementById('cfg-rapids-date');
 
+    const currentDob = profile.dob || '2026-11-15';
     if (nameInput) nameInput.value = profile.baby_name || 'Aiden James Vane';
-    if (dobInput) dobInput.value = profile.dob || '2026-11-15';
+    if (dobInput) dobInput.value = currentDob;
+    if (dobTextInput) dobTextInput.value = currentDob;
 
-    if (rapidsInput && anchors.rapids_appointment?.scheduled_date) {
-      const dateStr = anchors.rapids_appointment.scheduled_date.slice(0, 16);
-      rapidsInput.value = dateStr;
+    if (rapidsInput) {
+      if (anchors.rapids_appointment?.scheduled_date) {
+        rapidsInput.value = anchors.rapids_appointment.scheduled_date.slice(0, 16);
+      } else {
+        rapidsInput.value = '';
+      }
     }
 
     this.previewRecalculation();
@@ -2228,17 +2360,16 @@ class NrmcDashboardApp {
   }
 
   previewRecalculation() {
-    const dobVal = document.getElementById('cfg-baby-dob')?.value;
-    if (!dobVal) return;
-
-    const birthDate = new Date(dobVal + 'T00:00:00');
-    if (isNaN(birthDate.getTime())) return;
+    const dobInput = document.getElementById('cfg-baby-dob');
+    const dobTextInput = document.getElementById('cfg-baby-dob-text');
+    const dobVal = (dobInput?.value || dobTextInput?.value || '').trim();
+    if (!dobVal || !/^\d{4}-\d{2}-\d{2}$/.test(dobVal)) return;
 
     // 90 days TRICARE deadline
-    const tricareDeadline = new Date(birthDate.getTime() + 90 * 24 * 60 * 60 * 1000);
-    const deadlineStr = tricareDeadline.toISOString().split('T')[0];
+    const deadlineStr = this.addDays(dobVal, 90);
 
     const now = new Date();
+    const birthDate = new Date(dobVal + 'T00:00:00');
     const diffDays = Math.round((birthDate - now) / (1000 * 60 * 60 * 24));
     let statusStr = '';
     if (diffDays > 0) {
@@ -2257,8 +2388,8 @@ class NrmcDashboardApp {
     if (pDelta) pDelta.textContent = statusStr;
 
     // 2-month vaccine date
-    const vaxDate = new Date(birthDate.getTime() + 60 * 24 * 60 * 60 * 1000);
-    if (pPentavalent) pPentavalent.textContent = `${vaxDate.toISOString().split('T')[0]} (2-Month Pentavalent #1)`;
+    const vaxDate = this.addDays(dobVal, 60);
+    if (pPentavalent) pPentavalent.textContent = `${vaxDate} (2-Month Pentavalent #1)`;
 
     // Live Rank Calculation
     const rankInfo = this.computeAidenRank(dobVal);
@@ -2276,11 +2407,13 @@ class NrmcDashboardApp {
 
   async saveProfileConfiguration() {
     const nameVal = (document.getElementById('cfg-baby-name')?.value || '').trim() || 'Aiden James Vane';
-    const dobVal = document.getElementById('cfg-baby-dob')?.value;
-    const rapidsVal = document.getElementById('cfg-rapids-date')?.value;
+    const dobInput = document.getElementById('cfg-baby-dob');
+    const dobTextInput = document.getElementById('cfg-baby-dob-text');
+    let dobVal = (dobTextInput?.value || dobInput?.value || '').trim();
+    const rapidsVal = document.getElementById('cfg-rapids-date')?.value || '';
 
-    if (!dobVal) {
-      this.showToast('Please specify a valid Date of Birth / Delivery Date', 'error');
+    if (!dobVal || !/^\d{4}-\d{2}-\d{2}$/.test(dobVal)) {
+      this.showToast('Please specify a valid Date of Birth (YYYY-MM-DD)', 'error');
       return;
     }
 
@@ -2298,13 +2431,31 @@ class NrmcDashboardApp {
     delete this.state.profile.station;
     delete this.state.profile.sponsor_rank;
 
-    const birthDate = new Date(dobVal + 'T00:00:00');
-    const tricareDeadline = new Date(birthDate.getTime() + 90 * 24 * 60 * 60 * 1000);
+    const tricareDeadline = this.addDays(dobVal, 90);
     this.state.command_anchors.tricare_grace.start_date = dobVal;
-    this.state.command_anchors.tricare_grace.deadline = tricareDeadline.toISOString().split('T')[0];
+    this.state.command_anchors.tricare_grace.deadline = tricareDeadline;
 
     if (rapidsVal) {
       this.state.command_anchors.rapids_appointment.scheduled_date = rapidsVal;
+    } else {
+      this.state.command_anchors.rapids_appointment.scheduled_date = null;
+    }
+
+    // Update Next Medical Milestone target date (2 Months)
+    if (this.state.command_anchors.next_medical_milestone) {
+      const vax2m = this.addDays(dobVal, 60);
+      this.state.command_anchors.next_medical_milestone.target_date = `${vax2m}T09:30:00`;
+      this.state.command_anchors.next_medical_milestone.title = `2-Month Well-Child / Pentavalent (${vax2m})`;
+    }
+
+    // Update vaccine target dates in module E
+    if (this.state.modules?.module_e?.vaccine_glidepath) {
+      const vDays = { 'VAC_01': 0, 'VAC_02': 30, 'VAC_03': 60, 'VAC_04': 120, 'VAC_05': 180 };
+      this.state.modules.module_e.vaccine_glidepath.forEach((v) => {
+        if (vDays[v.id] !== undefined) {
+          v.target_date = this.addDays(dobVal, vDays[v.id]);
+        }
+      });
     }
 
     // Update audit trail
@@ -2337,6 +2488,9 @@ class NrmcDashboardApp {
     this.playTacticalFeedback('seal');
     this.closeProfileConfigModal();
     this.render();
+    this.broadcastFleetTelemetry();
+    this.showToast(`Timeline calibrated to DOB: ${dobVal} | Rank: ${rankInfo.code} (${rankInfo.grade})!`);
+  }
     this.broadcastFleetTelemetry();
     this.showToast(`Timeline calibrated to DOB: ${dobVal} | Rank: ${rankInfo.code} (${rankInfo.grade})!`);
   }

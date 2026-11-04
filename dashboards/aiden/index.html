@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700;800&family=Orbitron:wght@600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet" />
 
   <!-- NRMC HUD Styling -->
-  <link rel="stylesheet" href="./css/nrmc-hud.css?v=2.6.0" />
+  <link rel="stylesheet" href="./css/nrmc-hud.css?v=2.7.0" />
 </head>
 <body>
   <div id="app-root">
@@ -285,7 +285,9 @@
         
         <div class="glidepath-filter-group">
           <button class="glidepath-filter-btn active" data-filter="all">ALL SORTIES</button>
-          <button class="glidepath-filter-btn" data-filter="critical">CRITICAL PATH</button>
+          <button class="glidepath-filter-btn filter-parent-btn" data-filter="parent-action" style="border-color:var(--cyan-telemetry); color:var(--cyan-telemetry);">⚡ DIRECT ACTION ONLY</button>
+          <button class="glidepath-filter-btn filter-hospital-btn" data-filter="hospital-auto" style="border-color:#818cf8; color:#a5b4fc;">🏥 HOSPITAL PROTOCOL</button>
+          <button class="glidepath-filter-btn" data-filter="critical">🚨 CRITICAL PATH</button>
           <button class="glidepath-filter-btn" data-filter="military">MILITARY / DEERS</button>
           <button class="glidepath-filter-btn" data-filter="identity">IDENTITY &amp; PASSPORT</button>
           <button class="glidepath-filter-btn" data-filter="financial">FINANCIAL WEALTH</button>
@@ -390,12 +392,12 @@
         </div>
 
         <!-- Day Inspector Drawer -->
-        <div id="calendar-day-drawer" style="margin-top:20px; background:rgba(0,0,0,0.4); border:1px solid var(--border-subtle); border-radius:6px; padding:16px; display:none;">
+        <div id="calendar-day-drawer" style="margin-top:20px; background:rgba(0,0,0,0.5); border:1px solid var(--border-cyan); border-radius:6px; padding:16px; display:none;">
           <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; border-bottom:1px solid var(--border-subtle); padding-bottom:8px;">
             <span id="drawer-date-heading" style="font-family:var(--font-mono); font-size:1rem; font-weight:700; color:var(--cyan-telemetry);">SELECTED DATE</span>
             <button id="drawer-close-btn" class="hud-btn hud-btn-sm">CLOSE</button>
           </div>
-          <div id="drawer-events-list">
+          <div id="drawer-events-list" style="max-height:380px; overflow-y:auto; padding-right:4px;">
             <!-- Dynamically populated -->
           </div>
         </div>
@@ -1123,8 +1125,21 @@
             <input type="text" id="cfg-baby-name" style="width:100%; background:rgba(0,0,0,0.5); border:1px solid var(--border-cyan); color:var(--ghost-white); font-family:var(--font-ui); font-size:0.85rem; padding:8px 12px; border-radius:4px;" value="Aiden James Vane" />
           </div>
           <div>
-            <label style="display:block; font-family:var(--font-mono); font-size:0.75rem; color:var(--cyan-telemetry); margin-bottom:5px;">DATE OF BIRTH / EXPECTED DELIVERY</label>
-            <input type="date" id="cfg-baby-dob" style="width:100%; background:rgba(0,0,0,0.5); border:1px solid var(--border-cyan); color:var(--ghost-white); font-family:var(--font-mono); font-size:0.85rem; padding:8px 12px; border-radius:4px;" value="2026-11-15" />
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
+              <label style="font-family:var(--font-mono); font-size:0.75rem; color:var(--cyan-telemetry);">DATE OF BIRTH (DOB)</label>
+              <button type="button" id="btn-pick-dob" class="hud-btn hud-btn-sm" style="padding:2px 8px; font-size:0.68rem; border-color:var(--cyan-telemetry); color:var(--cyan-telemetry);" title="Open Calendar">📅 PICK</button>
+            </div>
+            <div style="display:flex; gap:6px;">
+              <input type="date" id="cfg-baby-dob" style="flex:1; background:rgba(0,0,0,0.6); border:1px solid var(--border-cyan); color:var(--ghost-white); font-family:var(--font-mono); font-size:0.85rem; padding:7px 10px; border-radius:4px; color-scheme:dark;" value="2026-11-15" />
+              <input type="text" id="cfg-baby-dob-text" placeholder="YYYY-MM-DD" style="width:110px; background:rgba(0,0,0,0.6); border:1px solid var(--border-cyan); color:var(--ghost-white); font-family:var(--font-mono); font-size:0.85rem; padding:7px 8px; border-radius:4px; text-align:center;" value="2026-11-15" />
+            </div>
+            <!-- Quick preset chips -->
+            <div style="display:flex; gap:5px; margin-top:6px;">
+              <button type="button" class="hud-btn hud-btn-sm btn-quick-dob" data-val="today" style="font-size:0.65rem; padding:2px 6px;">Today</button>
+              <button type="button" class="hud-btn hud-btn-sm btn-quick-dob" data-val="2026-11-15" style="font-size:0.65rem; padding:2px 6px;">Nov 15</button>
+              <button type="button" class="hud-btn hud-btn-sm btn-quick-dob" data-val="2026-11-18" style="font-size:0.65rem; padding:2px 6px;">Nov 18</button>
+              <button type="button" class="hud-btn hud-btn-sm btn-quick-dob" data-val="2026-12-01" style="font-size:0.65rem; padding:2px 6px;">Dec 1</button>
+            </div>
           </div>
         </div>
 
@@ -1140,8 +1155,17 @@
         </div>
 
         <div style="margin-bottom:18px;">
-          <label style="display:block; font-family:var(--font-mono); font-size:0.75rem; color:var(--text-muted); margin-bottom:5px;">RAPIDS / DEERS APPOINTMENT DATE</label>
-          <input type="datetime-local" id="cfg-rapids-date" style="width:100%; background:rgba(0,0,0,0.5); border:1px solid var(--border-subtle); color:var(--ghost-white); font-family:var(--font-mono); font-size:0.85rem; padding:8px 12px; border-radius:4px;" />
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
+            <label style="font-family:var(--font-mono); font-size:0.75rem; color:var(--text-muted);">RAPIDS / DEERS APPOINTMENT DATE &amp; TIME</label>
+            <div style="display:flex; gap:6px;">
+              <button type="button" id="btn-pick-rapids" class="hud-btn hud-btn-sm" style="padding:2px 8px; font-size:0.68rem; border-color:var(--amber-warning); color:var(--amber-warning);" title="Open Calendar">📅 PICK</button>
+              <button type="button" id="btn-clear-rapids" class="hud-btn hud-btn-sm" style="padding:2px 8px; font-size:0.68rem; color:var(--text-muted);" title="Clear Appointment">CLEAR</button>
+            </div>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <input type="datetime-local" id="cfg-rapids-date" style="flex:1; background:rgba(0,0,0,0.6); border:1px solid var(--border-subtle); color:var(--ghost-white); font-family:var(--font-mono); font-size:0.85rem; padding:7px 10px; border-radius:4px; color-scheme:dark;" />
+            <button type="button" class="hud-btn hud-btn-sm btn-quick-rapids" data-val="2026-12-05T10:00" style="font-size:0.68rem; padding:2px 8px; white-space:nowrap;">Dec 5 (10am)</button>
+          </div>
         </div>
 
         <!-- Live Calculation Telemetry Box -->
@@ -1179,6 +1203,6 @@
   <div id="toast-container" class="toast-container"></div>
 
   <!-- Application Bootstrap -->
-  <script type="module" src="./js/nrmc-app.js?v=2.6.0"></script>
+  <script type="module" src="./js/nrmc-app.js?v=2.7.0"></script>
 </body>
 </html>
