@@ -78,6 +78,48 @@ export const PLATFORM_DIAGNOSTICS_DATA = [
     technicalDescription: 'Fold/unfold sensor orientation event triggers double reflow on Android Chrome before locking aspect ratio 1.08:1.',
     status: 'TRIAGED',
     assignedAgent: 'device-optimizer'
+  },
+  {
+    id: 'diag-007',
+    category: 'ACTION REQUIRED',
+    categoryClass: 'cat-regression',
+    origin: 'NRMC Vital Records & DEERS Hub',
+    deckId: 'aiden',
+    timestamp: '2026-11-04 08:00 UTC',
+    title: 'DEERS & Certified Birth Certificates Intake',
+    technicalTitle: 'Vital Records Raised-Seal Processing & RAPIDS Intake',
+    description: 'Order 6 certified copies of birth certificate upon delivery and confirm physical delivery before Dec 5 RAPIDS appointment.',
+    technicalDescription: 'Automate certified birth certificate courier order (Task A3) and sync vital record physical delivery tracking with DMDC-AIDEN-7749 RAPIDS appointment scheduled at JBLM Waller Hall.',
+    status: 'ACTION_MANDATORY',
+    assignedAgent: 'pediatric-admin-sentinel'
+  },
+  {
+    id: 'diag-008',
+    category: 'ACTION REQUIRED',
+    categoryClass: 'cat-fix',
+    origin: 'TRICARE Ops & Clinical C2',
+    deckId: 'aiden',
+    timestamp: '2026-11-04 08:00 UTC',
+    title: 'TRICARE 90-Day Newborn Grace Window',
+    technicalTitle: 'TRICARE Prime Provisional Enrollment & PCM Alignment',
+    description: 'Initialize 90-day TRICARE Prime grace clock at birth to ensure newborn medical coverage at Madigan AMC.',
+    technicalDescription: 'Establish UTC countdown anchor for TRICARE 90-day grace period (2026-11-15 to 2027-02-13). Prevent point-of-service cost shares via automated DD Form 2876 enrollment pipeline.',
+    status: 'ACTIVE_INVESTIGATION',
+    assignedAgent: 'tricare-ops-sentinel'
+  },
+  {
+    id: 'diag-009',
+    category: 'NEW FEATURE',
+    categoryClass: 'cat-feature',
+    origin: 'Wealth Seeding & Pediatric Telemetry',
+    deckId: 'aiden',
+    timestamp: '2026-11-04 08:00 UTC',
+    title: '529 College Savings Auto-DCA & Growth Tracker',
+    technicalTitle: 'Automated 529 Monthly DCA & WHO Growth Telemetry Ingest',
+    description: 'Set up recurring $500/month 529 college savings auto-draft and integrate WHO growth centile tracking.',
+    technicalDescription: 'Ingest automated $500/mo DCA into WA GET/DreamAhead 529 portfolio and bind pediatric weight/length WHO percentile growth chart visualizer in NRMC Module E.',
+    status: 'BACKLOG_PRIORITY',
+    assignedAgent: 'wealth-pediatric-agent'
   }
 ];
 
@@ -130,6 +172,36 @@ export const AGENT_ROUTING_MAP = {
       subsystem: 'Galaxy Z Fold 8 Viewport Engine',
       targetFiles: ['js/device-optimizer.js'],
       issue: 'Dynamic safe-area viewport fold/unfold double reflow'
+    }
+  },
+  'diag-007': {
+    targetAgent: 'pediatric-admin-sentinel',
+    modelTier: 'flash_lite',
+    priority: 'HIGH',
+    contextParameters: {
+      subsystem: 'NRMC Vital Records & RAPIDS Engine',
+      targetFiles: ['dashboards/aiden/index.html', 'dashboards/aiden/data/nrmc_state.json', 'agents/aiden.py'],
+      issue: 'Task A3 birth certificate order and RAPIDS appointment synchronization'
+    }
+  },
+  'diag-008': {
+    targetAgent: 'tricare-ops-sentinel',
+    modelTier: 'flash_lite',
+    priority: 'HIGH',
+    contextParameters: {
+      subsystem: 'TRICARE Prime Grace Engine',
+      targetFiles: ['dashboards/aiden/index.html', 'core_state/alert_pipeline.py'],
+      issue: 'TRICARE 90-day grace clock initiation and DD Form 2876 packet'
+    }
+  },
+  'diag-009': {
+    targetAgent: 'wealth-pediatric-agent',
+    modelTier: 'flash_lite',
+    priority: 'MEDIUM',
+    contextParameters: {
+      subsystem: 'Wealth Seeding & WHO Pediatric Engine',
+      targetFiles: ['dashboards/aiden/index.html', 'dashboards/aiden/data/nrmc_state.json'],
+      issue: 'Automated 529 DCA pipeline & WHO growth percentile tracking integration'
     }
   }
 };
@@ -651,7 +723,11 @@ export class ExecutiveSidebarManager {
       'HEALTH_HRV_BELOW_TARGET': 'HRV Readiness Alert: 46 ms (Below 65 ms Baseline)',
       'HRV_BELOW_BASELINE': 'HRV Readiness Alert: 46 ms (Below 65 ms Baseline)',
       'CHEVY_COLORADO_ZR2_OIL_DECAY': '2021 Chevy Colorado ZR2 Oil Life at 18%',
-      'COLORADO_ZR2_OIL_18PCT': 'Colorado ZR2 Oil Life at 18% (Service Due Soon)'
+      'COLORADO_ZR2_OIL_18PCT': 'Colorado ZR2 Oil Life at 18% (Service Due Soon)',
+      'AIDEN_TRICARE_GRACE_ACTIVE': 'TRICARE 90-Day Newborn Grace Window Active',
+      'AIDEN_IMMEDIATE_SORTIE_QUEUE': 'Baby Aiden Immediate Sortie Queue (Hospital & T-0 to T+72h)',
+      'AIDEN_RAPIDS_APPOINTMENT_STANDBY': 'RAPIDS Appointment Booked (2026-12-05 - JBLM Waller Hall)',
+      'AIDEN_529_CONTRIBUTION_SCHEDULED': '529 College Savings Auto-DCA Active ($500/mo)'
     };
 
     const domainKeys = ['rental', 'garage', 'fleet', 'executive', 'trip', 'mackie', 'financial', 'health', 'aiden'];

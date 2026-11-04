@@ -76,7 +76,7 @@ async function main() {
 
   // 1. Test Python Agents
   console.log('▶ [1/6] Running individual domain agents via uv...');
-  const agents = ['fleet.py', 'family.py', 'academic.py', 'health.py'];
+  const agents = ['fleet.py', 'family.py', 'academic.py', 'health.py', 'aiden.py'];
   for (const agent of agents) {
     const res = await runCommand(uvPath, ['run', 'python', `agents/${agent}`], __dirname);
     if (res.code !== 0) {
@@ -116,6 +116,17 @@ async function main() {
   console.log(`  ✓ hub_state.json valid. Domains present: ${Object.keys(stateData).join(', ')}`);
   console.log(`  ✓ Executive highlights count: ${stateData.executive_briefing?.executive_highlights?.length}`);
   console.log(`  ✓ Active alerts in state: ${stateData.alerts?.length}`);
+  
+  if (!stateData.aiden) {
+    console.error('❌ Baby Aiden domain missing from hub_state.json!');
+    process.exit(1);
+  }
+  const aidenTasks = stateData.executive_briefing?.aiden_nrmc?.upcoming_14d_tasks || [];
+  if (aidenTasks.length === 0) {
+    console.error('❌ Baby Aiden upcoming 14-day tasks missing from executive briefing!');
+    process.exit(1);
+  }
+  console.log(`  ✓ Baby Aiden 14-day tasks successfully pulled: ${aidenTasks.length} tasks/milestones identified.`);
 
   // 5. Boot server.js and test REST APIs
   console.log('\n▶ [5/6] Testing server.js REST APIs...');

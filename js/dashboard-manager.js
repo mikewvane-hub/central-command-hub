@@ -235,22 +235,32 @@ export const DEFAULT_HUB_ALERTS = {
   aiden: {
     deckName: 'Baby Aiden // NRMC',
     deckIcon: '👶',
-    count: 3,
+    count: 4,
     severity: 'critical',
-    title: 'TRICARE 90-Day Grace & RAPIDS Sync',
+    title: 'TRICARE 90-Day Grace & Immediate Sortie Queue',
     items: [
       {
         severity: 'CRITICAL',
         code: 'AIDEN_TRICARE_GRACE_ACTIVE',
         statute: 'TRICARE Prime Enrollment',
         title: 'TRICARE 90-Day Newborn Grace Window Active',
+        dueDate: '2027-02-13',
         message: 'TRICARE 90-day grace clock running. DEERS enrollment required to finalize PCM assignment.'
+      },
+      {
+        severity: 'CRITICAL',
+        code: 'AIDEN_IMMEDIATE_SORTIE_QUEUE',
+        statute: 'Immediate Sortie / Vital Records',
+        title: 'Baby Aiden Immediate Sortie Queue (Hospital & T-0 to T+72h)',
+        dueDate: '2026-11-15',
+        message: 'Newborn delivery in 11 days (Nov 15, 2026). Immediate clinical, vital records, and immunization sortie tasks armed.'
       },
       {
         severity: 'WARNING',
         code: 'AIDEN_RAPIDS_APPOINTMENT_STANDBY',
         statute: 'DEERS / DD Form 1172-2',
         title: 'RAPIDS Appointment Booked (2026-12-05)',
+        dueDate: '2026-12-05',
         message: 'RAPIDS appointment booked. Verify physical certified birth certificate arrives prior to appointment.'
       },
       {
@@ -258,6 +268,7 @@ export const DEFAULT_HUB_ALERTS = {
         code: 'AIDEN_529_CONTRIBUTION_SCHEDULED',
         statute: 'Generational Wealth Architecture',
         title: '529 College Savings Auto-DCA Active ($500/mo)',
+        dueDate: '2026-11-30',
         message: 'Automatic contribution scheduled. Generational wealth compounding nominal.'
       }
     ]

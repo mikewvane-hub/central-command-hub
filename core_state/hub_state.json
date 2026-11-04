@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": "1.0.0-UNIFIED",
-    "last_updated": "2026-11-04T13:24:41.427011+00:00",
+    "last_updated": "2026-11-04T13:30:04.021926+00:00",
     "timezone": "America/New_York",
     "status": "ONLINE"
   },
@@ -232,7 +232,7 @@
       "statute_or_category": "Athletic Readiness",
       "due_date": "2026-11-04",
       "action_url": "health",
-      "created_at": "2026-11-04T13:24:41.256216+00:00",
+      "created_at": "2026-11-04T13:30:03.884501+00:00",
       "acknowledged": false,
       "dismissed": false
     },
@@ -274,7 +274,7 @@
       "statute_or_category": "Preventive Maintenance",
       "due_date": "2026-11-18",
       "action_url": "fleet",
-      "created_at": "2026-11-04T13:24:41.256216+00:00",
+      "created_at": "2026-11-04T13:30:03.884501+00:00",
       "acknowledged": false,
       "dismissed": false
     },
@@ -288,7 +288,7 @@
       "statute_or_category": "Q4 Statutory Maintenance",
       "due_date": "2026-12-31",
       "action_url": "rental",
-      "created_at": "2026-11-04T13:24:41.256216+00:00",
+      "created_at": "2026-11-04T13:30:03.884501+00:00",
       "acknowledged": false,
       "dismissed": false
     },
@@ -302,7 +302,7 @@
       "statute_or_category": "TRICARE Prime Enrollment",
       "due_date": "2027-02-13",
       "action_url": "aiden",
-      "created_at": "2026-11-04T13:24:41.256216+00:00",
+      "created_at": "2026-11-04T13:30:03.884501+00:00",
       "acknowledged": false,
       "dismissed": false
     },
@@ -316,7 +316,7 @@
       "statute_or_category": "Immediate Sortie / Vital Records",
       "due_date": "2026-11-15",
       "action_url": "aiden",
-      "created_at": "2026-11-04T13:24:41.256216+00:00",
+      "created_at": "2026-11-04T13:30:03.884501+00:00",
       "acknowledged": false,
       "dismissed": false
     },
@@ -330,7 +330,7 @@
       "statute_or_category": "DEERS / DD Form 1172-2",
       "due_date": "2026-12-05",
       "action_url": "aiden",
-      "created_at": "2026-11-04T13:24:41.256216+00:00",
+      "created_at": "2026-11-04T13:30:03.884501+00:00",
       "acknowledged": false,
       "dismissed": false
     },
@@ -344,14 +344,14 @@
       "statute_or_category": "Generational Wealth Architecture",
       "due_date": "2026-11-30",
       "action_url": "aiden",
-      "created_at": "2026-11-04T13:24:41.256216+00:00",
+      "created_at": "2026-11-04T13:30:03.884501+00:00",
       "acknowledged": false,
       "dismissed": false
     }
   ],
   "executive_briefing": {
     "cadence": "SUNDAY_1800_EXECUTIVE_BRIEFING",
-    "generated_at": "2026-11-04T13:24:41.225772+00:00",
+    "generated_at": "2026-11-04T13:30:03.853494+00:00",
     "week_label": "Week of November 04 \u2013 November 11, 2026",
     "cadence_window": "Week of November 04 \u2013 November 11, 2026",
     "summary": "Executive briefing for Week of November 04 \u2013 November 11, 2026 integrating Baby Aiden NRMC Sortie, Family Milestones, Property Cash Flow, Athletic Readiness, and Fleet Telemetry.",
@@ -1254,7 +1254,7 @@
   "dismissed_alerts": [],
   "aiden": {
     "domain": "aiden",
-    "timestamp": "2026-11-04T13:24:41.236939+00:00",
+    "timestamp": "2026-11-04T13:30:03.863503+00:00",
     "profile": {
       "baby_name": "Aiden James Vane",
       "dob": "2026-11-15",
