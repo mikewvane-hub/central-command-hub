@@ -3,16 +3,16 @@
  * Main Application Orchestrator
  */
 
-import { sfx } from './sound-effects.js?v=40.0';
-import { AtomicCoreVisualizer } from './atomic-core.js?v=42.0';
-import { DashboardManager } from './dashboard-manager.js?v=40.0';
-import { VoiceCommandEngine } from './voice-command.js?v=40.0';
-import { DeviceOptimizer } from './device-optimizer.js?v=40.0';
-import { renderQRCode } from './qr-generator.js?v=40.0';
-import { ExecutiveSidebarManager } from './executive-sidebar.js?v=40.0';
-import { telemetryBus } from './telemetry-bus.js?v=40.0';
-import { SentinelMaintenanceEngine } from './sentinel-maintenance.js?v=40.0';
-import { SentinelWidget } from './sentinel-widget.js?v=40.0';
+import { sfx } from './sound-effects.js?v=43.0';
+import { AtomicCoreVisualizer } from './atomic-core.js?v=43.0';
+import { DashboardManager } from './dashboard-manager.js?v=43.0';
+import { VoiceCommandEngine } from './voice-command.js?v=43.0';
+import { DeviceOptimizer } from './device-optimizer.js?v=43.0';
+import { renderQRCode } from './qr-generator.js?v=43.0';
+import { ExecutiveSidebarManager } from './executive-sidebar.js?v=43.0';
+import { telemetryBus } from './telemetry-bus.js?v=43.0';
+import { SentinelMaintenanceEngine } from './sentinel-maintenance.js?v=43.0';
+import { SentinelWidget } from './sentinel-widget.js?v=43.0';
 
 class CentralCommandHubApp {
   constructor() {
@@ -29,6 +29,14 @@ class CentralCommandHubApp {
 
   boot() {
     console.log(`🌌 [Central Command Hub] Initializing Atomic Quantum Architecture...`);
+
+    // Auto-cleanse any legacy localhost:3012 setting for aiden
+    try {
+      const storedAiden = localStorage.getItem('hub_url_aiden');
+      if (storedAiden && (storedAiden.includes('localhost') || storedAiden.includes('127.0.0.1') || storedAiden.includes(':3012'))) {
+        localStorage.setItem('hub_url_aiden', './dashboards/aiden/index.html');
+      }
+    } catch (e) {}
 
     // 1. Initialize Dashboard Manager
     this.dashboardMgr = new DashboardManager((deckId) => {

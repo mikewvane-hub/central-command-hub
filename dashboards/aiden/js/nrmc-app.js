@@ -12,7 +12,11 @@ class NrmcDashboardApp {
     this.ws = null;
     this.growthChart = null;
     this.tummyTimer = null;
-    this.currentTab = 'admin-military';
+    this.currentTab = 'mission-glidepath';
+    this.currentFilter = 'all';
+    this.calendarYear = 2026;
+    this.calendarMonth = 10; // November 2026 (0-indexed)
+    this.selectedCalendarDate = null;
     this.selectedTask = null;
     this.currentMetric = 'weight';
     this.broadcastChannel = null;
@@ -93,6 +97,17 @@ class NrmcDashboardApp {
     setInterval(updateTime, 1000);
   }
 
+  // Helper: Resilient API URL generator
+  apiUrl(path) {
+    if (window.location.port === '3012' || window.location.port === '4000') {
+      return path;
+    }
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      return `http://localhost:3012${path}`;
+    }
+    return path;
+  }
+
   // 3. Load State from LocalStorage / Server
   async loadInitialState() {
     // Check LocalStorage first for instant paint
@@ -107,7 +122,7 @@ class NrmcDashboardApp {
 
     // Fetch freshest state from server
     try {
-      const res = await fetch('/api/v1/nrmc/state');
+      const res = await fetch(this.apiUrl('/api/v1/nrmc/state'));
       if (res.ok) {
         this.state = await res.json();
         localStorage.setItem('nrmc_cached_state', JSON.stringify(this.state));
@@ -120,12 +135,18 @@ class NrmcDashboardApp {
   // 4. WebSocket Real-Time Stream
   initWebSocket() {
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const wsUrl = `${protocol}//${window.location.host}/ws/telemetry`;
+    const targetHost = (window.location.port === '3012')
+      ? window.location.host
+      : (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'localhost:3012' : window.location.host);
+    const wsUrl = `${protocol}//${targetHost}/ws/telemetry`;
 
     try {
       this.ws = new WebSocket(wsUrl);
       this.ws.onopen = () => {
         this.updateNetworkBadge(true);
+      };
+      this.ws.onerror = (err) => {
+        this.updateNetworkBadge(false);
       };
       this.ws.onmessage = (event) => {
         try {
@@ -227,9 +248,332 @@ class NrmcDashboardApp {
     this.renderHeaderAndProfile();
     this.renderMasterReadiness();
     this.renderCountdowns();
+    this.renderMissionGlidepath();
+    this.renderTacticalCalendar();
+    this.renderFlightLanes();
     this.renderModuleTasks();
     this.renderClinicalData();
     this.renderRawTelemetry();
+  }
+
+  // Unified Chronological Milestones Matrix
+  getAllMilestones() {
+    if (!this.state) return [];
+    const list = [];
+    const dob = this.state.profile?.dob || '2026-11-15';
+
+    const taskDateMapping = {
+      'A1': { date: '2026-11-15', offset: 'T-0', category: 'military', lane: 'military' },
+      'A2': { date: '2026-11-15', offset: 'T-0', category: 'identity', lane: 'identity' },
+      'A3': { date: '2026-11-18', offset: 'T+3d', category: 'military', lane: 'military' },
+      'A4': { date: '2026-11-16', offset: 'T+1d', category: 'clinical', lane: 'clinical' },
+      'A5': { date: '2026-11-16', offset: 'T+1d', category: 'clinical', lane: 'clinical' },
+      'A6': { date: '2026-11-17', offset: 'T+2d', category: 'clinical', lane: 'clinical' },
+      'A7': { date: '2027-02-13', offset: 'T+90d', category: 'military', lane: 'military', isDeadline: true },
+      'B1': { date: '2026-12-05', offset: 'T+20d', category: 'military', lane: 'military' },
+      'B2': { date: '2026-12-15', offset: 'T+30d', category: 'military', lane: 'military' },
+      'B3': { date: '2026-11-20', offset: 'T+5d', category: 'military', lane: 'military' },
+      'B4': { date: '2026-12-10', offset: 'T+25d', category: 'military', lane: 'military' },
+      'B5': { date: '2027-01-05', offset: 'T+50d', category: 'military', lane: 'military' },
+      'C1': { date: '2026-12-20', offset: 'T+35d', category: 'identity', lane: 'identity' },
+      'C2': { date: '2026-12-20', offset: 'T+35d', category: 'identity', lane: 'identity' },
+      'C3': { date: '2026-12-28', offset: 'T+43d', category: 'identity', lane: 'identity' },
+      'C4': { date: '2027-02-13', offset: 'T+90d', category: 'identity', lane: 'identity' },
+      'C5': { date: '2027-02-13', offset: 'T+90d', category: 'identity', lane: 'identity' },
+      'C6': { date: '2027-02-13', offset: 'T+90d', category: 'identity', lane: 'identity' },
+      'C7': { date: '2027-02-13', offset: 'T+90d', category: 'identity', lane: 'identity' },
+      'D1': { date: '2026-12-30', offset: 'T+45d', category: 'financial', lane: 'wealth' },
+      'D2': { date: '2027-01-14', offset: 'T+60d', category: 'financial', lane: 'wealth', isDeadline: true },
+      'D3': { date: '2026-11-25', offset: 'T+10d', category: 'financial', lane: 'wealth' },
+      'D4': { date: '2027-02-13', offset: 'T+90d', category: 'financial', lane: 'wealth' },
+      'D5': { date: '2039-11-15', offset: 'Age 13', category: 'financial', lane: 'wealth' }
+    };
+
+    // Tasks from modules A-D
+    Object.values(this.state.modules || {}).forEach((mod) => {
+      if (Array.isArray(mod.tasks)) {
+        mod.tasks.forEach((t) => {
+          const map = taskDateMapping[t.id] || { date: '2026-12-01', offset: 'T+15d', category: 'military', lane: 'military' };
+          list.push({
+            id: t.id,
+            title: t.title,
+            category: map.category,
+            lane: map.lane,
+            date: map.date,
+            offset: map.offset,
+            priority: t.priority || 'NORMAL',
+            status: t.status || 'PENDING',
+            sla: t.sla || '',
+            forms: t.forms || [],
+            isDeadline: !!map.isDeadline,
+            taskRef: t
+          });
+        });
+      }
+    });
+
+    // Vaccines from Module E
+    const vaccines = this.state.modules?.module_e?.vaccine_glidepath || [];
+    vaccines.forEach((v) => {
+      list.push({
+        id: v.id,
+        title: `${v.stage}: ${v.vaccine}`,
+        category: 'clinical',
+        lane: 'clinical',
+        date: v.target_date || '2026-11-15',
+        offset: v.stage.split(' ')[0],
+        priority: 'HIGH',
+        status: v.status || 'PENDING',
+        sla: 'Clinical Immunization Series',
+        forms: ['CDC Immunization Record'],
+        isDeadline: false,
+        vaccineRef: v
+      });
+    });
+
+    // Clinical Growth Checks
+    const growth = this.state.modules?.module_e?.growth_telemetry?.measurements || [];
+    growth.forEach((g) => {
+      list.push({
+        id: g.id,
+        title: `Clinical Growth Vitals (${g.weight_lbs} lbs / ${g.length_in} in)`,
+        category: 'clinical',
+        lane: 'clinical',
+        date: g.date,
+        offset: `T+${g.age_days}d`,
+        priority: 'NORMAL',
+        status: 'COMPLETE',
+        sla: 'Pediatric Well-Child Screening',
+        forms: ['WHO Growth Chart Entry'],
+        isDeadline: false,
+        growthRef: g
+      });
+    });
+
+    return list.sort((a, b) => new Date(a.date) - new Date(b.date));
+  }
+
+  // View 1: Render Mission Glidepath (Horizontal Flight Trajectory)
+  renderMissionGlidepath() {
+    const container = document.getElementById('glidepath-cards-container');
+    if (!container) return;
+
+    let items = this.getAllMilestones();
+    if (this.currentFilter === 'critical') {
+      items = items.filter((m) => m.priority === 'CRITICAL' || m.isDeadline);
+    } else if (this.currentFilter !== 'all') {
+      items = items.filter((m) => m.category === this.currentFilter);
+    }
+
+    container.innerHTML = items
+      .map((m) => {
+        const isComplete = m.status === 'COMPLETE';
+        const isCritical = m.priority === 'CRITICAL' || m.isDeadline;
+        const statusPill =
+          m.status === 'COMPLETE' ? 'pill-emerald' : m.status === 'IN_FLIGHT' ? 'pill-cyan' : m.status === 'LOCKED' ? 'pill-gray' : 'pill-amber';
+        const priorityPill = isCritical ? 'pill-crimson' : m.priority === 'HIGH' ? 'pill-amber' : 'pill-cyan';
+        const connectorClass = isComplete ? 'complete' : isCritical ? 'critical' : '';
+
+        return `
+        <div class="glidepath-milestone-card" data-task-id="${m.id}" data-category="${m.category}">
+          <div class="milestone-node-connector ${connectorClass}"></div>
+          <div class="milestone-header-row">
+            <span class="milestone-time-badge">${m.offset}</span>
+            <span class="countdown-pill ${priorityPill}">${m.isDeadline ? '🚨 DEADLINE' : m.priority}</span>
+          </div>
+          <div class="milestone-card-title">${m.title}</div>
+          <div class="milestone-card-date">Target: <strong>${m.date}</strong> ${m.sla ? `• ${m.sla}` : ''}</div>
+          <div class="milestone-card-footer">
+            <span style="font-family:var(--font-mono); font-size:0.7rem; color:var(--text-muted);">${m.forms.length > 0 ? m.forms[0].split('(')[0] : m.id}</span>
+            <span class="countdown-pill ${statusPill}">${m.status}</span>
+          </div>
+        </div>
+      `;
+      })
+      .join('');
+
+    // Update Current Radar Marker
+    const now = new Date();
+    const dob = new Date(this.state.profile?.dob || '2026-11-15');
+    const daysDiff = Math.max(0, Math.floor((now - dob) / (1000 * 60 * 60 * 24)));
+    const marker = document.getElementById('glidepath-current-marker');
+    if (marker) {
+      const clampedOffset = Math.min(1420, Math.max(35, daysDiff * 16 + 35));
+      marker.style.left = `${clampedOffset}px`;
+    }
+  }
+
+  // View 2: Render Tactical Calendar (Monthly HUD Grid)
+  renderTacticalCalendar() {
+    const grid = document.getElementById('tactical-calendar-grid');
+    const heading = document.getElementById('calendar-month-heading');
+    if (!grid || !heading) return;
+
+    const monthNames = [
+      'JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE',
+      'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'
+    ];
+    heading.textContent = `${monthNames[this.calendarMonth]} ${this.calendarYear}`;
+
+    const firstDay = new Date(this.calendarYear, this.calendarMonth, 1).getDay();
+    const daysInMonth = new Date(this.calendarYear, this.calendarMonth + 1, 0).getDate();
+    const daysInPrevMonth = new Date(this.calendarYear, this.calendarMonth, 0).getDate();
+
+    const allMilestones = this.getAllMilestones();
+    const now = new Date();
+    const todayStr = now.toISOString().split('T')[0];
+
+    let html = '';
+
+    // Previous month padding
+    for (let p = firstDay - 1; p >= 0; p--) {
+      const prevDayNum = daysInPrevMonth - p;
+      html += `
+        <div class="calendar-day-cell inactive-month">
+          <div class="day-cell-top"><span class="day-number">${prevDayNum}</span></div>
+        </div>
+      `;
+    }
+
+    // Active Month Days
+    for (let d = 1; d <= daysInMonth; d++) {
+      const monthStr = String(this.calendarMonth + 1).padStart(2, '0');
+      const dayStr = String(d).padStart(2, '0');
+      const dateKey = `${this.calendarYear}-${monthStr}-${dayStr}`;
+
+      const matches = allMilestones.filter((m) => m.date === dateKey);
+      const isToday = dateKey === todayStr;
+      const hasCritical = matches.some((m) => m.isDeadline || m.priority === 'CRITICAL');
+
+      let cellClass = 'calendar-day-cell';
+      if (isToday) cellClass += ' today-cell';
+      if (hasCritical) cellClass += ' has-critical-deadline';
+
+      html += `
+        <div class="${cellClass}" data-date="${dateKey}">
+          <div class="day-cell-top">
+            <span class="day-number" style="${isToday ? 'color:var(--cyan-telemetry); font-weight:800;' : ''}">${d}</span>
+            ${isToday ? '<span class="status-pulse-dot" style="width:6px; height:6px;"></span>' : ''}
+            ${hasCritical ? '<span style="font-size:0.75rem;">⚠️</span>' : ''}
+          </div>
+          <div class="calendar-events-stack">
+            ${matches
+              .slice(0, 3)
+              .map((m) => {
+                const chipClass = m.isDeadline
+                  ? 'chip-critical'
+                  : m.category === 'military'
+                  ? 'chip-military'
+                  : m.category === 'identity'
+                  ? 'chip-identity'
+                  : m.category === 'financial'
+                  ? 'chip-financial'
+                  : 'chip-clinical';
+                return `<div class="calendar-event-chip ${chipClass}" title="${m.title}">${m.title}</div>`;
+              })
+              .join('')}
+            ${matches.length > 3 ? `<div style="font-family:var(--font-mono); font-size:0.65rem; color:var(--text-muted);">+${matches.length - 3} more</div>` : ''}
+          </div>
+        </div>
+      `;
+    }
+
+    grid.innerHTML = html;
+
+    // Attach click listeners to day cells
+    grid.querySelectorAll('.calendar-day-cell:not(.inactive-month)').forEach((cell) => {
+      cell.addEventListener('click', () => {
+        const dateKey = cell.dataset.date;
+        this.openCalendarDrawer(dateKey);
+      });
+    });
+  }
+
+  openCalendarDrawer(dateKey) {
+    const drawer = document.getElementById('calendar-day-drawer');
+    const heading = document.getElementById('drawer-date-heading');
+    const list = document.getElementById('drawer-events-list');
+    if (!drawer || !heading || !list) return;
+
+    this.selectedCalendarDate = dateKey;
+    heading.textContent = `TACTICAL ROSTER FOR ${dateKey}`;
+
+    const allMilestones = this.getAllMilestones();
+    const matches = allMilestones.filter((m) => m.date === dateKey);
+
+    if (matches.length === 0) {
+      list.innerHTML =
+        '<div style="color:var(--text-muted); font-size:0.85rem;">No scheduled military, civil, or clinical sorties on this date. Nominal flight envelope.</div>';
+    } else {
+      list.innerHTML = matches
+        .map((m) => {
+          const priorityPill = m.isDeadline ? 'pill-crimson' : m.priority === 'HIGH' ? 'pill-amber' : 'pill-cyan';
+          return `
+          <div style="background:rgba(18,19,24,0.9); border:1px solid var(--border-subtle); padding:12px; border-radius:6px; margin-bottom:8px; display:flex; align-items:center; justify-content:space-between; gap:12px;">
+            <div>
+              <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+                <span class="countdown-pill ${priorityPill}">${m.isDeadline ? 'HARD DEADLINE' : m.priority}</span>
+                <span style="font-family:var(--font-mono); font-size:0.75rem; color:var(--cyan-telemetry);">${m.offset}</span>
+                <strong style="color:var(--ghost-white); font-size:0.95rem;">${m.title}</strong>
+              </div>
+              <div style="font-size:0.8rem; color:var(--text-muted);">${m.sla ? `SLA: ${m.sla}` : ''} ${m.forms.length > 0 ? `| Forms: ${m.forms.join(', ')}` : ''}</div>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="status-pill status-${m.status}">${m.status}</span>
+              <button class="hud-btn hud-btn-sm hud-btn-primary open-sortie-btn" data-id="${m.id}">LAUNCH DOSSIER</button>
+            </div>
+          </div>
+        `;
+        })
+        .join('');
+
+      list.querySelectorAll('.open-sortie-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          this.openActionModal(btn.dataset.id);
+        });
+      });
+    }
+
+    drawer.style.display = 'block';
+  }
+
+  // View 3: Render Connected Flight Lanes (Swimlane Pipeline)
+  renderFlightLanes() {
+    this.renderLane('swimlane-military', 'military');
+    this.renderLane('swimlane-identity', 'identity');
+    this.renderLane('swimlane-wealth', 'wealth');
+    this.renderLane('swimlane-clinical', 'clinical');
+  }
+
+  renderLane(containerId, laneKey) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    const milestones = this.getAllMilestones().filter((m) => m.lane === laneKey);
+    let html = '';
+
+    milestones.forEach((m, idx) => {
+      const isComplete = m.status === 'COMPLETE';
+      const statusPill =
+        isComplete ? 'pill-emerald' : m.status === 'IN_FLIGHT' ? 'pill-cyan' : m.status === 'LOCKED' ? 'pill-gray' : 'pill-amber';
+
+      html += `
+        <div class="swimlane-node-card" data-task-id="${m.id}">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span class="milestone-time-badge">${m.offset}</span>
+            <span class="countdown-pill ${statusPill}">${m.status}</span>
+          </div>
+          <div style="font-weight:700; font-size:0.85rem; color:var(--ghost-white); line-height:1.3;">${m.title}</div>
+          <div style="font-family:var(--font-mono); font-size:0.7rem; color:var(--text-muted);">${m.date}</div>
+        </div>
+      `;
+
+      if (idx < milestones.length - 1) {
+        html += `<span class="swimlane-arrow-divider">➔</span>`;
+      }
+    });
+
+    container.innerHTML = html;
   }
 
   renderHeaderAndProfile() {
@@ -238,7 +582,7 @@ class NrmcDashboardApp {
     const dobEl = document.getElementById('baby-dob-display');
     const stationEl = document.getElementById('military-station-display');
 
-    if (nameEl) nameEl.textContent = profile.baby_name || 'Aiden Christopher';
+    if (nameEl) nameEl.textContent = profile.baby_name || 'Aiden James Vane';
     if (dobEl) dobEl.textContent = `DOB: ${profile.dob || '2026-11-15'}`;
     if (stationEl) stationEl.textContent = `${profile.sponsor_rank || 'O-3'} | ${profile.station || 'JBLM'}`;
   }
@@ -530,13 +874,85 @@ class NrmcDashboardApp {
       });
     });
 
-    // Task Card Click (Open Action Modal)
+    // Unified Card Click Delegation (Task Matrix, Glidepath Runway, Swimlane Nodes)
     document.addEventListener('click', (e) => {
-      const card = e.target.closest('.task-matrix-card');
+      const card = e.target.closest('.task-matrix-card, .glidepath-milestone-card, .swimlane-node-card');
       if (card && card.dataset.taskId) {
         this.openActionModal(card.dataset.taskId);
       }
     });
+
+    // Mission Glidepath Filter Buttons
+    document.querySelectorAll('.glidepath-filter-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.glidepath-filter-btn').forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        this.currentFilter = btn.dataset.filter || 'all';
+        this.renderMissionGlidepath();
+      });
+    });
+
+    // Mission Glidepath Recenter Today Button
+    const recenterBtn = document.getElementById('btn-recenter-today');
+    if (recenterBtn) {
+      recenterBtn.addEventListener('click', () => {
+        const viewport = document.getElementById('glidepath-scroll-area');
+        const marker = document.getElementById('glidepath-current-marker');
+        if (viewport && marker) {
+          const targetScroll = marker.offsetLeft - (viewport.clientWidth / 2) + (marker.clientWidth / 2);
+          viewport.scrollTo({ left: Math.max(0, targetScroll), behavior: 'smooth' });
+        }
+      });
+    }
+
+    // Tactical Calendar Next / Prev Buttons
+    const calPrevBtn = document.getElementById('cal-prev-btn');
+    if (calPrevBtn) {
+      calPrevBtn.addEventListener('click', () => {
+        this.calendarMonth--;
+        if (this.calendarMonth < 0) {
+          this.calendarMonth = 11;
+          this.calendarYear--;
+        }
+        this.renderTacticalCalendar();
+      });
+    }
+
+    const calNextBtn = document.getElementById('cal-next-btn');
+    if (calNextBtn) {
+      calNextBtn.addEventListener('click', () => {
+        this.calendarMonth++;
+        if (this.calendarMonth > 11) {
+          this.calendarMonth = 0;
+          this.calendarYear++;
+        }
+        this.renderTacticalCalendar();
+      });
+    }
+
+    // Tactical Calendar Quick Jump Buttons
+    document.querySelectorAll('.cal-quick-jump').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const monthAttr = btn.dataset.month;
+        if (monthAttr) {
+          const parts = monthAttr.split('-');
+          if (parts.length === 2) {
+            this.calendarYear = parseInt(parts[0], 10);
+            this.calendarMonth = parseInt(parts[1], 10) - 1;
+            this.renderTacticalCalendar();
+          }
+        }
+      });
+    });
+
+    // Tactical Calendar Drawer Close Button
+    const drawerCloseBtn = document.getElementById('drawer-close-btn');
+    if (drawerCloseBtn) {
+      drawerCloseBtn.addEventListener('click', () => {
+        const drawer = document.getElementById('calendar-day-drawer');
+        if (drawer) drawer.style.display = 'none';
+      });
+    }
 
     // Modal Close
     const closeBtn = document.getElementById('modal-close-btn');
@@ -603,7 +1019,7 @@ class NrmcDashboardApp {
     const exportBtn = document.getElementById('export-telemetry-btn');
     if (exportBtn) {
       exportBtn.addEventListener('click', () => {
-        window.location.href = '/api/v1/nrmc/export';
+        window.location.href = this.apiUrl('/api/v1/nrmc/export');
         this.showToast('Telemetry state exported as JSON file.');
       });
     }
@@ -620,7 +1036,7 @@ class NrmcDashboardApp {
           reader.onload = async (evt) => {
             try {
               const imported = JSON.parse(evt.target.result);
-              const res = await fetch('/api/v1/nrmc/import', {
+              const res = await fetch(this.apiUrl('/api/v1/nrmc/import'), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(imported)
@@ -725,7 +1141,7 @@ class NrmcDashboardApp {
         html += '<div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px;">';
         task.form_downloads.forEach((f) => {
           html += `
-            <a href="/forms/${f.file}" download="${f.file}" class="hud-btn hud-btn-sm hud-btn-primary" target="_blank">
+            <a href="./forms/${f.file}" download="${f.file}" class="hud-btn hud-btn-sm hud-btn-primary" target="_blank">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                 <polyline points="7 10 12 15 17 10"></polyline>
@@ -802,7 +1218,7 @@ class NrmcDashboardApp {
 
   async syncTaskUpdate(taskId, payload) {
     try {
-      const res = await fetch(`/api/v1/nrmc/task/${taskId}`, {
+      const res = await fetch(this.apiUrl(`/api/v1/nrmc/task/${taskId}`), {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -827,7 +1243,7 @@ class NrmcDashboardApp {
     }
     this.render();
     try {
-      await fetch(`/api/v1/nrmc/milestone/${milestoneId}`, {
+      await fetch(this.apiUrl(`/api/v1/nrmc/milestone/${milestoneId}`), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status })
@@ -849,7 +1265,7 @@ class NrmcDashboardApp {
     this.showToast(`Logged ${minutes}m of tummy time!`);
 
     try {
-      await fetch('/api/v1/nrmc/tummy-time', {
+      await fetch(this.apiUrl('/api/v1/nrmc/tummy-time'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ minutes })
@@ -879,7 +1295,7 @@ class NrmcDashboardApp {
 
   async submitGrowthMeasurement(payload) {
     try {
-      const res = await fetch('/api/v1/nrmc/growth', {
+      const res = await fetch(this.apiUrl('/api/v1/nrmc/growth'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -912,7 +1328,7 @@ class NrmcDashboardApp {
     this.render();
     this.showToast(`Timeline calibrated to DOB: ${newDob}`);
 
-    fetch('/api/v1/nrmc/profile', {
+    fetch(this.apiUrl('/api/v1/nrmc/profile'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ dob: newDob })

@@ -52,7 +52,7 @@ The Central Command Hub coordinates 7 satellite subsystems across local and clou
    - Cloud Satellite Port: `:443` | Route: `https://daily-executive-dashboard.onrender.com/trip-planner/`
    - Scope: Overland expedition routing, Pacific Northwest campsite permits.
 7. **Newborn Readiness & Milestone Command (`baby-aiden-nrmc`):**
-   - Local Service Port: `:3012` | Route: `http://localhost:3012/` (Fallback: `./dashboards/aiden/index.html`)
+   - Local Service Port: `:3012` | Route: `./dashboards/aiden/index.html` (Dedicated Dev Port: `http://localhost:3012/`)
    - Scope: DEERS enrollment, TRICARE grace clock, CDC pediatric glidepath, 529 wealth seed.
 
 ---

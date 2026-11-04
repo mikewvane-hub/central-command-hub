@@ -584,7 +584,11 @@ export class AtomicCoreVisualizer {
           return val;
         }
         if (key === 'hub_url_aiden') {
-          return val && val !== 'about:blank' && val !== '' ? val : 'http://localhost:3012/';
+          if (!val || val.includes('localhost') || val.includes('127.0.0.1') || val === 'about:blank' || val === '') {
+            try { localStorage.setItem('hub_url_aiden', './dashboards/aiden/index.html'); } catch (e) {}
+            return './dashboards/aiden/index.html';
+          }
+          return val;
         }
         if (
           !val ||
@@ -711,7 +715,7 @@ export class AtomicCoreVisualizer {
         inclination: { x: 0.28, y: 0.44, z: -0.22 },
         color: 0x06b6d4,
         glowHex: '#06b6d4',
-        url: resolveCloudUrl('hub_url_aiden', 'http://localhost:3012/'),
+        url: resolveCloudUrl('hub_url_aiden', './dashboards/aiden/index.html'),
         icon: '👶'
       }
     ];

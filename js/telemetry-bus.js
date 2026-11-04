@@ -70,7 +70,7 @@ export const FLEET_PROJECTS = {
     category: 'Infant Milestones & Readiness',
     type: 'local',
     defaultPort: 3012,
-    url: 'http://localhost:3012/',
+    url: './dashboards/aiden/index.html',
     devUrl: 'http://localhost:3012/'
   }
 };

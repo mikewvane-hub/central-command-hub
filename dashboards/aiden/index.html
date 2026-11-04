@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700;800&family=Orbitron:wght@600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet" />
 
   <!-- NRMC HUD Styling -->
-  <link rel="stylesheet" href="/css/nrmc-hud.css" />
+  <link rel="stylesheet" href="./css/nrmc-hud.css" />
 </head>
 <body>
   <div id="app-root">
@@ -28,7 +28,7 @@
         </div>
         <div class="brand-title-group">
           <h1>
-            NRMC // <span class="subject-callsign" id="baby-name-display">AIDEN CHRISTOPHER</span>
+            NRMC // <span class="subject-callsign" id="baby-name-display">AIDEN JAMES VANE</span>
             <span class="status-indicator">
               <span class="status-pulse-dot"></span>
               <span style="font-size:0.75rem; font-family:var(--font-mono);">OPERATIONAL</span>
@@ -203,30 +203,44 @@
     <!-- INTERACTIVE MATRIX NAVIGATION TABS                                -->
     <!-- ================================================================= -->
     <nav class="matrix-nav-bar">
-      <button class="matrix-tab-btn active" data-tab="admin-military">
+      <button class="matrix-tab-btn active" data-tab="mission-glidepath">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+          <polyline points="2 17 12 22 22 17"></polyline>
+          <polyline points="2 12 12 17 22 12"></polyline>
+        </svg>
+        Mission Glidepath
+        <span class="tab-badge" style="background:rgba(0,229,255,0.25); color:var(--cyan-telemetry);">TIMELINE</span>
+      </button>
+
+      <button class="matrix-tab-btn" data-tab="tactical-calendar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        Tactical Calendar
+        <span class="tab-badge">MONTHLY HUD</span>
+      </button>
+
+      <button class="matrix-tab-btn" data-tab="flight-lanes">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="6" y1="3" x2="6" y2="15"></line>
+          <circle cx="18" cy="6" r="3"></circle>
+          <circle cx="6" cy="18" r="3"></circle>
+          <path d="M18 9a9 9 0 0 1-9 9"></path>
+        </svg>
+        Flight Lanes & Pipelines
+        <span class="tab-badge">DEPENDENCIES</span>
+      </button>
+
+      <button class="matrix-tab-btn" data-tab="admin-military">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
         </svg>
-        Administrative & Military
-        <span class="tab-badge">Mod A & B</span>
-      </button>
-
-      <button class="matrix-tab-btn" data-tab="legal-identity">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-        </svg>
-        Legal, Identity & Credit
-        <span class="tab-badge">Mod C</span>
-      </button>
-
-      <button class="matrix-tab-btn" data-tab="financial-wealth">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="12" y1="1" x2="12" y2="23"></line>
-          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-        </svg>
-        Financial Telemetry
-        <span class="tab-badge">Mod D</span>
+        Sortie Matrices
+        <span class="tab-badge">MOD A-D</span>
       </button>
 
       <button class="matrix-tab-btn" data-tab="clinical-pediatric">
@@ -234,7 +248,7 @@
           <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
         </svg>
         Clinical & Pediatric
-        <span class="tab-badge">Mod E</span>
+        <span class="tab-badge">MOD E</span>
       </button>
 
       <button class="matrix-tab-btn" data-tab="telemetry-audit">
@@ -248,18 +262,235 @@
     </nav>
 
     <!-- ================================================================= -->
-    <!-- TAB 1: ADMINISTRATIVE & MILITARY (MODULES A & B)                  -->
+    <!-- VIEW 1: MASTER MISSION GLIDEPATH (HORIZONTAL CHRONOMETRY)         -->
     <!-- ================================================================= -->
-    <section id="tab-admin-military" class="tab-content-panel active">
+    <section id="tab-mission-glidepath" class="tab-content-panel active">
+      <div class="glidepath-controls-bar">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="font-family:var(--font-display); font-size:0.95rem; font-weight:800; color:var(--ghost-white); letter-spacing:0.06em; text-transform:uppercase;">
+            ✈️ AIDEN JAMES VANE // 180-DAY MISSION GLIDEPATH
+          </div>
+          <span class="countdown-pill pill-cyan">CONTINUOUS RADAR CHRONOMETRY</span>
+        </div>
+        
+        <div class="glidepath-filter-group">
+          <button class="glidepath-filter-btn active" data-filter="all">ALL SORTIES</button>
+          <button class="glidepath-filter-btn" data-filter="critical">CRITICAL PATH</button>
+          <button class="glidepath-filter-btn" data-filter="military">MILITARY / DEERS</button>
+          <button class="glidepath-filter-btn" data-filter="identity">IDENTITY &amp; PASSPORT</button>
+          <button class="glidepath-filter-btn" data-filter="financial">FINANCIAL WEALTH</button>
+          <button class="glidepath-filter-btn" data-filter="clinical">AAP CLINICAL</button>
+          <button id="btn-recenter-today" class="hud-btn hud-btn-sm hud-btn-primary" style="margin-left:8px;">🎯 TODAY (T+0)</button>
+        </div>
+      </div>
+
+      <!-- Horizontal Glidepath Viewport -->
+      <div class="glidepath-timeline-viewport" id="glidepath-scroll-area">
+        <!-- Phases Runway Header -->
+        <div class="glidepath-phases-container">
+          <div class="glidepath-phase-zone phase-active-cyan">
+            <span class="phase-zone-title"><span style="color:var(--cyan-telemetry);">●</span> PHASE 0: HOSPITAL SORTIE</span>
+            <span class="phase-zone-window">T-0 to T+72 Hours • Immediate Vital Registration</span>
+          </div>
+          <div class="glidepath-phase-zone phase-active-amber">
+            <span class="phase-zone-title"><span style="color:var(--amber-warning);">●</span> PHASE 1: DEERS &amp; RAPIDS</span>
+            <span class="phase-zone-window">T+3 to T+30 Days • Military Personnel Enrollment</span>
+          </div>
+          <div class="glidepath-phase-zone phase-active-violet">
+            <span class="phase-zone-title"><span style="color:var(--violet-quantum);">●</span> PHASE 2: PASSPORT &amp; TAX</span>
+            <span class="phase-zone-window">T+30 to T+60 Days • Civil Identity &amp; W-4 CTC</span>
+          </div>
+          <div class="glidepath-phase-zone phase-active-crimson">
+            <span class="phase-zone-title"><span style="color:var(--crimson-alert);">⚠️</span> PHASE 3: TRICARE DEADLINE &amp; FREEZES</span>
+            <span class="phase-zone-window">T+60 to T+90 Days • 90-Day Grace Closes (2027-02-13)</span>
+          </div>
+          <div class="glidepath-phase-zone phase-active-emerald">
+            <span class="phase-zone-title"><span style="color:var(--emerald-nominal);">●</span> PHASE 4: PEDIATRIC FLIGHT PATH</span>
+            <span class="phase-zone-window">2M - 4M - 6M Sorties • AAP Immunization &amp; WHO Growth</span>
+          </div>
+        </div>
+
+        <!-- Central Runway with Guideline & Cards -->
+        <div class="glidepath-runway-track">
+          <div class="runway-guideline"></div>
+          
+          <!-- Current Date Beacon -->
+          <div class="runway-current-marker" id="glidepath-current-marker">
+            <div class="runway-current-beacon">
+              <span class="status-pulse-dot" style="width:6px; height:6px;"></span>
+              DAY T+0 / TODAY
+            </div>
+          </div>
+
+          <!-- Cards Flow Along Runway -->
+          <div id="glidepath-cards-container" class="glidepath-cards-flow">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- VIEW 2: TACTICAL CALENDAR (MONTHLY HUD VIEW)                      -->
+    <!-- ================================================================= -->
+    <section id="tab-tactical-calendar" class="tab-content-panel">
+      <div class="tactical-calendar-wrapper">
+        <div class="calendar-top-nav">
+          <div class="calendar-month-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            <span id="calendar-month-heading">NOVEMBER 2026</span>
+          </div>
+
+          <!-- Quick Jump Buttons -->
+          <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+            <button class="hud-btn hud-btn-sm cal-quick-jump" data-month="2026-11">NOV '26 (BIRTH)</button>
+            <button class="hud-btn hud-btn-sm cal-quick-jump" data-month="2026-12">DEC '26 (RAPIDS)</button>
+            <button class="hud-btn hud-btn-sm cal-quick-jump" data-month="2027-01">JAN '27 (2M SORTIE)</button>
+            <button class="hud-btn hud-btn-sm cal-quick-jump" data-month="2027-02" style="border-color:var(--crimson-alert); color:var(--crimson-alert);">FEB '27 (TRICARE 90D)</button>
+            <button class="hud-btn hud-btn-sm cal-quick-jump" data-month="2027-03">MAR '27 (4M)</button>
+            <button class="hud-btn hud-btn-sm cal-quick-jump" data-month="2027-05">MAY '27 (6M)</button>
+          </div>
+
+          <!-- Month Pagers -->
+          <div style="display:flex; align-items:center; gap:8px;">
+            <button id="cal-prev-btn" class="hud-btn hud-btn-sm">◀ PREV</button>
+            <button id="cal-next-btn" class="hud-btn hud-btn-sm">NEXT ▶</button>
+          </div>
+        </div>
+
+        <!-- 7-Day Header -->
+        <div class="calendar-grid-header">
+          <div>SUN</div>
+          <div>MON</div>
+          <div>TUE</div>
+          <div>WED</div>
+          <div>THU</div>
+          <div>FRI</div>
+          <div>SAT</div>
+        </div>
+
+        <!-- Days Grid -->
+        <div id="tactical-calendar-grid" class="calendar-days-grid">
+          <!-- Dynamically populated -->
+        </div>
+
+        <!-- Day Inspector Drawer -->
+        <div id="calendar-day-drawer" style="margin-top:20px; background:rgba(0,0,0,0.4); border:1px solid var(--border-subtle); border-radius:6px; padding:16px; display:none;">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; border-bottom:1px solid var(--border-subtle); padding-bottom:8px;">
+            <span id="drawer-date-heading" style="font-family:var(--font-mono); font-size:1rem; font-weight:700; color:var(--cyan-telemetry);">SELECTED DATE</span>
+            <button id="drawer-close-btn" class="hud-btn hud-btn-sm">CLOSE</button>
+          </div>
+          <div id="drawer-events-list">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- VIEW 3: FLIGHT LANES & DEPENDENCY PIPELINE                        -->
+    <!-- ================================================================= -->
+    <section id="tab-flight-lanes" class="tab-content-panel">
+      <div class="module-section-banner" style="border-left-color: var(--cyan-telemetry);">
+        <div class="module-section-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="6" y1="3" x2="6" y2="15"></line>
+            <circle cx="18" cy="6" r="3"></circle>
+            <circle cx="6" cy="18" r="3"></circle>
+            <path d="M18 9a9 9 0 0 1-9 9"></path>
+          </svg>
+          PARALLEL MISSION FLIGHT LANES &amp; PREREQUISITE CHAINS
+        </div>
+        <span class="countdown-pill pill-cyan">PIPELINE DEPENDENCIES</span>
+      </div>
+
+      <div class="swimlanes-container">
+        <!-- Lane 1: Military & DEERS -->
+        <div class="swimlane-row" style="border-left: 3px solid var(--amber-warning);">
+          <div class="swimlane-row-header">
+            <span class="swimlane-row-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              </svg>
+              LANE 1: MILITARY BEN &amp; DEERS ENROLLMENT PIPELINE
+            </span>
+            <span class="countdown-pill pill-amber">RAPIDS • TRICARE PRIME • DD-93</span>
+          </div>
+          <div class="swimlane-nodes-track" id="swimlane-military">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Lane 2: Civil Identity & Credit Fortress -->
+        <div class="swimlane-row" style="border-left: 3px solid var(--violet-quantum);">
+          <div class="swimlane-row-header">
+            <span class="swimlane-row-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+              LANE 2: CIVIL IDENTITY &amp; 3-BUREAU DEFENSE FORTRESS
+            </span>
+            <span class="countdown-pill pill-violet">PASSPORT DS-11 • PHOTO SPEC • EQUIFAX • EXPERIAN • TRANSUNION</span>
+          </div>
+          <div class="swimlane-nodes-track" id="swimlane-identity">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Lane 3: Wealth Architecture & Tax Compounding -->
+        <div class="swimlane-row" style="border-left: 3px solid var(--emerald-nominal);">
+          <div class="swimlane-row-header">
+            <span class="swimlane-row-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="1" x2="12" y2="23"></line>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+              </svg>
+              LANE 3: GENERATIONAL WEALTH &amp; TAX COMPOUNDING
+            </span>
+            <span class="countdown-pill pill-emerald">IRS CTC W-4 • DCFSA QLE • 529 DCA • UTMA BROKERAGE</span>
+          </div>
+          <div class="swimlane-nodes-track" id="swimlane-wealth">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Lane 4: AAP Pediatric Clinical Glidepath -->
+        <div class="swimlane-row" style="border-left: 3px solid var(--cyan-telemetry);">
+          <div class="swimlane-row-header">
+            <span class="swimlane-row-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+              </svg>
+              LANE 4: AAP PEDIATRIC CLINICAL GLIDEPATH
+            </span>
+            <span class="countdown-pill pill-cyan">HEPB #1 ➔ 1M HEPB #2 ➔ 2M PENTAVALENT ➔ 4M ➔ 6M</span>
+          </div>
+          <div class="swimlane-nodes-track" id="swimlane-clinical">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- VIEW 4: SORTIE MATRICES (MODULES A, B, C, D)                      -->
+    <!-- ================================================================= -->
+    <section id="tab-admin-military" class="tab-content-panel">
       <!-- Module A: Immediate Sortie (T-0 to T+72h) -->
       <div class="module-section-banner">
         <div class="module-section-title">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
           </svg>
-          MODULE A: HOSPITAL & T-0 TO T+72 HOURS (IMMEDIATE SORTIE)
+          MODULE A: HOSPITAL &amp; T-0 TO T+72 HOURS (IMMEDIATE SORTIE)
         </div>
-        <span class="countdown-pill pill-cyan">VITAL RECORDS & INTAKE</span>
+        <span class="countdown-pill pill-cyan">VITAL RECORDS &amp; INTAKE</span>
       </div>
       <div id="grid-module-a" class="task-grid-matrix">
         <!-- Rendered dynamically -->
@@ -652,6 +883,6 @@
   <div id="toast-container" class="toast-container"></div>
 
   <!-- Application Bootstrap -->
-  <script type="module" src="/js/nrmc-app.js"></script>
+  <script type="module" src="./js/nrmc-app.js"></script>
 </body>
 </html>

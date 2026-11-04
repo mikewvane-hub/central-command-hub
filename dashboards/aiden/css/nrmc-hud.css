@@ -1001,3 +1001,479 @@ body::after {
     grid-template-columns: 1fr;
   }
 }
+
+/* ==================================================================== */
+/* 🚀 MISSION GLIDEPATH // INTERACTIVE CHRONOMETRY & TIMELINE SUITE     */
+/* ==================================================================== */
+
+.glidepath-controls-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-cyan);
+  border-radius: var(--hud-radius);
+  padding: 10px 18px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.glidepath-filter-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.glidepath-filter-btn {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  font-family: var(--font-tech);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 5px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.glidepath-filter-btn:hover {
+  color: var(--ghost-white);
+  border-color: var(--cyan-telemetry);
+}
+
+.glidepath-filter-btn.active {
+  background: var(--cyan-dim);
+  border-color: var(--cyan-telemetry);
+  color: var(--cyan-telemetry);
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+}
+
+/* Horizontal Timeline Scroller */
+.glidepath-timeline-viewport {
+  position: relative;
+  background: radial-gradient(circle at 50% 50%, rgba(18, 22, 34, 0.95) 0%, rgba(10, 10, 12, 0.98) 100%);
+  border: 1px solid var(--border-cyan);
+  border-radius: var(--hud-radius);
+  padding: 32px 24px 24px 24px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin-bottom: 24px;
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.8), 0 4px 24px rgba(0, 229, 255, 0.15);
+}
+
+/* Central Neon Flight Runway */
+.glidepath-runway-track {
+  position: relative;
+  min-width: 1480px;
+  padding: 40px 0 60px 0;
+}
+
+/* Visual Flight Path Guideline */
+.runway-guideline {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, 
+    #10B981 0%, 
+    #00E5FF 25%, 
+    #8B5CF6 55%, 
+    #F59E0B 75%, 
+    #EF4444 85%, 
+    #00E5FF 100%
+  );
+  box-shadow: 0 0 12px rgba(0, 229, 255, 0.6);
+  border-radius: 2px;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+/* Current Position Radar Line */
+.runway-current-marker {
+  position: absolute;
+  top: -20px;
+  bottom: -20px;
+  left: 35px;
+  width: 2px;
+  background: var(--cyan-telemetry);
+  box-shadow: 0 0 15px var(--cyan-telemetry);
+  z-index: 5;
+  pointer-events: none;
+}
+
+.runway-current-beacon {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-jet);
+  border: 1px solid var(--cyan-telemetry);
+  color: var(--cyan-telemetry);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+  white-space: nowrap;
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Phases Bar on Top of Timeline */
+.glidepath-phases-container {
+  display: flex;
+  min-width: 1480px;
+  margin-bottom: 25px;
+  gap: 12px;
+  z-index: 2;
+  position: relative;
+}
+
+.glidepath-phase-zone {
+  flex: 1;
+  background: rgba(18, 19, 24, 0.7);
+  border-top: 2px solid var(--border-subtle);
+  border-left: 1px solid var(--border-subtle);
+  border-right: 1px solid var(--border-subtle);
+  border-radius: 6px 6px 0 0;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  transition: all var(--transition-fast);
+}
+
+.phase-zone-title {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--ghost-white);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.phase-zone-window {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+.phase-active-cyan { border-top-color: var(--cyan-telemetry); background: rgba(0, 229, 255, 0.05); }
+.phase-active-amber { border-top-color: var(--amber-warning); background: rgba(245, 158, 11, 0.05); }
+.phase-active-violet { border-top-color: var(--violet-quantum); background: rgba(139, 92, 246, 0.05); }
+.phase-active-crimson { border-top-color: var(--crimson-alert); background: rgba(239, 68, 68, 0.05); }
+.phase-active-emerald { border-top-color: var(--emerald-nominal); background: rgba(16, 185, 129, 0.05); }
+
+/* Milestone Flight Cards Along Track */
+.glidepath-cards-flow {
+  display: flex;
+  min-width: 1480px;
+  gap: 18px;
+  position: relative;
+  z-index: 3;
+  padding: 10px 0;
+}
+
+.glidepath-milestone-card {
+  width: 250px;
+  min-width: 250px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--hud-radius);
+  padding: 14px;
+  position: relative;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.glidepath-milestone-card:hover {
+  background: var(--bg-card-elevated);
+  border-color: var(--cyan-telemetry);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 229, 255, 0.25);
+}
+
+.milestone-node-connector {
+  position: absolute;
+  top: -16px;
+  left: 20px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--bg-jet);
+  border: 2px solid var(--cyan-telemetry);
+  box-shadow: 0 0 8px var(--cyan-telemetry);
+}
+
+.milestone-node-connector.complete {
+  background: var(--emerald-nominal);
+  border-color: var(--emerald-nominal);
+  box-shadow: 0 0 8px var(--emerald-nominal);
+}
+
+.milestone-node-connector.critical {
+  background: var(--crimson-alert);
+  border-color: var(--crimson-alert);
+  box-shadow: 0 0 10px var(--crimson-alert);
+  animation: pulse-glow 1.5s infinite;
+}
+
+.milestone-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.milestone-time-badge {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--cyan-telemetry);
+  background: rgba(0, 229, 255, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.milestone-card-title {
+  font-family: var(--font-tech);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ghost-white);
+  line-height: 1.25;
+}
+
+.milestone-card-date {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.milestone-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 8px;
+}
+
+/* ==================================================================== */
+/* 📅 TACTICAL CALENDAR VIEW // HIGH-TECH MONTHLY MISSION GRID          */
+/* ==================================================================== */
+
+.tactical-calendar-wrapper {
+  background: var(--bg-card);
+  border: 1px solid var(--border-cyan);
+  border-radius: var(--hud-radius);
+  padding: 18px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+  margin-bottom: 24px;
+}
+
+.calendar-top-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 12px;
+}
+
+.calendar-month-title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--ghost-white);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.calendar-grid-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-bottom: 8px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--cyan-telemetry);
+  text-transform: uppercase;
+}
+
+.calendar-days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+
+.calendar-day-cell {
+  min-height: 105px;
+  background: rgba(14, 16, 22, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 6px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  position: relative;
+}
+
+.calendar-day-cell:hover {
+  background: var(--bg-card-elevated);
+  border-color: var(--cyan-telemetry);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 229, 255, 0.15);
+}
+
+.calendar-day-cell.inactive-month {
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+.calendar-day-cell.has-critical-deadline {
+  border-color: rgba(239, 68, 68, 0.45);
+  background: rgba(239, 68, 68, 0.04);
+}
+
+.calendar-day-cell.today-cell {
+  border-color: var(--cyan-telemetry);
+  background: rgba(0, 229, 255, 0.08);
+  box-shadow: 0 0 12px rgba(0, 229, 255, 0.2);
+}
+
+.day-cell-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.day-number {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--ghost-white);
+}
+
+.calendar-events-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.calendar-event-chip {
+  font-family: var(--font-ui);
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+
+.chip-military { background: rgba(0, 229, 255, 0.15); color: #38bdf8; border-left: 2px solid var(--cyan-telemetry); }
+.chip-identity { background: rgba(139, 92, 246, 0.15); color: #c084fc; border-left: 2px solid var(--violet-quantum); }
+.chip-financial { background: rgba(16, 185, 129, 0.15); color: #34d399; border-left: 2px solid var(--emerald-nominal); }
+.chip-clinical { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border-left: 2px solid var(--amber-warning); }
+.chip-critical { background: rgba(239, 68, 68, 0.2); color: #f87171; border-left: 2px solid var(--crimson-alert); }
+
+/* ==================================================================== */
+/* 🌊 CONNECTED FLIGHT LANES // SWIMLANE DEPENDENCY PIPELINE            */
+/* ==================================================================== */
+
+.swimlanes-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.swimlane-row {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--hud-radius);
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
+}
+
+.swimlane-row-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-bottom: 8px;
+}
+
+.swimlane-row-title {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  color: var(--ghost-white);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.swimlane-nodes-track {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 8px 0;
+}
+
+.swimlane-node-card {
+  min-width: 220px;
+  max-width: 220px;
+  background: rgba(12, 14, 20, 0.9);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  position: relative;
+}
+
+.swimlane-node-card:hover {
+  border-color: var(--cyan-telemetry);
+  background: var(--bg-card-elevated);
+  transform: translateY(-2px);
+}
+
+.swimlane-arrow-divider {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  user-select: none;
+}
+

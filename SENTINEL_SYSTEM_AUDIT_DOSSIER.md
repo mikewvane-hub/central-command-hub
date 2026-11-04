@@ -1,5 +1,5 @@
 # 🛡️ ANTIGRAVITY CENTRAL COMMAND HUB // SENTINEL SYSTEM AUDIT DOSSIER
-> **Audit Generated At:** `2026-11-04T02:24:48.426Z`  
+> **Audit Generated At:** `2026-11-04T03:03:08.112Z`  
 > **Auditing Subagent:** `Sentinel-Daemon` (Autonomous Telemetry & Self-Healing Watchdog)  
 > **System Topology:** Antigravity Central Command Hub (Quantum Atomic Architecture v2.5.0)  
 > **Runtime Environment:** Node.js `v24.21.0` on `win32 (10.0.26300)`  
@@ -36,14 +36,14 @@ Provide an assessment summarizing:
 | `mackie-mom-board` | **Wife's Custom Digital Dashboard (Mackie Mom Board)** | `https://daily-executive-dashboard.onrender.com/mackie/` | `:443` | Cloud Satellite | Family calendar, kids meal planner, routine tracking. |
 | `daily-executive-briefing` | **Executive Daily Briefing Setup** | `https://daily-executive-dashboard.onrender.com/` | `:443` | Cloud Satellite | Chief of Staff weekly cadence, priority directives, high-impact highlights. |
 | `family-road-trip-planner` | **Custom Road Trip Dashboard (Rainier Basecamp)** | `https://daily-executive-dashboard.onrender.com/trip-planner/` | `:443` | Cloud Satellite | Overland expedition routing, Pacific Northwest campsite permits. |
-| `baby-aiden-nrmc` | **Newborn Readiness & Milestone Command (Baby Aiden)** | `http://localhost:3012/` | `:3012` | Local Subsystem | Infant administrative, DEERS military, civil identity, and pediatric milestones. |
+| `baby-aiden-nrmc` | **Newborn Readiness & Milestone Command (Baby Aiden)** | `http://localhost:4000/dashboards/aiden/index.html` | `:3012` | Local Subsystem | Infant administrative, DEERS military, civil identity, and pediatric milestones. |
 
 ---
 
 ## ⚙️ SENTINEL SUBAGENT TELEMETRY & SELF-HEALING STATUS
 
 - **Watchdog Subagent Status:** `ONLINE`
-- **Uptime:** `7s` (~0.1 minutes)
+- **Uptime:** `59s` (~1.0 minutes)
 - **Autonomous Sweep Frequency:** Every 15 minutes (configurable 15–60 min)
 - **Total In-Memory Audit Capacity:** Capped at 60 records max (ring buffer)
 - **Disk Audit Log Capacity:** Capped at 500 lines max with auto-prune to 300
@@ -65,6 +65,12 @@ Provide an assessment summarizing:
 
 | Timestamp | Action | Level | Details / Message |
 | :--- | :--- | :--- | :--- |
+| `2026-11-04T03:03:08.101Z` | `PRUNE_LOGS` | `REMEDIATED` | Pruned sentinel-audit.log to 50 entries |
+| `2026-11-04T03:03:08.093Z` | `TEST_SYNTHETIC_AUDIT` | `REMEDIATED` | Automated self-healing unit test verification |
+| `2026-11-04T03:02:40.235Z` | `SWEEP_COMPLETED` | `INFO` | {"durationMs":1195,"healthyCount":7,"degradedCount":0,"downCount":0,"remediationsApplied":0} |
+| `2026-11-04T03:02:39.040Z` | `SWEEP_STARTED` | `INFO` | {"sweepId":"sweep-1793761359040"} |
+| `2026-11-04T03:01:50.425Z` | `PRUNE_LOGS` | `REMEDIATED` | Pruned sentinel-audit.log to 50 entries |
+| `2026-11-04T03:01:50.418Z` | `TEST_SYNTHETIC_AUDIT` | `REMEDIATED` | Automated self-healing unit test verification |
 | `2026-11-04T02:23:47.560Z` | `PRUNE_LOGS` | `REMEDIATED` | Pruned sentinel-audit.log to 50 entries |
 | `2026-11-04T02:23:47.554Z` | `TEST_SYNTHETIC_AUDIT` | `REMEDIATED` | Automated self-healing unit test verification |
 | `2026-11-04T02:18:04.754Z` | `PRUNE_LOGS` | `REMEDIATED` | Pruned sentinel-audit.log to 50 entries |
@@ -74,11 +80,6 @@ Provide an assessment summarizing:
 | `2026-10-26T20:50:28.927Z` | `PRUNE_LOGS` | `REMEDIATED` | Pruned sentinel-audit.log to 50 entries |
 | `2026-10-26T20:50:28.915Z` | `TEST_SYNTHETIC_AUDIT` | `REMEDIATED` | Automated self-healing unit test verification |
 | `2026-10-26T20:38:10.950Z` | `PRUNE_LOGS` | `REMEDIATED` | Pruned sentinel-audit.log to 50 entries |
-| `2026-10-26T20:38:10.944Z` | `TEST_SYNTHETIC_AUDIT` | `REMEDIATED` | Automated self-healing unit test verification |
-| `2026-10-26T20:10:53.087Z` | `PRUNE_LOGS` | `REMEDIATED` | Pruned sentinel-audit.log to 50 entries |
-| `2026-10-26T20:10:53.080Z` | `TEST_SYNTHETIC_AUDIT` | `REMEDIATED` | Automated self-healing unit test verification |
-| `2026-10-26T20:02:39.959Z` | `PRUNE_LOGS` | `REMEDIATED` | Pruned sentinel-audit.log to 50 entries |
-| `2026-10-26T20:02:39.950Z` | `TEST_SYNTHETIC_AUDIT` | `REMEDIATED` | Automated self-healing unit test verification |
 
 ---
 

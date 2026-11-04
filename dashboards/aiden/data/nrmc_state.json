@@ -1,0 +1,1374 @@
+{
+  "profile": {
+    "baby_name": "Aiden James Vane",
+    "dob": "2026-11-15",
+    "sex": "male",
+    "birth_weight_lbs": 7.8,
+    "birth_length_in": 20.2,
+    "birth_head_circ_in": 14.1,
+    "hospital": "Naval Hospital / Regional Military Medical Center",
+    "pediatrician": "Dr. Sarah Vance, MD, FAAP",
+    "pcm_clinic": "Madigan AMC Pediatric Clinic",
+    "sponsor_rank": "O-3 / CPT",
+    "branch": "US ARMY",
+    "station": "JBLM / Pacific Command"
+  },
+  "command_anchors": {
+    "tricare_grace": {
+      "start_date": "2026-11-15",
+      "grace_days": 90,
+      "deadline": "2027-02-13",
+      "status": "PRIME_PENDING",
+      "details": "Under TRICARE policy, a newborn is covered as TRICARE Prime/Select for the first 90 days from birth. By Day 90, formal DEERS and TRICARE enrollment must be finalized to prevent retroactive Point of Service cost-shares."
+    },
+    "rapids_appointment": {
+      "scheduled_date": "2026-12-05T10:00:00",
+      "location": "JBLM Waller Hall RAPIDS ID & DEERS Center",
+      "confirmation_code": "DMDC-AIDEN-7749",
+      "status": "CONFIRMED",
+      "url": "https://rapids-appointments.dmdc.osd.mil"
+    },
+    "next_medical_milestone": {
+      "title": "2-Month Well-Child / Pentavalent (2027-01-15)",
+      "target_date": "2027-01-15T09:30:00",
+      "clinic": "Madigan AMC Pediatric Clinic",
+      "status": "SCHEDULED"
+    }
+  },
+  "financial_telemetry": {
+    "deers_enrolled": false,
+    "tricare_status": "PRIME_PENDING",
+    "ssn_status": "CARD_ISSUED",
+    "five_two_nine_active": true,
+    "custodial_account_active": false
+  },
+  "modules": {
+    "module_a": {
+      "id": "module_a",
+      "title": "Hospital & T-0 to T+72 Hours (Immediate Sortie)",
+      "badge": "IMMEDIATE SORTIE",
+      "tasks": [
+        {
+          "id": "A1",
+          "title": "Hospital Administration Intake & Paternity Verification",
+          "category": "Vital Records",
+          "priority": "HIGH",
+          "status": "COMPLETE",
+          "timeframe": "T-0 to T+12h",
+          "sla": "Within 24 hours of delivery",
+          "forms": [
+            "Hospital Birth Registration Packet",
+            "Paternity Affidavit"
+          ],
+          "form_downloads": [
+            {
+              "name": "Hospital Birth Registration Guidance",
+              "file": "hospital_vital_records_guide.txt"
+            }
+          ],
+          "checklists": [
+            "Mother full legal name & SSN verified",
+            "Father/Sponsor full legal name, rank, SSN/DoD ID verified",
+            "Infant official given name 'Aiden James Vane' spelled correctly",
+            "Hospital birth clerk signed and filed with State Dept of Health"
+          ],
+          "portals": [
+            {
+              "name": "WA State DOH Vital Records",
+              "url": "https://doh.wa.gov/licenses-permits-and-certificates/vital-records"
+            }
+          ],
+          "notes": "Automated test suite verification note.",
+          "last_updated": "2026-11-04T02:55:00.269Z"
+        },
+        {
+          "id": "A2",
+          "title": "Social Security Card Request Form Tracking (Form SS-5)",
+          "category": "Federal Identity",
+          "priority": "HIGH",
+          "status": "COMPLETE",
+          "timeframe": "T-0 to T+24h",
+          "sla": "2-4 weeks delivery from SSA",
+          "forms": [
+            "Form SS-5 (Application for a Social Security Card)"
+          ],
+          "form_downloads": [
+            {
+              "name": "Form SS-5 (SSA.gov Official)",
+              "file": "ss-5.pdf",
+              "official_url": "https://www.ssa.gov/forms/ss-5.pdf"
+            }
+          ],
+          "checklists": [
+            "Hospital Electronic Birth Registration SSN request box checked 'YES'",
+            "SSA birth hospital intake receipt code retained in records",
+            "Verify physical mailing address matches home residence (not PO Box if restricted)",
+            "Track physical card arrival in secure mailbox"
+          ],
+          "portals": [
+            {
+              "name": "SSA Newborn SSN Portal",
+              "url": "https://www.ssa.gov/number-card"
+            }
+          ],
+          "notes": "Hospital birth registrar submitted SS-5 electronic feed. Card issued and received."
+        },
+        {
+          "id": "A3",
+          "title": "Certified Birth Certificate Order Tracker (5-8 Official Copies)",
+          "category": "Vital Records",
+          "priority": "CRITICAL",
+          "status": "IN_FLIGHT",
+          "timeframe": "T+24h to T+14d",
+          "sla": "5-10 business days processing",
+          "copies_ordered": 6,
+          "copies_target": 6,
+          "copy_allocation": [
+            "Copy 1: DEERS & military sponsor dependent enrollment (original inspected)",
+            "Copy 2: U.S. Passport Agency (Form DS-11 original submission)",
+            "Copy 3: 529 & Custodial UTMA/UGMA Banking / Wealth Architecture",
+            "Copy 4: Defense Enrollment / Tricare Backup & Medical Records",
+            "Copy 5: Future School / Daycare / Defense Dependent School registration",
+            "Copy 6: Master Family Safe / Hardened Lockbox Archive"
+          ],
+          "forms": [
+            "State Certified Birth Certificate Application",
+            "VitalChek Expedited Request"
+          ],
+          "form_downloads": [
+            {
+              "name": "Certified Birth Certificate Checklist",
+              "file": "birth_certificate_order_checklist.txt"
+            }
+          ],
+          "checklists": [
+            "Order 6 certified copies with raised state seal via VitalChek / County Health Dept",
+            "Pay certified vital record issuance fee ($25/ea + state surcharge)",
+            "Request expedited courier shipping with tracking number",
+            "Log receipt & verify raised embossed seal upon delivery"
+          ],
+          "portals": [
+            {
+              "name": "VitalChek Official Records",
+              "url": "https://www.vitalchek.com"
+            }
+          ],
+          "notes": "Ordered 6 certified copies via State Vital Records. Tracking pending courier dispatch."
+        },
+        {
+          "id": "A4",
+          "title": "Newborn Metabolic Screening Card (Heel Prick Test)",
+          "category": "Clinical Clearance",
+          "priority": "HIGH",
+          "status": "COMPLETE",
+          "timeframe": "T+24h to T+48h",
+          "sla": "Sample collected prior to hospital discharge",
+          "forms": [
+            "State Newborn Screening Specimen Card (Filter Paper Blood Specimen)"
+          ],
+          "form_downloads": [],
+          "checklists": [
+            "Heel prick blood spot card collected at 24-48 hours of life",
+            "Specimen laboratory tracking number documented in infant chart",
+            "Screening results routed to primary care pediatrician",
+            "Clearance for metabolic disorders, PKU, congenital hypothyroidism, sickle cell"
+          ],
+          "portals": [
+            {
+              "name": "CDC Newborn Screening Portal",
+              "url": "https://www.cdc.gov/newborn-screening"
+            }
+          ],
+          "notes": "Blood spot card collected at 36 hours. Lab report confirmed negative/nominal."
+        },
+        {
+          "id": "A5",
+          "title": "Newborn Hearing Screening Clearance (OAE & AABR)",
+          "category": "Clinical Clearance",
+          "priority": "HIGH",
+          "status": "COMPLETE",
+          "timeframe": "T+12h to T+48h",
+          "sla": "Both ears tested prior to discharge",
+          "forms": [
+            "Hospital Hearing Screening Certificate of Clearance"
+          ],
+          "form_downloads": [],
+          "checklists": [
+            "Otoacoustic Emissions (OAE) or Automated ABR conducted in nursery",
+            "Bilateral pass confirmation in mother/infant medical folder",
+            "Copy placed in pediatric follow-up packet"
+          ],
+          "portals": [],
+          "notes": "Bilateral pass recorded. Normal acoustic response verified."
+        },
+        {
+          "id": "A6",
+          "title": "Hospital Discharge Summary Packet & Signed Physician Summary",
+          "category": "Clinical Documentation",
+          "priority": "HIGH",
+          "status": "COMPLETE",
+          "timeframe": "T+48h to T+72h",
+          "sla": "Obtained at bedside prior to discharge",
+          "forms": [
+            "Physician Signed Discharge Summary",
+            "Maternal Postpartum Discharge Order"
+          ],
+          "form_downloads": [],
+          "checklists": [
+            "Mother discharge vitals and physician signed release in hand",
+            "Infant discharge weight, length, head circumference documented",
+            "Hospital nursery discharge nurse sign-off on feeding & voiding schedule",
+            "Copy of itemized UB-04 / CMS-1500 hospital bills requested for insurance verification"
+          ],
+          "portals": [
+            {
+              "name": "MHS GENESIS Patient Portal",
+              "url": "https://patientportal.mhsgenesis.health.mil"
+            }
+          ],
+          "notes": "Discharge packet secured in physical binder. Initial pediatric appointment booked."
+        },
+        {
+          "id": "A7",
+          "title": "TRICARE 90-Day Newborn Grace Window Initialization",
+          "category": "Military Medical",
+          "priority": "CRITICAL",
+          "status": "IN_FLIGHT",
+          "timeframe": "T-0 to T+90d",
+          "sla": "90 calendar days from Date of Birth",
+          "forms": [
+            "TRICARE Prime Enrollment Application (DD Form 2876)"
+          ],
+          "form_downloads": [
+            {
+              "name": "DD Form 2876 (TRICARE Prime Enrollment)",
+              "file": "dd-2876.pdf",
+              "official_url": "https://www.esd.whs.mil/Portals/54/Documents/DD/forms/dd/dd2876.pdf"
+            }
+          ],
+          "checklists": [
+            "Verify infant is covered under sponsor's Prime policy for first 90 days",
+            "Ensure pediatrician bills claims under sponsor's SSN/DoD ID with infant as dependent",
+            "Set calendar alerts at T+30, T+60, and T+75 days to enforce DEERS enrollment",
+            "Prevent accidental lapse into TRICARE Select Point-of-Service deductible"
+          ],
+          "portals": [
+            {
+              "name": "Humana Military / TRICARE East",
+              "url": "https://www.humanamilitary.com"
+            },
+            {
+              "name": "TRICARE.mil Newborn Guide",
+              "url": "https://tricare.mil/CoveredServices/BenefitUpdates/Archives/11_19_2020_Newborn_Enrollment"
+            }
+          ],
+          "notes": "Grace window active. Currently at day T+0. Hard deadline: 2027-02-13."
+        }
+      ]
+    },
+    "module_b": {
+      "id": "module_b",
+      "title": "Military Personnel & Administrative (T+3 to T+60 Days)",
+      "badge": "MILITARY C2",
+      "tasks": [
+        {
+          "id": "B1",
+          "title": "DEERS Enrollment & RAPIDS Appointment Engine",
+          "category": "DEERS / Personnel",
+          "priority": "CRITICAL",
+          "status": "IN_FLIGHT",
+          "timeframe": "T+3 to T+30d",
+          "sla": "Complete within 30 days of birth",
+          "forms": [
+            "DD Form 1172-2 (Application for Identification Card/DEERS Enrollment)"
+          ],
+          "form_downloads": [
+            {
+              "name": "DD Form 1172-2 (Official DoD Form)",
+              "file": "dd-1172-2.pdf",
+              "official_url": "https://www.esd.whs.mil/Portals/54/Documents/DD/forms/dd/dd1172-2.pdf"
+            },
+            {
+              "name": "RAPIDS Appointment Guide",
+              "file": "rapids_deers_sop.txt"
+            }
+          ],
+          "checklists": [
+            "Prerequisite: Certified State Birth Certificate with raised seal in hand",
+            "Prerequisite: Social Security Card or official SSA receipt",
+            "Sponsor & Spouse original government IDs (CAC / Military ID / Driver's License)",
+            "Marriage certificate (if not already verified in DEERS)",
+            "Execute DD Form 1172-2 signed by sponsor (or digitally pre-signed in ID Card Office Online)",
+            "Special POA in hand if sponsor is deployed/field training",
+            "Attend scheduled RAPIDS appointment at Waller Hall"
+          ],
+          "portals": [
+            {
+              "name": "DMDC RAPIDS Appointment Scheduler",
+              "url": "https://rapids-appointments.dmdc.osd.mil"
+            },
+            {
+              "name": "ID Card Office Online (Pre-sign DD 1172-2)",
+              "url": "https://www.dmdc.osd.mil/self_service"
+            }
+          ],
+          "notes": "Appointment locked for 2026-12-05 10:00. Waiting on physical certified birth certificate.",
+          "checklists_completed": [],
+          "last_updated": "2026-11-04T02:46:21.640Z"
+        },
+        {
+          "id": "B2",
+          "title": "TRICARE Prime Selection & Primary Care Manager (PCM) Assignment",
+          "category": "Healthcare Delivery",
+          "priority": "HIGH",
+          "status": "PENDING",
+          "timeframe": "Immediate post-DEERS (T+5 to T+60d)",
+          "sla": "Must complete before Day 90 grace expires",
+          "forms": [
+            "Beneficiary Web Enrollment (BWE) / DD Form 2876"
+          ],
+          "form_downloads": [
+            {
+              "name": "DD Form 2876 (TRICARE Prime Enrollment)",
+              "file": "dd-2876.pdf",
+              "official_url": "https://www.esd.whs.mil/Portals/54/Documents/DD/forms/dd/dd2876.pdf"
+            }
+          ],
+          "checklists": [
+            "Log in to milConnect Beneficiary Web Enrollment (BWE) 24h post-DEERS sync",
+            "Select TRICARE Prime option (no enrollment fee for active duty dependents)",
+            "Select PCM: Madigan AMC Pediatric Clinic / Dr. Sarah Vance",
+            "Confirm TRICARE enrollment letter generated and saved to records",
+            "Update clinic front desk with Aiden's dedicated DoD ID number"
+          ],
+          "portals": [
+            {
+              "name": "milConnect Beneficiary Web Enrollment",
+              "url": "https://milconnect.dmdc.osd.mil/milconnect/public/faq/Health_Care-Beneficiary_Web_Enrollment_(BWE)"
+            },
+            {
+              "name": "Humana Military Beneficiary Portal",
+              "url": "https://www.humanamilitary.com/beneficiary"
+            }
+          ],
+          "notes": "Action triggers immediately once DEERS enrollment completes."
+        },
+        {
+          "id": "B3",
+          "title": "SGLI / FSGLI Automatic Coverage Verification ($10,000 at Birth)",
+          "category": "Life Insurance",
+          "priority": "MEDIUM",
+          "status": "PENDING",
+          "timeframe": "T-0 to T+30d",
+          "sla": "Automatic under federal law (38 U.S.C. 1967)",
+          "forms": [
+            "SGLI Online Enrollment System (SOES) Record"
+          ],
+          "form_downloads": [],
+          "checklists": [
+            "Verify Family Servicemembers' Group Life Insurance (FSGLI) child coverage is active ($10,000 coverage automatic at zero cost to member)",
+            "Access milConnect > Life Insurance > SOES to view beneficiary ledger",
+            "Verify Aiden is listed as child dependent under sponsor's SGLI tree"
+          ],
+          "portals": [
+            {
+              "name": "milConnect SOES System",
+              "url": "https://milconnect.dmdc.osd.mil"
+            }
+          ],
+          "notes": "Automatic $10,000 FSGLI coverage verified via milConnect. Zero monthly premium.",
+          "last_updated": "2026-11-04T02:47:28.881Z"
+        },
+        {
+          "id": "B4",
+          "title": "DD Form 93 (Record of Emergency Data) & iPERMS Execution",
+          "category": "Military Personnel",
+          "priority": "HIGH",
+          "status": "IN_FLIGHT",
+          "timeframe": "T+7 to T+45d",
+          "sla": "Required within 30 days of dependent addition",
+          "forms": [
+            "DD Form 93 (Record of Emergency Data)"
+          ],
+          "form_downloads": [
+            {
+              "name": "DD Form 93 (Official DoD Form)",
+              "file": "dd-93.pdf",
+              "official_url": "https://www.esd.whs.mil/Portals/54/Documents/DD/forms/dd/dd0093.pdf"
+            }
+          ],
+          "checklists": [
+            "Initiate updated DD Form 93 in IPPS-A / S1 personnel portal",
+            "Add Aiden James Vane as primary family dependent and child beneficiary",
+            "Update unpaid pay and allowances allocation percentages",
+            "Digitally sign via CAC and confirm auto-ingestion into iPERMS repository"
+          ],
+          "portals": [
+            {
+              "name": "IPPS-A Self-Service Portal",
+              "url": "https://hr.ippsa.army.mil"
+            },
+            {
+              "name": "iPERMS Record Repository",
+              "url": "https://iperms.hrc.army.mil"
+            }
+          ],
+          "notes": "Draft DD-93 initiated in IPPS-A. Routing for signature once SSN card received."
+        },
+        {
+          "id": "B5",
+          "title": "IPPS-A Dependent Profile Verification & BAH Rate Audit",
+          "category": "Compensation & Pay",
+          "priority": "MEDIUM",
+          "status": "PENDING",
+          "timeframe": "T+14 to T+60d",
+          "sla": "Verify on following month's LES via myPay",
+          "forms": [
+            "DA Form 5960 (Authorization to Start, Stop, or Change BAH)"
+          ],
+          "form_downloads": [
+            {
+              "name": "DA Form 5960 Guidance",
+              "file": "da_5960_bah_guide.txt"
+            }
+          ],
+          "checklists": [
+            "Verify BAH with Dependents status reflects on active duty LES",
+            "Audit dependent list in IPPS-A to ensure birth date and dependent code match",
+            "Cross-verify with S1 PAC clerk for local housing allowance audit compliance"
+          ],
+          "portals": [
+            {
+              "name": "myPay DFAS Official Portal",
+              "url": "https://mypay.dfas.mil"
+            }
+          ],
+          "notes": "Sponsor already receives BAH with Dependents (married). Verification required in IPPS-A tree."
+        }
+      ]
+    },
+    "module_c": {
+      "id": "module_c",
+      "title": "Civil & Identity Hardening (T+14 to T+90 Days)",
+      "badge": "CIVIL & IDENTITY",
+      "tasks": [
+        {
+          "id": "C1",
+          "title": "Passport Pipeline: Form DS-11 (Tourist Blue-Book & No-Fee)",
+          "category": "Federal Identity",
+          "priority": "HIGH",
+          "status": "PENDING",
+          "timeframe": "T+14 to T+60d",
+          "sla": "4-6 weeks routine / 2-3 weeks expedited",
+          "forms": [
+            "Form DS-11 (Application for a U.S. Passport)"
+          ],
+          "form_downloads": [
+            {
+              "name": "Form DS-11 (State Dept Official)",
+              "file": "ds-11.pdf",
+              "official_url": "https://eforms.state.gov/Forms/ds11.pdf"
+            },
+            {
+              "name": "Infant Passport Preparation SOP",
+              "file": "passport_infant_sop.txt"
+            }
+          ],
+          "checklists": [
+            "Complete DS-11 online using State Dept Form Filler (do NOT sign until in front of agent)",
+            "Original State Certified Birth Certificate (submitted with application, mailed back later)",
+            "Both parents' valid government-issued photo IDs (Driver's license, CAC, passport) + front/back photocopies",
+            "One 2x2 inch infant compliant color photograph",
+            "Check or money order payable to 'U.S. Department of State' ($100 book fee + $35 execution fee)",
+            "Book in-person appointment at USPS Passport Acceptance Facility or County Clerk"
+          ],
+          "portals": [
+            {
+              "name": "USPS Passport Appointment Scheduler",
+              "url": "https://tools.usps.com/rcas.htm"
+            },
+            {
+              "name": "travel.state.gov Passport Requirements",
+              "url": "https://travel.state.gov/content/travel/en/passports/need-passport/under-16.html"
+            }
+          ],
+          "notes": "DS-11 pre-filled. Booking appointment window for late December once birth certificate arrives."
+        },
+        {
+          "id": "C2",
+          "title": "Infant Passport Photo Compliance Verification",
+          "category": "Federal Identity",
+          "priority": "MEDIUM",
+          "status": "PENDING",
+          "timeframe": "T+14 to T+30d",
+          "sla": "Must meet strict State Dept 2x2 photo specs",
+          "forms": [
+            "State Dept Infant Photo Compliance Guide"
+          ],
+          "form_downloads": [
+            {
+              "name": "Infant Photo Compliance Guide",
+              "file": "infant_photo_specs.txt"
+            }
+          ],
+          "checklists": [
+            "Backdrop: Plain white or off-white sheet with ZERO shadows or textures",
+            "Positioning: Lay infant flat on back on white sheet, camera shot from directly above",
+            "Expression: Eyes open looking toward camera, neutral mouth (gentle smiles permitted)",
+            "Zero Hands: No parent hands, fingers, props, pacifiers, hats, or headbands visible in frame",
+            "Dimensions: 2x2 inches (51x51 mm) with head height between 1 inch and 1 3/8 inches (25-35 mm)",
+            "Print on glossy or matte photo-quality paper at local print shop or CVS/Walgreens"
+          ],
+          "portals": [
+            {
+              "name": "State Dept Photo Examples",
+              "url": "https://travel.state.gov/content/travel/en/passports/how-apply/photos.html"
+            }
+          ],
+          "notes": "Compliance guide reviewed. Photo shoot planned for home lighting setup."
+        },
+        {
+          "id": "C3",
+          "title": "Notarized Form DS-3053 (Statement of Consent: Minor Passport)",
+          "category": "Legal Compliance",
+          "priority": "MEDIUM",
+          "status": "PENDING",
+          "timeframe": "T+14 to T+60d",
+          "sla": "Executed within 90 days of application submission",
+          "forms": [
+            "Form DS-3053 (Statement of Consent - Minor Under Age 16)"
+          ],
+          "form_downloads": [
+            {
+              "name": "Form DS-3053 (Official State Dept)",
+              "file": "ds-3053.pdf",
+              "official_url": "https://eforms.state.gov/Forms/ds3053.pdf"
+            }
+          ],
+          "checklists": [
+            "Required ONLY if one parent cannot appear in person at passport acceptance facility",
+            "Non-applying parent completes DS-3053 in black ink",
+            "Form signed and dated in physical presence of a licensed Notary Public",
+            "Clear front and back photocopy of non-applying parent's government ID attached",
+            "Must be submitted within 90 calendar days of notarization date"
+          ],
+          "portals": [
+            {
+              "name": "State Dept Special Parental Circumstances",
+              "url": "https://travel.state.gov/content/travel/en/passports/need-passport/under-16.html#consent"
+            }
+          ],
+          "notes": "Standby contingency if sponsor is on duty. Both parents currently available to attend together."
+        },
+        {
+          "id": "C4",
+          "title": "Nationwide Credit Bureau Child File Freeze - Equifax",
+          "category": "Credit Defense",
+          "priority": "HIGH",
+          "status": "PENDING",
+          "timeframe": "T+30 to T+90d",
+          "sla": "Processed within 3 business days of receipt",
+          "forms": [
+            "Equifax Minor Credit Freeze Request Packet"
+          ],
+          "form_downloads": [
+            {
+              "name": "Equifax Minor Freeze Packet Checklist",
+              "file": "equifax_minor_freeze.txt"
+            }
+          ],
+          "checklists": [
+            "Draft formal written request for minor credit freeze under Fair Credit Reporting Act (FCRA)",
+            "Include photocopy of minor certified birth certificate",
+            "Include photocopy of minor Social Security Card",
+            "Include photocopy of parent/guardian Driver's License and utility bill for address proof",
+            "Send via USPS Certified Mail with Return Receipt to: Equifax Information Services LLC, P.O. Box 105788, Atlanta, GA 30348",
+            "Log confirmation PIN / receipt in vault"
+          ],
+          "portals": [
+            {
+              "name": "Equifax Child Credit Freeze",
+              "url": "https://www.equifax.com/personal/education/credit/report/how-to-protect-your-child-from-credit-fraud/"
+            }
+          ],
+          "notes": "Prevents synthetic identity theft and unauthorized credit lines. Packet compiled."
+        },
+        {
+          "id": "C5",
+          "title": "Nationwide Credit Bureau Child File Freeze - Experian",
+          "category": "Credit Defense",
+          "priority": "HIGH",
+          "status": "PENDING",
+          "timeframe": "T+30 to T+90d",
+          "sla": "Processed within 3 business days of receipt",
+          "forms": [
+            "Experian Minor Status Freeze Request Form"
+          ],
+          "form_downloads": [
+            {
+              "name": "Experian Minor Freeze Packet Checklist",
+              "file": "experian_minor_freeze.txt"
+            }
+          ],
+          "checklists": [
+            "Complete Experian Minor Child Security Freeze Form",
+            "Attach copy of child's birth certificate & SSN card",
+            "Attach copy of parent's driver's license & proof of address",
+            "Send via Certified Mail to: Experian, P.O. Box 9554, Allen, TX 75013",
+            "Confirm freeze creation acknowledgement letter"
+          ],
+          "portals": [
+            {
+              "name": "Experian Minor Freeze Portal",
+              "url": "https://www.experian.com/freeze/center.html"
+            }
+          ],
+          "notes": "Packet compiled for mailing alongside Equifax."
+        },
+        {
+          "id": "C6",
+          "title": "Nationwide Credit Bureau Child File Freeze - TransUnion",
+          "category": "Credit Defense",
+          "priority": "HIGH",
+          "status": "PENDING",
+          "timeframe": "T+30 to T+90d",
+          "sla": "Processed within 3 business days of receipt",
+          "forms": [
+            "TransUnion Child Identity Protection Request"
+          ],
+          "form_downloads": [
+            {
+              "name": "TransUnion Minor Freeze Packet Checklist",
+              "file": "transunion_minor_freeze.txt"
+            }
+          ],
+          "checklists": [
+            "Complete TransUnion Child Identity Protection Form",
+            "Enclose birth certificate copy, SSN card copy, and parent identification",
+            "Mail to: TransUnion, P.O. Box 160, Woodlyn, PA 19094",
+            "Verify complete freeze confirmation"
+          ],
+          "portals": [
+            {
+              "name": "TransUnion Child Identity Center",
+              "url": "https://www.transunion.com/credit-freeze"
+            }
+          ],
+          "notes": "Completes triad of major national credit bureau file freezes."
+        },
+        {
+          "id": "C7",
+          "title": "ChexSystems Minor Consumer File Block",
+          "category": "Banking Defense",
+          "priority": "MEDIUM",
+          "status": "PENDING",
+          "timeframe": "T+45 to T+90d",
+          "sla": "Processed within 5 business days",
+          "forms": [
+            "ChexSystems Minor Security Freeze Application"
+          ],
+          "form_downloads": [
+            {
+              "name": "ChexSystems Minor Security Freeze Checklist",
+              "file": "chexsystems_minor_block.txt"
+            }
+          ],
+          "checklists": [
+            "Blocks fraudulent opening of checking or deposit accounts in minor's name",
+            "Submit online or mail form with proof of parentage (Birth Cert + SSN)",
+            "Retain confirmation certificate"
+          ],
+          "portals": [
+            {
+              "name": "ChexSystems Security Freeze",
+              "url": "https://www.chexsystems.com/security-freeze/place-freeze"
+            }
+          ],
+          "notes": "Blocks deposit account fraud across all U.S. financial institutions."
+        }
+      ]
+    },
+    "module_d": {
+      "id": "module_d",
+      "title": "Financial Architecture & Wealth Seeding",
+      "badge": "FINANCIAL WEALTH",
+      "tasks": [
+        {
+          "id": "D1",
+          "title": "IRS Child Tax Credit (CTC) & W-4 Withholding Adjustment via myPay",
+          "category": "Tax Optimization",
+          "priority": "HIGH",
+          "status": "IN_FLIGHT",
+          "timeframe": "T+7 to T+30d",
+          "sla": "Processed on following monthly pay cycle",
+          "forms": [
+            "IRS Form W-4 (Employee's Withholding Certificate)"
+          ],
+          "form_downloads": [
+            {
+              "name": "Form W-4 (IRS Official)",
+              "file": "w-4.pdf",
+              "official_url": "https://www.irs.gov/pub/irs-pdf/fw4.pdf"
+            }
+          ],
+          "checklists": [
+            "Log in to DFAS myPay portal > 'Federal Withholding' section",
+            "Update Step 3: Claim Dependents ($2,000 Child Tax Credit under age 17)",
+            "Evaluate monthly net paycheck increase vs annual tax refund preference",
+            "Verify updated withholding calculation on forthcoming LES"
+          ],
+          "portals": [
+            {
+              "name": "DFAS myPay Portal",
+              "url": "https://mypay.dfas.mil"
+            },
+            {
+              "name": "IRS Tax Withholding Estimator",
+              "url": "https://www.irs.gov/individuals/tax-withholding-estimator"
+            }
+          ],
+          "notes": "W-4 estimator run. Ready to submit via myPay once SSN officially issued."
+        },
+        {
+          "id": "D2",
+          "title": "Dependent Care Flexible Spending Account (DCFSA) QLE Enrollment",
+          "category": "Tax Advantage",
+          "priority": "HIGH",
+          "status": "PENDING",
+          "timeframe": "T-0 to T+60d (60-Day Window)",
+          "sla": "Must enroll within 60 calendar days of birth QLE",
+          "forms": [
+            "FSAFEDS Qualifying Life Event (QLE) Enrollment Form"
+          ],
+          "form_downloads": [
+            {
+              "name": "FSAFEDS QLE Guide",
+              "file": "fsafeds_qle_guide.txt"
+            }
+          ],
+          "checklists": [
+            "Qualifying Life Event: Birth of a child triggers 60-day special enrollment window",
+            "Enroll via FSAFEDS up to statutory maximum ($5,000/year pre-tax for dependent care/daycare)",
+            "Upload birth documentation or hospital proof within 30 days of application",
+            "Calculate effective payroll deduction spread across remaining pay periods"
+          ],
+          "portals": [
+            {
+              "name": "FSAFEDS Government Portal",
+              "url": "https://www.fsafeds.com"
+            }
+          ],
+          "notes": "60-day clock active. Eligible for up to $5k pre-tax childcare savings."
+        },
+        {
+          "id": "D3",
+          "title": "529 College Savings Plan Initiation & Automated Monthly Contributions",
+          "category": "Education Wealth",
+          "priority": "CRITICAL",
+          "status": "COMPLETE",
+          "timeframe": "T+14 to T+60d",
+          "sla": "Account active and seeded",
+          "plan_details": {
+            "plan_name": "Washington GET / Utah my529 High-Equity Portfolio",
+            "account_number": "529-WA-9921-AIDEN",
+            "initial_seed": 2500,
+            "monthly_dca": 500,
+            "asset_allocation": "100% Total Global Stock Market Index (Vanguard/Schwab low cost)"
+          },
+          "forms": [
+            "State 529 Plan Master Application",
+            "Electronic Funds Transfer (EFT) Mandate"
+          ],
+          "form_downloads": [],
+          "checklists": [
+            "Select low-expense direct-sold plan (e.g. WA GET/DreamAhead or Utah my529)",
+            "Designate Aiden James Vane as primary beneficiary",
+            "Establish recurring automated ACH bank draft ($500/month compounding engine)",
+            "Generate gifting link for grandparents and family contributions",
+            "SECURE 2.0 Act review: up to $35k unused 529 can roll to Roth IRA after 15 years"
+          ],
+          "portals": [
+            {
+              "name": "my529 Official Portal",
+              "url": "https://my529.org"
+            },
+            {
+              "name": "WA 529 College Savings",
+              "url": "https://wastate529.wa.gov"
+            }
+          ],
+          "notes": "529 Plan initiated and seeded ($2,500). Auto-DCA configured for $500/mo."
+        },
+        {
+          "id": "D4",
+          "title": "Custodial Brokerage Account (UTMA/UGMA) Seed Funding",
+          "category": "Generational Wealth",
+          "priority": "HIGH",
+          "status": "IN_FLIGHT",
+          "timeframe": "T+30 to T+90d",
+          "sla": "Account opened upon receipt of SSN",
+          "custodial_details": {
+            "brokerage": "Fidelity / Schwab Custodial",
+            "type": "Uniform Transfers to Minors Act (UTMA - Age 21)",
+            "target_allocation": "100% VTI / VOO (Broad US Equities)",
+            "initial_target_seed": 1000
+          },
+          "forms": [
+            "Fidelity/Schwab Custodial Account Agreement"
+          ],
+          "form_downloads": [],
+          "checklists": [
+            "Open UTMA custodial brokerage account with parent as designated custodian",
+            "Fund initial seed ($1,000) and set dividend reinvestment (DRIP)",
+            "Review IRS 'Kiddie Tax' unearned income exemptions (up to $1,300 tax-free / $1,300 at child rate)",
+            "Set annual family gift tracking threshold ($19,000/year per donor gift tax exclusion)"
+          ],
+          "portals": [
+            {
+              "name": "Fidelity Custodial Accounts",
+              "url": "https://www.fidelity.com/open-account/custodial-account"
+            }
+          ],
+          "notes": "Application drafted at brokerage. Ready to fund upon SSN card entry."
+        },
+        {
+          "id": "D5",
+          "title": "Early Credit Compounding Engine: Authorized User Calendar Milestone",
+          "category": "Credit Architecture",
+          "priority": "LOW",
+          "status": "LOCKED",
+          "timeframe": "Future Milestone (Age 13-16)",
+          "sla": "Automated schedule trigger locked until age threshold",
+          "forms": [
+            "Financial Institution Authorized User Request"
+          ],
+          "form_downloads": [],
+          "checklists": [
+            "Milestone Locked: Scheduled trigger for Aiden's 13th Birthday (Amex min age 13; Chase/Capital One zero min age)",
+            "Strategy: Add child as authorized user on parent's oldest, zero-balance, perfect payment history credit card",
+            "Result: Ingests 15+ years of flawless credit seasoning into child's credit file on 18th birthday, yielding 750+ initial FICO"
+          ],
+          "portals": [],
+          "notes": "Future locked milestone. Calendar telemetry trigger established for system records."
+        }
+      ]
+    },
+    "module_e": {
+      "id": "module_e",
+      "title": "Pediatric Clinical Schedule & Well-Child Tracker",
+      "badge": "CLINICAL & PEDIATRIC",
+      "vaccine_glidepath": [
+        {
+          "id": "VAC_01",
+          "stage": "Birth (Hospital Discharge)",
+          "vaccine": "Hepatitis B (HepB) Dose #1",
+          "description": "Protects against Hepatitis B virus infection of the liver. Standard first dose administered within 24 hours of birth.",
+          "target_date": "2026-11-15",
+          "administered_date": "2026-11-15",
+          "clinic": "Naval Hospital / Labor & Delivery Nursery",
+          "lot_number": "ENG-B-9941A",
+          "provider": "RN E. Miller",
+          "status": "COMPLETE"
+        },
+        {
+          "id": "VAC_02",
+          "stage": "1 Month",
+          "vaccine": "Hepatitis B (HepB) Dose #2",
+          "description": "Second dose in the standard HepB series. Administered between 1 and 2 months of age.",
+          "target_date": "2026-12-15",
+          "administered_date": null,
+          "clinic": "Madigan AMC Pediatric Clinic",
+          "lot_number": null,
+          "provider": "Pediatric Team",
+          "status": "SCHEDULED"
+        },
+        {
+          "id": "VAC_03",
+          "stage": "2 Months (Major Pediatric Sortie)",
+          "vaccine": "DTaP #1, IPV #1, Hib #1, PCV15/20 #1, Rotavirus (RV) #1",
+          "description": "Pentavalent / Hexavalent composite primary immunization: Diphtheria, Tetanus, Pertussis, Inactivated Poliovirus, Haemophilus influenzae type b, Pneumococcal Conjugate (PCV), Oral Rotavirus.",
+          "target_date": "2027-01-15",
+          "administered_date": null,
+          "clinic": "Madigan AMC Pediatric Clinic",
+          "lot_number": null,
+          "provider": "Dr. Sarah Vance, MD",
+          "status": "PENDING"
+        },
+        {
+          "id": "VAC_04",
+          "stage": "4 Months",
+          "vaccine": "DTaP #2, IPV #2, Hib #2, PCV #2, Rotavirus (RV) #2",
+          "description": "Second series boosters for DTaP, Polio, Hib, Pneumococcal, and Rotavirus.",
+          "target_date": "2027-03-15",
+          "administered_date": null,
+          "clinic": "Madigan AMC Pediatric Clinic",
+          "lot_number": null,
+          "provider": "Pediatric Team",
+          "status": "PENDING"
+        },
+        {
+          "id": "VAC_05",
+          "stage": "6 Months",
+          "vaccine": "DTaP #3, IPV #3, Hib #3, PCV #3, RV #3, HepB #3 + Seasonal Flu / COVID-19",
+          "description": "Third primary series completion, final infant Rotavirus and HepB booster, plus seasonal influenza and COVID-19 clearance.",
+          "target_date": "2027-05-15",
+          "administered_date": null,
+          "clinic": "Madigan AMC Pediatric Clinic",
+          "lot_number": null,
+          "provider": "Dr. Sarah Vance, MD",
+          "status": "PENDING"
+        }
+      ],
+      "growth_telemetry": {
+        "unit_mode": "imperial",
+        "measurements": [
+          {
+            "id": "GROWTH_0",
+            "date": "2026-11-15",
+            "age_days": 0,
+            "age_months": 0,
+            "weight_lbs": 7.8,
+            "length_in": 20.2,
+            "head_circ_in": 14.1,
+            "weight_percentile": 52,
+            "length_percentile": 68,
+            "head_percentile": 60,
+            "notes": "Birth measurements recorded at delivery. Strong APGAR scores (9/9)."
+          },
+          {
+            "id": "GROWTH_1",
+            "date": "2026-11-20",
+            "age_days": 5,
+            "age_months": 0.17,
+            "weight_lbs": 7.5,
+            "length_in": 20.2,
+            "head_circ_in": 14.2,
+            "weight_percentile": 47,
+            "length_percentile": 68,
+            "head_percentile": 63,
+            "notes": "Day 5 newborn check. Physiological weight drop (3.8%), well within 7-10% normal tolerance."
+          },
+          {
+            "id": "GROWTH_2",
+            "date": "2026-11-29",
+            "age_days": 14,
+            "age_months": 0.47,
+            "weight_lbs": 8.1,
+            "length_in": 20.6,
+            "head_circ_in": 14.4,
+            "weight_percentile": 55,
+            "length_percentile": 71,
+            "head_percentile": 65,
+            "notes": "2-week clinical sortie. Regained and exceeded birth weight. Vigorous feeding."
+          },
+          {
+            "id": "GROWTH_1793757808281",
+            "date": "2026-11-04",
+            "age_days": 0,
+            "age_months": 0,
+            "weight_lbs": 8.4,
+            "length_in": 20.9,
+            "head_circ_in": 14.6,
+            "weight_percentile": 61,
+            "length_percentile": 63,
+            "head_percentile": 59,
+            "notes": "Automated test vitals entry"
+          },
+          {
+            "id": "GROWTH_1793760900274",
+            "date": "2026-11-04",
+            "age_days": 0,
+            "age_months": 0,
+            "weight_lbs": 8.4,
+            "length_in": 20.9,
+            "head_circ_in": 14.6,
+            "weight_percentile": 61,
+            "length_percentile": 63,
+            "head_percentile": 59,
+            "notes": "Automated test vitals entry"
+          }
+        ],
+        "who_standards_boys_0_12m": {
+          "weight_kg": {
+            "0": {
+              "p3": 2.5,
+              "p15": 2.9,
+              "p50": 3.3,
+              "p85": 3.9,
+              "p97": 4.4
+            },
+            "1": {
+              "p3": 3.4,
+              "p15": 3.9,
+              "p50": 4.5,
+              "p85": 5.1,
+              "p97": 5.8
+            },
+            "2": {
+              "p3": 4.3,
+              "p15": 4.9,
+              "p50": 5.6,
+              "p85": 6.3,
+              "p97": 7.1
+            },
+            "3": {
+              "p3": 5,
+              "p15": 5.7,
+              "p50": 6.4,
+              "p85": 7.2,
+              "p97": 8
+            },
+            "4": {
+              "p3": 5.6,
+              "p15": 6.2,
+              "p50": 7,
+              "p85": 7.8,
+              "p97": 8.7
+            },
+            "6": {
+              "p3": 6.4,
+              "p15": 7.1,
+              "p50": 7.9,
+              "p85": 8.8,
+              "p97": 9.8
+            },
+            "9": {
+              "p3": 7.1,
+              "p15": 8,
+              "p50": 8.9,
+              "p85": 9.9,
+              "p97": 11
+            },
+            "12": {
+              "p3": 7.7,
+              "p15": 8.6,
+              "p50": 9.6,
+              "p85": 10.8,
+              "p97": 12
+            }
+          },
+          "length_cm": {
+            "0": {
+              "p3": 46.1,
+              "p15": 48,
+              "p50": 49.9,
+              "p85": 51.8,
+              "p97": 53.7
+            },
+            "1": {
+              "p3": 50.8,
+              "p15": 52.8,
+              "p50": 54.7,
+              "p85": 56.7,
+              "p97": 58.6
+            },
+            "2": {
+              "p3": 54.4,
+              "p15": 56.4,
+              "p50": 58.4,
+              "p85": 60.4,
+              "p97": 62.4
+            },
+            "3": {
+              "p3": 57.3,
+              "p15": 59.4,
+              "p50": 61.4,
+              "p85": 63.5,
+              "p97": 65.5
+            },
+            "4": {
+              "p3": 59.7,
+              "p15": 61.8,
+              "p50": 63.9,
+              "p85": 66,
+              "p97": 68
+            },
+            "6": {
+              "p3": 63.6,
+              "p15": 65.7,
+              "p50": 67.6,
+              "p85": 69.8,
+              "p97": 71.9
+            },
+            "9": {
+              "p3": 67.7,
+              "p15": 69.9,
+              "p50": 72,
+              "p85": 74.2,
+              "p97": 76.5
+            },
+            "12": {
+              "p3": 71,
+              "p15": 73.3,
+              "p50": 75.7,
+              "p85": 78.1,
+              "p97": 80.5
+            }
+          },
+          "head_circ_cm": {
+            "0": {
+              "p3": 32.1,
+              "p15": 33.3,
+              "p50": 34.5,
+              "p85": 35.7,
+              "p97": 36.9
+            },
+            "1": {
+              "p3": 35.1,
+              "p15": 36.3,
+              "p50": 37.3,
+              "p85": 38.6,
+              "p97": 39.8
+            },
+            "2": {
+              "p3": 36.9,
+              "p15": 38.1,
+              "p50": 39.1,
+              "p85": 40.5,
+              "p97": 41.7
+            },
+            "3": {
+              "p3": 38.3,
+              "p15": 39.5,
+              "p50": 40.5,
+              "p85": 41.9,
+              "p97": 43.1
+            },
+            "4": {
+              "p3": 39.4,
+              "p15": 40.6,
+              "p50": 41.6,
+              "p85": 43,
+              "p97": 44.2
+            },
+            "6": {
+              "p3": 41,
+              "p15": 42.2,
+              "p50": 43.3,
+              "p85": 44.7,
+              "p97": 45.9
+            },
+            "9": {
+              "p3": 42.6,
+              "p15": 43.8,
+              "p50": 45,
+              "p85": 46.4,
+              "p97": 47.6
+            },
+            "12": {
+              "p3": 43.6,
+              "p15": 44.9,
+              "p50": 46.1,
+              "p85": 47.5,
+              "p97": 48.9
+            }
+          }
+        }
+      },
+      "tummy_time_tracker": {
+        "daily_target_minutes": 25,
+        "today_completed_minutes": 35,
+        "total_lifetime_sessions": 14,
+        "history": [
+          {
+            "date": "2026-11-04",
+            "minutes": 10,
+            "notes": "Automated tummy test"
+          },
+          {
+            "date": "2026-11-04",
+            "minutes": 10,
+            "notes": "Automated tummy test"
+          },
+          {
+            "date": "2026-11-28",
+            "minutes": 20,
+            "notes": "Active head lifting, supported on parent chest."
+          },
+          {
+            "date": "2026-11-29",
+            "minutes": 22,
+            "notes": "Play mat session with high contrast black/white cards."
+          },
+          {
+            "date": "2026-11-30",
+            "minutes": 25,
+            "notes": "Target met. Good chin elevation and neck stability."
+          }
+        ]
+      },
+      "developmental_milestones": [
+        {
+          "id": "DEV_01",
+          "category": "Motor & Physical",
+          "title": "Lifts Head Briefly & Turns Face While on Tummy",
+          "target_age": "Birth - 1 Month",
+          "status": "ACHIEVED",
+          "date_achieved": "2026-11-22",
+          "notes": "Lifts chin off flat surface for 3-5 seconds and turns head side to side."
+        },
+        {
+          "id": "DEV_02",
+          "category": "Visual & Cognitive",
+          "title": "Visual Tracking of High-Contrast Objects (8-12 inches)",
+          "target_age": "1 - 2 Months",
+          "status": "IN_PROGRESS",
+          "date_achieved": null,
+          "notes": "Tracks black and white geometric flashcards across 90-degree field of view."
+        },
+        {
+          "id": "DEV_03",
+          "category": "Acoustic & Sensory",
+          "title": "Startle & Acoustic Orienting Response",
+          "target_age": "Birth - 1 Month",
+          "status": "ACHIEVED",
+          "date_achieved": "2026-11-17",
+          "notes": "Blinks or stills in response to sudden voices; calms to parent soothing voice."
+        },
+        {
+          "id": "DEV_04",
+          "category": "Social & Emotional",
+          "title": "Spontaneous & Responsive Social Smiling",
+          "target_age": "6 - 8 Weeks",
+          "status": "PENDING",
+          "date_achieved": null,
+          "notes": "Smiles in direct response to parent vocalization and eye contact."
+        },
+        {
+          "id": "DEV_05",
+          "category": "Motor & Physical",
+          "title": "Head Lifted to 45° - 90° with Forearm Support",
+          "target_age": "2 - 3 Months",
+          "status": "PENDING",
+          "date_achieved": null,
+          "notes": "Pushes up on forearms during tummy time with steady head control."
+        },
+        {
+          "id": "DEV_06",
+          "category": "Communication",
+          "title": "Vocal Babbling & Cooing Response (Ooh / Aah Sounds)",
+          "target_age": "2 - 3 Months",
+          "status": "PENDING",
+          "date_achieved": null,
+          "notes": "Produces vowel sounds and exchanges vocal turns with caregivers."
+        }
+      ]
+    }
+  },
+  "system_alerts": [
+    {
+      "id": "ALT-01",
+      "severity": "CRITICAL",
+      "code": "TRICARE-GRACE-ACTIVE",
+      "message": "TRICARE 90-Day Newborn Grace Window active. DEERS enrollment required to finalize Prime assignment.",
+      "timestamp": "2026-11-15T00:00:00Z"
+    },
+    {
+      "id": "ALT-02",
+      "severity": "WARNING",
+      "code": "RAPIDS-APPOINTMENT-STANDBY",
+      "message": "RAPIDS appointment booked for 2026-12-05. Verify physical certified birth certificate arrives prior to date.",
+      "timestamp": "2026-11-20T14:30:00Z"
+    },
+    {
+      "id": "ALT-03",
+      "severity": "INFO",
+      "code": "529-CONTRIBUTION-SCHEDULED",
+      "message": "529 College Savings auto-DCA active ($500/mo). Generational wealth compounding nominal.",
+      "timestamp": "2026-11-25T08:00:00Z"
+    }
+  ],
+  "audit_trail": [
+    {
+      "timestamp": "2026-11-15T08:00:00Z",
+      "action": "SYSTEM_INITIALIZE",
+      "actor": "ORCHESTRATOR",
+      "details": "Newborn Readiness & Milestone Command initialized for Baby Aiden."
+    },
+    {
+      "timestamp": "2026-11-15T12:00:00Z",
+      "action": "VACCINE_LOG",
+      "actor": "CLINICAL",
+      "details": "Hepatitis B Dose #1 recorded as COMPLETE."
+    },
+    {
+      "timestamp": "2026-11-18T16:00:00Z",
+      "action": "TASK_UPDATE",
+      "actor": "FINANCIAL",
+      "details": "529 Plan established and initial seed executed."
+    },
+    {
+      "timestamp": "2026-11-04T02:03:28.274Z",
+      "action": "TASK_STATUS_UPDATE",
+      "actor": "OPERATOR",
+      "details": "Task A1 (Hospital Administration Intake & Paternity Verification) updated to COMPLETE"
+    },
+    {
+      "timestamp": "2026-11-04T02:03:28.281Z",
+      "action": "GROWTH_MEASUREMENT_LOG",
+      "actor": "PEDIATRIC_TELEMETRY",
+      "details": "Added growth record: 8.4 lbs, 20.9 in, 14.6 in head circumference"
+    },
+    {
+      "timestamp": "2026-11-04T02:03:28.286Z",
+      "action": "TUMMY_TIME_LOG",
+      "actor": "CAREGIVER",
+      "details": "Logged 10 minutes of tummy time. Daily total: 25 min."
+    },
+    {
+      "timestamp": "2026-11-04T02:46:15.082Z",
+      "action": "TASK_STATUS_UPDATE",
+      "actor": "OPERATOR",
+      "details": "Task B1 (DEERS Enrollment & RAPIDS Appointment Engine) updated to IN_FLIGHT"
+    },
+    {
+      "timestamp": "2026-11-04T02:46:15.735Z",
+      "action": "TASK_STATUS_UPDATE",
+      "actor": "OPERATOR",
+      "details": "Task B1 (DEERS Enrollment & RAPIDS Appointment Engine) updated to IN_FLIGHT"
+    },
+    {
+      "timestamp": "2026-11-04T02:46:18.157Z",
+      "action": "TASK_STATUS_UPDATE",
+      "actor": "OPERATOR",
+      "details": "Task B1 (DEERS Enrollment & RAPIDS Appointment Engine) updated to IN_FLIGHT"
+    },
+    {
+      "timestamp": "2026-11-04T02:46:21.224Z",
+      "action": "TASK_STATUS_UPDATE",
+      "actor": "OPERATOR",
+      "details": "Task B1 (DEERS Enrollment & RAPIDS Appointment Engine) updated to IN_FLIGHT"
+    },
+    {
+      "timestamp": "2026-11-04T02:46:21.640Z",
+      "action": "TASK_STATUS_UPDATE",
+      "actor": "OPERATOR",
+      "details": "Task B1 (DEERS Enrollment & RAPIDS Appointment Engine) updated to IN_FLIGHT"
+    },
+    {
+      "timestamp": "2026-11-04T02:47:28.881Z",
+      "action": "TASK_STATUS_UPDATE",
+      "actor": "OPERATOR",
+      "details": "Task B3 (SGLI / FSGLI Automatic Coverage Verification ($10,000 at Birth)) updated to PENDING"
+    },
+    {
+      "timestamp": "2026-11-04T02:55:00.269Z",
+      "action": "TASK_STATUS_UPDATE",
+      "actor": "OPERATOR",
+      "details": "Task A1 (Hospital Administration Intake & Paternity Verification) updated to COMPLETE"
+    },
+    {
+      "timestamp": "2026-11-04T02:55:00.274Z",
+      "action": "GROWTH_MEASUREMENT_LOG",
+      "actor": "PEDIATRIC_TELEMETRY",
+      "details": "Added growth record: 8.4 lbs, 20.9 in, 14.6 in head circumference"
+    },
+    {
+      "timestamp": "2026-11-04T02:55:00.281Z",
+      "action": "TUMMY_TIME_LOG",
+      "actor": "CAREGIVER",
+      "details": "Logged 10 minutes of tummy time. Daily total: 35 min."
+    }
+  ],
+  "last_updated": "2026-11-04T02:55:00.281Z"
+}

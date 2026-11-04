@@ -314,7 +314,7 @@ export class DashboardManager {
       trip: localStorage.getItem('hub_url_trip') || 'https://daily-executive-dashboard.onrender.com/trip-planner/',
       mackie: localStorage.getItem('hub_url_mackie') || 'https://daily-executive-dashboard.onrender.com/mackie/',
       garage: sanitizeGarageUrl(),
-      aiden: localStorage.getItem('hub_url_aiden') || 'http://localhost:3012/'
+      aiden: sanitizeCloudUrl('hub_url_aiden', './dashboards/aiden/index.html')
     };
 
     this.statusMap = {
@@ -1337,6 +1337,11 @@ export class DashboardManager {
       if (!iframe.src.includes('v=35.0') || hasLocalhostMismatch) {
         iframe.src = targetUrl;
       }
+    } else if (deckId === 'aiden') {
+      const hasLocalhostOrPort = iframe.src.includes('localhost:3012') || iframe.src.includes(':3012');
+      if (hasLocalhostOrPort || !iframe.src.includes('/dashboards/aiden')) {
+        iframe.src = targetUrl;
+      }
     }
   }
 
@@ -1344,7 +1349,7 @@ export class DashboardManager {
     const iframe = document.getElementById(`iframe-${deckId}`);
     if (iframe) {
       sfx.playClick();
-      const targetUrl = this.urls[deckId] || (deckId === 'garage' ? './dashboards/garage/index.html?v=40.0' : '');
+      const targetUrl = this.urls[deckId] || (deckId === 'garage' ? './dashboards/garage/index.html?v=40.0' : deckId === 'aiden' ? './dashboards/aiden/index.html' : '');
       if (targetUrl) {
         iframe.src = targetUrl;
       }

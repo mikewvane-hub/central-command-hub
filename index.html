@@ -78,7 +78,7 @@
           <span class="tab-badge" data-status-badge="garage">BAY 01-02</span>
         </button>
 
-        <button class="nav-tab-btn" data-deck="aiden" title="Newborn Readiness &amp; Milestone Command // Baby Aiden Christopher">
+        <button class="nav-tab-btn" data-deck="aiden" title="Newborn Readiness &amp; Milestone Command // Baby Aiden James Vane">
           <span>👶 AIDEN</span>
           <span class="tab-badge" data-status-badge="aiden">ORBIT 07</span>
         </button>
@@ -364,7 +364,7 @@
                 <span class="status-beacon"></span> ONLINE
               </span>
               <strong>NEWBORN READINESS &amp; MILESTONE COMMAND // BABY AIDEN</strong>
-              <span class="subnav-url">localhost:3012</span>
+              <span class="subnav-url">./dashboards/aiden/</span>
             </div>
             <div class="subnav-actions">
               <button class="subnav-btn btn-toggle-glass" data-action="toggle-glass" title="Toggle Glass / Ghost Translucency to see Atomic Core behind">💎 Glass (82%)</button>
@@ -374,7 +374,7 @@
             </div>
           </div>
           <div class="dashboard-iframe-container">
-            <iframe id="iframe-aiden" class="dashboard-iframe" src="about:blank" data-src="http://localhost:3012/" title="Baby Aiden NRMC Dashboard" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+            <iframe id="iframe-aiden" class="dashboard-iframe" src="about:blank" data-src="./dashboards/aiden/index.html" title="Baby Aiden NRMC Dashboard" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
           </div>
         </div>
       </section>
@@ -710,7 +710,7 @@
 
           <label style="display:flex;flex-direction:column;gap:4px;">
             <span style="color:#06b6d4;">Baby Aiden // NRMC Command URL:</span>
-            <input type="text" id="setting-url-aiden" style="background:#030712;border:1px solid var(--border-cyan);color:#fff;padding:8px 12px;border-radius:6px;font-family:inherit;" placeholder="http://localhost:3012/" />
+            <input type="text" id="setting-url-aiden" style="background:#030712;border:1px solid var(--border-cyan);color:#fff;padding:8px 12px;border-radius:6px;font-family:inherit;" placeholder="./dashboards/aiden/index.html" />
           </label>
 
           <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:10px;">
@@ -840,6 +840,6 @@
   </div>
 
   <!-- Boot Module Script -->
-  <script type="module" src="js/app.js?v=42.0"></script>
+  <script type="module" src="js/app.js?v=43.0"></script>
 </body>
 </html>
