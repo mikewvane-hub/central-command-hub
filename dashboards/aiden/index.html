@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NRMC // NEWBORN READINESS & MILESTONE COMMAND (BABY AIDEN)</title>
+  <title>AIDEN JAMES VANE // READINESS & MILESTONE COMMAND</title>
   
   <!-- Antigravity HUD Typography Disciplines -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700;800&family=Orbitron:wght@600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet" />
 
   <!-- NRMC HUD Styling -->
-  <link rel="stylesheet" href="./css/nrmc-hud.css?v=2.5.1" />
+  <link rel="stylesheet" href="./css/nrmc-hud.css?v=2.6.0" />
 </head>
 <body>
   <div id="app-root">
@@ -28,7 +28,7 @@
         </div>
         <div class="brand-title-group">
           <h1>
-            NRMC // <span class="subject-callsign" id="baby-name-display">AIDEN JAMES VANE</span>
+            <span class="subject-callsign" id="baby-name-display">AIDEN JAMES VANE</span>
             <span class="status-indicator">
               <span class="status-pulse-dot"></span>
               <span style="font-size:0.75rem; font-family:var(--font-mono);">OPERATIONAL</span>
@@ -37,7 +37,9 @@
           <div class="brand-subtitle">
             <span id="baby-dob-display">DOB: 2026-11-15</span>
             <span>•</span>
-            <span id="military-station-display">O-3 / CPT | JBLM PACIFIC</span>
+            <span id="military-station-display" class="countdown-pill pill-cyan" style="font-weight:700;">RANK: PVT (E-1)</span>
+            <span>•</span>
+            <span id="rank-next-promo-display" style="color:var(--text-muted); font-size:0.75rem;">NEXT: PV2 AT 6 MOS</span>
             <span>•</span>
             <span id="ws-status-badge" class="countdown-pill pill-cyan">LIVE TELEMETRY</span>
           </div>
@@ -1126,14 +1128,14 @@
           </div>
         </div>
 
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px;">
-          <div>
-            <label style="display:block; font-family:var(--font-mono); font-size:0.75rem; color:var(--text-muted); margin-bottom:5px;">SPONSOR RANK & BRANCH</label>
-            <input type="text" id="cfg-sponsor-rank" style="width:100%; background:rgba(0,0,0,0.5); border:1px solid var(--border-subtle); color:var(--ghost-white); font-family:var(--font-ui); font-size:0.85rem; padding:8px 12px; border-radius:4px;" placeholder="O-3 / CPT | US ARMY" />
+        <!-- Aiden's Military Rank & Progression Progression -->
+        <div style="background:rgba(16,185,129,0.06); border:1px solid rgba(16,185,129,0.3); border-radius:6px; padding:12px 16px; margin-bottom:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <span style="font-family:var(--font-mono); font-size:0.75rem; color:#6ee7b7; font-weight:700;">🎖️ SERVICE GLIDEPATH (PVT → SFC → 2LT)</span>
+            <span id="cfg-rank-badge" class="countdown-pill pill-cyan">PVT / E-1</span>
           </div>
-          <div>
-            <label style="display:block; font-family:var(--font-mono); font-size:0.75rem; color:var(--text-muted); margin-bottom:5px;">DUTY STATION / COMMAND</label>
-            <input type="text" id="cfg-station" style="width:100%; background:rgba(0,0,0,0.5); border:1px solid var(--border-subtle); color:var(--ghost-white); font-family:var(--font-ui); font-size:0.85rem; padding:8px 12px; border-radius:4px;" placeholder="JBLM / Pacific Command" />
+          <div id="cfg-rank-summary" style="font-family:var(--font-mono); font-size:0.78rem; color:var(--ghost-white); line-height:1.4;">
+            Enlisted at Birth as PVT (E-1). Auto-advances across milestones to SFC (E-7), commissioning as 2LT Direct Commission at Age 18.
           </div>
         </div>
 
@@ -1177,6 +1179,6 @@
   <div id="toast-container" class="toast-container"></div>
 
   <!-- Application Bootstrap -->
-  <script type="module" src="./js/nrmc-app.js?v=2.5.1"></script>
+  <script type="module" src="./js/nrmc-app.js?v=2.6.0"></script>
 </body>
 </html>

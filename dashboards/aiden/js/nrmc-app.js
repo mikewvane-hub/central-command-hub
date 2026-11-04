@@ -641,15 +641,143 @@ class NrmcDashboardApp {
     container.innerHTML = html;
   }
 
+  // Aiden's Military Rank Progression Engine (PVT -> SFC -> 2LT Direct Commission at Age 18)
+  computeAidenRank(dobStr) {
+    if (!dobStr) dobStr = '2026-11-15';
+    const dob = new Date(dobStr + 'T00:00:00');
+    const now = new Date();
+
+    const diffMs = now - dob;
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    const ageMonths = diffMs / (1000 * 60 * 60 * 24 * 30.4375);
+    const ageYears = diffMs / (1000 * 60 * 60 * 24 * 365.25);
+
+    if (diffDays < 0) {
+      return {
+        code: 'PVT (CADET)',
+        grade: 'E-1 PENDING',
+        title: 'Private Candidate',
+        desc: 'Awaiting birth deployment. Sworn in as PVT (E-1) at birth.',
+        badgeClass: 'pill-cyan',
+        insignia: '🔰',
+        nextRank: 'PVT (E-1) at Birth',
+        isCommissioned: false
+      };
+    }
+
+    if (ageYears >= 18) {
+      return {
+        code: '2LT',
+        grade: 'O-1',
+        title: 'Second Lieutenant (Direct Commission)',
+        desc: 'Age 18 reached. Direct Commission executed.',
+        badgeClass: 'pill-emerald',
+        insignia: '🎖️',
+        nextRank: '1LT / O-2 via Promotion Board',
+        isCommissioned: true
+      };
+    } else if (ageYears >= 13) {
+      const daysUntil18 = Math.max(0, Math.ceil((new Date(dob.getFullYear() + 18, dob.getMonth(), dob.getDate()) - now) / (1000 * 60 * 60 * 24)));
+      return {
+        code: 'SFC',
+        grade: 'E-7',
+        title: 'Sergeant First Class',
+        desc: 'Platoon Sergeant tier. Direct Commission to 2LT at Age 18.',
+        badgeClass: 'pill-emerald',
+        insignia: '⭐⭐⭐',
+        nextRank: `2LT (O-1 Direct Commission) in ${daysUntil18}d (Age 18)`,
+        isCommissioned: false
+      };
+    } else if (ageYears >= 8) {
+      return {
+        code: 'SSG',
+        grade: 'E-6',
+        title: 'Staff Sergeant',
+        desc: 'Squad Leader tier. Advanced childhood milestone mastery.',
+        badgeClass: 'pill-emerald',
+        insignia: '⭐⭐',
+        nextRank: 'SFC (E-7) at Age 13',
+        isCommissioned: false
+      };
+    } else if (ageYears >= 4) {
+      return {
+        code: 'SGT',
+        grade: 'E-5',
+        title: 'Sergeant',
+        desc: 'NCO Core. Independent motor, speech, and tactical agility.',
+        badgeClass: 'pill-emerald',
+        insignia: '⭐',
+        nextRank: 'SSG (E-6) at Age 8',
+        isCommissioned: false
+      };
+    } else if (ageYears >= 2) {
+      return {
+        code: 'SPC',
+        grade: 'E-4',
+        title: 'Specialist',
+        desc: 'Specialist tier. Locomotion & communication operational readiness.',
+        badgeClass: 'pill-cyan',
+        insignia: '🦅',
+        nextRank: 'SGT (E-5) at Age 4',
+        isCommissioned: false
+      };
+    } else if (ageYears >= 1) {
+      return {
+        code: 'PFC',
+        grade: 'E-3',
+        title: 'Private First Class',
+        desc: 'PFC tier. 1-Year pediatric and physical glidepath mastered.',
+        badgeClass: 'pill-cyan',
+        insignia: '∧‿',
+        nextRank: 'SPC (E-4) at Age 2',
+        isCommissioned: false
+      };
+    } else if (ageMonths >= 6) {
+      return {
+        code: 'PV2',
+        grade: 'E-2',
+        title: 'Private E-2',
+        desc: 'First promotion. 6-Month pentavalent schedule completed.',
+        badgeClass: 'pill-cyan',
+        insignia: '∧',
+        nextRank: 'PFC (E-3) at 12 Months',
+        isCommissioned: false
+      };
+    } else {
+      // 0 to 6 months
+      const monthsLeft = Math.max(1, Math.round(6 - ageMonths));
+      return {
+        code: 'PVT',
+        grade: 'E-1',
+        title: 'Private',
+        desc: 'Active Newborn Sortie. First echelon recruit.',
+        badgeClass: 'pill-cyan',
+        insignia: '🎖️',
+        nextRank: `PV2 (E-2) at 6 Months (~${monthsLeft} mo)`,
+        isCommissioned: false
+      };
+    }
+  }
+
   renderHeaderAndProfile() {
     const profile = this.state.profile || {};
     const nameEl = document.getElementById('baby-name-display');
     const dobEl = document.getElementById('baby-dob-display');
-    const stationEl = document.getElementById('military-station-display');
+    const rankEl = document.getElementById('military-station-display');
+    const promoEl = document.getElementById('rank-next-promo-display');
 
     if (nameEl) nameEl.textContent = profile.baby_name || 'Aiden James Vane';
     if (dobEl) dobEl.textContent = `DOB: ${profile.dob || '2026-11-15'}`;
-    if (stationEl) stationEl.textContent = `${profile.sponsor_rank || 'O-3'} | ${profile.station || 'JBLM'}`;
+
+    const rankInfo = this.computeAidenRank(profile.dob);
+    if (rankEl) {
+      rankEl.textContent = `RANK: ${rankInfo.code} (${rankInfo.grade})`;
+      rankEl.className = `countdown-pill ${rankInfo.badgeClass}`;
+      rankEl.title = `${rankInfo.title}: ${rankInfo.desc}`;
+    }
+    if (promoEl) {
+      promoEl.textContent = `NEXT: ${rankInfo.nextRank}`;
+    }
   }
 
   // Master Readiness Ring Meter
@@ -2080,14 +2208,10 @@ class NrmcDashboardApp {
 
     const nameInput = document.getElementById('cfg-baby-name');
     const dobInput = document.getElementById('cfg-baby-dob');
-    const rankInput = document.getElementById('cfg-sponsor-rank');
-    const stationInput = document.getElementById('cfg-station');
     const rapidsInput = document.getElementById('cfg-rapids-date');
 
     if (nameInput) nameInput.value = profile.baby_name || 'Aiden James Vane';
     if (dobInput) dobInput.value = profile.dob || '2026-11-15';
-    if (rankInput) rankInput.value = profile.sponsor_rank || 'O-3 / CPT';
-    if (stationInput) stationInput.value = profile.station || 'JBLM / Pacific Command';
 
     if (rapidsInput && anchors.rapids_appointment?.scheduled_date) {
       const dateStr = anchors.rapids_appointment.scheduled_date.slice(0, 16);
@@ -2135,13 +2259,24 @@ class NrmcDashboardApp {
     // 2-month vaccine date
     const vaxDate = new Date(birthDate.getTime() + 60 * 24 * 60 * 60 * 1000);
     if (pPentavalent) pPentavalent.textContent = `${vaxDate.toISOString().split('T')[0]} (2-Month Pentavalent #1)`;
+
+    // Live Rank Calculation
+    const rankInfo = this.computeAidenRank(dobVal);
+    const rankBadge = document.getElementById('cfg-rank-badge');
+    const rankSummary = document.getElementById('cfg-rank-summary');
+
+    if (rankBadge) {
+      rankBadge.textContent = `${rankInfo.code} (${rankInfo.grade})`;
+      rankBadge.className = `countdown-pill ${rankInfo.badgeClass}`;
+    }
+    if (rankSummary) {
+      rankSummary.textContent = `${rankInfo.title}: ${rankInfo.desc} Next progression milestone: ${rankInfo.nextRank}.`;
+    }
   }
 
   async saveProfileConfiguration() {
     const nameVal = (document.getElementById('cfg-baby-name')?.value || '').trim() || 'Aiden James Vane';
     const dobVal = document.getElementById('cfg-baby-dob')?.value;
-    const rankVal = (document.getElementById('cfg-sponsor-rank')?.value || '').trim() || 'O-3 / CPT';
-    const stationVal = (document.getElementById('cfg-station')?.value || '').trim() || 'JBLM / Pacific Command';
     const rapidsVal = document.getElementById('cfg-rapids-date')?.value;
 
     if (!dobVal) {
@@ -2155,10 +2290,13 @@ class NrmcDashboardApp {
     if (!this.state.command_anchors.tricare_grace) this.state.command_anchors.tricare_grace = {};
     if (!this.state.command_anchors.rapids_appointment) this.state.command_anchors.rapids_appointment = {};
 
+    const rankInfo = this.computeAidenRank(dobVal);
     this.state.profile.baby_name = nameVal;
     this.state.profile.dob = dobVal;
-    this.state.profile.sponsor_rank = rankVal;
-    this.state.profile.station = stationVal;
+    this.state.profile.rank = rankInfo.code;
+    this.state.profile.pay_grade = rankInfo.grade;
+    delete this.state.profile.station;
+    delete this.state.profile.sponsor_rank;
 
     const birthDate = new Date(dobVal + 'T00:00:00');
     const tricareDeadline = new Date(birthDate.getTime() + 90 * 24 * 60 * 60 * 1000);
@@ -2175,7 +2313,7 @@ class NrmcDashboardApp {
       timestamp: new Date().toISOString(),
       action: 'PROFILE_RECALIBRATED',
       actor: 'OPERATOR',
-      details: `Updated profile: ${nameVal}, DOB: ${dobVal}, Station: ${stationVal}`
+      details: `Recalibrated profile: ${nameVal}, DOB: ${dobVal}, Rank: ${rankInfo.code} (${rankInfo.grade})`
     });
 
     // Persist to localStorage
@@ -2200,7 +2338,7 @@ class NrmcDashboardApp {
     this.closeProfileConfigModal();
     this.render();
     this.broadcastFleetTelemetry();
-    this.showToast(`Timeline successfully calibrated to DOB: ${dobVal}!`);
+    this.showToast(`Timeline calibrated to DOB: ${dobVal} | Rank: ${rankInfo.code} (${rankInfo.grade})!`);
   }
 
   // Toast Notification

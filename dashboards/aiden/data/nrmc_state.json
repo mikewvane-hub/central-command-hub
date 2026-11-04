@@ -9,9 +9,10 @@
     "hospital": "Naval Hospital / Regional Military Medical Center",
     "pediatrician": "Dr. Sarah Vance, MD, FAAP",
     "pcm_clinic": "Madigan AMC Pediatric Clinic",
-    "sponsor_rank": "O-3 / CPT",
-    "branch": "US ARMY",
-    "station": "JBLM / Pacific Command"
+    "rank": "PVT",
+    "pay_grade": "E-1",
+    "commission_target": "2LT Direct Commission at Age 18",
+    "branch": "US ARMY"
   },
   "command_anchors": {
     "tricare_grace": {
