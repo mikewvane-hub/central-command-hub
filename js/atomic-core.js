@@ -612,11 +612,11 @@ export class AtomicCoreVisualizer {
         shortTitle: 'EXECUTIVE',
         orbitTag: 'ORBIT 01',
         code: 'DAILY BRIEF',
-        orbitRadius: 5.2,
-        horizontalStretch: 1.48,
+        orbitRadius: 3.4,
+        horizontalStretch: 1.22,
         speed: 0.35,
         angle: 0.2,
-        inclination: { x: 0.32, y: 0.35, z: 0.15 },
+        inclination: { x: 0.28, y: 0.30, z: 0.14 },
         color: 0x00f0ff,
         glowHex: '#00f0ff',
         url: localStorage.getItem('hub_url_executive') || 'https://daily-executive-dashboard.onrender.com/',
@@ -628,11 +628,11 @@ export class AtomicCoreVisualizer {
         shortTitle: 'RENTAL OPS',
         orbitTag: 'ORBIT 02',
         code: 'WA RENTAL',
-        orbitRadius: 6.6,
-        horizontalStretch: 1.54,
+        orbitRadius: 4.3,
+        horizontalStretch: 1.24,
         speed: 0.30,
         angle: 2.1,
-        inclination: { x: -0.30, y: 0.70, z: -0.26 },
+        inclination: { x: -0.26, y: 0.52, z: -0.22 },
         color: 0x38bdf8,
         glowHex: '#38bdf8',
         url: resolveCloudUrl('hub_url_rental', './dashboards/rental/index.html'),
@@ -644,11 +644,11 @@ export class AtomicCoreVisualizer {
         shortTitle: 'WEALTH CONSOLE',
         orbitTag: 'ORBIT 03',
         code: 'WEALTH 24/7',
-        orbitRadius: 8.0,
-        horizontalStretch: 1.58,
+        orbitRadius: 5.2,
+        horizontalStretch: 1.26,
         speed: 0.25,
         angle: 4.4,
-        inclination: { x: 0.28, y: -0.60, z: 0.38 },
+        inclination: { x: 0.24, y: -0.44, z: 0.28 },
         color: 0x8b5cf6,
         glowHex: '#8b5cf6',
         url: resolveCloudUrl('hub_url_financial', './dashboards/financial/index.html'),
@@ -660,11 +660,11 @@ export class AtomicCoreVisualizer {
         shortTitle: 'BASECAMP',
         orbitTag: 'ORBIT 04',
         code: 'OVERLAND',
-        orbitRadius: 9.4,
-        horizontalStretch: 1.62,
+        orbitRadius: 6.1,
+        horizontalStretch: 1.28,
         speed: 0.20,
         angle: 3.2,
-        inclination: { x: -0.26, y: -0.36, z: 0.34 },
+        inclination: { x: -0.22, y: -0.28, z: 0.26 },
         color: 0x10b981,
         glowHex: '#10b981',
         url: localStorage.getItem('hub_url_trip') || 'https://daily-executive-dashboard.onrender.com/trip-planner/',
@@ -676,11 +676,11 @@ export class AtomicCoreVisualizer {
         shortTitle: "MACKIE'S BOARD",
         orbitTag: 'ORBIT 05',
         code: 'CALENDAR & MEALS',
-        orbitRadius: 10.8,
-        horizontalStretch: 1.66,
+        orbitRadius: 7.0,
+        horizontalStretch: 1.30,
         speed: 0.16,
         angle: 1.4,
-        inclination: { x: 0.30, y: -0.26, z: -0.32 },
+        inclination: { x: 0.24, y: -0.22, z: -0.25 },
         color: 0xf43f5e,
         glowHex: '#f43f5e',
         url: localStorage.getItem('hub_url_mackie') || 'https://daily-executive-dashboard.onrender.com/mackie/',
@@ -692,11 +692,11 @@ export class AtomicCoreVisualizer {
         shortTitle: 'GARAGE & FLEET',
         orbitTag: 'BAY 01-02',
         code: 'POWERTRAIN & TELEMETRY',
-        orbitRadius: 12.2,
-        horizontalStretch: 1.70,
+        orbitRadius: 7.9,
+        horizontalStretch: 1.32,
         speed: 0.13,
         angle: 5.6,
-        inclination: { x: -0.34, y: 0.42, z: -0.18 },
+        inclination: { x: -0.26, y: 0.32, z: -0.15 },
         color: 0xf59e0b,
         glowHex: '#f59e0b',
         url: resolveCloudUrl('hub_url_garage', './dashboards/garage/index.html?v=40.0'),
@@ -708,11 +708,11 @@ export class AtomicCoreVisualizer {
         shortTitle: 'BABY AIDEN',
         orbitTag: 'ORBIT 07',
         code: 'NRMC MILESTONES',
-        orbitRadius: 13.6,
-        horizontalStretch: 1.74,
+        orbitRadius: 8.8,
+        horizontalStretch: 1.34,
         speed: 0.11,
         angle: 0.8,
-        inclination: { x: 0.28, y: 0.44, z: -0.22 },
+        inclination: { x: 0.22, y: 0.34, z: -0.18 },
         color: 0x06b6d4,
         glowHex: '#06b6d4',
         url: resolveCloudUrl('hub_url_aiden', './dashboards/aiden/index.html'),
@@ -792,13 +792,17 @@ export class AtomicCoreVisualizer {
   }
 
   adjustCameraForAspect(aspect) {
-    if (aspect < 1.1) {
-      // Square or tall aspect ratio (Z Fold 8 Inner unfolded or mobile) - Zoom out to fit all orbits
-      this.camera.position.set(0, 0.8, 44.0);
-    } else {
-      // Laptop widescreen - Wider horizontal view taking up the horizontal room on screen
-      this.camera.position.set(0, 0.4, 27.5);
-    }
+    // Dynamically calculate camera Z distance so that the entire flight plan fits comfortably on screen
+    const requiredHalfWidth = 13.5;
+    const requiredHalfHeight = 10.0;
+    const fovRad = (this.camera.fov * Math.PI) / 360; // 22.5 deg in rad
+    const tanFov = Math.tan(fovRad);
+
+    const zFromHeight = requiredHalfHeight / tanFov;
+    const zFromWidth = requiredHalfWidth / (tanFov * Math.max(0.70, aspect));
+    const targetZ = Math.max(25.5, Math.max(zFromHeight, zFromWidth));
+
+    this.camera.position.set(0, 0.3, targetZ);
     this.camera.lookAt(0, 0, 0);
     this.applyViewOffset(true);
   }
@@ -807,15 +811,15 @@ export class AtomicCoreVisualizer {
     this.nucleusGroup = new THREE.Group();
 
     // Nucleus Core Cluster
-    const nucleonGeo = new THREE.SphereGeometry(0.35, 16, 16);
+    const nucleonGeo = new THREE.SphereGeometry(0.26, 16, 16);
     const cyanMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff });
     const violetMat = new THREE.MeshBasicMaterial({ color: 0xa855f7 });
     const whiteMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
 
     const nucleonPositions = [
-      [0, 0, 0], [0.35, 0.25, 0], [-0.3, 0.3, 0.2],
-      [0.2, -0.35, 0.2], [-0.3, -0.2, -0.25],
-      [0.1, 0.1, -0.4], [-0.2, 0.3, -0.3], [0.35, -0.1, -0.2]
+      [0, 0, 0], [0.26, 0.20, 0], [-0.22, 0.22, 0.15],
+      [0.16, -0.26, 0.15], [-0.22, -0.15, -0.20],
+      [0.08, 0.08, -0.30], [-0.15, 0.22, -0.22], [0.26, -0.08, -0.15]
     ];
 
     nucleonPositions.forEach((pos, idx) => {
@@ -826,7 +830,7 @@ export class AtomicCoreVisualizer {
     });
 
     // Plasma Halo Core Glow (Inner Shell)
-    const haloGeo = new THREE.SphereGeometry(1.25, 32, 32);
+    const haloGeo = new THREE.SphereGeometry(0.95, 32, 32);
     const haloMat = new THREE.MeshBasicMaterial({
       color: 0x00f0ff,
       transparent: true,
@@ -837,7 +841,7 @@ export class AtomicCoreVisualizer {
     this.nucleusGroup.add(haloMesh);
 
     // Energy Shield Pulsing Shell (Outer)
-    const outerHaloGeo = new THREE.IcosahedronGeometry(1.7, 2);
+    const outerHaloGeo = new THREE.IcosahedronGeometry(1.30, 2);
     const outerHaloMat = new THREE.MeshBasicMaterial({
       color: 0x8b5cf6,
       transparent: true,
@@ -1015,7 +1019,7 @@ export class AtomicCoreVisualizer {
 
     this.dashboards.forEach((dash) => {
       // 1. Orbital Ring Track (Smooth Ellipse / Ring stretched horizontally)
-      const ringGeo = new THREE.RingGeometry(dash.orbitRadius - 0.025, dash.orbitRadius + 0.025, 128);
+      const ringGeo = new THREE.RingGeometry(dash.orbitRadius - 0.02, dash.orbitRadius + 0.02, 128);
       const ringMat = new THREE.MeshBasicMaterial({
         color: dash.color,
         side: THREE.DoubleSide,
@@ -1024,7 +1028,7 @@ export class AtomicCoreVisualizer {
       });
       const ring = new THREE.Mesh(ringGeo, ringMat);
       ring.rotation.x = Math.PI / 2;
-      const stretchX = dash.horizontalStretch || 1.4;
+      const stretchX = dash.horizontalStretch || 1.3;
       ring.scale.set(stretchX, 1.0, 1.0);
 
       // Container for tilting the orbit
@@ -1046,6 +1050,8 @@ export class AtomicCoreVisualizer {
       });
       const electron = new THREE.Mesh(nodeGeo, electronMat);
       electron.userData = { dashboard: dash };
+      // Proportionately minimize 3D mesh scale to match minimized rings
+      electron.scale.set(0.65, 0.65, 0.65);
 
       // Outer glow halo matching the node shape
       const glowGeo = nodeGeo.clone();
@@ -1271,7 +1277,7 @@ export class AtomicCoreVisualizer {
         const dy = e.touches[0].clientY - e.touches[1].clientY;
         const currentDist = Math.hypot(dx, dy);
         const factor = initialPinchDist / Math.max(10, currentDist);
-        this.camera.position.z = Math.max(18.0, Math.min(55.0, initialZoomZ * factor));
+        this.camera.position.z = Math.max(22.0, Math.min(50.0, initialZoomZ * factor));
       }
     }, { passive: true });
 
@@ -1289,7 +1295,7 @@ export class AtomicCoreVisualizer {
       e.preventDefault();
       const zoomStep = e.deltaY * 0.015;
       const currentZ = this.camera.position.z;
-      this.camera.position.z = Math.max(18.0, Math.min(55.0, currentZ + zoomStep));
+      this.camera.position.z = Math.max(22.0, Math.min(50.0, currentZ + zoomStep));
     }, { passive: false });
 
     // Click on 3D Electron Meshes
@@ -1496,7 +1502,7 @@ export class AtomicCoreVisualizer {
       const speedMultiplier = isCanvasHovered ? 0.45 : 1.0;
       el.currentAngle += 0.016 * dash.speed * speedMultiplier * timeScale;
       
-      const stretchX = dash.horizontalStretch || 1.4;
+      const stretchX = dash.horizontalStretch || 1.3;
       const x = Math.cos(el.currentAngle) * (dash.orbitRadius * stretchX);
       const z = Math.sin(el.currentAngle) * dash.orbitRadius;
       el.mesh.position.set(x, 0, z);
@@ -1522,16 +1528,26 @@ export class AtomicCoreVisualizer {
         el.mesh.getWorldPosition(worldVec);
         worldVec.project(this.camera);
 
-        const screenX = (worldVec.x * 0.5 + 0.5) * width;
-        const screenY = (-(worldVec.y * 0.5) + 0.5) * height;
+        const rawScreenX = (worldVec.x * 0.5 + 0.5) * width;
+        const rawScreenY = (-(worldVec.y * 0.5) + 0.5) * height;
 
-        // If in front of camera
-        if (worldVec.z < 1.0 && screenX >= -80 && screenX <= width + 80 && screenY >= -80 && screenY <= height + 80) {
+        // Strict screen boundary flight margins: ensures all spheres/tiles remain 100% on-screen throughout entire flight plan
+        // 96px tile half-width is 48px; badges/index labels add margin -> 54px horizontal margin
+        // Top command bar is ~52px -> 64px top margin
+        // Bottom orbital status bar is ~45px -> 54px bottom margin
+        const marginX = 54;
+        const marginTop = 64;
+        const marginBottom = 54;
+
+        const screenX = Math.max(marginX, Math.min(width - marginX, rawScreenX));
+        const screenY = Math.max(marginTop, Math.min(height - marginBottom, rawScreenY));
+
+        // Keep 2D spheres visible and clamped within flight boundaries
+        if (worldVec.z < 1.0) {
           el.domElement.style.display = 'flex';
-          // Keep ALL 6 spheres at uniform scale; slightly expand if hovered
           const isHovered = isCanvasHovered || isSidebarHovered;
           const uniformScale = isHovered ? 1.08 : 1.0;
-          const depthOpacity = isHovered ? 1.0 : Math.max(0.68, Math.min(1.0, 1.02 - (worldVec.z * 0.22)));
+          const depthOpacity = isHovered ? 1.0 : Math.max(0.72, Math.min(1.0, 1.02 - (worldVec.z * 0.18)));
           const zIndex = isHovered ? 200 : Math.round((1.0 - worldVec.z) * 100);
 
           el.domElement.style.transform = `translate3d(${screenX}px, ${screenY}px, 0) translate(-50%, -50%) scale(${uniformScale})`;

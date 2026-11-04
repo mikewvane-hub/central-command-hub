@@ -3,16 +3,16 @@
  * Main Application Orchestrator
  */
 
-import { sfx } from './sound-effects.js?v=43.0';
-import { AtomicCoreVisualizer } from './atomic-core.js?v=43.0';
-import { DashboardManager } from './dashboard-manager.js?v=43.0';
-import { VoiceCommandEngine } from './voice-command.js?v=43.0';
-import { DeviceOptimizer } from './device-optimizer.js?v=43.0';
-import { renderQRCode } from './qr-generator.js?v=43.0';
-import { ExecutiveSidebarManager } from './executive-sidebar.js?v=43.0';
-import { telemetryBus } from './telemetry-bus.js?v=43.0';
-import { SentinelMaintenanceEngine } from './sentinel-maintenance.js?v=43.0';
-import { SentinelWidget } from './sentinel-widget.js?v=43.0';
+import { sfx } from './sound-effects.js?v=44.0';
+import { AtomicCoreVisualizer } from './atomic-core.js?v=44.0';
+import { DashboardManager } from './dashboard-manager.js?v=44.0';
+import { VoiceCommandEngine } from './voice-command.js?v=44.0';
+import { DeviceOptimizer } from './device-optimizer.js?v=44.0';
+import { renderQRCode } from './qr-generator.js?v=44.0';
+import { ExecutiveSidebarManager } from './executive-sidebar.js?v=44.0';
+import { telemetryBus } from './telemetry-bus.js?v=44.0';
+import { SentinelMaintenanceEngine } from './sentinel-maintenance.js?v=44.0';
+import { SentinelWidget } from './sentinel-widget.js?v=44.0';
 
 class CentralCommandHubApp {
   constructor() {

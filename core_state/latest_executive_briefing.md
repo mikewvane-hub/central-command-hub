@@ -1,10 +1,10 @@
 # EXECUTIVE WEEKLY BRIEFING // WEEK OF NOVEMBER 04 – NOVEMBER 11, 2026
-*Generated on Wednesday, November 04, 2026 at 03:54 UTC | Cadence: Sunday 18:00*
+*Generated on Wednesday, November 04, 2026 at 13:11 UTC | Cadence: Sunday 18:00*
 
 ---
 
 ## 📌 Executive Highlights
-- FAMILY: User Birthday (29 Mar 1993, in 146d), Wife Birthday (23 Apr 1996, in 171d), Anniversary (23 Sep).
+- FAMILY: User Birthday (29 Mar 1993, in 145d), Wife Birthday (23 Apr 1996, in 170d), Anniversary (23 Sep).
 - PROPERTY: Sierra Pines cash flow at +$1,120/mo Net ($3,030 Gross). Priority ticket: 'Perimeter Fence Wash & Gate Warranty Inspection'.
 - ATHLETIC: Readiness Score 61/100. HRV at 46 ms (BELOW_TARGET). Directive: ⚠️ HRV at 46 ms (Target: 65 ms). Autonomic nervous system fatigued. Throttle training to Zone 2 Active Recovery..
 - FLEET: Colorado ZR2 oil life at 18% (service due); 2022 Nissan Murano TN registration current through May 2027.
@@ -19,9 +19,9 @@
 | **Fleet** | 2021 Chevy Colorado ZR2 maintenance/registration action due. |
 
 **Core Family Milestones:**
-- **User Birthday:** 29 Mar 1993 (146 days remaining)
-- **Wife's Birthday:** 23 Apr 1996 (171 days remaining)
-- **Wedding Anniversary:** September 23 (324 days remaining)
+- **User Birthday:** 29 Mar 1993 (145 days remaining)
+- **Wife's Birthday:** 23 Apr 1996 (170 days remaining)
+- **Wedding Anniversary:** September 23 (323 days remaining)
 
 ---
 

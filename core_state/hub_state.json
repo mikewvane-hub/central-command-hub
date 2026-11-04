@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": "1.0.0-UNIFIED",
-    "last_updated": "2026-11-04T03:54:52.865425+00:00",
+    "last_updated": "2026-11-04T13:11:31.762407+00:00",
     "timezone": "America/New_York",
     "status": "ONLINE"
   },
@@ -232,7 +232,7 @@
       "statute_or_category": "Athletic Readiness",
       "due_date": "2026-11-04",
       "action_url": "health",
-      "created_at": "2026-11-04T03:54:52.575060+00:00",
+      "created_at": "2026-11-04T13:11:31.664259+00:00",
       "acknowledged": false,
       "dismissed": false
     },
@@ -274,7 +274,7 @@
       "statute_or_category": "Preventive Maintenance",
       "due_date": "2026-11-18",
       "action_url": "fleet",
-      "created_at": "2026-11-04T03:54:52.575060+00:00",
+      "created_at": "2026-11-04T13:11:31.664259+00:00",
       "acknowledged": false,
       "dismissed": false
     },
@@ -288,25 +288,25 @@
       "statute_or_category": "Q4 Statutory Maintenance",
       "due_date": "2026-12-31",
       "action_url": "rental",
-      "created_at": "2026-11-04T03:54:52.599883+00:00",
+      "created_at": "2026-11-04T13:11:31.678366+00:00",
       "acknowledged": false,
       "dismissed": false
     }
   ],
   "executive_briefing": {
     "cadence": "SUNDAY_1800_EXECUTIVE_BRIEFING",
-    "generated_at": "2026-11-04T03:54:52.574061+00:00",
+    "generated_at": "2026-11-04T13:11:31.663245+00:00",
     "week_label": "Week of November 04 \u2013 November 11, 2026",
     "cadence_window": "Week of November 04 \u2013 November 11, 2026",
     "summary": "Executive briefing for Week of November 04 \u2013 November 11, 2026 integrating Family Milestones, Property Cash Flow, Athletic Readiness, and Fleet Telemetry.",
     "highlights": [
-      "FAMILY: User Birthday (29 Mar 1993, in 146d), Wife Birthday (23 Apr 1996, in 171d), Anniversary (23 Sep).",
+      "FAMILY: User Birthday (29 Mar 1993, in 145d), Wife Birthday (23 Apr 1996, in 170d), Anniversary (23 Sep).",
       "PROPERTY: Sierra Pines cash flow at +$1,120/mo Net ($3,030 Gross). Priority ticket: 'Perimeter Fence Wash & Gate Warranty Inspection'.",
       "ATHLETIC: Readiness Score 61/100. HRV at 46 ms (BELOW_TARGET). Directive: \u26a0\ufe0f HRV at 46 ms (Target: 65 ms). Autonomic nervous system fatigued. Throttle training to Zone 2 Active Recovery..",
       "FLEET: Colorado ZR2 oil life at 18% (service due); 2022 Nissan Murano TN registration current through May 2027."
     ],
     "executive_highlights": [
-      "FAMILY: User Birthday (29 Mar 1993, in 146d), Wife Birthday (23 Apr 1996, in 171d), Anniversary (23 Sep).",
+      "FAMILY: User Birthday (29 Mar 1993, in 145d), Wife Birthday (23 Apr 1996, in 170d), Anniversary (23 Sep).",
       "PROPERTY: Sierra Pines cash flow at +$1,120/mo Net ($3,030 Gross). Priority ticket: 'Perimeter Fence Wash & Gate Warranty Inspection'.",
       "ATHLETIC: Readiness Score 61/100. HRV at 46 ms (BELOW_TARGET). Directive: \u26a0\ufe0f HRV at 46 ms (Target: 65 ms). Autonomic nervous system fatigued. Throttle training to Zone 2 Active Recovery..",
       "FLEET: Colorado ZR2 oil life at 18% (service due); 2022 Nissan Murano TN registration current through May 2027."
@@ -333,19 +333,19 @@
         {
           "event": "User Birthday (29 Mar 1993)",
           "date": "March 29",
-          "days_until": 146,
+          "days_until": 145,
           "age_turning": 34
         },
         {
           "event": "Wife's Birthday (23 Apr 1996)",
           "date": "April 23",
-          "days_until": 171,
+          "days_until": 170,
           "age_turning": 31
         },
         {
           "event": "Wedding Anniversary (23 Sep)",
           "date": "September 23",
-          "days_until": 324
+          "days_until": 323
         }
       ]
     },
@@ -833,7 +833,8 @@
     }
   ],
   "denied_diagnostics": [
-    "diag-002"
+    "diag-002",
+    "diag-003"
   ],
   "dismissed_alerts": []
 }
