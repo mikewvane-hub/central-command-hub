@@ -1222,6 +1222,36 @@ class NrmcDashboardApp {
       configBtn.addEventListener('click', () => this.openProfileConfigModal());
     }
 
+    const configCloseBtn = document.getElementById('profile-config-close-btn');
+    if (configCloseBtn) {
+      configCloseBtn.addEventListener('click', () => this.closeProfileConfigModal());
+    }
+
+    const configCancelBtn = document.getElementById('profile-config-cancel-btn');
+    if (configCancelBtn) {
+      configCancelBtn.addEventListener('click', () => this.closeProfileConfigModal());
+    }
+
+    const configApplyBtn = document.getElementById('profile-config-apply-btn');
+    if (configApplyBtn) {
+      configApplyBtn.addEventListener('click', () => this.saveProfileConfiguration());
+    }
+
+    const cfgDobInput = document.getElementById('cfg-baby-dob');
+    if (cfgDobInput) {
+      cfgDobInput.addEventListener('input', () => this.previewRecalculation());
+    }
+
+    // Close modals on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        this.closeActionModal();
+        this.closeProfileConfigModal();
+        const opsecModal = document.getElementById('opsec-warning-modal');
+        if (opsecModal) opsecModal.classList.remove('active');
+      }
+    });
+
     // Modal Quick Upload Button -> Link to Document Vault
     const quickUploadBtn = document.getElementById('modal-quick-upload-btn');
     if (quickUploadBtn) {
@@ -2042,24 +2072,135 @@ class NrmcDashboardApp {
 
   // Profile Configurator Modal
   openProfileConfigModal() {
-    const currentDob = this.state.profile?.dob || '2026-11-15';
-    const newDob = prompt('Enter Date of Birth / Expected Delivery (YYYY-MM-DD):', currentDob);
-    if (!newDob || newDob === currentDob) return;
+    const modal = document.getElementById('profile-config-modal');
+    if (!modal) return;
 
-    this.state.profile.dob = newDob;
-    const birthDate = new Date(newDob);
-    const deadline = new Date(birthDate.getTime() + 90 * 24 * 60 * 60 * 1000);
-    this.state.command_anchors.tricare_grace.start_date = newDob;
-    this.state.command_anchors.tricare_grace.deadline = deadline.toISOString().split('T')[0];
+    const profile = this.state?.profile || {};
+    const anchors = this.state?.command_anchors || {};
 
-    this.render();
-    this.showToast(`Timeline calibrated to DOB: ${newDob}`);
+    const nameInput = document.getElementById('cfg-baby-name');
+    const dobInput = document.getElementById('cfg-baby-dob');
+    const rankInput = document.getElementById('cfg-sponsor-rank');
+    const stationInput = document.getElementById('cfg-station');
+    const rapidsInput = document.getElementById('cfg-rapids-date');
 
-    fetch(this.apiUrl('/api/v1/nrmc/profile'), {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ dob: newDob })
+    if (nameInput) nameInput.value = profile.baby_name || 'Aiden James Vane';
+    if (dobInput) dobInput.value = profile.dob || '2026-11-15';
+    if (rankInput) rankInput.value = profile.sponsor_rank || 'O-3 / CPT';
+    if (stationInput) stationInput.value = profile.station || 'JBLM / Pacific Command';
+
+    if (rapidsInput && anchors.rapids_appointment?.scheduled_date) {
+      const dateStr = anchors.rapids_appointment.scheduled_date.slice(0, 16);
+      rapidsInput.value = dateStr;
+    }
+
+    this.previewRecalculation();
+    modal.classList.add('active');
+  }
+
+  closeProfileConfigModal() {
+    const modal = document.getElementById('profile-config-modal');
+    if (modal) modal.classList.remove('active');
+  }
+
+  previewRecalculation() {
+    const dobVal = document.getElementById('cfg-baby-dob')?.value;
+    if (!dobVal) return;
+
+    const birthDate = new Date(dobVal + 'T00:00:00');
+    if (isNaN(birthDate.getTime())) return;
+
+    // 90 days TRICARE deadline
+    const tricareDeadline = new Date(birthDate.getTime() + 90 * 24 * 60 * 60 * 1000);
+    const deadlineStr = tricareDeadline.toISOString().split('T')[0];
+
+    const now = new Date();
+    const diffDays = Math.round((birthDate - now) / (1000 * 60 * 60 * 24));
+    let statusStr = '';
+    if (diffDays > 0) {
+      statusStr = `T-${diffDays} Days until expected delivery`;
+    } else if (diffDays === 0) {
+      statusStr = `T-0 Delivery Sortie Day!`;
+    } else {
+      statusStr = `T+${Math.abs(diffDays)} Days Post-Birth`;
+    }
+
+    const pTricare = document.getElementById('cfg-preview-tricare');
+    const pDelta = document.getElementById('cfg-preview-delta');
+    const pPentavalent = document.getElementById('cfg-preview-pentavalent');
+
+    if (pTricare) pTricare.textContent = `${deadlineStr} (90-day grace expiration)`;
+    if (pDelta) pDelta.textContent = statusStr;
+
+    // 2-month vaccine date
+    const vaxDate = new Date(birthDate.getTime() + 60 * 24 * 60 * 60 * 1000);
+    if (pPentavalent) pPentavalent.textContent = `${vaxDate.toISOString().split('T')[0]} (2-Month Pentavalent #1)`;
+  }
+
+  async saveProfileConfiguration() {
+    const nameVal = (document.getElementById('cfg-baby-name')?.value || '').trim() || 'Aiden James Vane';
+    const dobVal = document.getElementById('cfg-baby-dob')?.value;
+    const rankVal = (document.getElementById('cfg-sponsor-rank')?.value || '').trim() || 'O-3 / CPT';
+    const stationVal = (document.getElementById('cfg-station')?.value || '').trim() || 'JBLM / Pacific Command';
+    const rapidsVal = document.getElementById('cfg-rapids-date')?.value;
+
+    if (!dobVal) {
+      this.showToast('Please specify a valid Date of Birth / Delivery Date', 'error');
+      return;
+    }
+
+    if (!this.state) this.state = {};
+    if (!this.state.profile) this.state.profile = {};
+    if (!this.state.command_anchors) this.state.command_anchors = {};
+    if (!this.state.command_anchors.tricare_grace) this.state.command_anchors.tricare_grace = {};
+    if (!this.state.command_anchors.rapids_appointment) this.state.command_anchors.rapids_appointment = {};
+
+    this.state.profile.baby_name = nameVal;
+    this.state.profile.dob = dobVal;
+    this.state.profile.sponsor_rank = rankVal;
+    this.state.profile.station = stationVal;
+
+    const birthDate = new Date(dobVal + 'T00:00:00');
+    const tricareDeadline = new Date(birthDate.getTime() + 90 * 24 * 60 * 60 * 1000);
+    this.state.command_anchors.tricare_grace.start_date = dobVal;
+    this.state.command_anchors.tricare_grace.deadline = tricareDeadline.toISOString().split('T')[0];
+
+    if (rapidsVal) {
+      this.state.command_anchors.rapids_appointment.scheduled_date = rapidsVal;
+    }
+
+    // Update audit trail
+    if (!Array.isArray(this.state.audit_trail)) this.state.audit_trail = [];
+    this.state.audit_trail.push({
+      timestamp: new Date().toISOString(),
+      action: 'PROFILE_RECALIBRATED',
+      actor: 'OPERATOR',
+      details: `Updated profile: ${nameVal}, DOB: ${dobVal}, Station: ${stationVal}`
     });
+
+    // Persist to localStorage
+    localStorage.setItem('nrmc_cached_state', JSON.stringify(this.state));
+
+    // Sync to server if backend is online
+    try {
+      await fetch(this.apiUrl('/api/v1/nrmc/profile'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          baby_name: nameVal,
+          dob: dobVal,
+          rapids_date: rapidsVal
+        })
+      });
+    } catch (e) {
+      // Local mode
+    }
+
+    this.playTacticalFeedback('seal');
+    this.closeProfileConfigModal();
+    this.render();
+    this.broadcastFleetTelemetry();
+    this.showToast(`Timeline successfully calibrated to DOB: ${dobVal}!`);
   }
 
   // Toast Notification

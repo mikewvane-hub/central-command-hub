@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700;800&family=Orbitron:wght@600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet" />
 
   <!-- NRMC HUD Styling -->
-  <link rel="stylesheet" href="./css/nrmc-hud.css?v=2.5.0" />
+  <link rel="stylesheet" href="./css/nrmc-hud.css?v=2.5.1" />
 </head>
 <body>
   <div id="app-root">
@@ -1098,10 +1098,85 @@
     </div>
   </div>
 
+  <!-- =================================================================== -->
+  <!-- PROFILE & TIMELINE CALIBRATION MODAL (DOB / CONFIG)                  -->
+  <!-- =================================================================== -->
+  <div id="profile-config-modal" class="hud-modal-backdrop">
+    <div class="hud-modal-window" style="max-width:580px; border-color:var(--cyan-telemetry); box-shadow:0 0 35px rgba(0,229,255,0.25);">
+      <div class="hud-modal-header" style="border-bottom-color:var(--border-cyan);">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="font-size:1.3rem;">⚙️</span>
+          <span style="font-family:var(--font-display); font-size:1.05rem; font-weight:800; color:var(--ghost-white); letter-spacing:0.06em;">TIMELINE CALIBRATION // PROFILE CONFIG</span>
+        </div>
+        <button id="profile-config-close-btn" class="hud-modal-close-btn">&times;</button>
+      </div>
+      <div class="hud-modal-body" style="padding:22px;">
+        <p style="font-size:0.82rem; color:var(--text-muted); line-height:1.5; margin-bottom:12px;">
+          Calibrating Date of Birth (DOB) dynamically recalculates the entire chronological mission glidepath, including the TRICARE 90-day grace expiration, RAPIDS schedule milestones, and CDC vaccine sorties.
+        </p>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px;">
+          <div>
+            <label style="display:block; font-family:var(--font-mono); font-size:0.75rem; color:var(--cyan-telemetry); margin-bottom:5px;">BABY FULL NAME</label>
+            <input type="text" id="cfg-baby-name" style="width:100%; background:rgba(0,0,0,0.5); border:1px solid var(--border-cyan); color:var(--ghost-white); font-family:var(--font-ui); font-size:0.85rem; padding:8px 12px; border-radius:4px;" value="Aiden James Vane" />
+          </div>
+          <div>
+            <label style="display:block; font-family:var(--font-mono); font-size:0.75rem; color:var(--cyan-telemetry); margin-bottom:5px;">DATE OF BIRTH / EXPECTED DELIVERY</label>
+            <input type="date" id="cfg-baby-dob" style="width:100%; background:rgba(0,0,0,0.5); border:1px solid var(--border-cyan); color:var(--ghost-white); font-family:var(--font-mono); font-size:0.85rem; padding:8px 12px; border-radius:4px;" value="2026-11-15" />
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px;">
+          <div>
+            <label style="display:block; font-family:var(--font-mono); font-size:0.75rem; color:var(--text-muted); margin-bottom:5px;">SPONSOR RANK & BRANCH</label>
+            <input type="text" id="cfg-sponsor-rank" style="width:100%; background:rgba(0,0,0,0.5); border:1px solid var(--border-subtle); color:var(--ghost-white); font-family:var(--font-ui); font-size:0.85rem; padding:8px 12px; border-radius:4px;" placeholder="O-3 / CPT | US ARMY" />
+          </div>
+          <div>
+            <label style="display:block; font-family:var(--font-mono); font-size:0.75rem; color:var(--text-muted); margin-bottom:5px;">DUTY STATION / COMMAND</label>
+            <input type="text" id="cfg-station" style="width:100%; background:rgba(0,0,0,0.5); border:1px solid var(--border-subtle); color:var(--ghost-white); font-family:var(--font-ui); font-size:0.85rem; padding:8px 12px; border-radius:4px;" placeholder="JBLM / Pacific Command" />
+          </div>
+        </div>
+
+        <div style="margin-bottom:18px;">
+          <label style="display:block; font-family:var(--font-mono); font-size:0.75rem; color:var(--text-muted); margin-bottom:5px;">RAPIDS / DEERS APPOINTMENT DATE</label>
+          <input type="datetime-local" id="cfg-rapids-date" style="width:100%; background:rgba(0,0,0,0.5); border:1px solid var(--border-subtle); color:var(--ghost-white); font-family:var(--font-mono); font-size:0.85rem; padding:8px 12px; border-radius:4px;" />
+        </div>
+
+        <!-- Live Calculation Telemetry Box -->
+        <div style="background:rgba(0,229,255,0.06); border:1px solid rgba(0,229,255,0.25); border-radius:6px; padding:12px 16px; margin-bottom:18px;">
+          <div style="font-family:var(--font-mono); font-size:0.72rem; color:var(--cyan-telemetry); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:8px;">Live Recalculated Milestones</div>
+          <div style="display:flex; flex-direction:column; gap:6px; font-family:var(--font-mono); font-size:0.78rem;">
+            <div style="display:flex; justify-content:space-between;">
+              <span style="color:var(--text-muted);">Current Sortie Status:</span>
+              <span id="cfg-preview-delta" style="color:var(--ghost-white); font-weight:700;">T-12 Days</span>
+            </div>
+            <div style="display:flex; justify-content:space-between;">
+              <span style="color:var(--text-muted);">TRICARE 90-Day Grace Expiration:</span>
+              <span id="cfg-preview-tricare" style="color:var(--amber-warning); font-weight:700;">2027-02-13</span>
+            </div>
+            <div style="display:flex; justify-content:space-between;">
+              <span style="color:var(--text-muted);">2-Month Pentavalent #1 Sortie:</span>
+              <span id="cfg-preview-pentavalent" style="color:#6ee7b7; font-weight:700;">2027-01-14</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:10px;">
+          <button id="profile-config-cancel-btn" class="hud-btn" style="border-color:var(--border-subtle); color:var(--text-muted);">
+            CANCEL
+          </button>
+          <button id="profile-config-apply-btn" class="hud-btn hud-btn-primary hud-btn-emerald" style="padding:9px 20px; font-weight:800;">
+            APPLY & RECALIBRATE TIMELINE
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast Notification Container -->
   <div id="toast-container" class="toast-container"></div>
 
   <!-- Application Bootstrap -->
-  <script type="module" src="./js/nrmc-app.js?v=2.5.0"></script>
+  <script type="module" src="./js/nrmc-app.js?v=2.5.1"></script>
 </body>
 </html>
