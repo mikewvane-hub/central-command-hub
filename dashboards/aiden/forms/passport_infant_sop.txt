@@ -1,0 +1,44 @@
+================================================================================
+U.S. PASSPORT FORM DS-11 APPLICATION SOP (INFANTS & MINORS UNDER 16)
+U.S. Department of State - Bureau of Consular Affairs
+================================================================================
+
+OFFICIAL FORM DS-11 URL:
+https://eforms.state.gov/Forms/ds11.pdf
+APPOINTMENT SCHEDULER:
+https://tools.usps.com/rcas.htm
+STATE DEPT MINOR PASSPORT REQUIREMENTS:
+https://travel.state.gov/content/travel/en/passports/need-passport/under-16.html
+
+CRITICAL STATUTORY RULES:
+1. IN-PERSON APPEARANCE:
+   The infant and BOTH parents must appear in person at a designated Passport
+   Acceptance Facility (Post Office or County Clerk).
+2. IF ONE PARENT CANNOT APPEAR:
+   The non-appearing parent must complete, sign, and date a NOTARIZED Form DS-3053
+   (Statement of Consent) in front of a licensed notary public, accompanied by
+   a clear photocopy of the front and back of their government ID.
+   URL: https://eforms.state.gov/Forms/ds3053.pdf
+
+APPLICATION DOSSIER CHECKLIST:
+[ ] Form DS-11: Filled out completely online using the Form Filler, printed single-sided.
+    DO NOT SIGN until instructed by the passport acceptance agent.
+[ ] Evidence of U.S. Citizenship:
+    Official Certified Birth Certificate (Must list both parents' names, date/place of birth,
+    registrar's signature, and raised/embossed seal).
+    * Note: The Department of State will mail the original certificate back separately.
+[ ] Parental Relationship Proof:
+    Certified Birth Certificate serves as both citizenship proof and parentage proof.
+[ ] Parental Identification:
+    Both parents must present valid unexpired photo ID (Driver's License / Real ID, Military CAC, or Passport).
+    Bring clear photocopies of the front and back of each ID on 8.5x11 inch white paper.
+[ ] Passport Photo:
+    One 2x2 inch color photo meeting all infant compliance rules (see infant_photo_specs.txt).
+[ ] Separate Payments:
+    1. Application Fee: Payable to 'U.S. Department of State' via Check or Money Order:
+       - Passport Book (Under 16): $100.00
+       - Expedited Processing (Optional): +$60.00
+       - 1-2 Day Return Delivery (Optional): +$21.36
+    2. Execution Fee: Payable to Acceptance Facility (USPS / Clerk) via Card or Cash:
+       - Acceptance Fee: $35.00
+================================================================================

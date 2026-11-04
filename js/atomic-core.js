@@ -427,6 +427,125 @@ const SPHERE_VISUAL_SVGS = {
         </g>
       </svg>
     </div>
+  `,
+  aiden: `
+    <div class="circle-graphic-container shape-graphic-container circle-graphic-aiden">
+      <svg viewBox="0 0 148 148" class="circle-svg-art shape-svg-art" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="grad-baby-halo" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#e0f2fe" stop-opacity="0.95"/>
+            <stop offset="40%" stop-color="#38bdf8" stop-opacity="0.75"/>
+            <stop offset="75%" stop-color="#0284c7" stop-opacity="0.45"/>
+            <stop offset="100%" stop-color="#030712" stop-opacity="0"/>
+          </radialGradient>
+          <linearGradient id="grad-baby-pod" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.95"/>
+            <stop offset="45%" stop-color="#0284c7" stop-opacity="0.90"/>
+            <stop offset="85%" stop-color="#0369a1" stop-opacity="0.95"/>
+            <stop offset="100%" stop-color="#082f49" stop-opacity="0.98"/>
+          </linearGradient>
+          <radialGradient id="grad-gold-charm" cx="35%" cy="35%" r="65%">
+            <stop offset="0%" stop-color="#fef08a"/>
+            <stop offset="60%" stop-color="#f59e0b"/>
+            <stop offset="100%" stop-color="#b45309"/>
+          </radialGradient>
+          <filter id="glow-cyan-baby" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="2.4" result="blur"/>
+            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+          </filter>
+        </defs>
+
+        <!-- Outer Rotating Celestial Nursery Mobile Ring (Rotates Clockwise) -->
+        <g class="rotating-baby-mobile" filter="url(#glow-cyan-baby)">
+          <!-- Celestial Orbital Track Ring with Radar Crosshairs -->
+          <circle cx="74" cy="74" r="58" fill="none" stroke="#0284c7" stroke-width="1.2" stroke-dasharray="4,4" opacity="0.6"/>
+          <circle cx="74" cy="74" r="48" fill="none" stroke="#38bdf8" stroke-width="1.6" opacity="0.8"/>
+
+          <!-- 4 Floating Celestial Mobile Charms (Hanging at Cardinal Points) -->
+          <!-- Top: Celestial North Star -->
+          <g transform="translate(74, 18)">
+            <polygon points="0,-10 3,-3 10,0 3,3 0,10 -3,3 -10,0 -3,-3" fill="url(#grad-gold-charm)" stroke="#fff" stroke-width="0.8"/>
+            <circle cx="0" cy="0" r="2" fill="#fff"/>
+          </g>
+          <!-- Right: Crescent Moon Charm -->
+          <g transform="translate(130, 74)">
+            <path d="M-4,-9 A9,9 0 0,0 6,8 A10,10 0 1,1 -4,-9 Z" fill="url(#grad-gold-charm)" stroke="#38bdf8" stroke-width="0.8"/>
+          </g>
+          <!-- Bottom: Pediatric Rattle / Heart Charm -->
+          <g transform="translate(74, 130)">
+            <circle cx="0" cy="-3" r="5.5" fill="none" stroke="#38bdf8" stroke-width="1.8"/>
+            <line x1="0" y1="2.5" x2="0" y2="9" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="0" cy="-3" r="2" fill="#38bdf8"/>
+          </g>
+          <!-- Left: Little Nursery Star -->
+          <g transform="translate(18, 74)">
+            <polygon points="0,-8 2.5,-2.5 8,0 2.5,2.5 0,8 -2.5,2.5 -8,0 -2.5,-2.5" fill="url(#grad-gold-charm)" stroke="#fff" stroke-width="0.8"/>
+            <circle cx="0" cy="0" r="1.6" fill="#fff"/>
+          </g>
+
+          <!-- Cardinal Tech Ticks -->
+          <line x1="74" y1="28" x2="74" y2="34" stroke="#38bdf8" stroke-width="1.5"/>
+          <line x1="74" y1="114" x2="74" y2="120" stroke="#38bdf8" stroke-width="1.5"/>
+          <line x1="28" y1="74" x2="34" y2="74" stroke="#38bdf8" stroke-width="1.5"/>
+          <line x1="114" y1="74" x2="120" y2="74" stroke="#38bdf8" stroke-width="1.5"/>
+        </g>
+
+        <!-- Inner Counter-Rotating Constellation Points (Rotates Counter-Clockwise) -->
+        <g class="rotating-baby-stars">
+          <circle cx="44" cy="44" r="1.8" fill="#e0f2fe" filter="url(#glow-cyan-baby)"/>
+          <circle cx="104" cy="44" r="1.8" fill="#e0f2fe" filter="url(#glow-cyan-baby)"/>
+          <circle cx="104" cy="104" r="1.8" fill="#e0f2fe" filter="url(#glow-cyan-baby)"/>
+          <circle cx="44" cy="104" r="1.8" fill="#e0f2fe" filter="url(#glow-cyan-baby)"/>
+          <!-- Star Sparkles -->
+          <polygon points="74,38 76,43 81,45 76,47 74,52 72,47 67,45 72,43" fill="#38bdf8" opacity="0.75"/>
+          <polygon points="74,96 76,101 81,103 76,105 74,110 72,105 67,103 72,101" fill="#38bdf8" opacity="0.75"/>
+        </g>
+
+        <!-- Center Glowing Cyber-Baby Silhouette (Gentle Floating Animation) -->
+        <g class="baby-floating-core" filter="url(#glow-cyan-baby)">
+          <!-- Ambient Halo Aura Behind Baby -->
+          <circle cx="74" cy="74" r="34" fill="url(#grad-baby-halo)" opacity="0.6"/>
+
+          <!-- Swaddled Cocoon / Sleeping Pod Body -->
+          <path d="M52,86 Q46,106 58,118 Q74,126 90,118 Q102,106 96,86 Z"
+                fill="url(#grad-baby-pod)" stroke="#38bdf8" stroke-width="2.2" stroke-linejoin="round"/>
+          
+          <!-- Swaddle Wrap Diagonal Chevron Lines -->
+          <path d="M54,92 Q74,102 94,92" fill="none" stroke="#7dd3fc" stroke-width="1.2" opacity="0.8"/>
+          <path d="M58,102 Q74,112 90,102" fill="none" stroke="#7dd3fc" stroke-width="1.2" opacity="0.8"/>
+
+          <!-- Baby Head & Chubby Cheeks Silhouette -->
+          <path d="M52,66 C50,52 60,42 74,42 C88,42 98,52 96,66 C98,75 92,84 84,86 C78,88 70,88 64,86 C56,84 50,75 52,66 Z"
+                fill="#0369a1" stroke="#38bdf8" stroke-width="2.4" stroke-linejoin="round"/>
+
+          <!-- Adorable Top Baby Hair Curl / Swirl -->
+          <path d="M74,42 Q76,34 82,34 Q86,34 85,38 Q84,41 78,40" fill="none" stroke="#fef08a" stroke-width="2.4" stroke-linecap="round"/>
+
+          <!-- Baby Left & Right Ears -->
+          <circle cx="49" cy="65" r="4.2" fill="#0284c7" stroke="#38bdf8" stroke-width="1.5"/>
+          <circle cx="49" cy="65" r="2" fill="#38bdf8" opacity="0.6"/>
+          <circle cx="99" cy="65" r="4.2" fill="#0284c7" stroke="#38bdf8" stroke-width="1.5"/>
+          <circle cx="99" cy="65" r="2" fill="#38bdf8" opacity="0.6"/>
+
+          <!-- Sleeping Sweet Curved Eyes (Gentle Closed Lashes) -->
+          <path d="M60,63 Q65,67 70,63" fill="none" stroke="#e0f2fe" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M78,63 Q83,67 88,63" fill="none" stroke="#e0f2fe" stroke-width="1.8" stroke-linecap="round"/>
+
+          <!-- Chubby Rosy Cheeks -->
+          <circle cx="58" cy="71" r="3.2" fill="#f43f5e" opacity="0.45"/>
+          <circle cx="90" cy="71" r="3.2" fill="#f43f5e" opacity="0.45"/>
+
+          <!-- Baby Button Nose -->
+          <circle cx="74" cy="69" r="1.4" fill="#bae6fd"/>
+
+          <!-- Glowing Pacifier / Soother with Ring -->
+          <circle cx="74" cy="78" r="4.8" fill="#082f49" stroke="#f59e0b" stroke-width="1.6"/>
+          <circle cx="74" cy="78" r="2.2" fill="#38bdf8"/>
+          <!-- Pacifier Handle Loop -->
+          <path d="M71,83 Q74,87 77,83" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-linecap="round"/>
+        </g>
+      </svg>
+    </div>
   `
 };
 
@@ -463,6 +582,9 @@ export class AtomicCoreVisualizer {
             return './dashboards/garage/index.html?v=40.0';
           }
           return val;
+        }
+        if (key === 'hub_url_aiden') {
+          return val && val !== 'about:blank' && val !== '' ? val : 'http://localhost:3012/';
         }
         if (
           !val ||
@@ -575,6 +697,22 @@ export class AtomicCoreVisualizer {
         glowHex: '#f59e0b',
         url: resolveCloudUrl('hub_url_garage', './dashboards/garage/index.html?v=40.0'),
         icon: '🛻'
+      },
+      {
+        id: 'aiden',
+        name: 'BABY AIDEN // NRMC COMMAND',
+        shortTitle: 'BABY AIDEN',
+        orbitTag: 'ORBIT 07',
+        code: 'NRMC MILESTONES',
+        orbitRadius: 13.6,
+        horizontalStretch: 1.74,
+        speed: 0.11,
+        angle: 0.8,
+        inclination: { x: 0.28, y: 0.44, z: -0.22 },
+        color: 0x06b6d4,
+        glowHex: '#06b6d4',
+        url: resolveCloudUrl('hub_url_aiden', 'http://localhost:3012/'),
+        icon: '👶'
       }
     ];
 
@@ -817,6 +955,43 @@ export class AtomicCoreVisualizer {
       shape.closePath();
       geo = new THREE.ExtrudeGeometry(shape, {
         depth: 0.20,
+        bevelEnabled: true,
+        bevelSegments: 2,
+        steps: 1,
+        bevelSize: 0.025,
+        bevelThickness: 0.025
+      });
+      geo.center();
+    } else if (deckId === 'aiden') {
+      // 👶 3D Stylized Baby Aiden Figure (Extruded Newborn Head, Hair Curl, Ears & Swaddle Pod)
+      const shape = new THREE.Shape();
+      // Start at top hair swirl/curl
+      shape.moveTo(0, 0.58);
+      shape.bezierCurveTo(0.08, 0.58, 0.12, 0.52, 0.10, 0.46);
+      // Head upper right curve
+      shape.bezierCurveTo(0.24, 0.44, 0.32, 0.36, 0.32, 0.26);
+      // Right ear
+      shape.bezierCurveTo(0.42, 0.26, 0.42, 0.14, 0.32, 0.14);
+      // Chubby right cheek
+      shape.bezierCurveTo(0.36, 0.02, 0.32, -0.10, 0.24, -0.16);
+      // Swaddle body / sleep pod right side
+      shape.bezierCurveTo(0.32, -0.22, 0.30, -0.42, 0.16, -0.54);
+      // Pod base
+      shape.bezierCurveTo(0.08, -0.60, -0.08, -0.60, -0.16, -0.54);
+      // Swaddle body / sleep pod left side
+      shape.bezierCurveTo(-0.30, -0.42, -0.32, -0.22, -0.24, -0.16);
+      // Chubby left cheek
+      shape.bezierCurveTo(-0.32, -0.10, -0.36, 0.02, -0.32, 0.14);
+      // Left ear
+      shape.bezierCurveTo(-0.42, 0.14, -0.42, 0.26, -0.32, 0.26);
+      // Head upper left curve
+      shape.bezierCurveTo(-0.32, 0.36, -0.24, 0.44, -0.10, 0.46);
+      // Back to center hair curl
+      shape.bezierCurveTo(-0.06, 0.54, -0.04, 0.58, 0, 0.58);
+      shape.closePath();
+
+      geo = new THREE.ExtrudeGeometry(shape, {
+        depth: 0.24,
         bevelEnabled: true,
         bevelSegments: 2,
         steps: 1,

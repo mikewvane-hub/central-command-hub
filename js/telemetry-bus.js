@@ -62,6 +62,16 @@ export const FLEET_PROJECTS = {
     type: 'cloud',
     defaultPort: 443,
     url: 'https://daily-executive-dashboard.onrender.com/trip-planner/'
+  },
+  'baby-aiden-nrmc': {
+    id: 'baby-aiden-nrmc',
+    deckId: 'aiden',
+    name: 'Newborn Readiness & Milestone Command (Baby Aiden)',
+    category: 'Infant Milestones & Readiness',
+    type: 'local',
+    defaultPort: 3012,
+    url: 'http://localhost:3012/',
+    devUrl: 'http://localhost:3012/'
   }
 };
 
@@ -71,7 +81,9 @@ export const DECK_TO_PROJECT_MAP = {
   financial: 'financial-command-center',
   mackie: 'mackie-mom-board',
   executive: 'daily-executive-briefing',
-  trip: 'family-road-trip-planner'
+  trip: 'family-road-trip-planner',
+  aiden: 'baby-aiden-nrmc',
+  nrmc: 'baby-aiden-nrmc'
 };
 
 export class TelemetryBus {

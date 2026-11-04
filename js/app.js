@@ -4,7 +4,7 @@
  */
 
 import { sfx } from './sound-effects.js?v=40.0';
-import { AtomicCoreVisualizer } from './atomic-core.js?v=41.0';
+import { AtomicCoreVisualizer } from './atomic-core.js?v=42.0';
 import { DashboardManager } from './dashboard-manager.js?v=40.0';
 import { VoiceCommandEngine } from './voice-command.js?v=40.0';
 import { DeviceOptimizer } from './device-optimizer.js?v=40.0';
@@ -248,7 +248,12 @@ class CentralCommandHubApp {
           this.dashboardMgr.switchDeck('mackie');
           break;
         case '6':
+          this.dashboardMgr.switchDeck('garage');
+          break;
         case '7':
+          this.dashboardMgr.switchDeck('aiden');
+          break;
+        case '8':
           this.dashboardMgr.switchDeck('telemetry');
           break;
         case 'f':
@@ -328,6 +333,7 @@ class CentralCommandHubApp {
     const inputTrip = document.getElementById('setting-url-trip');
     const inputMackie = document.getElementById('setting-url-mackie');
     const inputGarage = document.getElementById('setting-url-garage');
+    const inputAiden = document.getElementById('setting-url-aiden');
 
     if (inputExec) inputExec.value = this.dashboardMgr.urls.executive;
     if (inputRent) inputRent.value = this.dashboardMgr.urls.rental;
@@ -335,6 +341,7 @@ class CentralCommandHubApp {
     if (inputTrip) inputTrip.value = this.dashboardMgr.urls.trip;
     if (inputMackie) inputMackie.value = this.dashboardMgr.urls.mackie;
     if (inputGarage) inputGarage.value = this.dashboardMgr.urls.garage;
+    if (inputAiden) inputAiden.value = this.dashboardMgr.urls.aiden;
   }
 
   saveSettingsForm() {
@@ -344,6 +351,7 @@ class CentralCommandHubApp {
     const inputTrip = document.getElementById('setting-url-trip');
     const inputMackie = document.getElementById('setting-url-mackie');
     const inputGarage = document.getElementById('setting-url-garage');
+    const inputAiden = document.getElementById('setting-url-aiden');
 
     if (inputExec) this.dashboardMgr.saveCustomUrl('executive', inputExec.value.trim());
     if (inputRent) this.dashboardMgr.saveCustomUrl('rental', inputRent.value.trim());
@@ -351,6 +359,7 @@ class CentralCommandHubApp {
     if (inputTrip) this.dashboardMgr.saveCustomUrl('trip', inputTrip.value.trim());
     if (inputMackie) this.dashboardMgr.saveCustomUrl('mackie', inputMackie.value.trim());
     if (inputGarage) this.dashboardMgr.saveCustomUrl('garage', inputGarage.value.trim());
+    if (inputAiden) this.dashboardMgr.saveCustomUrl('aiden', inputAiden.value.trim());
 
     // Synchronize custom URLs into 3D orbital visualizer in memory
     if (this.visualizer && Array.isArray(this.visualizer.dashboards)) {

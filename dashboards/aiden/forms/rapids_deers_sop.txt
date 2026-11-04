@@ -1,0 +1,36 @@
+================================================================================
+DD FORM 1172-2 REFERENCE & APPLICATION SOP
+APPLICATION FOR IDENTIFICATION CARD/DEERS ENROLLMENT
+Department of Defense (DoD) Official Reference
+================================================================================
+
+OFFICIAL FORM URL:
+https://www.esd.whs.mil/Portals/54/Documents/DD/forms/dd/dd1172-2.pdf
+RAPIDS APPOINTMENTS SCHEDULER:
+https://rapids-appointments.dmdc.osd.mil
+ID CARD OFFICE ONLINE (DIGITAL PRE-SIGN):
+https://www.dmdc.osd.mil/self_service
+
+PURPOSE:
+Enroll infant dependent (Baby Aiden) into the Defense Enrollment Eligibility
+Reporting System (DEERS) and establish military medical benefits (TRICARE).
+
+MANDATORY DOCUMENTS REQUIRED FOR APPOINTMENT:
+1. Certified State Birth Certificate (Raised/embossed seal or colored state security paper).
+   * Note: Hospital souvenir certificates are NOT accepted by RAPIDS operators.
+2. Social Security Card (or official SSA Form SSA-2853 / formal SSA intake receipt if card is in transit).
+   * Note: If SSN has not arrived, infant can be enrolled with a temporary 90-day DoD-generated ID number,
+     but the physical SSN must be presented within 90 days to prevent automatic termination of benefits.
+3. Marriage Certificate (original or certified copy, if not already verified in DEERS).
+4. Sponsor and Spouse Two (2) Forms of Unexpired Government ID:
+   - Primary: Common Access Card (CAC) or State Driver's License / Real ID.
+   - Secondary: U.S. Passport, Social Security Card, or Voter Registration Card.
+5. If Sponsor Cannot Attend in Person:
+   - Option A: Digitally sign DD Form 1172-2 via CAC on ID Card Office Online within 90 days.
+   - Option B: Execute a Special Power of Attorney (POA) granting spouse authority to enroll dependents into DEERS.
+
+RAPIDS SITE CHECKLIST:
+- Double check that the infant's full legal name, DOB, and relationship code (Child) match the birth certificate exactly.
+- Confirm TRICARE eligibility flag is set to 'ACTIVE' immediately in DEERS.
+- Obtain signed copy of the completed DD Form 1172-2 for your personal family records binder.
+================================================================================

@@ -143,7 +143,8 @@ export const TILE_METADATA = {
   executive: { name: 'EXECUTIVE CADENCE', icon: '⭐', color: '#00f0ff' },
   core: { name: 'COMMAND PLATFORM', icon: '🌌', color: '#6366f1' },
   health: { name: 'HEALTH & READINESS', icon: '❤️', color: '#10b981' },
-  family: { name: 'FAMILY OPERATIONS', icon: '👨‍👩‍👧', color: '#f43f5e' }
+  family: { name: 'FAMILY OPERATIONS', icon: '👨‍👩‍👧', color: '#f43f5e' },
+  aiden: { name: 'BABY AIDEN // NRMC', icon: '👶', color: '#06b6d4' }
 };
 
 export class ExecutiveSidebarManager {
@@ -653,7 +654,7 @@ export class ExecutiveSidebarManager {
       'COLORADO_ZR2_OIL_18PCT': 'Colorado ZR2 Oil Life at 18% (Service Due Soon)'
     };
 
-    const domainKeys = ['rental', 'garage', 'fleet', 'executive', 'trip', 'mackie', 'financial', 'health'];
+    const domainKeys = ['rental', 'garage', 'fleet', 'executive', 'trip', 'mackie', 'financial', 'health', 'aiden'];
 
     domainKeys.forEach(deckId => {
       const group = domainAlerts[deckId];

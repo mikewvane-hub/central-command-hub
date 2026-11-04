@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NRMC // NEWBORN READINESS & MILESTONE COMMAND (BABY AIDEN)</title>
+  
+  <!-- Antigravity HUD Typography Disciplines -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700;800&family=Orbitron:wght@600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- NRMC HUD Styling -->
+  <link rel="stylesheet" href="/css/nrmc-hud.css" />
+</head>
+<body>
+  <div id="app-root">
+
+    <!-- ================================================================= -->
+    <!-- COMMAND STRIP & TACTICAL HEADER                                    -->
+    <!-- ================================================================= -->
+    <header class="command-header">
+      <div class="brand-section">
+        <div class="brand-icon-hex">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+          </svg>
+        </div>
+        <div class="brand-title-group">
+          <h1>
+            NRMC // <span class="subject-callsign" id="baby-name-display">AIDEN CHRISTOPHER</span>
+            <span class="status-indicator">
+              <span class="status-pulse-dot"></span>
+              <span style="font-size:0.75rem; font-family:var(--font-mono);">OPERATIONAL</span>
+            </span>
+          </h1>
+          <div class="brand-subtitle">
+            <span id="baby-dob-display">DOB: 2026-11-15</span>
+            <span>•</span>
+            <span id="military-station-display">O-3 / CPT | JBLM PACIFIC</span>
+            <span>•</span>
+            <span id="ws-status-badge" class="countdown-pill pill-cyan">LIVE TELEMETRY</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Master Readiness Progress Ring -->
+      <div class="command-readiness-strip">
+        <div class="micro-progress-ring-container">
+          <div class="ring-svg-box">
+            <svg width="48" height="48" viewBox="0 0 48 48">
+              <circle class="ring-circle-bg" cx="24" cy="24" r="20"></circle>
+              <circle id="master-ring-circle" class="ring-circle-progress" cx="24" cy="24" r="20"></circle>
+            </svg>
+          </div>
+          <div class="ring-label-box">
+            <span class="ring-value" id="master-readiness-percent">0%</span>
+            <span class="ring-caption" id="master-tasks-completed-count">0/0 Tasks</span>
+          </div>
+        </div>
+
+        <!-- Live Clocks -->
+        <div class="tactical-telemetry-meta">
+          <div class="clock-card">
+            <span class="clock-label">ZULU TIME</span>
+            <span class="clock-time" id="hud-zulu-time">00:00:00 Z</span>
+          </div>
+          <div class="clock-card">
+            <span class="clock-label">LOCAL TAC</span>
+            <span class="clock-time" id="hud-local-time">00:00:00</span>
+          </div>
+        </div>
+
+        <!-- Quick Action Buttons -->
+        <div class="command-btn-group">
+          <button id="config-profile-btn" class="hud-btn hud-btn-sm" title="Adjust DOB or Timeline">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+            DOB / CONFIG
+          </button>
+          <button id="export-telemetry-btn" class="hud-btn hud-btn-sm" title="Export JSON State">
+            EXPORT JSON
+          </button>
+          <input type="file" id="import-state-input" accept=".json" style="display:none;" />
+          <button id="import-state-btn" class="hud-btn hud-btn-sm" title="Import JSON State">
+            IMPORT
+          </button>
+          <a href="http://localhost:4000/" target="_blank" class="hud-btn hud-btn-sm hud-btn-primary" title="Launch Central Command Hub">
+            CENTRAL HUB
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- ================================================================= -->
+    <!-- DYNAMIC COUNTDOWN STRIP // THREE-PILLAR COMMAND TELEMETRY         -->
+    <!-- ================================================================= -->
+    <div class="countdown-telemetry-grid">
+      <!-- 1. TRICARE 90-Day Newborn Grace Window -->
+      <div id="tricare-card" class="telemetry-countdown-card card-cyan">
+        <div class="countdown-card-header">
+          <span class="countdown-card-title">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            TRICARE 90-Day Grace Window
+          </span>
+          <span class="countdown-pill pill-cyan">CRITICAL SORTIE</span>
+        </div>
+        <div class="countdown-digits-wrapper">
+          <span class="countdown-main-num" id="tricare-countdown-days">--d --h</span>
+          <span class="countdown-unit">Remaining</span>
+        </div>
+        <div class="countdown-progress-bar">
+          <div id="tricare-progress-fill" class="countdown-progress-fill" style="width: 10%;"></div>
+        </div>
+        <div class="countdown-sub-meta">
+          <span id="tricare-countdown-sub">Hard Deadline: 2027-02-13</span>
+          <span style="color:var(--cyan-telemetry);">Prime Transition</span>
+        </div>
+      </div>
+
+      <!-- 2. RAPIDS Appointment Delta -->
+      <div class="telemetry-countdown-card card-amber">
+        <div class="countdown-card-header">
+          <span class="countdown-card-title">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            RAPIDS / DEERS Appointment
+          </span>
+          <span class="countdown-pill pill-amber">SCHEDULED</span>
+        </div>
+        <div class="countdown-digits-wrapper">
+          <span class="countdown-main-num" id="rapids-countdown-days">--d --h</span>
+          <span class="countdown-unit">Delta</span>
+        </div>
+        <div class="countdown-progress-bar">
+          <div class="countdown-progress-fill" style="width: 35%; background:var(--amber-warning);"></div>
+        </div>
+        <div class="countdown-sub-meta">
+          <span id="rapids-countdown-sub">Waller Hall DEERS Center</span>
+          <span style="color:var(--amber-warning);">DD-1172-2 Pre-Check</span>
+        </div>
+      </div>
+
+      <!-- 3. Next Pediatric Sortie -->
+      <div class="telemetry-countdown-card card-emerald">
+        <div class="countdown-card-header">
+          <span class="countdown-card-title">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+            </svg>
+            Next Pediatric Sortie
+          </span>
+          <span class="countdown-pill pill-emerald">AAP CLINICAL</span>
+        </div>
+        <div class="countdown-digits-wrapper">
+          <span class="countdown-main-num" id="pediatric-countdown-days">-- Days</span>
+          <span class="countdown-unit">Target</span>
+        </div>
+        <div class="countdown-progress-bar">
+          <div class="countdown-progress-fill" style="width: 60%; background:var(--emerald-nominal);"></div>
+        </div>
+        <div class="countdown-sub-meta">
+          <span id="pediatric-countdown-sub">2-Month Well-Child / Pentavalent</span>
+          <span style="color:var(--emerald-nominal);">Madigan AMC</span>
+        </div>
+      </div>
+
+      <!-- 4. Newborn Age & Sortie Tracker -->
+      <div class="telemetry-countdown-card card-cyan">
+        <div class="countdown-card-header">
+          <span class="countdown-card-title">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            Sortie Chronometry
+          </span>
+          <span class="countdown-pill pill-violet">INFANT AGE</span>
+        </div>
+        <div class="countdown-digits-wrapper">
+          <span class="countdown-main-num" id="infant-days-counter">T+0 Days</span>
+          <span class="countdown-unit">Life Stage</span>
+        </div>
+        <div class="countdown-progress-bar">
+          <div class="countdown-progress-fill" style="width: 100%; background:var(--violet-quantum);"></div>
+        </div>
+        <div class="countdown-sub-meta">
+          <span>Weight: 7.8 lbs | Length: 20.2 in</span>
+          <span style="color:var(--violet-quantum);">APGAR: 9/9</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- INTERACTIVE MATRIX NAVIGATION TABS                                -->
+    <!-- ================================================================= -->
+    <nav class="matrix-nav-bar">
+      <button class="matrix-tab-btn active" data-tab="admin-military">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+        </svg>
+        Administrative & Military
+        <span class="tab-badge">Mod A & B</span>
+      </button>
+
+      <button class="matrix-tab-btn" data-tab="legal-identity">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+        Legal, Identity & Credit
+        <span class="tab-badge">Mod C</span>
+      </button>
+
+      <button class="matrix-tab-btn" data-tab="financial-wealth">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="1" x2="12" y2="23"></line>
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+        </svg>
+        Financial Telemetry
+        <span class="tab-badge">Mod D</span>
+      </button>
+
+      <button class="matrix-tab-btn" data-tab="clinical-pediatric">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+        </svg>
+        Clinical & Pediatric
+        <span class="tab-badge">Mod E</span>
+      </button>
+
+      <button class="matrix-tab-btn" data-tab="telemetry-audit">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="4 17 10 11 4 5"></polyline>
+          <line x1="12" y1="19" x2="20" y2="19"></line>
+        </svg>
+        Live Telemetry Feed
+        <span class="tab-badge">REST / WS</span>
+      </button>
+    </nav>
+
+    <!-- ================================================================= -->
+    <!-- TAB 1: ADMINISTRATIVE & MILITARY (MODULES A & B)                  -->
+    <!-- ================================================================= -->
+    <section id="tab-admin-military" class="tab-content-panel active">
+      <!-- Module A: Immediate Sortie (T-0 to T+72h) -->
+      <div class="module-section-banner">
+        <div class="module-section-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
+          MODULE A: HOSPITAL & T-0 TO T+72 HOURS (IMMEDIATE SORTIE)
+        </div>
+        <span class="countdown-pill pill-cyan">VITAL RECORDS & INTAKE</span>
+      </div>
+      <div id="grid-module-a" class="task-grid-matrix">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <!-- Module B: Military Personnel & Administrative (T+3 to T+60d) -->
+      <div class="module-section-banner" style="border-left-color: var(--amber-warning);">
+        <div class="module-section-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+          MODULE B: MILITARY PERSONNEL & ADMINISTRATIVE (T+3 TO T+60 DAYS)
+        </div>
+        <span class="countdown-pill pill-amber">DEERS • TRICARE • SGLI • IPPS-A</span>
+      </div>
+      <div id="grid-module-b" class="task-grid-matrix">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- TAB 2: LEGAL, IDENTITY & CREDIT (MODULE C)                        -->
+    <!-- ================================================================= -->
+    <section id="tab-legal-identity" class="tab-content-panel">
+      <div class="module-section-banner" style="border-left-color: var(--violet-quantum);">
+        <div class="module-section-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          MODULE C: CIVIL & IDENTITY HARDENING (T+14 TO T+90 DAYS)
+        </div>
+        <span class="countdown-pill pill-violet">PASSPORT DS-11 • PHOTO SPEC • 3-BUREAU FREEZE</span>
+      </div>
+
+      <!-- Infant Photo Spec HUD Card -->
+      <div class="hud-panel" style="margin-bottom: 20px; border-left: 3px solid var(--violet-quantum);">
+        <div class="hud-panel-header">
+          <span class="hud-panel-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+              <circle cx="12" cy="13" r="4"></circle>
+            </svg>
+            INFANT PASSPORT PHOTO COMPLIANCE GUIDE (DS-11 SPECIFICATION)
+          </span>
+          <a href="/forms/infant_photo_specs.txt" download="infant_photo_specs.txt" class="hud-btn hud-btn-sm hud-btn-primary">DOWNLOAD PHOTO SOP</a>
+        </div>
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:14px; font-size:0.85rem;">
+          <div style="background:rgba(0,0,0,0.3); padding:12px; border-radius:6px; border:1px solid var(--border-subtle);">
+            <div style="font-weight:700; color:var(--cyan-telemetry); margin-bottom:4px;">1. BACKDROP & SETUP</div>
+            <p style="color:#cbd5e1;">Lay infant flat on a pristine white sheet. Zero shadows, zero wrinkles, no colored blankets.</p>
+          </div>
+          <div style="background:rgba(0,0,0,0.3); padding:12px; border-radius:6px; border:1px solid var(--border-subtle);">
+            <div style="font-weight:700; color:var(--cyan-telemetry); margin-bottom:4px;">2. EYES & EXPRESSION</div>
+            <p style="color:#cbd5e1;">Both eyes open looking toward camera. Gentle neutral expression or relaxed smile allowed.</p>
+          </div>
+          <div style="background:rgba(0,0,0,0.3); padding:12px; border-radius:6px; border:1px solid var(--border-subtle);">
+            <div style="font-weight:700; color:var(--crimson-alert); margin-bottom:4px;">3. ZERO-HANDS RULE</div>
+            <p style="color:#cbd5e1;">Strictly ZERO parent hands, fingers, pacifiers, headbands, or props visible in the 2x2 crop.</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="grid-module-c" class="task-grid-matrix">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- TAB 3: FINANCIAL TELEMETRY (MODULE D)                             -->
+    <!-- ================================================================= -->
+    <section id="tab-financial-wealth" class="tab-content-panel">
+      <div class="module-section-banner" style="border-left-color: var(--emerald-nominal);">
+        <div class="module-section-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="1" x2="12" y2="23"></line>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+          </svg>
+          MODULE D: FINANCIAL ARCHITECTURE & WEALTH SEEDING
+        </div>
+        <span class="countdown-pill pill-emerald">IRS CTC • DCFSA • 529 PLAN • UTMA/UGMA BROKERAGE</span>
+      </div>
+
+      <!-- Financial Architecture KPI Grid -->
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin-bottom:20px;">
+        <div class="hud-panel" style="border-top:2px solid var(--emerald-nominal);">
+          <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">529 College Savings Seed</div>
+          <div style="font-family:var(--font-mono); font-size:1.8rem; font-weight:800; color:var(--ghost-white);">$2,500 <span style="font-size:0.9rem; color:var(--emerald-nominal);">+ $500/mo DCA</span></div>
+          <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">WA GET / Utah my529 • 100% Global Index</div>
+        </div>
+        <div class="hud-panel" style="border-top:2px solid var(--cyan-telemetry);">
+          <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Child Tax Credit (CTC) Delta</div>
+          <div style="font-family:var(--font-mono); font-size:1.8rem; font-weight:800; color:var(--ghost-white);">$2,000 / Yr</div>
+          <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">IRS Form W-4 Step 3 • myPay Withholding Adjusted</div>
+        </div>
+        <div class="hud-panel" style="border-top:2px solid var(--amber-warning);">
+          <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">DCFSA Pre-Tax Target</div>
+          <div style="font-family:var(--font-mono); font-size:1.8rem; font-weight:800; color:var(--ghost-white);">$5,000 Max</div>
+          <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">60-Day Qualifying Life Event Special Window</div>
+        </div>
+      </div>
+
+      <div id="grid-module-d" class="task-grid-matrix">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- TAB 4: CLINICAL & PEDIATRIC (MODULE E)                            -->
+    <!-- ================================================================= -->
+    <section id="tab-clinical-pediatric" class="tab-content-panel">
+      <div class="module-section-banner" style="border-left-color: var(--cyan-telemetry);">
+        <div class="module-section-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+          </svg>
+          MODULE E: PEDIATRIC CLINICAL SCHEDULE & WELL-CHILD TRACKER
+        </div>
+        <span class="countdown-pill pill-cyan">CDC/AAP VACCINE GLIDEPATH • WHO GROWTH STANDARDS</span>
+      </div>
+
+      <div class="clinical-subgrid">
+        <!-- 1. CDC/AAP Vaccine Glidepath -->
+        <div class="hud-panel">
+          <div class="hud-panel-header">
+            <span class="hud-panel-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              </svg>
+              CDC / AAP VACCINE GLIDEPATH
+            </span>
+            <span class="countdown-pill pill-cyan">5 PHASES</span>
+          </div>
+          <div class="tactical-table-wrapper">
+            <table class="tactical-table">
+              <thead>
+                <tr>
+                  <th>Milestone</th>
+                  <th>Immunization Series</th>
+                  <th>Target Date</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="vaccine-table-body">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 2. WHO Growth Telemetry & Percentile Curve Visualizer -->
+        <div class="hud-panel">
+          <div class="hud-panel-header">
+            <span class="hud-panel-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+                <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                <line x1="15" y1="9" x2="15.01" y2="9"></line>
+              </svg>
+              WHO GROWTH STANDARDS (BOYS 0-12M)
+            </span>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <button class="hud-btn hud-btn-sm metric-toggle-btn hud-btn-primary" data-metric="weight">Weight</button>
+              <button class="hud-btn hud-btn-sm metric-toggle-btn" data-metric="length">Length</button>
+              <button class="hud-btn hud-btn-sm metric-toggle-btn" data-metric="head_circ">Head</button>
+              <button id="open-add-growth-btn" class="hud-btn hud-btn-sm" title="Log Clinical Vitals">+ Vitals</button>
+            </div>
+          </div>
+          <div class="growth-chart-container">
+            <canvas id="growth-canvas" class="growth-canvas"></canvas>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:0.75rem; color:var(--text-muted); margin-top:8px;">
+            <span>Legend: <span style="color:#00E5FF;">― Aiden's Vitals</span> | <span style="color:rgba(0,229,255,0.5);">-- WHO 50th Percentile</span></span>
+            <span>WHO Multicentre Growth Reference</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tummy Time Stopwatch & Developmental Milestones -->
+      <div class="clinical-subgrid">
+        <!-- Tummy Time Stopwatch -->
+        <div class="hud-panel">
+          <div class="hud-panel-header">
+            <span class="hud-panel-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              TUMMY TIME SORTIE STOPWATCH
+            </span>
+            <span class="countdown-pill pill-cyan" id="tummy-target-mins">Target: 25m/day</span>
+          </div>
+          <div class="tummy-time-box">
+            <div>
+              <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Session Stopwatch</div>
+              <div id="tummy-stopwatch-display" class="stopwatch-display">00:00</div>
+            </div>
+            <div class="stopwatch-controls">
+              <button id="tummy-start-btn" class="hud-btn hud-btn-primary">START</button>
+              <button id="tummy-pause-btn" class="hud-btn hud-btn-primary" style="display:none;">PAUSE</button>
+              <button id="tummy-reset-btn" class="hud-btn">RESET</button>
+              <button id="tummy-save-btn" class="hud-btn hud-btn-sm" style="border-color:var(--emerald-nominal); color:var(--emerald-nominal);">LOG SESSION</button>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Today's Completed</div>
+              <div id="tummy-today-mins" style="font-family:var(--font-mono); font-size:1.6rem; font-weight:700; color:var(--emerald-nominal);">15m</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Motor & Cognitive Milestones Checklist -->
+        <div class="hud-panel">
+          <div class="hud-panel-header">
+            <span class="hud-panel-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+              </svg>
+              MOTOR & COGNITIVE MILESTONES (AAP CRITERIA)
+            </span>
+            <span class="countdown-pill pill-emerald">ACTIVE CHECKLIST</span>
+          </div>
+          <div id="milestone-checklist-container" class="modal-checklists-group" style="border:none; padding:0; background:transparent;">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- TAB 5: LIVE TELEMETRY FEED & AUDIT LOG                            -->
+    <!-- ================================================================= -->
+    <section id="tab-telemetry-audit" class="tab-content-panel">
+      <div class="module-section-banner" style="border-left-color: var(--cyan-telemetry);">
+        <div class="module-section-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="4 17 10 11 4 5"></polyline>
+            <line x1="12" y1="19" x2="20" y2="19"></line>
+          </svg>
+          24/7 LIVE TELEMETRY STREAM & FLEET CONTRACT (`GET /api/v1/nrmc/telemetry`)
+        </div>
+        <span class="countdown-pill pill-emerald">CENTRAL COMMAND HUB READY</span>
+      </div>
+
+      <div class="clinical-subgrid">
+        <!-- Live JSON Contract -->
+        <div class="hud-panel">
+          <div class="hud-panel-header">
+            <span class="hud-panel-title">LIVE JSON TELEMETRY CONTRACT</span>
+            <span class="countdown-pill pill-cyan">SCHEMA V1</span>
+          </div>
+          <pre id="raw-telemetry-json" style="background:#000; border:1px solid var(--border-subtle); padding:16px; border-radius:6px; color:#38bdf8; font-family:var(--font-mono); font-size:0.8rem; overflow-x:auto; max-height:420px;"></pre>
+        </div>
+
+        <!-- System Alerts & Fleet Connectors -->
+        <div class="hud-panel">
+          <div class="hud-panel-header">
+            <span class="hud-panel-title">SYSTEM ALERTS & FLEET ORCHESTRATION</span>
+            <span class="countdown-pill pill-amber">ACTIVE ALERTS</span>
+          </div>
+          <div id="system-alerts-ledger">
+            <!-- Rendered dynamically -->
+          </div>
+
+          <div style="margin-top:20px; border-top:1px solid var(--border-subtle); padding-top:14px;">
+            <div style="font-family:var(--font-tech); font-weight:700; color:var(--ghost-white); margin-bottom:8px;">CENTRAL COMMAND HUB CONNECTOR CONTRACT:</div>
+            <p style="font-family:var(--font-mono); font-size:0.75rem; color:var(--text-muted); line-height:1.5;">
+              Deck ID: <code>nrmc-baby-aiden</code><br/>
+              Telemetry Endpoint: <code>http://localhost:3012/api/v1/nrmc/telemetry</code><br/>
+              BroadcastChannel: <code>antigravity_telemetry_bus</code><br/>
+              WebSocket Stream: <code>ws://localhost:3012/ws/telemetry</code>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- =================================================================== -->
+  <!-- ACTION MODAL (DETAILED TASK DOSSIER & FORMS)                        -->
+  <!-- =================================================================== -->
+  <div id="task-action-modal" class="hud-modal-backdrop">
+    <div class="hud-modal-window">
+      <div class="hud-modal-header">
+        <div class="hud-modal-title-box">
+          <span id="modal-task-id" class="task-id-badge">A1</span>
+          <span id="modal-task-title" style="font-family:var(--font-tech); font-size:1.15rem; font-weight:700; color:var(--ghost-white);">TASK TITLE</span>
+        </div>
+        <button id="modal-close-btn" class="hud-modal-close-btn">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="hud-modal-body">
+        <!-- Quick Meta Row -->
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; background:rgba(0,0,0,0.3); padding:10px 14px; border-radius:6px; border:1px solid var(--border-subtle);">
+          <div>
+            <span style="font-size:0.72rem; color:var(--text-muted); text-transform:uppercase;">Category:</span>
+            <span id="modal-category" style="font-weight:600; color:var(--cyan-telemetry); margin-left:4px;">Vital Records</span>
+          </div>
+          <div>
+            <span style="font-size:0.72rem; color:var(--text-muted); text-transform:uppercase;">Timeframe:</span>
+            <span id="modal-timeframe" style="font-weight:600; color:var(--ghost-white); margin-left:4px;">T-0 to T+12h</span>
+          </div>
+          <div>
+            <span style="font-size:0.72rem; color:var(--text-muted); text-transform:uppercase;">SLA:</span>
+            <span id="modal-sla" style="font-weight:600; color:var(--amber-warning); margin-left:4px;">24 hours</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:0.72rem; color:var(--text-muted); text-transform:uppercase;">Status:</span>
+            <select id="modal-status-select" style="background:var(--bg-carbon); border:1px solid var(--border-cyan); color:var(--ghost-white); font-family:var(--font-mono); font-size:0.78rem; padding:4px 8px; border-radius:4px;">
+              <option value="PENDING">PENDING</option>
+              <option value="IN_FLIGHT">IN_FLIGHT</option>
+              <option value="COMPLETE">COMPLETE</option>
+              <option value="LOCKED">LOCKED</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Documentation Checklist -->
+        <div>
+          <div class="modal-section-title">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 11 12 14 22 4"></polyline>
+              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+            </svg>
+            REQUIRED SUPPORTING DOCUMENTATION & VERIFICATION CHECKLIST
+          </div>
+          <div id="modal-checklists" class="modal-checklists-group">
+            <!-- Injected dynamically -->
+          </div>
+        </div>
+
+        <!-- Direct Form Downloads -->
+        <div>
+          <div class="modal-section-title">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            OFFICIAL FEDERAL & MILITARY FORMS (DIRECT DOWNLOADS)
+          </div>
+          <div id="modal-forms-container">
+            <!-- Injected dynamically -->
+          </div>
+        </div>
+
+        <!-- External Portals -->
+        <div>
+          <div class="modal-section-title">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+            OFFICIAL SECURE WEB PORTALS
+          </div>
+          <div id="modal-portals-container" style="display:flex; flex-wrap:wrap; gap:8px;">
+            <!-- Injected dynamically -->
+          </div>
+        </div>
+
+        <!-- Notes / Audit Log -->
+        <div>
+          <div class="modal-section-title">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+            </svg>
+            SORTIE OPERATIONAL NOTES & AUDIT TRAIL
+          </div>
+          <textarea id="modal-notes-input" rows="3" style="width:100%; background:rgba(0,0,0,0.4); border:1px solid var(--border-subtle); color:var(--ghost-white); font-family:var(--font-mono); font-size:0.82rem; padding:10px; border-radius:6px; resize:vertical;"></textarea>
+          <div style="display:flex; justify-content:flex-end; margin-top:8px;">
+            <button id="modal-save-notes-btn" class="hud-btn hud-btn-sm hud-btn-primary">SAVE NOTES</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Application Bootstrap -->
+  <script type="module" src="/js/nrmc-app.js"></script>
+</body>
+</html>

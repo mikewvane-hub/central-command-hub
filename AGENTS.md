@@ -31,7 +31,7 @@ Subagents must **never** default to `Model: "inherit"`, as inheriting the parent
 
 ## 2. Satellite Fleet Topology & Port Bindings
 
-The Central Command Hub coordinates 6 satellite subsystems across local and cloud environments:
+The Central Command Hub coordinates 7 satellite subsystems across local and cloud environments:
 
 1. **Garage & Fleet Asset Manager (`fleet-asset-manager`):**
    - Local Dev Port: `:3009` | Route: `./dashboards/garage/index.html?v=40.0`
@@ -51,6 +51,9 @@ The Central Command Hub coordinates 6 satellite subsystems across local and clou
 6. **Rainier Basecamp Trip Planner (`family-road-trip-planner`):**
    - Cloud Satellite Port: `:443` | Route: `https://daily-executive-dashboard.onrender.com/trip-planner/`
    - Scope: Overland expedition routing, Pacific Northwest campsite permits.
+7. **Newborn Readiness & Milestone Command (`baby-aiden-nrmc`):**
+   - Local Service Port: `:3012` | Route: `http://localhost:3012/` (Fallback: `./dashboards/aiden/index.html`)
+   - Scope: DEERS enrollment, TRICARE grace clock, CDC pediatric glidepath, 529 wealth seed.
 
 ---
 

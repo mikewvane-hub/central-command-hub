@@ -132,6 +132,12 @@ app.get('/api/telemetry', async (req, res) => {
       name: 'Garage & Fleet Asset Command',
       url: `http://localhost:${PORT}/dashboards/garage/index.html`,
       type: 'local'
+    },
+    {
+      id: 'nrmc',
+      name: 'Newborn Readiness & Milestone Command (Baby Aiden)',
+      url: 'http://localhost:3012/api/v1/nrmc/telemetry',
+      type: 'local'
     }
   ];
 
@@ -677,6 +683,15 @@ function generateSentinelDossier() {
       port: 443,
       type: 'Cloud Satellite',
       desc: 'Overland expedition routing, Pacific Northwest campsite permits.'
+    },
+    {
+      id: 'baby-aiden-nrmc',
+      name: 'Newborn Readiness & Milestone Command (Baby Aiden)',
+      deckId: 'aiden',
+      route: 'http://localhost:3012/',
+      port: 3012,
+      type: 'Local Subsystem',
+      desc: 'Infant administrative, DEERS military, civil identity, and pediatric milestones.'
     }
   ];
 
@@ -691,7 +706,7 @@ function generateSentinelDossier() {
   md += `---\n\n`;
   md += `## 🎯 PROMPT & INSTRUCTIONS FOR EXTERNAL AI REVIEWER (CLAUDE / CHATGPT)\n\n`;
   md += `You are acting as an expert Systems Architect, Security Auditor, and Principal Full-Stack Engineer. Review this audit dossier for the **Antigravity Central Command Hub** multi-project fleet. Scrub and scrutinize the architecture, configurations, and state below to verify that there are no hidden flaws, vulnerabilities, or regressions:\n\n`;
-  md += `1. **Endpoint & Tunnel Resilience:** Verify that the 6 fleet projects have well-defined, non-conflicting port routes and graceful offline fallback mechanisms.\n`;
+  md += `1. **Endpoint & Tunnel Resilience:** Verify that the 7 fleet projects have well-defined, non-conflicting port routes and graceful offline fallback mechanisms.\n`;
   md += `2. **DOM & Self-Healing Integrity:** Validate that the autonomous watchdog mechanisms properly handle 3D orbit freezing, orphaned CSS pulse classes, and dangling listeners without main-thread locks.\n`;
   md += `3. **Memory & Cache Safety:** Verify that telemetry queues, localStorage keys, and log files are strictly bounded with zero memory leak or disk exhaustion risks.\n`;
   md += `4. **CORS & Iframe Isolation:** Confirm that header configurations allow secure responsive framing while preventing cross-origin clickjacking.\n`;
@@ -703,7 +718,7 @@ function generateSentinelDossier() {
   md += `- **Recommended Hardening Proposals**\n\n`;
 
   md += `---\n\n`;
-  md += `## 🛰️ SATELLITE FLEET TOPOLOGY (6 CONNECTED PROJECTS)\n\n`;
+  md += `## 🛰️ SATELLITE FLEET TOPOLOGY (7 CONNECTED PROJECTS)\n\n`;
   md += `| Subsystem ID | Project Name | Route / URL | Port | Type | Domain Description |\n`;
   md += `| :--- | :--- | :--- | :--- | :--- | :--- |\n`;
   fleetProjects.forEach(p => {

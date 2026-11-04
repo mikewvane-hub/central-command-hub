@@ -231,6 +231,36 @@ export const DEFAULT_HUB_ALERTS = {
         message: 'Heart Rate Variability is 46 ms vs 65 ms target baseline. Autonomic nervous system fatigued. Throttle training to Zone 2 Active Recovery.'
       }
     ]
+  },
+  aiden: {
+    deckName: 'Baby Aiden // NRMC',
+    deckIcon: '👶',
+    count: 3,
+    severity: 'critical',
+    title: 'TRICARE 90-Day Grace & RAPIDS Sync',
+    items: [
+      {
+        severity: 'CRITICAL',
+        code: 'AIDEN_TRICARE_GRACE_ACTIVE',
+        statute: 'TRICARE Prime Enrollment',
+        title: 'TRICARE 90-Day Newborn Grace Window Active',
+        message: 'TRICARE 90-day grace clock running. DEERS enrollment required to finalize PCM assignment.'
+      },
+      {
+        severity: 'WARNING',
+        code: 'AIDEN_RAPIDS_APPOINTMENT_STANDBY',
+        statute: 'DEERS / DD Form 1172-2',
+        title: 'RAPIDS Appointment Booked (2026-12-05)',
+        message: 'RAPIDS appointment booked. Verify physical certified birth certificate arrives prior to appointment.'
+      },
+      {
+        severity: 'INFO',
+        code: 'AIDEN_529_CONTRIBUTION_SCHEDULED',
+        statute: 'Generational Wealth Architecture',
+        title: '529 College Savings Auto-DCA Active ($500/mo)',
+        message: 'Automatic contribution scheduled. Generational wealth compounding nominal.'
+      }
+    ]
   }
 };
 
@@ -283,7 +313,8 @@ export class DashboardManager {
       financial: sanitizeCloudUrl('hub_url_financial', './dashboards/financial/index.html'),
       trip: localStorage.getItem('hub_url_trip') || 'https://daily-executive-dashboard.onrender.com/trip-planner/',
       mackie: localStorage.getItem('hub_url_mackie') || 'https://daily-executive-dashboard.onrender.com/mackie/',
-      garage: sanitizeGarageUrl()
+      garage: sanitizeGarageUrl(),
+      aiden: localStorage.getItem('hub_url_aiden') || 'http://localhost:3012/'
     };
 
     this.statusMap = {
@@ -292,7 +323,8 @@ export class DashboardManager {
       financial: 'CHECKING',
       trip: 'CHECKING',
       mackie: 'CHECKING',
-      garage: 'CHECKING'
+      garage: 'CHECKING',
+      aiden: 'CHECKING'
     };
 
     // Track seen / acknowledged alerts per deck so indicators disappear once opened
@@ -1269,7 +1301,7 @@ export class DashboardManager {
   }
 
   scheduleBackgroundPreload() {
-    const queue = ['rental', 'financial', 'garage', 'executive', 'trip', 'mackie'];
+    const queue = ['rental', 'financial', 'garage', 'executive', 'trip', 'mackie', 'aiden'];
     let idx = 0;
     const preloadNext = () => {
       if (idx >= queue.length) return;
@@ -1338,6 +1370,7 @@ export class DashboardManager {
         if (deckId === 'garage') finalUrl = './dashboards/garage/index.html?v=40.0';
         else if (deckId === 'rental') finalUrl = './dashboards/rental/index.html';
         else if (deckId === 'financial') finalUrl = './dashboards/financial/index.html';
+        else if (deckId === 'aiden') finalUrl = './dashboards/aiden/index.html';
       }
     }
     this.urls[deckId] = finalUrl;
@@ -1378,7 +1411,8 @@ export class DashboardManager {
       { id: 'financial', url: this.urls.financial },
       { id: 'trip', url: this.urls.trip },
       { id: 'mackie', url: this.urls.mackie },
-      { id: 'garage', url: this.urls.garage }
+      { id: 'garage', url: this.urls.garage },
+      { id: 'aiden', url: this.urls.aiden }
     ];
 
     probes.forEach(async (probe) => {

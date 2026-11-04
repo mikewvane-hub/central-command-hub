@@ -61,7 +61,8 @@ async function runSentinelTestSuite() {
     'financial-command-center',
     'mackie-mom-board',
     'daily-executive-briefing',
-    'family-road-trip-planner'
+    'family-road-trip-planner',
+    'baby-aiden-nrmc'
   ];
 
   expectedProjects.forEach(id => {
@@ -98,7 +99,7 @@ async function runSentinelTestSuite() {
     bus.validateEventSchema({ projectId: 'fleet-asset-manager' });
   }, /Invalid or missing 'status'/);
 
-  console.log(`  ✓ All 6 fleet projects correctly registered.`);
+  console.log(`  ✓ All 7 fleet projects correctly registered.`);
   console.log(`  ✓ Standardized JSON event schema validation strictly enforced.`);
 
   // ------------------------------------------------------------------
@@ -117,7 +118,7 @@ async function runSentinelTestSuite() {
 
   let metrics = bus.getAggregateMetrics();
   assert.strictEqual(metrics.fleetHealthScore, 100, 'Baseline health score must be 100%');
-  assert.strictEqual(metrics.healthyCount, 6, 'All 6 nodes must be healthy');
+  assert.strictEqual(metrics.healthyCount, 7, 'All 7 nodes must be healthy');
 
   // Simulate drop on fleet-asset-manager
   const dropEvent = bus.emitHealth('fleet-asset-manager', {
@@ -131,7 +132,7 @@ async function runSentinelTestSuite() {
 
   metrics = bus.getAggregateMetrics();
   assert.strictEqual(metrics.downCount, 1, 'downCount must reflect 1 offline satellite');
-  assert.strictEqual(metrics.healthyCount, 5, 'healthyCount must now be 5');
+  assert.strictEqual(metrics.healthyCount, 6, 'healthyCount must now be 6');
   assert(metrics.fleetHealthScore < 100, 'fleetHealthScore must degrade below 100%');
 
   // Verify nomination of ticket

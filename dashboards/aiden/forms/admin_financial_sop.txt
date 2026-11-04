@@ -1,0 +1,27 @@
+================================================================================
+FINANCIAL & MILITARY ADMINISTRATIVE GUIDELINES
+DCFSA QLE, Vital Records Ordering, and BAH DA Form 5960 Checklist
+================================================================================
+
+1. DEPENDENT CARE FSA (DCFSA) QUALIFYING LIFE EVENT (QLE):
+- Portal: https://www.fsafeds.com
+- Timeframe: Within 60 calendar days of birth.
+- Contribution Limit: Up to $5,000 per family per calendar year.
+- Benefit: Pre-tax paycheck deductions used for daycare, nanny, nursery school, and summer camps.
+- Required Proof: Hospital certificate or official birth certificate uploaded to FSAFEDS within 30 days.
+
+2. CERTIFIED BIRTH CERTIFICATES (ORDER 5-8 OFFICIAL COPIES):
+- Source: VitalChek (https://www.vitalchek.com) or County Health Dept Vital Statistics.
+- Allocation Matrix:
+  * Copy 1: DEERS & Military Dependent Enrollment (Physical original inspected by RAPIDS clerk).
+  * Copy 2: U.S. Department of State Passport Application (Form DS-11; original is mailed and returned).
+  * Copy 3: Financial Institutions (529 Plan, UTMA/UGMA brokerage account opening).
+  * Copy 4: Defense Enrollment / Tricare Backup & Medical Records archive.
+  * Copy 5: Daycare / Elementary School / DoD Education Activity (DoDEA) registration.
+  * Copy 6: Master Family Safe / Hardened Lockbox Archive.
+
+3. DA FORM 5960 (BAH WITH DEPENDENTS AUDIT):
+- Portal: https://mypay.dfas.mil
+- S1 Requirement: Submit copy of birth certificate to Unit S-1 / PAC clerk to ensure military personnel file (IPPS-A) reflects child dependent status.
+- BAH Rate Check: Verifies sponsor receives 'With Dependents' rate and audits dependent allowances.
+================================================================================

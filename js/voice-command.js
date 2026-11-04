@@ -126,6 +126,16 @@ export const VOICE_TARGETS = {
     ],
     phonetic: ['garaj', 'flit', 'kolorado', 'murano', 'kar', 'truk']
   },
+  aiden: {
+    category: 'deck',
+    target: 'aiden',
+    speech: "Opening Baby Aiden Newborn Readiness and Milestone Command. Orbit 07 Cyber Core online.",
+    keywords: [
+      'aiden', 'baby aiden', 'baby', 'nrmc', 'milestones', 'newborn',
+      'aiden christopher', 'baby tracker', 'pediatric', 'readiness', 'infant'
+    ],
+    phonetic: ['aiden', 'bebi', 'bebi aiden', 'nrmk', 'milston', 'niuborn', 'infant']
+  },
   telemetry: {
     category: 'deck',
     target: 'telemetry',

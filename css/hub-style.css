@@ -771,6 +771,36 @@ body::after {
   animation: spin-shield-reticle 14s linear infinite;
 }
 
+@keyframes spin-baby-mobile {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes spin-baby-stars {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(-360deg); }
+}
+
+@keyframes baby-gentle-float {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-3px) scale(1.02); }
+}
+
+.rotating-baby-mobile {
+  transform-origin: 74px 74px;
+  animation: spin-baby-mobile 14s linear infinite;
+}
+
+.rotating-baby-stars {
+  transform-origin: 74px 74px;
+  animation: spin-baby-stars 18s linear infinite;
+}
+
+.baby-floating-core {
+  transform-origin: 74px 74px;
+  animation: baby-gentle-float 3.5s ease-in-out infinite;
+}
+
 @keyframes alert-badge-soft-pulse {
   0%, 100% {
     box-shadow: 0 0 8px rgba(245, 158, 11, 0.6);

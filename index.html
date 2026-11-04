@@ -78,6 +78,11 @@
           <span class="tab-badge" data-status-badge="garage">BAY 01-02</span>
         </button>
 
+        <button class="nav-tab-btn" data-deck="aiden" title="Newborn Readiness &amp; Milestone Command // Baby Aiden Christopher">
+          <span>👶 AIDEN</span>
+          <span class="tab-badge" data-status-badge="aiden">ORBIT 07</span>
+        </button>
+
         <button class="nav-tab-btn" data-deck="telemetry" title="Quantum Telemetry &amp; 24/7 Cloud Fleet Console">
           <span>📡 FLEET</span>
           <span class="tab-badge">24/7</span>
@@ -163,7 +168,7 @@
           <div class="telemetry-row">
             <div class="tactical-box overlay-interactive">
               <div class="tactical-title">QUANTUM ORBITAL TELEMETRY</div>
-              <div class="tactical-metric" id="tactical-cores-count">6 ACTIVE CORES</div>
+              <div class="tactical-metric" id="tactical-cores-count">7 ACTIVE CORES</div>
               <div class="tactical-sub" id="telemetry-aspect-ratio">VIEWPORT: OPTIMIZED</div>
             </div>
 
@@ -171,7 +176,7 @@
             <div class="voice-teleprompter-box overlay-interactive">
               <div class="prompt-icon">⚡</div>
               <div class="prompt-text">
-                VOICE COMMAND ACTIVE: Say <strong>"Open Executive Dashboard"</strong>, <strong>"Open Rental Ops"</strong>, or <strong>"Wealth Console"</strong>
+                VOICE COMMAND ACTIVE: Say <strong>"Open Baby Aiden"</strong>, <strong>"Open Executive Dashboard"</strong>, or <strong>"Wealth Console"</strong>
               </div>
             </div>
           </div>
@@ -180,7 +185,7 @@
           <div class="atomic-orbital-status-bar overlay-interactive">
             <div class="status-pill">
               <span class="status-beacon"></span>
-              <span id="orbital-status-pill-text">6 ORBITAL SHAPES ACTIVE • PULSING SHAPES INDICATE ACTIVE ALERTS / NOTIFICATIONS</span>
+              <span id="orbital-status-pill-text">7 ORBITAL SHAPES ACTIVE • PULSING SHAPES INDICATE ACTIVE ALERTS / NOTIFICATIONS</span>
             </div>
             <div class="status-pill status-tip">
               <span>🖱️ DRAG TO ROTATE 3D ATOM • 👆 CLICK SHAPE OR TAB TO EXPAND</span>
@@ -349,7 +354,33 @@
       </section>
 
       <!-- ========================================== -->
-      <!-- DECK 7: SYSTEM TELEMETRY & 24/7 CLOUD HOST -->
+      <!-- DECK 7: BABY AIDEN // NRMC COMMAND         -->
+      <!-- ========================================== -->
+      <section class="deck-view" id="deck-aiden">
+        <div class="holographic-window">
+          <div class="dashboard-subnav">
+            <div class="subnav-left">
+              <span class="subnav-status" data-status-badge="aiden">
+                <span class="status-beacon"></span> ONLINE
+              </span>
+              <strong>NEWBORN READINESS &amp; MILESTONE COMMAND // BABY AIDEN</strong>
+              <span class="subnav-url">localhost:3012</span>
+            </div>
+            <div class="subnav-actions">
+              <button class="subnav-btn btn-toggle-glass" data-action="toggle-glass" title="Toggle Glass / Ghost Translucency to see Atomic Core behind">💎 Glass (82%)</button>
+              <button class="subnav-btn" data-action="refresh-frame" data-deck="aiden">🔄 Refresh</button>
+              <button class="subnav-btn" data-action="popout-tab" data-deck="aiden">↗️ New Tab</button>
+              <button class="subnav-btn btn-minimize" data-action="return-core" title="Minimize back into Orbiting Circle">⚛️ Minimize to Orbit</button>
+            </div>
+          </div>
+          <div class="dashboard-iframe-container">
+            <iframe id="iframe-aiden" class="dashboard-iframe" src="about:blank" data-src="http://localhost:3012/" title="Baby Aiden NRMC Dashboard" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- DECK 8: SYSTEM TELEMETRY & 24/7 CLOUD HOST -->
       <!-- ========================================== -->
       <section class="deck-view" id="deck-telemetry">
         <div class="holographic-window">
@@ -398,6 +429,10 @@
               <div class="matrix-item">
                 <span class="matrix-label">Garage &amp; Fleet Asset Command</span>
                 <span class="matrix-value live" id="telemetry-status-garage">ORBIT 06 ONLINE</span>
+              </div>
+              <div class="matrix-item">
+                <span class="matrix-label">Baby Aiden NRMC Command</span>
+                <span class="matrix-value live" id="telemetry-status-aiden">ORBIT 07 ONLINE</span>
               </div>
               <div class="matrix-item">
                 <span class="matrix-label">Voice Neural Assistant</span>
@@ -673,6 +708,11 @@
             <input type="text" id="setting-url-garage" style="background:#030712;border:1px solid var(--border-cyan);color:#fff;padding:8px 12px;border-radius:6px;font-family:inherit;" placeholder="./dashboards/garage/index.html" />
           </label>
 
+          <label style="display:flex;flex-direction:column;gap:4px;">
+            <span style="color:#06b6d4;">Baby Aiden // NRMC Command URL:</span>
+            <input type="text" id="setting-url-aiden" style="background:#030712;border:1px solid var(--border-cyan);color:#fff;padding:8px 12px;border-radius:6px;font-family:inherit;" placeholder="http://localhost:3012/" />
+          </label>
+
           <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:10px;">
             <button class="launch-btn" id="btn-save-settings">SAVE CONFIGURATION</button>
           </div>
@@ -762,14 +802,14 @@
 
         <!-- Main Grid & Feed Split View -->
         <div class="sentinel-body-split">
-          <!-- Node Status Grid (6 Connected Projects) -->
+          <!-- Node Status Grid (7 Connected Projects) -->
           <div class="sentinel-column-left">
             <div class="sentinel-section-header">
-              <span>SATELLITE FLEET NODES (6 CONNECTED PROJECTS)</span>
-              <span class="sentinel-count-pill" id="sentinel-nodes-count">6 ACTIVE</span>
+              <span>SATELLITE FLEET NODES (7 CONNECTED PROJECTS)</span>
+              <span class="sentinel-count-pill" id="sentinel-nodes-count">7 ACTIVE</span>
             </div>
             <div class="sentinel-node-grid" id="sentinel-node-grid">
-              <!-- Dynamically populated 6 satellite node cards -->
+              <!-- Dynamically populated 7 satellite node cards -->
             </div>
           </div>
 
@@ -800,6 +840,6 @@
   </div>
 
   <!-- Boot Module Script -->
-  <script type="module" src="js/app.js?v=41.0"></script>
+  <script type="module" src="js/app.js?v=42.0"></script>
 </body>
 </html>
