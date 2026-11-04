@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700;800&family=Orbitron:wght@600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet" />
 
   <!-- NRMC HUD Styling -->
-  <link rel="stylesheet" href="./css/nrmc-hud.css" />
+  <link rel="stylesheet" href="./css/nrmc-hud.css?v=2.5.0" />
 </head>
 <body>
   <div id="app-root">
@@ -249,6 +249,14 @@
         </svg>
         Clinical & Pediatric
         <span class="tab-badge">MOD E</span>
+      </button>
+
+      <button class="matrix-tab-btn" data-tab="document-vault">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+        </svg>
+        Document Vault
+        <span class="tab-badge" id="nav-vault-count">0 FILES</span>
       </button>
 
       <button class="matrix-tab-btn" data-tab="telemetry-audit">
@@ -722,7 +730,150 @@
     </section>
 
     <!-- ================================================================= -->
+    <!-- VIEW: SECURE DOCUMENT VAULT & ATTACHMENT REPOSITORY               -->
+    <!-- ================================================================= -->
+    <section id="tab-document-vault" class="tab-content-panel">
+      <!-- OPSEC High-Sensitivity PII Safeguard Directive Banner -->
+      <div class="vault-opsec-banner">
+        <div class="opsec-icon">🛑</div>
+        <div style="flex:1;">
+          <div class="opsec-title">OPERATIONAL SECURITY (OPSEC) DIRECTIVE // HIGH-SENSITIVITY PII SAFEGUARD</div>
+          <div class="opsec-desc">
+            <span style="color:#f87171; font-weight:700;">PROHIBITED ATTACHMENTS:</span> For security defense, <strong>NEVER</strong> upload unredacted Social Security cards, official state certified birth certificates, or full passport scans to local web storage. Store ultra-sensitive identity items strictly in a physical fireproof safe or hardware-encrypted vault.<br/>
+            <span style="color:#4ade80; font-weight:700;">AUTHORIZED ARCHIVES:</span> CDC Immunization Cards, Clinic Encounter Vitals, Signed Physician Discharge summaries, Newborn Hearing/Metabolic clearances, DD-1172-2 / DD-93 work copies, 529 Plan statements, and Infant Photo tests.
+          </div>
+        </div>
+      </div>
+
+      <!-- Vault Quick Upload Interface -->
+      <div class="hud-panel" style="margin-bottom:24px;">
+        <div class="hud-panel-header">
+          <span class="hud-panel-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            ARCHIVE NEW DOCUMENT OR CLINIC RECORD TO LOCAL VAULT
+          </span>
+          <span class="countdown-pill pill-cyan">LOCAL SECURE DISK VAULT</span>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+          <!-- Dropzone -->
+          <div>
+            <div id="vault-dropzone" class="vault-upload-zone">
+              <input type="file" id="vault-file-input" style="display:none;" />
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--cyan-telemetry)" stroke-width="1.8" style="margin-bottom:10px;">
+                <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path>
+                <path d="M12 12v9"></path>
+                <path d="m16 16-4-4-4 4"></path>
+              </svg>
+              <div style="font-family:var(--font-tech); font-size:1rem; font-weight:700; color:var(--ghost-white); margin-bottom:4px;">
+                DRAG &amp; DROP DOCUMENT HERE OR CLICK TO BROWSE
+              </div>
+              <div style="font-size:0.75rem; color:var(--text-muted); font-family:var(--font-mono);">
+                Supports PDF, PNG, JPG, DOCX, TXT (Max 50MB)
+              </div>
+              <div id="vault-selected-file-name" style="margin-top:12px; font-family:var(--font-mono); font-size:0.8rem; color:var(--cyan-telemetry); font-weight:700;"></div>
+            </div>
+          </div>
+
+          <!-- Metadata Form -->
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <div>
+              <label style="font-family:var(--font-mono); font-size:0.72rem; color:var(--text-muted); text-transform:uppercase;">Document Title / Label:</label>
+              <input type="text" id="vault-doc-name-input" placeholder="e.g., Madigan AMC HepB #1 Clinic Card" style="width:100%; background:rgba(0,0,0,0.5); border:1px solid var(--border-subtle); color:var(--ghost-white); font-family:var(--font-tech); font-size:0.9rem; padding:8px 12px; border-radius:4px; margin-top:4px;" />
+            </div>
+
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+              <div>
+                <label style="font-family:var(--font-mono); font-size:0.72rem; color:var(--text-muted); text-transform:uppercase;">Category:</label>
+                <select id="vault-doc-category-select" style="width:100%; background:var(--bg-carbon); border:1px solid var(--border-cyan); color:var(--ghost-white); font-family:var(--font-mono); font-size:0.78rem; padding:8px; border-radius:4px; margin-top:4px;">
+                  <option value="CLINICAL_RECORD">🩺 Clinical / Vaccine Record</option>
+                  <option value="MILITARY_ADMIN">🎖️ Military Administration (DD / SGLI / BAH)</option>
+                  <option value="FINANCIAL_BENEFITS">💰 Financial / 529 / DCFSA</option>
+                  <option value="PHOTO_COMPLIANCE">📸 Infant Passport Photo Test</option>
+                  <option value="GENERAL_ARCHIVE">📋 General Sortie Paperwork</option>
+                </select>
+              </div>
+
+              <div>
+                <label style="font-family:var(--font-mono); font-size:0.72rem; color:var(--text-muted); text-transform:uppercase;">Link to Sortie / Milestone:</label>
+                <select id="vault-doc-task-select" style="width:100%; background:var(--bg-carbon); border:1px solid var(--border-subtle); color:var(--ghost-white); font-family:var(--font-mono); font-size:0.78rem; padding:8px; border-radius:4px; margin-top:4px;">
+                  <option value="">(None / General Archive)</option>
+                  <option value="A4">A4: Metabolic Screening Card</option>
+                  <option value="A5">A5: Hearing Screening Clearance</option>
+                  <option value="A6">A6: Physician Discharge Summary</option>
+                  <option value="B1">B1: DD Form 1172-2 / RAPIDS</option>
+                  <option value="B3">B3: SGLI / SOES Coverage</option>
+                  <option value="B4">B4: DD Form 93 Record</option>
+                  <option value="C2">C2: Infant Passport Photo</option>
+                  <option value="D1">D1: W-4 CTC Withholding</option>
+                  <option value="D2">D2: DCFSA QLE Enrollment</option>
+                  <option value="D3">D3: 529 College Plan</option>
+                  <option value="VAC_01">VAC_01: HepB #1 Record</option>
+                  <option value="VAC_02">VAC_02: HepB #2 Record</option>
+                  <option value="VAC_03">VAC_03: 2-Month Pentavalent Slip</option>
+                  <option value="VAC_04">VAC_04: 4-Month Vaccines</option>
+                  <option value="VAC_05">VAC_05: 6-Month Vaccines</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label style="font-family:var(--font-mono); font-size:0.72rem; color:var(--text-muted); text-transform:uppercase;">Notes / Provider Remarks (Optional):</label>
+              <input type="text" id="vault-doc-notes-input" placeholder="e.g., Attending pediatrician signed; lot number recorded" style="width:100%; background:rgba(0,0,0,0.5); border:1px solid var(--border-subtle); color:var(--ghost-white); font-family:var(--font-mono); font-size:0.8rem; padding:8px 12px; border-radius:4px; margin-top:4px;" />
+            </div>
+
+            <button id="vault-upload-submit-btn" class="hud-btn hud-btn-primary" style="margin-top:6px; padding:10px; font-weight:800; font-size:0.85rem; letter-spacing:0.06em;">
+              🔒 ARCHIVE DOCUMENT TO LOCAL VAULT
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vault Archive Table -->
+      <div class="hud-panel">
+        <div class="hud-panel-header" style="flex-wrap:wrap; gap:12px;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span class="hud-panel-title">ARCHIVED DOCUMENTS &amp; CLINICAL RECORDS</span>
+            <span class="countdown-pill pill-cyan" id="vault-total-count-pill">0 DOCUMENTS</span>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:8px;">
+            <button class="hud-btn hud-btn-sm vault-filter-btn active" data-cat="ALL">ALL (0)</button>
+            <button class="hud-btn hud-btn-sm vault-filter-btn" data-cat="CLINICAL_RECORD">CLINICAL</button>
+            <button class="hud-btn hud-btn-sm vault-filter-btn" data-cat="MILITARY_ADMIN">MILITARY</button>
+            <button class="hud-btn hud-btn-sm vault-filter-btn" data-cat="FINANCIAL_BENEFITS">FINANCIAL</button>
+            <button class="hud-btn hud-btn-sm vault-filter-btn" data-cat="PHOTO_COMPLIANCE">PHOTOS</button>
+          </div>
+        </div>
+
+        <div class="vault-table-wrapper">
+          <table class="vault-table">
+            <thead>
+              <tr>
+                <th>DOCUMENT NAME</th>
+                <th>CATEGORY</th>
+                <th>LINKED SORTIE</th>
+                <th>DATE ARCHIVED</th>
+                <th>SIZE</th>
+                <th>OPSEC POSTURE</th>
+                <th style="text-align:right;">ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody id="vault-documents-tbody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
     <!-- TAB 5: LIVE TELEMETRY FEED & AUDIT LOG                            -->
+    <!-- ================================================================= -->
     <!-- ================================================================= -->
     <section id="tab-telemetry-audit" class="tab-content-panel">
       <div class="module-section-banner" style="border-left-color: var(--cyan-telemetry);">
@@ -790,6 +941,17 @@
       </div>
 
       <div class="hud-modal-body">
+        <!-- Operator Completion Seal Bar -->
+        <div style="background:linear-gradient(90deg, rgba(16,185,129,0.12) 0%, rgba(0,0,0,0.4) 100%); border:1px solid rgba(16,185,129,0.3); border-radius:6px; padding:12px 16px; margin-bottom:14px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+          <div>
+            <div style="font-family:var(--font-tech); font-weight:800; font-size:0.95rem; color:var(--ghost-white); letter-spacing:0.04em;">OPERATOR COMPLETION STATUS</div>
+            <div style="font-size:0.75rem; color:#94a3b8;">Check off this sortie once completed in real life. No completion is assumed.</div>
+          </div>
+          <button id="modal-seal-btn" class="hud-btn hud-btn-emerald" style="padding:8px 18px; font-weight:800; font-size:0.85rem; letter-spacing:0.04em;">
+            ✓ SEAL SORTIE AS 100% COMPLETE
+          </button>
+        </div>
+
         <!-- Quick Meta Row -->
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; background:rgba(0,0,0,0.3); padding:10px 14px; border-radius:6px; border:1px solid var(--border-subtle);">
           <div>
@@ -861,6 +1023,22 @@
           </div>
         </div>
 
+        <!-- Attached Documents in Local Vault -->
+        <div>
+          <div class="modal-section-title" style="display:flex; justify-content:space-between; align-items:center;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+              </svg>
+              VAULTED SUPPORTING RECORDS &amp; ATTACHMENTS
+            </div>
+            <button id="modal-quick-upload-btn" class="hud-btn hud-btn-sm hud-btn-primary" style="padding:3px 10px;">+ FILE RECORD</button>
+          </div>
+          <div id="modal-attached-documents" style="display:flex; flex-direction:column; gap:8px;">
+            <!-- Injected dynamically -->
+          </div>
+        </div>
+
         <!-- Notes / Audit Log -->
         <div>
           <div class="modal-section-title">
@@ -879,10 +1057,51 @@
     </div>
   </div>
 
+  <!-- =================================================================== -->
+  <!-- OPSEC HIGH-SENSITIVITY INTERCEPT MODAL                              -->
+  <!-- =================================================================== -->
+  <div id="opsec-warning-modal" class="hud-modal-backdrop">
+    <div class="hud-modal-window" style="max-width:540px; border-color:var(--crimson-alert); box-shadow:0 0 35px rgba(239,68,68,0.35);">
+      <div class="hud-modal-header" style="border-bottom-color:rgba(239,68,68,0.4);">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="font-size:1.5rem;">🛑</span>
+          <span style="font-family:var(--font-display); font-size:1.05rem; font-weight:800; color:#fca5a5; letter-spacing:0.06em;">OPSEC PII INTERCEPT WARNING</span>
+        </div>
+        <button id="opsec-close-btn" class="hud-modal-close-btn">&times;</button>
+      </div>
+      <div class="hud-modal-body" style="padding:20px;">
+        <div style="background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); border-radius:6px; padding:14px; margin-bottom:16px;">
+          <div style="font-weight:700; color:var(--ghost-white); margin-bottom:6px;">High-Sensitivity Identity Document Pattern Detected:</div>
+          <div id="opsec-detected-filename" style="font-family:var(--font-mono); font-size:0.85rem; color:#fca5a5; font-weight:700; word-break:break-all;"></div>
+        </div>
+        <p style="font-size:0.82rem; color:#cbd5e1; line-height:1.5; margin-bottom:14px;">
+          Federal identity records (Social Security Cards, Certified Birth Certificates, Full U.S. Passports) should <strong>NEVER</strong> be uploaded unredacted to web browsers or local computer directories. They present severe identity theft vulnerabilities if compromised.
+        </p>
+        <p style="font-size:0.82rem; color:#cbd5e1; line-height:1.5; margin-bottom:16px;">
+          <strong>Recommended Protocol:</strong> Keep original birth certificates, passports, and SSN cards strictly in a physical fireproof lockbox. Only clinic visit summaries, CDC immunization cards, physician vitals, and work copies of DD forms should be stored electronically.
+        </p>
+        <div style="background:rgba(0,0,0,0.4); border:1px solid var(--border-subtle); padding:10px 14px; border-radius:6px; margin-bottom:18px;">
+          <input type="checkbox" id="opsec-redaction-confirm" />
+          <label for="opsec-redaction-confirm" style="font-family:var(--font-mono); font-size:0.75rem; color:var(--ghost-white); cursor:pointer; margin-left:6px;">
+            I confirm all Social Security Numbers, Passport numbers, and sensitive biometric details have been <strong>COMPLETELY REDACTED / BLACKED OUT</strong> on this copy.
+          </label>
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:10px;">
+          <button id="opsec-abort-btn" class="hud-btn hud-btn-primary" style="background:var(--crimson-alert); border-color:var(--crimson-alert);">
+            ABORT UPLOAD (RECOMMENDED)
+          </button>
+          <button id="opsec-proceed-btn" class="hud-btn" style="opacity:0.5; cursor:not-allowed;" disabled>
+            PROCEED WITH REDACTED FILE
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast Notification Container -->
   <div id="toast-container" class="toast-container"></div>
 
   <!-- Application Bootstrap -->
-  <script type="module" src="./js/nrmc-app.js"></script>
+  <script type="module" src="./js/nrmc-app.js?v=2.5.0"></script>
 </body>
 </html>

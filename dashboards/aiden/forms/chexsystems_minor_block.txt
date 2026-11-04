@@ -1,0 +1,28 @@
+================================================================================
+CHEXSYSTEMS MINOR CONSUMER FILE SECURITY FREEZE
+Aiden James Vane Banking Identity Protection Procedure
+================================================================================
+
+1. OVERVIEW:
+ChexSystems tracks checking and savings account inquiries and unauthorized bank account opening. Placing a freeze prevents bad actors from opening fraudulent bank accounts in a minor's name.
+
+2. SUBMISSION METHOD:
+- Online Portal: https://www.chexsystems.com/security-freeze/place-freeze
+- Mail Address:
+  Chex Systems, Inc.
+  Attn: Consumer Relations
+  P.O. Box 583399
+  Minneapolis, MN 55458
+- Fax: (602) 659-2197
+
+3. REQUIRED ENCLOSURES (FOR MINOR UNDER 16):
+[ ] ChexSystems Minor Security Freeze Request Form.
+[ ] Child's Full Legal Name: Aiden James Vane
+[ ] Child's Date of Birth: 2026-11-15 & SSN.
+[ ] Copy of Child's Certified Birth Certificate showing parentage.
+[ ] Copy of Parent's Government-issued photo identification (Military ID / Driver's License).
+[ ] Copy of Parent's proof of address (utility bill or bank statement).
+
+4. CONFIRMATION:
+- ChexSystems will issue a 10-digit Security Freeze PIN letter to the mailing address within 5 business days.
+================================================================================

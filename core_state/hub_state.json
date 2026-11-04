@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": "1.0.0-UNIFIED",
-    "last_updated": "2026-11-04T03:02:00.101396+00:00",
+    "last_updated": "2026-11-04T03:41:38.836543+00:00",
     "timezone": "America/New_York",
     "status": "ONLINE"
   },
@@ -232,7 +232,7 @@
       "statute_or_category": "Athletic Readiness",
       "due_date": "2026-11-04",
       "action_url": "health",
-      "created_at": "2026-11-04T03:02:00.037619+00:00",
+      "created_at": "2026-11-04T03:41:38.670568+00:00",
       "acknowledged": false,
       "dismissed": false
     },
@@ -274,7 +274,7 @@
       "statute_or_category": "Preventive Maintenance",
       "due_date": "2026-11-18",
       "action_url": "fleet",
-      "created_at": "2026-11-04T03:02:00.037619+00:00",
+      "created_at": "2026-11-04T03:41:38.670568+00:00",
       "acknowledged": false,
       "dismissed": false
     },
@@ -288,14 +288,14 @@
       "statute_or_category": "Q4 Statutory Maintenance",
       "due_date": "2026-12-31",
       "action_url": "rental",
-      "created_at": "2026-11-04T03:02:00.045014+00:00",
+      "created_at": "2026-11-04T03:41:38.694480+00:00",
       "acknowledged": false,
       "dismissed": false
     }
   ],
   "executive_briefing": {
     "cadence": "SUNDAY_1800_EXECUTIVE_BRIEFING",
-    "generated_at": "2026-11-04T03:02:00.037619+00:00",
+    "generated_at": "2026-11-04T03:41:38.667818+00:00",
     "week_label": "Week of November 04 \u2013 November 11, 2026",
     "cadence_window": "Week of November 04 \u2013 November 11, 2026",
     "summary": "Executive briefing for Week of November 04 \u2013 November 11, 2026 integrating Family Milestones, Property Cash Flow, Athletic Readiness, and Fleet Telemetry.",

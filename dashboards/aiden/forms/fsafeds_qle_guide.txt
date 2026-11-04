@@ -1,0 +1,22 @@
+================================================================================
+FSAFEDS DEPENDENT CARE FSA (DCFSA) QUALIFYING LIFE EVENT GUIDE
+Pre-Tax Childcare Allocation for Aiden James Vane
+================================================================================
+
+1. CRITICAL 60-DAY WINDOW:
+- Birth of a child is an OPM Qualifying Life Event (QLE).
+- Enrollment Window: Exactly 60 calendar days from the date of birth.
+- Portal: https://www.fsafeds.com
+
+2. DCFSA CONTRIBUTION LIMIT:
+- Maximum Annual Contribution: $5,000 per household per calendar year.
+- Payroll Deduction: Deducted from sponsor's monthly pay pre-tax, reducing taxable income.
+- Eligible Expenses: Licensed infant daycare, nursery school, nanny wages (FICA applicable), preschool, before/after school care.
+
+3. WORKFLOW STEPS:
+Step 1: Log in to https://www.fsafeds.com using Login.gov credentials.
+Step 2: Select "File a Qualifying Life Event" -> "Birth/Adoption of a Child".
+Step 3: Enter date of birth (2026-11-15) and calculate contribution allocation.
+Step 4: Upload proof of event: Hospital birth record or certified birth certificate within 30 days of submission.
+Step 5: Confirm payroll deduction schedule begins on following pay period.
+================================================================================

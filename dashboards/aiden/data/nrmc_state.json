@@ -38,8 +38,8 @@
   "financial_telemetry": {
     "deers_enrolled": false,
     "tricare_status": "PRIME_PENDING",
-    "ssn_status": "CARD_ISSUED",
-    "five_two_nine_active": true,
+    "ssn_status": "PENDING_APPLICATION",
+    "five_two_nine_active": false,
     "custodial_account_active": false
   },
   "modules": {
@@ -53,7 +53,7 @@
           "title": "Hospital Administration Intake & Paternity Verification",
           "category": "Vital Records",
           "priority": "HIGH",
-          "status": "COMPLETE",
+          "status": "PENDING",
           "timeframe": "T-0 to T+12h",
           "sla": "Within 24 hours of delivery",
           "forms": [
@@ -79,14 +79,15 @@
             }
           ],
           "notes": "Automated test suite verification note.",
-          "last_updated": "2026-11-04T02:55:00.269Z"
+          "last_updated": "2026-11-04T03:34:03.358Z",
+          "checklists_completed": []
         },
         {
           "id": "A2",
           "title": "Social Security Card Request Form Tracking (Form SS-5)",
           "category": "Federal Identity",
           "priority": "HIGH",
-          "status": "COMPLETE",
+          "status": "PENDING",
           "timeframe": "T-0 to T+24h",
           "sla": "2-4 weeks delivery from SSA",
           "forms": [
@@ -94,7 +95,7 @@
           ],
           "form_downloads": [
             {
-              "name": "Form SS-5 (SSA.gov Official)",
+              "name": "Form SS-5 (SSA Official PDF)",
               "file": "ss-5.pdf",
               "official_url": "https://www.ssa.gov/forms/ss-5.pdf"
             }
@@ -111,14 +112,17 @@
               "url": "https://www.ssa.gov/number-card"
             }
           ],
-          "notes": "Hospital birth registrar submitted SS-5 electronic feed. Card issued and received."
+          "notes": "Hospital birth registrar submitted SS-5 electronic feed. Card issued and received.",
+          "checklists_completed": [],
+          "last_updated": "2026-11-04T03:08:01.426Z",
+          "attached_documents": []
         },
         {
           "id": "A3",
           "title": "Certified Birth Certificate Order Tracker (5-8 Official Copies)",
           "category": "Vital Records",
           "priority": "CRITICAL",
-          "status": "IN_FLIGHT",
+          "status": "PENDING",
           "timeframe": "T+24h to T+14d",
           "sla": "5-10 business days processing",
           "copies_ordered": 6,
@@ -153,14 +157,16 @@
               "url": "https://www.vitalchek.com"
             }
           ],
-          "notes": "Ordered 6 certified copies via State Vital Records. Tracking pending courier dispatch."
+          "notes": "Ordered 6 certified copies via State Vital Records. Tracking pending courier dispatch.",
+          "checklists_completed": [],
+          "last_updated": "2026-11-04T03:08:01.426Z"
         },
         {
           "id": "A4",
           "title": "Newborn Metabolic Screening Card (Heel Prick Test)",
           "category": "Clinical Clearance",
           "priority": "HIGH",
-          "status": "COMPLETE",
+          "status": "PENDING",
           "timeframe": "T+24h to T+48h",
           "sla": "Sample collected prior to hospital discharge",
           "forms": [
@@ -179,14 +185,16 @@
               "url": "https://www.cdc.gov/newborn-screening"
             }
           ],
-          "notes": "Blood spot card collected at 36 hours. Lab report confirmed negative/nominal."
+          "notes": "Blood spot card collected at 36 hours. Lab report confirmed negative/nominal.",
+          "checklists_completed": [],
+          "last_updated": "2026-11-04T03:08:01.426Z"
         },
         {
           "id": "A5",
           "title": "Newborn Hearing Screening Clearance (OAE & AABR)",
           "category": "Clinical Clearance",
           "priority": "HIGH",
-          "status": "COMPLETE",
+          "status": "PENDING",
           "timeframe": "T+12h to T+48h",
           "sla": "Both ears tested prior to discharge",
           "forms": [
@@ -199,14 +207,16 @@
             "Copy placed in pediatric follow-up packet"
           ],
           "portals": [],
-          "notes": "Bilateral pass recorded. Normal acoustic response verified."
+          "notes": "Bilateral pass recorded. Normal acoustic response verified.",
+          "checklists_completed": [],
+          "last_updated": "2026-11-04T03:08:01.426Z"
         },
         {
           "id": "A6",
           "title": "Hospital Discharge Summary Packet & Signed Physician Summary",
           "category": "Clinical Documentation",
           "priority": "HIGH",
-          "status": "COMPLETE",
+          "status": "PENDING",
           "timeframe": "T+48h to T+72h",
           "sla": "Obtained at bedside prior to discharge",
           "forms": [
@@ -226,14 +236,16 @@
               "url": "https://patientportal.mhsgenesis.health.mil"
             }
           ],
-          "notes": "Discharge packet secured in physical binder. Initial pediatric appointment booked."
+          "notes": "Discharge packet secured in physical binder. Initial pediatric appointment booked.",
+          "checklists_completed": [],
+          "last_updated": "2026-11-04T03:08:01.426Z"
         },
         {
           "id": "A7",
           "title": "TRICARE 90-Day Newborn Grace Window Initialization",
           "category": "Military Medical",
           "priority": "CRITICAL",
-          "status": "IN_FLIGHT",
+          "status": "PENDING",
           "timeframe": "T-0 to T+90d",
           "sla": "90 calendar days from Date of Birth",
           "forms": [
@@ -262,7 +274,9 @@
               "url": "https://tricare.mil/CoveredServices/BenefitUpdates/Archives/11_19_2020_Newborn_Enrollment"
             }
           ],
-          "notes": "Grace window active. Currently at day T+0. Hard deadline: 2027-02-13."
+          "notes": "Grace window active. Currently at day T+0. Hard deadline: 2027-02-13.",
+          "checklists_completed": [],
+          "last_updated": "2026-11-04T03:08:01.426Z"
         }
       ]
     },
@@ -276,7 +290,7 @@
           "title": "DEERS Enrollment & RAPIDS Appointment Engine",
           "category": "DEERS / Personnel",
           "priority": "CRITICAL",
-          "status": "IN_FLIGHT",
+          "status": "PENDING",
           "timeframe": "T+3 to T+30d",
           "sla": "Complete within 30 days of birth",
           "forms": [
@@ -284,13 +298,13 @@
           ],
           "form_downloads": [
             {
-              "name": "DD Form 1172-2 (Official DoD Form)",
-              "file": "dd-1172-2.pdf",
-              "official_url": "https://www.esd.whs.mil/Portals/54/Documents/DD/forms/dd/dd1172-2.pdf"
+              "name": "RAPIDS Appointment SOP",
+              "file": "rapids_deers_sop.txt"
             },
             {
-              "name": "RAPIDS Appointment Guide",
-              "file": "rapids_deers_sop.txt"
+              "name": "DD Form 1172-2 (Official DoD Link)",
+              "file": "rapids_deers_sop.txt",
+              "official_url": "https://www.esd.whs.mil/Portals/54/Documents/DD/forms/dd/dd1172-2.pdf"
             }
           ],
           "checklists": [
@@ -304,17 +318,17 @@
           ],
           "portals": [
             {
-              "name": "DMDC RAPIDS Appointment Scheduler",
-              "url": "https://rapids-appointments.dmdc.osd.mil"
+              "name": "ID Card Office Online (Pre-sign DD 1172-2)",
+              "url": "https://idco.dmdc.osd.mil/idco/"
             },
             {
-              "name": "ID Card Office Online (Pre-sign DD 1172-2)",
-              "url": "https://www.dmdc.osd.mil/self_service"
+              "name": "DMDC RAPIDS Appointment Scheduler",
+              "url": "https://idco.dmdc.osd.mil/idco/"
             }
           ],
           "notes": "Appointment locked for 2026-12-05 10:00. Waiting on physical certified birth certificate.",
           "checklists_completed": [],
-          "last_updated": "2026-11-04T02:46:21.640Z"
+          "last_updated": "2026-11-04T03:08:01.426Z"
         },
         {
           "id": "B2",
@@ -351,7 +365,9 @@
               "url": "https://www.humanamilitary.com/beneficiary"
             }
           ],
-          "notes": "Action triggers immediately once DEERS enrollment completes."
+          "notes": "Action triggers immediately once DEERS enrollment completes.",
+          "checklists_completed": [],
+          "last_updated": "2026-11-04T03:08:01.426Z"
         },
         {
           "id": "B3",
@@ -377,14 +393,15 @@
             }
           ],
           "notes": "Automatic $10,000 FSGLI coverage verified via milConnect. Zero monthly premium.",
-          "last_updated": "2026-11-04T02:47:28.881Z"
+          "last_updated": "2026-11-04T03:08:01.426Z",
+          "checklists_completed": []
         },
         {
           "id": "B4",
           "title": "DD Form 93 (Record of Emergency Data) & iPERMS Execution",
           "category": "Military Personnel",
           "priority": "HIGH",
-          "status": "IN_FLIGHT",
+          "status": "PENDING",
           "timeframe": "T+7 to T+45d",
           "sla": "Required within 30 days of dependent addition",
           "forms": [
@@ -413,7 +430,9 @@
               "url": "https://iperms.hrc.army.mil"
             }
           ],
-          "notes": "Draft DD-93 initiated in IPPS-A. Routing for signature once SSN card received."
+          "notes": "Draft DD-93 initiated in IPPS-A. Routing for signature once SSN card received.",
+          "checklists_completed": [],
+          "last_updated": "2026-11-04T03:08:01.426Z"
         },
         {
           "id": "B5",
@@ -443,7 +462,9 @@
               "url": "https://mypay.dfas.mil"
             }
           ],
-          "notes": "Sponsor already receives BAH with Dependents (married). Verification required in IPPS-A tree."
+          "notes": "Sponsor already receives BAH with Dependents (married). Verification required in IPPS-A tree.",
+          "checklists_completed": [],
+          "last_updated": "2026-11-04T03:08:01.426Z"
         }
       ]
     },
@@ -465,9 +486,9 @@
           ],
           "form_downloads": [
             {
-              "name": "Form DS-11 (State Dept Official)",
+              "name": "Form DS-11 (State Dept Official PDF)",
               "file": "ds-11.pdf",
-              "official_url": "https://eforms.state.gov/Forms/ds11.pdf"
+              "official_url": "https://eforms.state.gov/Forms/ds11_pdf.pdf"
             },
             {
               "name": "Infant Passport Preparation SOP",
@@ -484,15 +505,17 @@
           ],
           "portals": [
             {
-              "name": "USPS Passport Appointment Scheduler",
-              "url": "https://tools.usps.com/rcas.htm"
+              "name": "travel.state.gov Passport Requirements (Under 16)",
+              "url": "https://travel.state.gov/content/travel/en/passports/need-passport/under-16.html"
             },
             {
-              "name": "travel.state.gov Passport Requirements",
-              "url": "https://travel.state.gov/content/travel/en/passports/need-passport/under-16.html"
+              "name": "USPS Passport Appointment Scheduler",
+              "url": "https://tools.usps.com/rcas.htm"
             }
           ],
-          "notes": "DS-11 pre-filled. Booking appointment window for late December once birth certificate arrives."
+          "notes": "DS-11 pre-filled. Booking appointment window for late December once birth certificate arrives.",
+          "checklists_completed": [],
+          "last_updated": "2026-11-04T03:08:01.426Z"
         },
         {
           "id": "C2",
@@ -525,7 +548,9 @@
               "url": "https://travel.state.gov/content/travel/en/passports/how-apply/photos.html"
             }
           ],
-          "notes": "Compliance guide reviewed. Photo shoot planned for home lighting setup."
+          "notes": "Compliance guide reviewed. Photo shoot planned for home lighting setup.",
+          "checklists_completed": [],
+          "last_updated": "2026-11-04T03:08:01.426Z"
         },
         {
           "id": "C3",
@@ -540,7 +565,7 @@
           ],
           "form_downloads": [
             {
-              "name": "Form DS-3053 (Official State Dept)",
+              "name": "Form DS-3053 (Official PDF)",
               "file": "ds-3053.pdf",
               "official_url": "https://eforms.state.gov/Forms/ds3053.pdf"
             }
@@ -558,7 +583,9 @@
               "url": "https://travel.state.gov/content/travel/en/passports/need-passport/under-16.html#consent"
             }
           ],
-          "notes": "Standby contingency if sponsor is on duty. Both parents currently available to attend together."
+          "notes": "Standby contingency if sponsor is on duty. Both parents currently available to attend together.",
+          "checklists_completed": [],
+          "last_updated": "2026-11-04T03:08:01.426Z"
         },
         {
           "id": "C4",
@@ -591,7 +618,9 @@
               "url": "https://www.equifax.com/personal/education/credit/report/how-to-protect-your-child-from-credit-fraud/"
             }
           ],
-          "notes": "Prevents synthetic identity theft and unauthorized credit lines. Packet compiled."
+          "notes": "Prevents synthetic identity theft and unauthorized credit lines. Packet compiled.",
+          "checklists_completed": [],
+          "last_updated": "2026-11-04T03:08:01.426Z"
         },
         {
           "id": "C5",
@@ -623,7 +652,9 @@
               "url": "https://www.experian.com/freeze/center.html"
             }
           ],
-          "notes": "Packet compiled for mailing alongside Equifax."
+          "notes": "Packet compiled for mailing alongside Equifax.",
+          "checklists_completed": [],
+          "last_updated": "2026-11-04T03:08:01.426Z"
         },
         {
           "id": "C6",
@@ -654,7 +685,9 @@
               "url": "https://www.transunion.com/credit-freeze"
             }
           ],
-          "notes": "Completes triad of major national credit bureau file freezes."
+          "notes": "Completes triad of major national credit bureau file freezes.",
+          "checklists_completed": [],
+          "last_updated": "2026-11-04T03:08:01.426Z"
         },
         {
           "id": "C7",
@@ -684,7 +717,9 @@
               "url": "https://www.chexsystems.com/security-freeze/place-freeze"
             }
           ],
-          "notes": "Blocks deposit account fraud across all U.S. financial institutions."
+          "notes": "Blocks deposit account fraud across all U.S. financial institutions.",
+          "checklists_completed": [],
+          "last_updated": "2026-11-04T03:08:01.426Z"
         }
       ]
     },
@@ -698,7 +733,7 @@
           "title": "IRS Child Tax Credit (CTC) & W-4 Withholding Adjustment via myPay",
           "category": "Tax Optimization",
           "priority": "HIGH",
-          "status": "IN_FLIGHT",
+          "status": "PENDING",
           "timeframe": "T+7 to T+30d",
           "sla": "Processed on following monthly pay cycle",
           "forms": [
@@ -706,7 +741,7 @@
           ],
           "form_downloads": [
             {
-              "name": "Form W-4 (IRS Official)",
+              "name": "Form W-4 (IRS Official PDF)",
               "file": "w-4.pdf",
               "official_url": "https://www.irs.gov/pub/irs-pdf/fw4.pdf"
             }
@@ -727,7 +762,9 @@
               "url": "https://www.irs.gov/individuals/tax-withholding-estimator"
             }
           ],
-          "notes": "W-4 estimator run. Ready to submit via myPay once SSN officially issued."
+          "notes": "W-4 estimator run. Ready to submit via myPay once SSN officially issued.",
+          "checklists_completed": [],
+          "last_updated": "2026-11-04T03:08:01.426Z"
         },
         {
           "id": "D2",
@@ -758,14 +795,16 @@
               "url": "https://www.fsafeds.com"
             }
           ],
-          "notes": "60-day clock active. Eligible for up to $5k pre-tax childcare savings."
+          "notes": "60-day clock active. Eligible for up to $5k pre-tax childcare savings.",
+          "checklists_completed": [],
+          "last_updated": "2026-11-04T03:08:01.426Z"
         },
         {
           "id": "D3",
           "title": "529 College Savings Plan Initiation & Automated Monthly Contributions",
           "category": "Education Wealth",
           "priority": "CRITICAL",
-          "status": "COMPLETE",
+          "status": "PENDING",
           "timeframe": "T+14 to T+60d",
           "sla": "Account active and seeded",
           "plan_details": {
@@ -797,14 +836,16 @@
               "url": "https://wastate529.wa.gov"
             }
           ],
-          "notes": "529 Plan initiated and seeded ($2,500). Auto-DCA configured for $500/mo."
+          "notes": "529 Plan initiated and seeded ($2,500). Auto-DCA configured for $500/mo.",
+          "checklists_completed": [],
+          "last_updated": "2026-11-04T03:08:01.426Z"
         },
         {
           "id": "D4",
           "title": "Custodial Brokerage Account (UTMA/UGMA) Seed Funding",
           "category": "Generational Wealth",
           "priority": "HIGH",
-          "status": "IN_FLIGHT",
+          "status": "PENDING",
           "timeframe": "T+30 to T+90d",
           "sla": "Account opened upon receipt of SSN",
           "custodial_details": {
@@ -829,14 +870,16 @@
               "url": "https://www.fidelity.com/open-account/custodial-account"
             }
           ],
-          "notes": "Application drafted at brokerage. Ready to fund upon SSN card entry."
+          "notes": "Application drafted at brokerage. Ready to fund upon SSN card entry.",
+          "checklists_completed": [],
+          "last_updated": "2026-11-04T03:08:01.426Z"
         },
         {
           "id": "D5",
           "title": "Early Credit Compounding Engine: Authorized User Calendar Milestone",
           "category": "Credit Architecture",
           "priority": "LOW",
-          "status": "LOCKED",
+          "status": "PENDING",
           "timeframe": "Future Milestone (Age 13-16)",
           "sla": "Automated schedule trigger locked until age threshold",
           "forms": [
@@ -849,7 +892,9 @@
             "Result: Ingests 15+ years of flawless credit seasoning into child's credit file on 18th birthday, yielding 750+ initial FICO"
           ],
           "portals": [],
-          "notes": "Future locked milestone. Calendar telemetry trigger established for system records."
+          "notes": "Future locked milestone. Calendar telemetry trigger established for system records.",
+          "checklists_completed": [],
+          "last_updated": "2026-11-04T03:08:01.426Z"
         }
       ]
     },
@@ -868,7 +913,8 @@
           "clinic": "Naval Hospital / Labor & Delivery Nursery",
           "lot_number": "ENG-B-9941A",
           "provider": "RN E. Miller",
-          "status": "COMPLETE"
+          "status": "SCHEDULED",
+          "date_administered": null
         },
         {
           "id": "VAC_02",
@@ -880,7 +926,8 @@
           "clinic": "Madigan AMC Pediatric Clinic",
           "lot_number": null,
           "provider": "Pediatric Team",
-          "status": "SCHEDULED"
+          "status": "SCHEDULED",
+          "date_administered": null
         },
         {
           "id": "VAC_03",
@@ -892,7 +939,8 @@
           "clinic": "Madigan AMC Pediatric Clinic",
           "lot_number": null,
           "provider": "Dr. Sarah Vance, MD",
-          "status": "PENDING"
+          "status": "SCHEDULED",
+          "date_administered": null
         },
         {
           "id": "VAC_04",
@@ -904,7 +952,8 @@
           "clinic": "Madigan AMC Pediatric Clinic",
           "lot_number": null,
           "provider": "Pediatric Team",
-          "status": "PENDING"
+          "status": "SCHEDULED",
+          "date_administered": null
         },
         {
           "id": "VAC_05",
@@ -916,7 +965,8 @@
           "clinic": "Madigan AMC Pediatric Clinic",
           "lot_number": null,
           "provider": "Dr. Sarah Vance, MD",
-          "status": "PENDING"
+          "status": "SCHEDULED",
+          "date_administered": null
         }
       ],
       "growth_telemetry": {
@@ -976,6 +1026,58 @@
           },
           {
             "id": "GROWTH_1793760900274",
+            "date": "2026-11-04",
+            "age_days": 0,
+            "age_months": 0,
+            "weight_lbs": 8.4,
+            "length_in": 20.9,
+            "head_circ_in": 14.6,
+            "weight_percentile": 61,
+            "length_percentile": 63,
+            "head_percentile": 59,
+            "notes": "Automated test vitals entry"
+          },
+          {
+            "id": "GROWTH_1793761312206",
+            "date": "2026-11-04",
+            "age_days": 0,
+            "age_months": 0,
+            "weight_lbs": 8.4,
+            "length_in": 20.9,
+            "head_circ_in": 14.6,
+            "weight_percentile": 61,
+            "length_percentile": 63,
+            "head_percentile": 59,
+            "notes": "Automated test vitals entry"
+          },
+          {
+            "id": "GROWTH_1793762118372",
+            "date": "2026-11-04",
+            "age_days": 0,
+            "age_months": 0,
+            "weight_lbs": 8.4,
+            "length_in": 20.9,
+            "head_circ_in": 14.6,
+            "weight_percentile": 61,
+            "length_percentile": 63,
+            "head_percentile": 59,
+            "notes": "Automated test vitals entry"
+          },
+          {
+            "id": "GROWTH_1793762964662",
+            "date": "2026-11-04",
+            "age_days": 0,
+            "age_months": 0,
+            "weight_lbs": 8.4,
+            "length_in": 20.9,
+            "head_circ_in": 14.6,
+            "weight_percentile": 61,
+            "length_percentile": 63,
+            "head_percentile": 59,
+            "notes": "Automated test vitals entry"
+          },
+          {
+            "id": "GROWTH_1793763243366",
             "date": "2026-11-04",
             "age_days": 0,
             "age_months": 0,
@@ -1167,9 +1269,29 @@
       },
       "tummy_time_tracker": {
         "daily_target_minutes": 25,
-        "today_completed_minutes": 35,
-        "total_lifetime_sessions": 14,
+        "today_completed_minutes": 75,
+        "total_lifetime_sessions": 18,
         "history": [
+          {
+            "date": "2026-11-04",
+            "minutes": 10,
+            "notes": "Automated tummy test"
+          },
+          {
+            "date": "2026-11-04",
+            "minutes": 10,
+            "notes": "Automated tummy test"
+          },
+          {
+            "date": "2026-11-04",
+            "minutes": 10,
+            "notes": "Automated tummy test"
+          },
+          {
+            "date": "2026-11-04",
+            "minutes": 10,
+            "notes": "Automated tummy test"
+          },
           {
             "date": "2026-11-04",
             "minutes": 10,
@@ -1203,8 +1325,8 @@
           "category": "Motor & Physical",
           "title": "Lifts Head Briefly & Turns Face While on Tummy",
           "target_age": "Birth - 1 Month",
-          "status": "ACHIEVED",
-          "date_achieved": "2026-11-22",
+          "status": "PENDING",
+          "date_achieved": null,
           "notes": "Lifts chin off flat surface for 3-5 seconds and turns head side to side."
         },
         {
@@ -1212,7 +1334,7 @@
           "category": "Visual & Cognitive",
           "title": "Visual Tracking of High-Contrast Objects (8-12 inches)",
           "target_age": "1 - 2 Months",
-          "status": "IN_PROGRESS",
+          "status": "PENDING",
           "date_achieved": null,
           "notes": "Tracks black and white geometric flashcards across 90-degree field of view."
         },
@@ -1221,8 +1343,8 @@
           "category": "Acoustic & Sensory",
           "title": "Startle & Acoustic Orienting Response",
           "target_age": "Birth - 1 Month",
-          "status": "ACHIEVED",
-          "date_achieved": "2026-11-17",
+          "status": "PENDING",
+          "date_achieved": null,
           "notes": "Blinks or stills in response to sudden voices; calms to parent soothing voice."
         },
         {
@@ -1368,7 +1490,116 @@
       "action": "TUMMY_TIME_LOG",
       "actor": "CAREGIVER",
       "details": "Logged 10 minutes of tummy time. Daily total: 35 min."
+    },
+    {
+      "timestamp": "2026-11-04T03:01:52.202Z",
+      "action": "TASK_STATUS_UPDATE",
+      "actor": "OPERATOR",
+      "details": "Task A1 (Hospital Administration Intake & Paternity Verification) updated to COMPLETE"
+    },
+    {
+      "timestamp": "2026-11-04T03:01:52.206Z",
+      "action": "GROWTH_MEASUREMENT_LOG",
+      "actor": "PEDIATRIC_TELEMETRY",
+      "details": "Added growth record: 8.4 lbs, 20.9 in, 14.6 in head circumference"
+    },
+    {
+      "timestamp": "2026-11-04T03:01:52.210Z",
+      "action": "TUMMY_TIME_LOG",
+      "actor": "CAREGIVER",
+      "details": "Logged 10 minutes of tummy time. Daily total: 45 min."
+    },
+    {
+      "timestamp": "2026-11-04T03:15:18.357Z",
+      "action": "TASK_STATUS_UPDATE",
+      "actor": "OPERATOR",
+      "details": "Task A1 (Hospital Administration Intake & Paternity Verification) updated to PENDING"
+    },
+    {
+      "timestamp": "2026-11-04T03:15:18.372Z",
+      "action": "GROWTH_MEASUREMENT_LOG",
+      "actor": "PEDIATRIC_TELEMETRY",
+      "details": "Added growth record: 8.4 lbs, 20.9 in, 14.6 in head circumference"
+    },
+    {
+      "timestamp": "2026-11-04T03:15:18.381Z",
+      "action": "TUMMY_TIME_LOG",
+      "actor": "CAREGIVER",
+      "details": "Logged 10 minutes of tummy time. Daily total: 55 min."
+    },
+    {
+      "timestamp": "2026-11-04T03:15:44.347Z",
+      "action": "TASK_STATUS_UPDATE",
+      "actor": "OPERATOR",
+      "details": "Task A1 (Hospital Administration Intake & Paternity Verification) updated to COMPLETE"
+    },
+    {
+      "timestamp": "2026-11-04T03:15:44.482Z",
+      "action": "TASK_STATUS_UPDATE",
+      "actor": "OPERATOR",
+      "details": "Task A1 (Hospital Administration Intake & Paternity Verification) updated to PENDING"
+    },
+    {
+      "timestamp": "2026-11-04T03:29:24.648Z",
+      "action": "TASK_STATUS_UPDATE",
+      "actor": "OPERATOR",
+      "details": "Task A1 (Hospital Administration Intake & Paternity Verification) updated to PENDING"
+    },
+    {
+      "timestamp": "2026-11-04T03:29:24.662Z",
+      "action": "GROWTH_MEASUREMENT_LOG",
+      "actor": "PEDIATRIC_TELEMETRY",
+      "details": "Added growth record: 8.4 lbs, 20.9 in, 14.6 in head circumference"
+    },
+    {
+      "timestamp": "2026-11-04T03:29:24.677Z",
+      "action": "TUMMY_TIME_LOG",
+      "actor": "CAREGIVER",
+      "details": "Logged 10 minutes of tummy time. Daily total: 65 min."
+    },
+    {
+      "timestamp": "2026-11-04T03:33:41.719Z",
+      "action": "DOCUMENT_VAULTED",
+      "actor": "OPERATOR",
+      "details": "Vaulted document \"CDC Vaccine Card - HepB #1\" (37 bytes) under CLINICAL"
+    },
+    {
+      "timestamp": "2026-11-04T03:33:41.774Z",
+      "action": "DOCUMENT_VAULTED",
+      "actor": "OPERATOR",
+      "details": "Vaulted document \"SS-5 Receipt (Redacted)\" (37 bytes) under LEGAL"
+    },
+    {
+      "timestamp": "2026-11-04T03:33:54.120Z",
+      "action": "DOCUMENT_VAULTED",
+      "actor": "OPERATOR",
+      "details": "Vaulted document \"CDC Vaccine Card - HepB #1\" (37 bytes) under CLINICAL"
+    },
+    {
+      "timestamp": "2026-11-04T03:33:54.162Z",
+      "action": "DOCUMENT_VAULTED",
+      "actor": "OPERATOR",
+      "details": "Vaulted document \"SS-5 Receipt (Redacted)\" (37 bytes) under LEGAL"
+    },
+    {
+      "timestamp": "2026-11-04T03:34:03.358Z",
+      "action": "TASK_STATUS_UPDATE",
+      "actor": "OPERATOR",
+      "details": "Task A1 (Hospital Administration Intake & Paternity Verification) updated to PENDING"
+    },
+    {
+      "timestamp": "2026-11-04T03:34:03.366Z",
+      "action": "GROWTH_MEASUREMENT_LOG",
+      "actor": "PEDIATRIC_TELEMETRY",
+      "details": "Added growth record: 8.4 lbs, 20.9 in, 14.6 in head circumference"
+    },
+    {
+      "timestamp": "2026-11-04T03:34:03.375Z",
+      "action": "TUMMY_TIME_LOG",
+      "actor": "CAREGIVER",
+      "details": "Logged 10 minutes of tummy time. Daily total: 75 min."
     }
   ],
-  "last_updated": "2026-11-04T02:55:00.281Z"
+  "last_updated": "2026-11-04T03:34:03.375Z",
+  "vault_documents": []
 }

@@ -20,6 +20,9 @@ class NrmcDashboardApp {
     this.selectedTask = null;
     this.currentMetric = 'weight';
     this.broadcastChannel = null;
+    this.currentVaultFilter = 'ALL';
+    this.stagedVaultFile = null;
+    this.pendingOpsecFile = null;
 
     this.init();
   }
@@ -108,36 +111,73 @@ class NrmcDashboardApp {
     return path;
   }
 
-  // 3. Load State from LocalStorage / Server
+  // 3. Load State from LocalStorage / Server / Static Baseline
   async loadInitialState() {
-    // Check LocalStorage first for instant paint
+    let baselineState = null;
+    const isLocalBackend = window.location.port === '3012' || window.location.port === '4000' ||
+                           (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+
+    // If local backend is active, query live API state
+    if (isLocalBackend) {
+      try {
+        const res = await fetch(this.apiUrl('/api/v1/nrmc/state'));
+        if (res.ok) {
+          baselineState = await res.json();
+        }
+      } catch (err) {
+        console.warn('[NRMC] Local backend unreachable:', err.message);
+      }
+    }
+
+    // Fallback: If no server state (e.g. GitHub Pages or static host), fetch static baseline JSON
+    if (!baselineState) {
+      try {
+        const staticRes = await fetch('./data/nrmc_state.json');
+        if (staticRes.ok) {
+          baselineState = await staticRes.json();
+        }
+      } catch (e) {
+        console.warn('[NRMC] Static baseline fetch failed:', e.message);
+      }
+    }
+
+    // Check LocalStorage for instant paint & user-saved modifications
     const cached = localStorage.getItem('nrmc_cached_state');
     if (cached) {
       try {
-        this.state = JSON.parse(cached);
+        const parsed = JSON.parse(cached);
+        if (parsed && parsed.profile) {
+          parsed.profile.baby_name = 'Aiden James Vane';
+          if (!Array.isArray(parsed.vault_documents)) {
+            parsed.vault_documents = baselineState?.vault_documents || [];
+          }
+          this.state = parsed;
+        }
       } catch (e) {
-        console.warn('[NRMC] Invalid cached state');
+        console.warn('[NRMC] Invalid cached state:', e);
       }
     }
 
-    // Fetch freshest state from server
-    try {
-      const res = await fetch(this.apiUrl('/api/v1/nrmc/state'));
-      if (res.ok) {
-        this.state = await res.json();
-        localStorage.setItem('nrmc_cached_state', JSON.stringify(this.state));
-      }
-    } catch (err) {
-      console.warn('[NRMC] Offline or server unreachable, running in local cached mode:', err.message);
+    // If no valid cached state, use baseline
+    if (!this.state && baselineState) {
+      this.state = baselineState;
+      localStorage.setItem('nrmc_cached_state', JSON.stringify(this.state));
     }
   }
 
-  // 4. WebSocket Real-Time Stream
+  // 4. WebSocket Real-Time Stream (Active only on local hosts with Node backend)
   initWebSocket() {
+    const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    if (!isLocal && !window.location.port) {
+      // Static cloud host (e.g. GitHub Pages) - operate in standalone client mode
+      this.updateNetworkBadge(false, 'STANDALONE ORBIT');
+      return;
+    }
+
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
     const targetHost = (window.location.port === '3012')
       ? window.location.host
-      : (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'localhost:3012' : window.location.host);
+      : (isLocal ? 'localhost:3012' : window.location.host);
     const wsUrl = `${protocol}//${targetHost}/ws/telemetry`;
 
     try {
@@ -165,18 +205,20 @@ class NrmcDashboardApp {
       };
       this.ws.onclose = () => {
         this.updateNetworkBadge(false);
-        setTimeout(() => this.initWebSocket(), 5000);
+        if (isLocal) {
+          setTimeout(() => this.initWebSocket(), 5000);
+        }
       };
     } catch (e) {
       this.updateNetworkBadge(false);
     }
   }
 
-  updateNetworkBadge(online) {
+  updateNetworkBadge(online, customLabel) {
     const badge = document.getElementById('ws-status-badge');
     if (badge) {
-      badge.textContent = online ? 'LIVE WEBSOCKET' : 'STANDALONE SYNC';
-      badge.className = `countdown-pill ${online ? 'pill-emerald' : 'pill-amber'}`;
+      badge.textContent = customLabel || (online ? 'LIVE WEBSOCKET' : 'STANDALONE SYNC');
+      badge.className = `countdown-pill ${online ? 'pill-emerald' : 'pill-cyan'}`;
     }
   }
 
@@ -254,6 +296,7 @@ class NrmcDashboardApp {
     this.renderModuleTasks();
     this.renderClinicalData();
     this.renderRawTelemetry();
+    this.renderDocumentVault();
   }
 
   // Unified Chronological Milestones Matrix
@@ -374,17 +417,32 @@ class NrmcDashboardApp {
         const priorityPill = isCritical ? 'pill-crimson' : m.priority === 'HIGH' ? 'pill-amber' : 'pill-cyan';
         const connectorClass = isComplete ? 'complete' : isCritical ? 'critical' : '';
 
+        // Check if documents are vaulted or prompted for this milestone
+        const taskDocs = (this.state.vault_documents || []).filter((d) => d.task_id === m.id);
+        const needsDocPrompt = ['A4', 'A5', 'A6', 'B1', 'B3', 'B4', 'C2', 'D1', 'D2', 'D3', 'VAC_01', 'VAC_02', 'VAC_03', 'VAC_04', 'VAC_05'].includes(m.id);
+        let docPromptHtml = '';
+        if (taskDocs.length > 0) {
+          docPromptHtml = `<button class="vault-prompt-badge has-docs open-vault-task-btn" data-task-id="${m.id}" title="${taskDocs.length} record(s) archived in local vault. Click to view.">📁 ${taskDocs.length} RECORD(S)</button>`;
+        } else if (needsDocPrompt) {
+          docPromptHtml = `<button class="vault-prompt-badge need-doc prompt-upload-btn" data-task-id="${m.id}" title="OPSEC Prompt: File supporting record or clinic slip">📎 FILE RECORD</button>`;
+        }
+
         return `
-        <div class="glidepath-milestone-card" data-task-id="${m.id}" data-category="${m.category}">
+        <div class="glidepath-milestone-card ${isComplete ? 'milestone-card-complete' : ''}" data-task-id="${m.id}" data-category="${m.category}">
           <div class="milestone-node-connector ${connectorClass}"></div>
           <div class="milestone-header-row">
             <span class="milestone-time-badge">${m.offset}</span>
-            <span class="countdown-pill ${priorityPill}">${m.isDeadline ? '🚨 DEADLINE' : m.priority}</span>
+            <div style="display:flex; align-items:center; gap:6px;">
+              ${docPromptHtml}
+              <span class="countdown-pill ${priorityPill}">${m.isDeadline ? '🚨 DEADLINE' : m.priority}</span>
+            </div>
           </div>
           <div class="milestone-card-title">${m.title}</div>
           <div class="milestone-card-date">Target: <strong>${m.date}</strong> ${m.sla ? `• ${m.sla}` : ''}</div>
           <div class="milestone-card-footer">
-            <span style="font-family:var(--font-mono); font-size:0.7rem; color:var(--text-muted);">${m.forms.length > 0 ? m.forms[0].split('(')[0] : m.id}</span>
+            <button class="hud-check-toggle-sm ${isComplete ? 'is-complete' : ''}" data-task-id="${m.id}" title="${isComplete ? 'Task Sealed. Click to reopen' : 'Click to seal task as complete'}">
+              ${isComplete ? '✓ SEALED' : '◯ COMPLETE'}
+            </button>
             <span class="countdown-pill ${statusPill}">${m.status}</span>
           </div>
         </div>
@@ -519,8 +577,10 @@ class NrmcDashboardApp {
               <div style="font-size:0.8rem; color:var(--text-muted);">${m.sla ? `SLA: ${m.sla}` : ''} ${m.forms.length > 0 ? `| Forms: ${m.forms.join(', ')}` : ''}</div>
             </div>
             <div style="display:flex; align-items:center; gap:8px;">
-              <span class="status-pill status-${m.status}">${m.status}</span>
-              <button class="hud-btn hud-btn-sm hud-btn-primary open-sortie-btn" data-id="${m.id}">LAUNCH DOSSIER</button>
+              <button class="hud-check-toggle-sm ${isComplete ? 'is-complete' : ''}" data-task-id="${m.id}" title="${isComplete ? 'Task Sealed. Click to reopen' : 'Click to seal complete'}">
+                ${isComplete ? '✓ SEALED' : '◯ MARK DONE'}
+              </button>
+              <button class="hud-btn hud-btn-sm hud-btn-primary open-sortie-btn" data-id="${m.id}">DOSSIER</button>
             </div>
           </div>
         `;
@@ -558,13 +618,18 @@ class NrmcDashboardApp {
         isComplete ? 'pill-emerald' : m.status === 'IN_FLIGHT' ? 'pill-cyan' : m.status === 'LOCKED' ? 'pill-gray' : 'pill-amber';
 
       html += `
-        <div class="swimlane-node-card" data-task-id="${m.id}">
+        <div class="swimlane-node-card ${isComplete ? 'node-card-complete' : ''}" data-task-id="${m.id}">
           <div style="display:flex; justify-content:space-between; align-items:center;">
             <span class="milestone-time-badge">${m.offset}</span>
-            <span class="countdown-pill ${statusPill}">${m.status}</span>
+            <button class="hud-check-toggle-sm ${isComplete ? 'is-complete' : ''}" data-task-id="${m.id}" title="${isComplete ? 'Sealed. Click to reopen' : 'Click to complete'}">
+              ${isComplete ? '✓' : '◯'}
+            </button>
           </div>
           <div style="font-weight:700; font-size:0.85rem; color:var(--ghost-white); line-height:1.3;">${m.title}</div>
-          <div style="font-family:var(--font-mono); font-size:0.7rem; color:var(--text-muted);">${m.date}</div>
+          <div style="display:flex; justify-content:space-between; align-items:center; font-family:var(--font-mono); font-size:0.7rem; color:var(--text-muted);">
+            <span>${m.date}</span>
+            <span class="countdown-pill ${statusPill}">${m.status}</span>
+          </div>
         </div>
       `;
 
@@ -741,28 +806,49 @@ class NrmcDashboardApp {
       .map((t) => {
         const checkTotal = t.checklists ? t.checklists.length : 0;
         const checkDone = t.checklists_completed ? t.checklists_completed.length : t.status === 'COMPLETE' ? checkTotal : 0;
+        const isComplete = t.status === 'COMPLETE';
         const priorityPill =
           t.priority === 'CRITICAL' ? 'pill-crimson' : t.priority === 'HIGH' ? 'pill-amber' : 'pill-cyan';
+        const cardBorderClass = isComplete ? 'task-card-complete' : '';
+
+        // Check if documents are vaulted or prompted for this task
+        const taskDocs = (this.state.vault_documents || []).filter((d) => d.task_id === t.id);
+        const needsDocPrompt = ['A4', 'A5', 'A6', 'B1', 'B3', 'B4', 'C2', 'D1', 'D2', 'D3'].includes(t.id);
+        let docPromptHtml = '';
+        if (taskDocs.length > 0) {
+          docPromptHtml = `<button class="vault-prompt-badge has-docs open-vault-task-btn" data-task-id="${t.id}" title="${taskDocs.length} record(s) filed. Click to view.">📁 ${taskDocs.length} RECORD(S)</button>`;
+        } else if (needsDocPrompt) {
+          docPromptHtml = `<button class="vault-prompt-badge need-doc prompt-upload-btn" data-task-id="${t.id}" title="OPSEC Prompt: File supporting document">📎 FILE RECORD</button>`;
+        }
 
         return `
-        <div class="task-matrix-card" data-task-id="${t.id}">
+        <div class="task-matrix-card ${cardBorderClass}" data-task-id="${t.id}">
           <div class="task-card-header">
             <div style="display:flex; align-items:center; gap:8px;">
               <span class="task-id-badge">${t.id}</span>
               <span class="task-category-tag">${t.category || 'General'}</span>
             </div>
-            <span class="countdown-pill ${priorityPill}">${t.priority || 'NORMAL'}</span>
+            <div style="display:flex; align-items:center; gap:6px;">
+              ${docPromptHtml}
+              <span class="countdown-pill ${priorityPill}">${t.priority || 'NORMAL'}</span>
+            </div>
           </div>
           <div class="task-card-title">${t.title}</div>
           <div class="task-card-desc">${t.notes || (t.sla ? `SLA: ${t.sla}` : 'Operational task')}</div>
           <div class="task-card-footer">
-            <span class="task-checklist-summary">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="20 6 9 17 4 12"></polyline>
-              </svg>
-              ${checkDone}/${checkTotal} Checked
-            </span>
-            <span class="status-pill status-${t.status}">${t.status}</span>
+            <button class="hud-check-toggle-btn ${isComplete ? 'is-complete' : ''}" data-task-id="${t.id}" title="${isComplete ? 'Task Sealed. Click to reopen' : 'Click to seal task as complete'}">
+              <span class="hud-check-box">${isComplete ? '✓' : ''}</span>
+              <span class="hud-check-text">${isComplete ? 'SEALED COMPLETE' : 'MARK COMPLETE'}</span>
+            </button>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span class="task-checklist-summary">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                ${checkDone}/${checkTotal}
+              </span>
+              <span class="status-pill status-${t.status}">${t.status}</span>
+            </div>
           </div>
         </div>
       `;
@@ -780,16 +866,19 @@ class NrmcDashboardApp {
     if (vacTableBody && Array.isArray(modE.vaccine_glidepath)) {
       vacTableBody.innerHTML = modE.vaccine_glidepath
         .map((v) => {
+          const isComplete = v.status === 'COMPLETE';
           const statusClass =
-            v.status === 'COMPLETE' ? 'pill-emerald' : v.status === 'SCHEDULED' ? 'pill-cyan' : 'pill-amber';
+            isComplete ? 'pill-emerald' : v.status === 'SCHEDULED' ? 'pill-cyan' : 'pill-amber';
           return `
           <tr>
             <td style="font-family:var(--font-mono); font-weight:700; color:var(--cyan-telemetry);">${v.stage}</td>
             <td style="font-weight:600;">${v.vaccine}</td>
-            <td style="font-family:var(--font-mono); color:var(--text-muted);">${v.target_date || 'TBD'}</td>
+            <td style="font-family:var(--font-mono); color:var(--text-muted);">${v.target_date || 'TBD'} ${v.date_administered ? `(Administered: ${v.date_administered})` : ''}</td>
             <td><span class="countdown-pill ${statusClass}">${v.status}</span></td>
             <td>
-              <button class="hud-btn hud-btn-sm edit-vaccine-btn" data-vac-id="${v.id}">LOG / EDIT</button>
+              <button class="hud-btn hud-btn-sm ${isComplete ? 'hud-btn-emerald' : 'hud-btn-primary'} vac-toggle-btn" data-vac-id="${v.id}" title="${isComplete ? 'Vaccine recorded. Click to uncheck' : 'Click to record vaccine as administered today'}">
+                ${isComplete ? '✓ GIVEN' : 'MARK GIVEN'}
+              </button>
             </td>
           </tr>
         `;
@@ -874,13 +963,82 @@ class NrmcDashboardApp {
       });
     });
 
-    // Unified Card Click Delegation (Task Matrix, Glidepath Runway, Swimlane Nodes)
+    // Unified Card & Checkbox Click Delegation
     document.addEventListener('click', (e) => {
+      // 1. Direct Task Checkbox Toggle (stop propagation to prevent opening modal)
+      const toggleBtn = e.target.closest('.hud-check-toggle-btn, .hud-check-toggle-sm');
+      if (toggleBtn && toggleBtn.dataset.taskId) {
+        e.stopPropagation();
+        e.preventDefault();
+        this.toggleTaskComplete(toggleBtn.dataset.taskId);
+        return;
+      }
+
+      // 2. Direct Vaccine Toggle
+      const vacBtn = e.target.closest('.vac-toggle-btn');
+      if (vacBtn && vacBtn.dataset.vacId) {
+        e.stopPropagation();
+        e.preventDefault();
+        this.toggleVaccineComplete(vacBtn.dataset.vacId);
+        return;
+      }
+
+      // 3. Document Vault Prompt Button (e.g., from Glidepath or Task Card)
+      const promptBtn = e.target.closest('.prompt-upload-btn');
+      if (promptBtn && promptBtn.dataset.taskId) {
+        e.stopPropagation();
+        e.preventDefault();
+        this.switchTab('document-vault');
+        const select = document.getElementById('vault-doc-task-select');
+        if (select) select.value = promptBtn.dataset.taskId;
+        const dropzone = document.getElementById('vault-dropzone');
+        if (dropzone) dropzone.scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
+
+      // 4. Open Vault Attached Records for Task
+      const vaultTaskBtn = e.target.closest('.open-vault-task-btn');
+      if (vaultTaskBtn && vaultTaskBtn.dataset.taskId) {
+        e.stopPropagation();
+        e.preventDefault();
+        this.openActionModal(vaultTaskBtn.dataset.taskId);
+        return;
+      }
+
+      // 5. Delete Document from Vault
+      const delBtn = e.target.closest('.delete-vault-doc-btn');
+      if (delBtn && delBtn.dataset.docId) {
+        e.stopPropagation();
+        e.preventDefault();
+        this.deleteVaultDocument(delBtn.dataset.docId);
+        return;
+      }
+
+      // 6. Click on linked task badge in Vault Table
+      const openTaskBtn = e.target.closest('[data-open-task]');
+      if (openTaskBtn && openTaskBtn.dataset.openTask) {
+        e.stopPropagation();
+        e.preventDefault();
+        this.openActionModal(openTaskBtn.dataset.openTask);
+        return;
+      }
+
+      // 7. Card click opens action modal
       const card = e.target.closest('.task-matrix-card, .glidepath-milestone-card, .swimlane-node-card');
       if (card && card.dataset.taskId) {
         this.openActionModal(card.dataset.taskId);
       }
     });
+
+    // Modal Seal Button Listener
+    const modalSealBtn = document.getElementById('modal-seal-btn');
+    if (modalSealBtn) {
+      modalSealBtn.addEventListener('click', () => {
+        if (this.selectedTask) {
+          this.toggleTaskComplete(this.selectedTask.id);
+        }
+      });
+    }
 
     // Mission Glidepath Filter Buttons
     document.querySelectorAll('.glidepath-filter-btn').forEach((btn) => {
@@ -1063,6 +1221,96 @@ class NrmcDashboardApp {
     if (configBtn) {
       configBtn.addEventListener('click', () => this.openProfileConfigModal());
     }
+
+    // Modal Quick Upload Button -> Link to Document Vault
+    const quickUploadBtn = document.getElementById('modal-quick-upload-btn');
+    if (quickUploadBtn) {
+      quickUploadBtn.addEventListener('click', () => {
+        if (this.selectedTask) {
+          const tId = this.selectedTask.id;
+          this.closeActionModal();
+          this.switchTab('document-vault');
+          const select = document.getElementById('vault-doc-task-select');
+          if (select) select.value = tId;
+          const dropzone = document.getElementById('vault-dropzone');
+          if (dropzone) dropzone.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    }
+
+    // Vault Dropzone & File Input
+    const dropzone = document.getElementById('vault-dropzone');
+    const fileInput = document.getElementById('vault-file-input');
+    if (dropzone && fileInput) {
+      dropzone.addEventListener('click', () => fileInput.click());
+      fileInput.addEventListener('change', (e) => {
+        if (e.target.files && e.target.files.length) {
+          this.handleVaultFileSelection(e.target.files[0]);
+        }
+      });
+      dropzone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropzone.classList.add('drag-active');
+      });
+      dropzone.addEventListener('dragleave', () => dropzone.classList.remove('drag-active'));
+      dropzone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropzone.classList.remove('drag-active');
+        if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length) {
+          this.handleVaultFileSelection(e.dataTransfer.files[0]);
+        }
+      });
+    }
+
+    // Vault Upload Submit Button
+    const submitUploadBtn = document.getElementById('vault-upload-submit-btn');
+    if (submitUploadBtn) {
+      submitUploadBtn.addEventListener('click', () => this.uploadStagedVaultDocument());
+    }
+
+    // Vault Category Filter Buttons
+    document.querySelectorAll('.vault-filter-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        this.currentVaultFilter = btn.dataset.cat || 'ALL';
+        this.renderDocumentVault();
+      });
+    });
+
+    // OPSEC Warning Intercept Modal Controls
+    const opsecConfirm = document.getElementById('opsec-redaction-confirm');
+    const opsecProceed = document.getElementById('opsec-proceed-btn');
+    const opsecAbort = document.getElementById('opsec-abort-btn');
+    const opsecClose = document.getElementById('opsec-close-btn');
+
+    if (opsecConfirm && opsecProceed) {
+      opsecConfirm.addEventListener('change', (e) => {
+        opsecProceed.disabled = !e.target.checked;
+        opsecProceed.style.opacity = e.target.checked ? '1' : '0.5';
+        opsecProceed.style.cursor = e.target.checked ? 'pointer' : 'not-allowed';
+      });
+    }
+
+    const closeOpsecModal = () => {
+      const modal = document.getElementById('opsec-warning-modal');
+      if (modal) modal.classList.remove('active');
+      this.pendingOpsecFile = null;
+      const fInput = document.getElementById('vault-file-input');
+      if (fInput) fInput.value = '';
+    };
+
+    if (opsecAbort) opsecAbort.addEventListener('click', closeOpsecModal);
+    if (opsecClose) opsecClose.addEventListener('click', closeOpsecModal);
+
+    if (opsecProceed) {
+      opsecProceed.addEventListener('click', () => {
+        const modal = document.getElementById('opsec-warning-modal');
+        if (modal) modal.classList.remove('active');
+        if (this.pendingOpsecFile) {
+          this.stageVaultFile(this.pendingOpsecFile);
+          this.showToast('Redacted copy staged for vaulting.', 'warning');
+        }
+      });
+    }
   }
 
   switchTab(tabKey) {
@@ -1125,7 +1373,25 @@ class NrmcDashboardApp {
             } else {
               task.checklists_completed = task.checklists_completed.filter((x) => x !== val);
             }
-            this.syncTaskUpdate(task.id, { checklists_completed: task.checklists_completed });
+
+            // Auto-advance or revert task completion based on full checklist fulfillment
+            if (task.checklists.length > 0 && task.checklists_completed.length === task.checklists.length) {
+              task.status = 'COMPLETE';
+              document.getElementById('modal-status-select').value = 'COMPLETE';
+              this.updateModalSealButton(true);
+              this.playTacticalFeedback('seal');
+              this.showToast(`All documentation verified! Task ${task.id} sealed COMPLETE.`);
+            } else if (task.status === 'COMPLETE' && task.checklists_completed.length < task.checklists.length) {
+              task.status = 'IN_FLIGHT';
+              document.getElementById('modal-status-select').value = 'IN_FLIGHT';
+              this.updateModalSealButton(false);
+            }
+
+            this.syncTaskUpdate(task.id, {
+              status: task.status,
+              checklists_completed: task.checklists_completed
+            });
+            this.render();
           });
         });
       } else {
@@ -1133,30 +1399,44 @@ class NrmcDashboardApp {
       }
     }
 
+    // Update Modal Seal Button state
+    this.updateModalSealButton(task.status === 'COMPLETE');
+
     // Required Forms & Download Links
     const formsContainer = document.getElementById('modal-forms-container');
     if (formsContainer) {
       let html = '';
       if (Array.isArray(task.form_downloads) && task.form_downloads.length > 0) {
-        html += '<div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px;">';
+        html += '<div style="display:flex; flex-direction:column; gap:8px; margin-bottom:12px;">';
         task.form_downloads.forEach((f) => {
           html += `
-            <a href="./forms/${f.file}" download="${f.file}" class="hud-btn hud-btn-sm hud-btn-primary" target="_blank">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-                <line x1="12" y1="15" x2="12" y2="3"></line>
-              </svg>
-              ${f.name}
-            </a>
+            <div style="background:rgba(0,0,0,0.35); border:1px solid var(--border-subtle); border-radius:6px; padding:10px 14px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+              <div>
+                <div style="font-weight:700; color:var(--ghost-white); font-size:0.88rem;">📄 ${f.name}</div>
+                <div style="font-family:var(--font-mono); font-size:0.72rem; color:var(--text-muted);">Internal Archive: ./forms/${f.file}</div>
+              </div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <a href="./forms/${f.file}" download="${f.file}" class="hud-btn hud-btn-sm hud-btn-primary" target="_blank">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                  </svg>
+                  DOWNLOAD FORM / SOP
+                </a>
+                ${f.official_url ? `
+                  <a href="${f.official_url}" target="_blank" rel="noopener noreferrer" class="hud-btn hud-btn-sm" style="border-color:var(--cyan-telemetry); color:var(--cyan-telemetry);">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                      <polyline points="15 3 21 3 21 9"></polyline>
+                      <line x1="10" y1="14" x2="21" y2="3"></line>
+                    </svg>
+                    VERIFIED .GOV LINK
+                  </a>
+                ` : ''}
+              </div>
+            </div>
           `;
-          if (f.official_url) {
-            html += `
-              <a href="${f.official_url}" target="_blank" rel="noopener noreferrer" class="hud-btn hud-btn-sm">
-                Official .gov Portal
-              </a>
-            `;
-          }
         });
         html += '</div>';
       } else if (Array.isArray(task.forms) && task.forms.length > 0) {
@@ -1190,6 +1470,35 @@ class NrmcDashboardApp {
       }
     }
 
+    // Vault Attachments for this task
+    const attachedContainer = document.getElementById('modal-attached-documents');
+    if (attachedContainer) {
+      const taskDocs = (this.state.vault_documents || []).filter((d) => d.task_id === task.id);
+      if (taskDocs.length === 0) {
+        attachedContainer.innerHTML = '<div style="color:var(--text-muted); font-size:0.8rem;">No documents currently archived for this sortie. Click "+ FILE RECORD" above to archive clinic slips or DD forms.</div>';
+      } else {
+        attachedContainer.innerHTML = taskDocs
+          .map(
+            (d) => `
+          <div style="background:rgba(0,0,0,0.35); border:1px solid var(--border-subtle); border-radius:6px; padding:10px 14px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+            <div>
+              <div style="font-weight:700; color:var(--ghost-white); font-size:0.88rem;">📁 ${d.name}</div>
+              <div style="font-family:var(--font-mono); font-size:0.72rem; color:var(--text-muted);">
+                ${d.original_filename} • ${Math.round(d.file_size / 1024)} KB • ${d.uploaded_at ? d.uploaded_at.split('T')[0] : ''}
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <a href="${d.data_url || this.apiUrl('/api/v1/nrmc/vault/file/' + d.safe_filename)}" target="_blank" class="hud-btn hud-btn-sm">VIEW</a>
+              <a href="${d.data_url || this.apiUrl('/api/v1/nrmc/vault/file/' + d.safe_filename)}" download="${d.original_filename}" class="hud-btn hud-btn-sm hud-btn-primary">DOWNLOAD</a>
+              <button class="hud-btn hud-btn-sm delete-vault-doc-btn" data-doc-id="${d.id}" style="color:#f87171;">REMOVE</button>
+            </div>
+          </div>
+        `
+          )
+          .join('');
+      }
+    }
+
     modal.classList.add('active');
   }
 
@@ -1197,6 +1506,424 @@ class NrmcDashboardApp {
     const modal = document.getElementById('task-action-modal');
     if (modal) modal.classList.remove('active');
     this.selectedTask = null;
+  }
+
+  updateModalSealButton(isComplete) {
+    const sealBtn = document.getElementById('modal-seal-btn');
+    if (!sealBtn) return;
+    if (isComplete) {
+      sealBtn.className = 'hud-btn hud-btn-amber';
+      sealBtn.innerHTML = '↺ REOPEN SORTIE (MARK PENDING)';
+    } else {
+      sealBtn.className = 'hud-btn hud-btn-emerald';
+      sealBtn.innerHTML = '✓ SEAL SORTIE AS 100% COMPLETE';
+    }
+  }
+
+  // Tactical Audio Feedback (Web Audio API)
+  playTacticalFeedback(type = 'seal') {
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      if (type === 'seal') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
+        osc.frequency.exponentialRampToValueAtTime(880.0, ctx.currentTime + 0.1); // A5
+        gain.gain.setValueAtTime(0.12, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.16);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.16);
+      } else {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(440.0, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(329.63, ctx.currentTime + 0.09);
+        gain.gain.setValueAtTime(0.09, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.12);
+      }
+    } catch (e) {
+      // Audio playback optional if browser blocks before gesture
+    }
+  }
+
+  // Operator Direct Checkbox Completion Toggle (Single-click Seal)
+  async toggleTaskComplete(taskId) {
+    if (!this.state) return;
+    let target = null;
+    Object.values(this.state.modules || {}).forEach((mod) => {
+      if (Array.isArray(mod.tasks)) {
+        const found = mod.tasks.find((t) => t.id.toUpperCase() === taskId.toUpperCase());
+        if (found) target = found;
+      }
+    });
+
+    if (!target) return;
+
+    const willComplete = target.status !== 'COMPLETE';
+    target.status = willComplete ? 'COMPLETE' : 'PENDING';
+    if (willComplete) {
+      target.checklists_completed = Array.isArray(target.checklists) ? [...target.checklists] : [];
+    } else {
+      target.checklists_completed = [];
+    }
+    target.last_updated = new Date().toISOString();
+
+    // Trigger audio feedback & notification
+    this.playTacticalFeedback(willComplete ? 'seal' : 'unseal');
+    this.showToast(willComplete ? `✓ Task ${target.id} sealed as COMPLETE!` : `↺ Task ${target.id} reopened to PENDING.`);
+
+    // If modal is active for this task, sync modal controls
+    if (this.selectedTask && this.selectedTask.id.toUpperCase() === taskId.toUpperCase()) {
+      this.selectedTask.status = target.status;
+      this.selectedTask.checklists_completed = target.checklists_completed;
+      const statusSelect = document.getElementById('modal-status-select');
+      if (statusSelect) statusSelect.value = target.status;
+      this.updateModalSealButton(target.status === 'COMPLETE');
+
+      // Update modal checkboxes
+      const checklistContainer = document.getElementById('modal-checklists');
+      if (checklistContainer) {
+        checklistContainer.querySelectorAll('input[type="checkbox"]').forEach((box) => {
+          box.checked = target.checklists_completed.includes(box.dataset.item);
+        });
+      }
+    }
+
+    // Immediately sync to server
+    await this.syncTaskUpdate(target.id, {
+      status: target.status,
+      checklists_completed: target.checklists_completed
+    });
+
+    this.render();
+  }
+
+  // Operator Direct Vaccine Completion Toggle
+  async toggleVaccineComplete(vacId) {
+    const vaccines = this.state.modules?.module_e?.vaccine_glidepath || [];
+    const v = vaccines.find((item) => item.id.toUpperCase() === vacId.toUpperCase());
+    if (!v) return;
+
+    const willComplete = v.status !== 'COMPLETE';
+    v.status = willComplete ? 'COMPLETE' : 'SCHEDULED';
+    v.date_administered = willComplete ? new Date().toISOString().split('T')[0] : null;
+
+    this.playTacticalFeedback(willComplete ? 'seal' : 'unseal');
+    this.showToast(willComplete ? `✓ Vaccine ${v.vaccine} recorded as GIVEN on ${v.date_administered}!` : `Vaccine ${v.vaccine} reverted to scheduled.`);
+    this.render();
+
+    try {
+      await fetch(this.apiUrl(`/api/v1/nrmc/vaccine/${v.id}`), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          status: v.status,
+          date_administered: v.date_administered
+        })
+      });
+      this.broadcastFleetTelemetry();
+    } catch (err) {
+      console.warn('[NRMC] Vaccine update saved locally:', err.message);
+    }
+    localStorage.setItem('nrmc_cached_state', JSON.stringify(this.state));
+  }
+
+  // ====================================================================
+  // DOCUMENT VAULT // CLIENT ENGINE & OPSEC PII SAFEGUARDS
+  // ====================================================================
+
+  renderDocumentVault() {
+    const tbody = document.getElementById('vault-documents-tbody');
+    const totalCountPill = document.getElementById('vault-total-count-pill');
+    const navCountBadge = document.getElementById('nav-vault-count');
+    if (!tbody) return;
+
+    const allDocs = Array.isArray(this.state.vault_documents) ? this.state.vault_documents : [];
+    if (totalCountPill) totalCountPill.textContent = `${allDocs.length} DOCUMENTS`;
+    if (navCountBadge) navCountBadge.textContent = `${allDocs.length} FILES`;
+
+    // Filter by category
+    let displayed = allDocs;
+    if (this.currentVaultFilter && this.currentVaultFilter !== 'ALL') {
+      displayed = allDocs.filter((d) => d.category === this.currentVaultFilter);
+    }
+
+    // Update filter buttons count
+    document.querySelectorAll('.vault-filter-btn').forEach((btn) => {
+      const cat = btn.dataset.cat;
+      btn.classList.toggle('active', cat === this.currentVaultFilter);
+      if (cat === 'ALL') {
+        btn.textContent = `ALL (${allDocs.length})`;
+      } else {
+        const c = allDocs.filter((d) => d.category === cat).length;
+        const labels = {
+          'CLINICAL_RECORD': 'CLINICAL',
+          'MILITARY_ADMIN': 'MILITARY',
+          'FINANCIAL_BENEFITS': 'FINANCIAL',
+          'PHOTO_COMPLIANCE': 'PHOTOS'
+        };
+        btn.textContent = `${labels[cat] || cat} (${c})`;
+      }
+    });
+
+    if (displayed.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="7" style="text-align:center; padding:32px; color:var(--text-muted); font-family:var(--font-mono);">
+            No archived records found in this category. Use the dropzone above to file records into the vault.
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    tbody.innerHTML = displayed
+      .map((d) => {
+        const catPill =
+          d.category === 'CLINICAL_RECORD'
+            ? 'pill-emerald'
+            : d.category === 'MILITARY_ADMIN'
+            ? 'pill-cyan'
+            : d.category === 'FINANCIAL_BENEFITS'
+            ? 'pill-amber'
+            : 'pill-violet';
+
+        const sizeKb = Math.round((d.file_size || 0) / 1024);
+        const opsecPill =
+          d.opsec_flag === 'REDACTED_CONFIRMED'
+            ? '<span class="countdown-pill pill-crimson">REDACTED CHECKED</span>'
+            : '<span class="countdown-pill pill-cyan">STANDARD PII SAFE</span>';
+
+        return `
+        <tr>
+          <td>
+            <div style="font-weight:700; color:var(--ghost-white); font-size:0.9rem;">${d.name}</div>
+            <div style="font-family:var(--font-mono); font-size:0.72rem; color:var(--text-muted);">${d.original_filename} ${d.notes ? `• ${d.notes}` : ''}</div>
+          </td>
+          <td><span class="countdown-pill ${catPill}">${(d.category || '').replace('_', ' ')}</span></td>
+          <td>
+            ${d.task_id ? `<span class="task-id-badge" style="cursor:pointer;" data-open-task="${d.task_id}">${d.task_id}</span>` : '<span style="color:var(--text-muted); font-family:var(--font-mono); font-size:0.72rem;">GENERAL</span>'}
+          </td>
+          <td style="font-family:var(--font-mono); font-size:0.75rem; color:var(--text-muted);">${d.uploaded_at ? d.uploaded_at.split('T')[0] : 'N/A'}</td>
+          <td style="font-family:var(--font-mono); font-size:0.75rem;">${sizeKb} KB</td>
+          <td>${opsecPill}</td>
+          <td style="text-align:right;">
+            <div style="display:inline-flex; gap:6px;">
+              <a href="${d.data_url || this.apiUrl('/api/v1/nrmc/vault/file/' + d.safe_filename)}" target="_blank" class="hud-btn hud-btn-sm" title="View document inline">VIEW</a>
+              <a href="${d.data_url || this.apiUrl('/api/v1/nrmc/vault/file/' + d.safe_filename)}" download="${d.original_filename}" class="hud-btn hud-btn-sm hud-btn-primary" title="Download physical file">DOWNLOAD</a>
+              <button class="hud-btn hud-btn-sm delete-vault-doc-btn" data-doc-id="${d.id}" title="Delete document from vault" style="color:#f87171;">DELETE</button>
+            </div>
+          </td>
+        </tr>
+      `;
+      })
+      .join('');
+  }
+
+  handleVaultFileSelection(file) {
+    if (!file) return;
+
+    // OPSEC Sensitivity Check
+    const sensitiveRegex = /ssn|social[-_\s]?security|passport|birth[-_\s]?cert/i;
+    const isSensitive = sensitiveRegex.test(file.name);
+
+    if (isSensitive) {
+      this.pendingOpsecFile = file;
+      const modal = document.getElementById('opsec-warning-modal');
+      const filenameEl = document.getElementById('opsec-detected-filename');
+      const confirmBox = document.getElementById('opsec-redaction-confirm');
+      const proceedBtn = document.getElementById('opsec-proceed-btn');
+
+      if (filenameEl) filenameEl.textContent = file.name;
+      if (confirmBox) confirmBox.checked = false;
+      if (proceedBtn) {
+        proceedBtn.disabled = true;
+        proceedBtn.style.opacity = '0.5';
+        proceedBtn.style.cursor = 'not-allowed';
+      }
+      if (modal) modal.classList.add('active');
+      return;
+    }
+
+    this.stageVaultFile(file);
+  }
+
+  stageVaultFile(file) {
+    this.stagedVaultFile = file;
+    const nameEl = document.getElementById('vault-selected-file-name');
+    const titleInput = document.getElementById('vault-doc-name-input');
+    if (nameEl) {
+      nameEl.textContent = `Selected: ${file.name} (${Math.round(file.size / 1024)} KB)`;
+    }
+    if (titleInput && !titleInput.value) {
+      const cleanTitle = file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
+      titleInput.value = cleanTitle;
+    }
+  }
+
+  async uploadStagedVaultDocument() {
+    if (!this.stagedVaultFile) {
+      this.showToast('Please select or drop a document to archive', 'error');
+      return;
+    }
+
+    const titleInput = document.getElementById('vault-doc-name-input');
+    const categorySelect = document.getElementById('vault-doc-category-select');
+    const taskSelect = document.getElementById('vault-doc-task-select');
+    const notesInput = document.getElementById('vault-doc-notes-input');
+
+    const title = (titleInput?.value || '').trim() || this.stagedVaultFile.name;
+    const category = categorySelect?.value || 'GENERAL_ARCHIVE';
+    const taskId = taskSelect?.value || null;
+    const notes = (notesInput?.value || '').trim();
+
+    const submitBtn = document.getElementById('vault-upload-submit-btn');
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'ENCRYPTING & ARCHIVING...';
+    }
+
+    try {
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        try {
+          const base64Data = e.target.result.split(',')[1];
+          const payload = {
+            name: title,
+            filename: this.stagedVaultFile.name,
+            category,
+            taskId,
+            mimeType: this.stagedVaultFile.type || 'application/octet-stream',
+            dataBase64: base64Data,
+            notes,
+            opsec_redaction_confirmed: true
+          };
+
+          let createdDoc = null;
+          try {
+            const res = await fetch(this.apiUrl('/api/v1/nrmc/vault/upload'), {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            });
+
+            if (res.ok) {
+              const data = await res.json();
+              createdDoc = data.document;
+            } else if (res.status === 400) {
+              const errData = await res.json().catch(() => ({}));
+              this.showToast(errData.error || 'Upload rejected by security policy', 'error');
+              return;
+            }
+          } catch (netErr) {
+            // Static hosting fallback (e.g. GitHub Pages)
+            console.log('[NRMC] Operating in client-side document vault mode');
+          }
+
+          if (!createdDoc) {
+            const docId = `DOC-${Date.now()}-${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
+            createdDoc = {
+              id: docId,
+              name: title,
+              original_filename: this.stagedVaultFile.name,
+              safe_filename: `${docId}_${this.stagedVaultFile.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`,
+              file_size: this.stagedVaultFile.size,
+              mime_type: this.stagedVaultFile.type || 'application/octet-stream',
+              category,
+              task_id: taskId || null,
+              notes,
+              uploaded_at: new Date().toISOString(),
+              opsec_flag: 'STANDARD',
+              data_url: e.target.result
+            };
+          } else {
+            createdDoc.data_url = e.target.result;
+          }
+
+          if (!Array.isArray(this.state.vault_documents)) {
+            this.state.vault_documents = [];
+          }
+          this.state.vault_documents.unshift(createdDoc);
+
+          // If linked to a taskId, attach to task's attached_documents
+          if (taskId) {
+            Object.values(this.state.modules || {}).forEach((mod) => {
+              if (Array.isArray(mod.tasks)) {
+                const t = mod.tasks.find((item) => item.id.toUpperCase() === taskId.toUpperCase());
+                if (t) {
+                  if (!Array.isArray(t.attached_documents)) t.attached_documents = [];
+                  if (!t.attached_documents.includes(createdDoc.id)) t.attached_documents.push(createdDoc.id);
+                }
+              }
+              if (Array.isArray(mod.vaccine_glidepath)) {
+                const v = mod.vaccine_glidepath.find((item) => item.id.toUpperCase() === taskId.toUpperCase());
+                if (v) {
+                  if (!Array.isArray(v.attached_documents)) v.attached_documents = [];
+                  if (!v.attached_documents.includes(createdDoc.id)) v.attached_documents.push(createdDoc.id);
+                }
+              }
+            });
+          }
+
+          localStorage.setItem('nrmc_cached_state', JSON.stringify(this.state));
+
+          this.playTacticalFeedback('seal');
+          this.showToast(`Document "${title}" safely archived in vault!`);
+
+          // Reset form
+          this.stagedVaultFile = null;
+          if (titleInput) titleInput.value = '';
+          if (notesInput) notesInput.value = '';
+          const nameEl = document.getElementById('vault-selected-file-name');
+          if (nameEl) nameEl.textContent = '';
+          const fileInput = document.getElementById('vault-file-input');
+          if (fileInput) fileInput.value = '';
+
+          this.render();
+        } catch (err) {
+          this.showToast('Failed to upload document: ' + err.message, 'error');
+        } finally {
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = '🔒 ARCHIVE DOCUMENT TO LOCAL VAULT';
+          }
+        }
+      };
+      reader.readAsDataURL(this.stagedVaultFile);
+    } catch (e) {
+      this.showToast('File read error: ' + e.message, 'error');
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = '🔒 ARCHIVE DOCUMENT TO LOCAL VAULT';
+      }
+    }
+  }
+
+  async deleteVaultDocument(docId) {
+    if (!confirm('Are you sure you want to remove this document from the local vault?')) return;
+    try {
+      const res = await fetch(this.apiUrl(`/api/v1/nrmc/vault/document/${docId}`), {
+        method: 'DELETE'
+      });
+      if (res.ok) {
+        if (Array.isArray(this.state.vault_documents)) {
+          this.state.vault_documents = this.state.vault_documents.filter((d) => d.id !== docId);
+        }
+        localStorage.setItem('nrmc_cached_state', JSON.stringify(this.state));
+        this.playTacticalFeedback('unseal');
+        this.showToast('Document removed from local vault');
+        this.render();
+      }
+    } catch (e) {
+      this.showToast('Delete error: ' + e.message, 'error');
+    }
   }
 
   // Task Status Update API sync

@@ -1,0 +1,28 @@
+================================================================================
+TRANSUNION MINOR CHILD SECURITY FREEZE PACKET
+Aiden James Vane Identity Protection Standard Operating Procedure
+================================================================================
+
+1. OVERVIEW:
+TransUnion's Child Identity Protection program allows a parent to create and freeze a protected record for a child under the age of 16, preventing identity thieves from opening unauthorized lines of credit.
+
+2. SUBMISSION METHOD:
+- TransUnion Minor Freeze Address:
+  TransUnion LLC
+  P.O. Box 380
+  Woodlyn, PA 19094
+- Portal: https://www.transunion.com/credit-freeze
+- Send via USPS Certified Mail with Return Receipt Requested.
+
+3. REQUIRED ENCLOSURES CHECKLIST:
+[ ] Formal written letter requesting minor security freeze pursuant to federal law.
+[ ] Minor's Full Legal Name: Aiden James Vane
+[ ] Minor's Date of Birth: 2026-11-15
+[ ] Copy of Minor's State Certified Birth Certificate.
+[ ] Copy of Minor's Social Security Card.
+[ ] Copy of Parent's Government-issued ID (Military CAC or Driver's License).
+[ ] Copy of Parent's utility bill or official correspondence verifying address.
+
+4. CONFIRMATION:
+- TransUnion sends a written confirmation letter with PIN/confirmation number.
+================================================================================

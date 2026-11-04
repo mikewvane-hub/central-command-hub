@@ -1,0 +1,28 @@
+================================================================================
+EXPERIAN MINOR CHILD SECURITY FREEZE PACKET
+Aiden James Vane Identity Protection Standard Operating Procedure
+================================================================================
+
+1. OVERVIEW:
+Experian allows parents/legal guardians to request a security freeze for minors under 16 by mail. Experian verifies parental authority and places a freeze flag on the minor's SSN.
+
+2. SUBMISSION METHOD:
+- Experian Minor Freeze Address:
+  Experian Security Freeze
+  P.O. Box 9554
+  Allen, TX 75013
+- Online Portal: https://www.experian.com/freeze/center.html
+- Send via USPS Certified Mail with Return Receipt Requested.
+
+3. REQUIRED ENCLOSURES CHECKLIST:
+[ ] Experian Minor Child Security Freeze Request Form or written request letter.
+[ ] Minor's Full Legal Name: Aiden James Vane
+[ ] Minor's Date of Birth: 2026-11-15
+[ ] Copy of Minor's Birth Certificate showing parent's name.
+[ ] Copy of Minor's Social Security Card.
+[ ] Copy of Parent's Government-Issued ID (Military ID or Driver's License).
+[ ] Copy of Parent's utility bill, phone bill, or paystub showing current physical address.
+
+4. CONFIRMATION:
+- Experian issues a written acknowledgment confirming the file has been created and frozen.
+================================================================================

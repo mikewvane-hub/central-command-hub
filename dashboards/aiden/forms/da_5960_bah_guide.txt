@@ -1,0 +1,30 @@
+================================================================================
+DA FORM 5960 & IPPS-A DEPENDENT PROFILE VERIFICATION GUIDE
+Sponsor: CPT Vane | Beneficiary: Aiden James Vane
+================================================================================
+
+1. PURPOSE:
+- Ensure active duty military dependent records accurately reflect newborn child Aiden James Vane.
+- Audit Basic Allowance for Housing (BAH) status: Confirm 'With Dependents' BAH entitlement is active and disbursed without gap.
+
+2. IPPS-A DEPENDENT PROFILE WORKFLOW:
+- Portal: https://hr.ippsa.army.mil
+- Action: Initiate a Personnel Action Request (PAR) for "Add Dependent".
+- Required Attachments:
+  * Official State Certified Birth Certificate
+  * Social Security Card (or SSA receipt letter if card is in transit)
+  * DD Form 1172-2 signed by DEERS/RAPIDS verifying official enrollment
+
+3. DA FORM 5960 (AUTHORIZATION TO START, STOP, OR CHANGE BASIC ALLOWANCE FOR QUARTERS/HOUSING):
+- Form Location: Army Publishing Directorate (APD) or local S-1 clerk packet.
+- Section I: Administrative Data (Sponsor Name, SSN/DoD ID, Rank, Military Address)
+- Section II: Type of Action -> "Change / Recertification of Dependent Information"
+- Section III: Dependent Information -> List child Aiden James Vane, Date of Birth, Relationship (Child)
+- Section IV: Certification and Signature by Sponsor and Unit S-1 / Commander
+
+4. LES AUDIT VIA MYPAY:
+- Portal: https://mypay.dfas.mil
+- Once S-1 / IPPS-A processes the PAR, audit the next Leave and Earnings Statement (LES):
+  * Verify BAH status reads "WITH"
+  * Check Remarks section for dependent addition confirmation
+================================================================================

@@ -30,11 +30,11 @@ class CentralCommandHubApp {
   boot() {
     console.log(`🌌 [Central Command Hub] Initializing Atomic Quantum Architecture...`);
 
-    // Auto-cleanse any legacy localhost:3012 setting for aiden
+    // Auto-cleanse any legacy localhost:3012 setting or stale version for aiden
     try {
       const storedAiden = localStorage.getItem('hub_url_aiden');
-      if (storedAiden && (storedAiden.includes('localhost') || storedAiden.includes('127.0.0.1') || storedAiden.includes(':3012'))) {
-        localStorage.setItem('hub_url_aiden', './dashboards/aiden/index.html');
+      if (!storedAiden || storedAiden.includes('localhost') || storedAiden.includes('127.0.0.1') || storedAiden.includes(':3012') || !storedAiden.includes('v=2.5.0')) {
+        localStorage.setItem('hub_url_aiden', './dashboards/aiden/index.html?v=2.5.0');
       }
     } catch (e) {}
 

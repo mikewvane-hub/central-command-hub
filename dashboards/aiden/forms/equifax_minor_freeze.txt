@@ -1,0 +1,27 @@
+================================================================================
+EQUIFAX MINOR CHILD SECURITY FREEZE PACKET
+Aiden James Vane Identity Protection Standard Operating Procedure
+================================================================================
+
+1. OVERVIEW:
+Federal law allows parents to place a free security freeze on a child's credit file under age 16. If no credit file exists (standard for a newborn), Equifax creates a protected consumer record and immediately locks it against unauthorized inquiries.
+
+2. SUBMISSION METHOD:
+- Equifax Minor Freeze Address:
+  Equifax Information Services LLC
+  P.O. Box 105788
+  Atlanta, GA 30348-5788
+- Send via USPS Certified Mail with Return Receipt Requested.
+
+3. REQUIRED ENCLOSURES CHECKLIST:
+[ ] Written Letter of Request formally requesting a protected child security freeze.
+[ ] Child's Full Legal Name: Aiden James Vane
+[ ] Child's Date of Birth: 2026-11-15
+[ ] Copy of Child's Certified State Birth Certificate (Proof of parentage)
+[ ] Copy of Child's Social Security Card
+[ ] Copy of Parent's Government-Issued Photo ID (Driver's License or Military ID)
+[ ] Copy of Parent's Proof of Address (Utility bill, bank statement, or paystub dated within 60 days)
+
+4. VERIFICATION:
+- Equifax will mail a written confirmation containing a unique PIN or confirmation code within 10-15 business days. Keep this code in master safe.
+================================================================================

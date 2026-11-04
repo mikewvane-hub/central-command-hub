@@ -277,6 +277,16 @@ app.get('/api/v1/nrmc/export', (req, res) => {
   res.status(404).json({ error: 'NRMC state not found' });
 });
 
+// Vault file stream route
+app.get('/api/v1/nrmc/vault/file/:filename', (req, res) => {
+  const safeFilename = path.basename(req.params.filename);
+  const vaultPath = path.resolve(__dirname, '..', 'Baby Aiden Tracker', 'data', 'vault', safeFilename);
+  if (fs.existsSync(vaultPath)) {
+    return res.sendFile(vaultPath);
+  }
+  res.status(404).send('Vault document not found');
+});
+
 // Resilient forwarder for NRMC mutations
 app.all('/api/v1/nrmc/*', async (req, res, next) => {
   if (req.method === 'GET') return next();
