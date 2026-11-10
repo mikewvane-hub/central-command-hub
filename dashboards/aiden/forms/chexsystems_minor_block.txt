@@ -18,7 +18,7 @@ ChexSystems tracks checking and savings account inquiries and unauthorized bank 
 3. REQUIRED ENCLOSURES (FOR MINOR UNDER 16):
 [ ] ChexSystems Minor Security Freeze Request Form.
 [ ] Child's Full Legal Name: Aiden James Vane
-[ ] Child's Date of Birth: 2026-11-15 & SSN.
+[ ] Child's Date of Birth: 2026-11-06 & SSN.
 [ ] Copy of Child's Certified Birth Certificate showing parentage.
 [ ] Copy of Parent's Government-issued photo identification (Military ID / Driver's License).
 [ ] Copy of Parent's proof of address (utility bill or bank statement).

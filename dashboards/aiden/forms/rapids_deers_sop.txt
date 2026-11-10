@@ -1,36 +1,32 @@
 ================================================================================
-DD FORM 1172-2 REFERENCE & APPLICATION SOP
-APPLICATION FOR IDENTIFICATION CARD/DEERS ENROLLMENT
-Department of Defense (DoD) Official Reference
+NCR DEERS / RAPIDS ENROLLMENT & DD FORM 1172-2 SOP
+Aiden James Vane — Newborn Dependent Enrollment
 ================================================================================
 
-OFFICIAL FORM URL:
-https://www.esd.whs.mil/Portals/54/Documents/DD/forms/dd/dd1172-2.pdf
-RAPIDS APPOINTMENTS SCHEDULER:
-https://rapids-appointments.dmdc.osd.mil
-ID CARD OFFICE ONLINE (DIGITAL PRE-SIGN):
-https://www.dmdc.osd.mil/self_service
+OFFICIAL SCHEDULER & PORTALS:
+- RAPIDS Appointments: https://rapids-appointments.dmdc.osd.mil/
+- ID Card Office Online (Digital Pre-Sign DD 1172-2): https://idco.dmdc.osd.mil/idco/
+- Official DD Form 1172-2 PDF: https://www.esd.whs.mil/Portals/54/Documents/DD/forms/dd/dd1172-2.pdf
 
-PURPOSE:
-Enroll infant dependent (Baby Aiden) into the Defense Enrollment Eligibility
-Reporting System (DEERS) and establish military medical benefits (TRICARE).
+MANDATORY DOCUMENTS PER ATAMMC BIRTH PACKET (BOTH BC + SSN REQUIRED):
+1. Certified Virginia Birth Certificate (raised/embossed state seal — VA DMV $17/ea or OVR).
+   * Hospital complimentary/souvenir certificates are NOT accepted.
+2. Social Security Card (mailed 4-8 weeks after EAB signature on 2026-11-09).
+   * Target window: Dec 7, 2026 - Jan 4, 2027.
+3. Marriage Certificate (if spouse/marriage not already verified in DEERS).
+4. Sponsor & Spouse Valid Unexpired Government Photo IDs (CAC, Driver's License, Passport).
+5. Signed DD Form 1172-2 (or Special Power of Attorney if Sponsor cannot attend).
 
-MANDATORY DOCUMENTS REQUIRED FOR APPOINTMENT:
-1. Certified State Birth Certificate (Raised/embossed seal or colored state security paper).
-   * Note: Hospital souvenir certificates are NOT accepted by RAPIDS operators.
-2. Social Security Card (or official SSA Form SSA-2853 / formal SSA intake receipt if card is in transit).
-   * Note: If SSN has not arrived, infant can be enrolled with a temporary 90-day DoD-generated ID number,
-     but the physical SSN must be presented within 90 days to prevent automatic termination of benefits.
-3. Marriage Certificate (original or certified copy, if not already verified in DEERS).
-4. Sponsor and Spouse Two (2) Forms of Unexpired Government ID:
-   - Primary: Common Access Card (CAC) or State Driver's License / Real ID.
-   - Secondary: U.S. Passport, Social Security Card, or Voter Registration Card.
-5. If Sponsor Cannot Attend in Person:
-   - Option A: Digitally sign DD Form 1172-2 via CAC on ID Card Office Online within 90 days.
-   - Option B: Execute a Special Power of Attorney (POA) granting spouse authority to enroll dependents into DEERS.
+NCR DEERS / RAPIDS CENTERS (PER ATAMMC HANDOUT):
+- Fort Belvoir: 9625 Middleton Rd Bldg 1189 | 703-805-5578 | M-F 0800-1600
+- Henderson Hall: 1555 Southgate Rd, VA | 703-693-7152 | M-F 0800-1530 (Closed 1200-1230, Appt Only)
+- MCB Quantico (Little Hall): 102 Barnett Ave Bldg 2034 | 703-784-2758 | M/Tu/Th/F 0730-1500, Wed 0700-1330
+- Washington Navy Yard: 1220 O Street SE Bldg 126 Rm 1, DC | 202-685-1208 | M-F 0630-1500 (Appt & Walk-ins)
+- Pentagon USAF: 811 FSS/FSMPS Rm 5C1049 | 703-697-4110 | M-F 0800-1500
+- Marshall Hall NDU: 300 5th Ave SW Bldg 62 Rm 199A, DC | 202-685-3780 | M/Tu/W/F 0800-1130 & 1230-1500 (Closed Thu, Fri 0800-1200, Appt & Walk-ins)
+- Joint Base Andrews: 1414 Arkansas Rd | 301-981-4141 | M-F 0830-1530 (Appt Only; Walk-ins Thu 0800-1500)
 
-RAPIDS SITE CHECKLIST:
-- Double check that the infant's full legal name, DOB, and relationship code (Child) match the birth certificate exactly.
-- Confirm TRICARE eligibility flag is set to 'ACTIVE' immediately in DEERS.
-- Obtain signed copy of the completed DD Form 1172-2 for your personal family records binder.
+IMMEDIATE NEXT STEP AFTER DEERS (TRICARE DEADLINE: FEB 4, 2027):
+- Within 24 hours of DEERS completion, log in to https://www.tricare.mil or call Humana Military
+  (TRICARE East) at 1-800-444-5445 to enroll Aiden in TRICARE Prime (Team Pink / Dr. Saro Verghese).
 ================================================================================

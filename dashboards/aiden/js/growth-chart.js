@@ -65,8 +65,9 @@ export class WhoGrowthChart {
     let minDistance = 18;
 
     this.dataPoints.forEach((pt) => {
-      const px = padding.left + (pt.age_months / 12) * chartW;
       const val = this.getMeasurementValue(pt);
+      if (val === null || val === undefined || Number.isNaN(val)) return;
+      const px = padding.left + (pt.age_months / 12) * chartW;
       const py = padding.top + chartH - ((val - bounds.min) / (bounds.max - bounds.min)) * chartH;
       const dist = Math.hypot(mouseX - px, mouseY - py);
       if (dist < minDistance) {
@@ -82,11 +83,15 @@ export class WhoGrowthChart {
   }
 
   getMeasurementValue(pt) {
+    if (!pt) return null;
     if (this.metricType === 'weight') {
+      if (pt.weight_lbs === null || pt.weight_lbs === undefined) return null;
       return this.unitMode === 'imperial' ? pt.weight_lbs : pt.weight_lbs * 0.453592;
     } else if (this.metricType === 'length') {
+      if (pt.length_in === null || pt.length_in === undefined) return null;
       return this.unitMode === 'imperial' ? pt.length_in : pt.length_in * 2.54;
     } else {
+      if (pt.head_circ_in === null || pt.head_circ_in === undefined) return null;
       return this.unitMode === 'imperial' ? pt.head_circ_in : pt.head_circ_in * 2.54;
     }
   }
@@ -185,15 +190,18 @@ export class WhoGrowthChart {
     this.drawCurve('p97', 'rgba(255, 255, 255, 0.18)', 1, true);
     this.drawCurve('p3', 'rgba(255, 255, 255, 0.18)', 1, true);
 
-    // Draw Aiden's Recorded Growth Trajectory
-    if (this.dataPoints && this.dataPoints.length > 0) {
+    // Draw Aiden's Recorded Growth Trajectory (skipping null metrics safely)
+    const validPoints = (this.dataPoints || [])
+      .map((pt) => ({ pt, val: this.getMeasurementValue(pt) }))
+      .filter((item) => item.val !== null && item.val !== undefined && !Number.isNaN(item.val));
+
+    if (validPoints.length > 0) {
       ctx.strokeStyle = '#00E5FF';
       ctx.lineWidth = 3;
       ctx.beginPath();
 
-      this.dataPoints.forEach((pt, idx) => {
+      validPoints.forEach(({ pt, val }, idx) => {
         const px = padding.left + (pt.age_months / 12) * chartW;
-        const val = this.getMeasurementValue(pt);
         const py = padding.top + chartH - ((val - bounds.min) / (bounds.max - bounds.min)) * chartH;
         if (idx === 0) ctx.moveTo(px, py);
         else ctx.lineTo(px, py);
@@ -201,9 +209,8 @@ export class WhoGrowthChart {
       ctx.stroke();
 
       // Point dots
-      this.dataPoints.forEach((pt) => {
+      validPoints.forEach(({ pt, val }) => {
         const px = padding.left + (pt.age_months / 12) * chartW;
-        const val = this.getMeasurementValue(pt);
         const py = padding.top + chartH - ((val - bounds.min) / (bounds.max - bounds.min)) * chartH;
 
         ctx.fillStyle = '#0a0a0c';
@@ -219,6 +226,11 @@ export class WhoGrowthChart {
         ctx.arc(px, py, 2.5, 0, Math.PI * 2);
         ctx.fill();
       });
+    } else if (this.dataPoints && this.dataPoints.length > 0) {
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '11px "JetBrains Mono", monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(`No ${this.metricType.replace('_', ' ')} reading recorded yet (log via + Vitals)`, padding.left + chartW / 2, padding.top + 20);
     }
 
     // Hover Tooltip

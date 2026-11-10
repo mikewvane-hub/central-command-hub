@@ -208,7 +208,7 @@ app.get('/api/briefing', (req, res) => {
         const aidenPath = getAidenStatePath();
         if (aidenPath && fs.existsSync(aidenPath)) {
           const aState = JSON.parse(fs.readFileSync(aidenPath, 'utf-8'));
-          const dob = aState.profile?.dob || '2026-11-15';
+          const dob = aState.profile?.dob || '2026-11-06';
           const now = new Date();
           now.setHours(0, 0, 0, 0);
 
@@ -222,19 +222,22 @@ app.get('/api/briefing', (req, res) => {
           }
 
           const taskSpecs = {
-            'A1': { days: 0, title: 'Hospital Administration Intake & Paternity Verification' },
-            'A2': { days: 0, title: 'Social Security Card SS-5 Request' },
-            'A3': { days: 3, title: 'Order 5-8 Certified Birth Certificates' },
-            'A4': { days: 1, title: 'Newborn Metabolic Screening (Heel Prick)' },
-            'A5': { days: 1, title: 'Bilateral Hearing Screening' },
-            'A6': { days: 2, title: 'Hospital Discharge Summary Verification' },
-            'A7': { days: 90, title: 'TRICARE 90-Day Grace Window Deadline' },
-            'B1': { days: 20, title: 'DEERS Enrollment & RAPIDS Appointment' },
-            'B2': { days: 30, title: 'TRICARE Prime & PCM Selection' },
-            'B3': { days: 5, title: 'SGLI / FSGLI Auto-Coverage Verification' },
-            'B4': { days: 25, title: 'DD Form 93 Record of Emergency Data' },
-            'B5': { days: 50, title: 'eMILPO / IPPS-A Dependent Profile & BAH' },
-            'D3': { days: 10, title: '529 College Savings Plan Setup' }
+            'A1': { days: 0, title: 'Hospital Admin Intake & VA COLB (VS 1 06/16)' },
+            'A2': { days: 31, title: 'Track SSN in Mail (EAB 4-8 wks: Dec 7 - Jan 4)' },
+            'A3': { days: 6, title: 'Go to VA DMV for 5-6 Certified Birth Certs ($17/ea; opens Thu 11/12)' },
+            'A4': { days: 6, title: 'Check 72h Newborn Screen & Bilirubin Lab Result' },
+            'A5': { days: 14, title: 'Verify Bilateral Hearing Clearance Result' },
+            'A6': { days: 14, title: 'ATAMMC Daily Care & FBCH Visits (11/10 Team Blue, 11/20 Team Pink)' },
+            'A7': { days: 90, title: 'Move Aiden onto TRICARE Prime (Hard Cutoff 2027-02-04)' },
+            'B1': { days: 31, title: 'Book RAPIDS / DEERS Appointment & Complete DD 1172-2 (Fort Belvoir / NCR)' },
+            'B2': { days: 32, title: 'Confirm TRICARE Prime & Dr. Saro Verghese PCM' },
+            'B3': { days: 7, title: 'Verify SGLI / FSGLI Automatic Child Coverage ($10k)' },
+            'B4': { days: 35, title: 'Update DD Form 93 Record of Emergency Data' },
+            'B5': { days: 40, title: 'Verify IPPS-A Dependent Profile & BAH Rate' },
+            'D1': { days: 35, title: 'IRS Child Tax Credit W-4 Step 3 via myPay' },
+            'D2': { days: 60, title: 'DCFSA 60-Day QLE Enrollment (Deadline 2027-01-05)' },
+            'D3': { days: 35, title: 'Open 529 College Savings Plan (Post-SSN)' },
+            'D6': { days: 35, title: 'Open Trump Account ($1,000 Treasury Pilot / IRS Form 4547)' }
           };
 
           const rapidsAppt = aState.command_anchors?.rapids_appointment?.scheduled_date;
@@ -255,8 +258,8 @@ app.get('/api/briefing', (req, res) => {
                 const calDate = spec.customDate || addDaysH(dob, spec.days || 0);
                 const targetDateObj = new Date(calDate + 'T00:00:00');
                 const diffDays = Math.round((targetDateObj - now) / (1000 * 60 * 60 * 24));
-                if (diffDays >= -14 && diffDays <= 7 && t.status !== 'COMPLETE') {
-                  const statusLbl = `T${diffDays >= 0 ? '+' : ''}${diffDays}d`;
+                if (diffDays >= -14 && diffDays <= 14 && t.status !== 'COMPLETE') {
+                  const statusLbl = diffDays > 0 ? `T-${diffDays}d` : (diffDays === 0 ? 'TODAY' : `DUE +${Math.abs(diffDays)}d`);
                   briefing.upcoming_7d_milestones.push({
                     category: 'Baby Aiden',
                     detail: `${spec.title} (Target ${calDate} • ${statusLbl})`
@@ -325,7 +328,7 @@ app.get('/api/v1/nrmc/telemetry', (req, res) => {
         timestamp: new Date().toISOString(),
         critical_deadlines_30d: criticalDeadlines,
         pending_actions_total: pendingCount,
-        next_medical_milestone: state.command_anchors?.next_medical_milestone?.title || '2-Month Well-Child / Pentavalent (2027-01-15)',
+        next_medical_milestone: state.command_anchors?.next_medical_milestone?.title || 'FBCH Peds Follow-Up: Dr. Saro Verghese (2026-11-20 07:50 EST)',
         financial_telemetry: state.financial_telemetry || {},
         system_alerts: state.system_alerts || []
       });

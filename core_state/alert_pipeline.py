@@ -168,18 +168,20 @@ def evaluate_aiden_alerts(aiden_data: Dict[str, Any]) -> List[Dict[str, Any]]:
     anchors = aiden_data.get("command_anchors", {})
     upcoming = aiden_data.get("upcoming_14d_tasks", [])
     profile = aiden_data.get("profile", {})
-    dob_str = profile.get("dob", "2026-11-15")
+    dob_str = profile.get("dob", "2026-11-06")
+    days_until_dob = aiden_data.get("days_until_dob")
+    age_days = abs(days_until_dob) if (days_until_dob is not None and days_until_dob <= 0) else 0
 
     # 1. TRICARE 90-Day Newborn Grace Window Alert (CRITICAL)
     tricare = anchors.get("tricare_grace", {})
-    deadline = tricare.get("deadline", "2027-02-13")
+    deadline = tricare.get("deadline", "2027-02-04")
     alerts.append({
         "id": "alert_aiden_tricare_grace",
         "domain": "aiden",
         "severity": "CRITICAL",
         "code": "AIDEN_TRICARE_GRACE_ACTIVE",
-        "title": "TRICARE 90-Day Newborn Grace Window Active",
-        "message": f"TRICARE 90-day grace clock active from delivery ({dob_str}). Mandatory DEERS enrollment required by {deadline} to finalize PCM assignment at Madigan AMC and prevent Point of Service cost-shares.",
+        "title": "TRICARE 90-Day Newborn Grace Window Active (Cutoff Feb 4, 2027)",
+        "message": f"TRICARE 90-day grace clock running since birth ({dob_str}, T+{age_days}d). Mandatory DEERS enrollment (Cert Birth Cert + SSN) & TRICARE Prime selection required before {deadline} for FBCH Team Pink PCM (Dr. Saro Verghese, MD).",
         "statute_or_category": "TRICARE Prime Enrollment",
         "due_date": deadline,
         "action_url": "aiden",
@@ -195,44 +197,53 @@ def evaluate_aiden_alerts(aiden_data: Dict[str, Any]) -> List[Dict[str, Any]]:
             "domain": "aiden",
             "severity": "CRITICAL",
             "code": "AIDEN_IMMEDIATE_SORTIE_QUEUE",
-            "title": "Baby Aiden Immediate Sortie Queue (Hospital & T-0 to T+72h)",
-            "message": f"Delivery scheduled in {aiden_data.get('days_until_dob', 11)} days ({dob_str}). {len(upcoming)} clinical, vital records, and immunization sortie tasks armed in NRMC Module A & E.",
+            "title": "VA DMV Birth Cert Pickup (Opens Thu Nov 12) & 72h ATAMMC Labs",
+            "message": f"Born {dob_str} @ ATAMMC (T+{age_days}d). Veterans Day Nov 11 closed -> VA DMV opens Thu Nov 12 ($17/ea, 5-6 copies); confirm 72h Newborn Screen, Bilirubin lab & Hearing clearance ({len(upcoming)} active items).",
             "statute_or_category": "Immediate Sortie / Vital Records",
-            "due_date": dob_str,
+            "due_date": "2026-11-12",
             "action_url": "aiden",
             "created_at": now.isoformat(),
             "acknowledged": False,
             "dismissed": False
         })
 
-    # 3. RAPIDS DEERS Appointment Standby (WARNING)
+    # 3. RAPIDS DEERS Appointment Standby / Needs Booking (WARNING)
     rapids = anchors.get("rapids_appointment", {})
-    rapids_date = rapids.get("scheduled_date", "2026-12-05")
+    rapids_date = rapids.get("scheduled_date")
+    if rapids_date:
+        rapids_title = f"RAPIDS DEERS Appointment Booked ({rapids_date[:10]})"
+        rapids_msg = f"Appointment confirmed at {rapids.get('location', 'Fort Belvoir DEERS/RAPIDS')} (Code: {rapids.get('confirmation_code', 'CONFIRMED')}). Bring VA Certified Birth Cert + SSN Card."
+        rapids_due = rapids_date[:10]
+    else:
+        rapids_title = "RAPIDS / DEERS Appointment Needs Scheduling (Post BC + SSN)"
+        rapids_msg = f"Book via rapids-appointments.dmdc.osd.mil ({rapids.get('location', 'Fort Belvoir Bldg 1189 / NCR DEERS')}) as soon as VA Certified Birth Cert (A3) & SSN Card (A2) arrive."
+        rapids_due = "2026-12-07"
+
     alerts.append({
         "id": "alert_aiden_rapids_appointment",
         "domain": "aiden",
         "severity": "WARNING",
         "code": "AIDEN_RAPIDS_APPOINTMENT_STANDBY",
-        "title": f"RAPIDS Appointment Booked ({rapids_date[:10]} - JBLM Waller Hall)",
-        "message": f"Appointment confirmed (Code: {rapids.get('confirmation_code', 'DMDC-AIDEN-7749')}). Verify certified birth certificate physical arrival prior to DEERS enrollment appointment.",
+        "title": rapids_title,
+        "message": rapids_msg,
         "statute_or_category": "DEERS / DD Form 1172-2",
-        "due_date": rapids_date[:10],
+        "due_date": rapids_due,
         "action_url": "aiden",
         "created_at": now.isoformat(),
         "acknowledged": False,
         "dismissed": False
     })
 
-    # 4. 529 College Savings Auto-DCA (INFO)
+    # 4. Trump Account ($1,000 U.S. Treasury Pilot) & 529 Queued Upon SSN (INFO)
     alerts.append({
         "id": "alert_aiden_529_dca",
         "domain": "aiden",
         "severity": "INFO",
         "code": "AIDEN_529_CONTRIBUTION_SCHEDULED",
-        "title": "529 College Savings Auto-DCA Active ($500/mo)",
-        "message": "WA GET / DreamAhead 529 automated monthly contribution scheduled upon SSN receipt. Generational wealth compounding nominal.",
+        "title": "Trump Account ($1,000 Treasury Pilot / Form 4547) & 529 Queued",
+        "message": "SSN EAB signed Nov 9 (4-8 wk delivery: Dec 7 - Jan 4). Upon SSN arrival: elect $1,000 U.S. Treasury Trump Account pilot (IRC 530A / IRS Form 4547) and open DC/VA/my529 plan.",
         "statute_or_category": "Generational Wealth Architecture",
-        "due_date": "2026-11-30",
+        "due_date": "2026-12-07",
         "action_url": "aiden",
         "created_at": now.isoformat(),
         "acknowledged": False,

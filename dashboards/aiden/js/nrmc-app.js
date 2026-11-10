@@ -141,17 +141,28 @@ class NrmcDashboardApp {
       }
     }
 
-    // Check LocalStorage for instant paint & user-saved modifications
+    // Check LocalStorage for instant paint & user-saved modifications (auto-invalidate pre-ATAMMC cache)
     const cached = localStorage.getItem('nrmc_cached_state');
     if (cached) {
       try {
         const parsed = JSON.parse(cached);
-        if (parsed && parsed.profile) {
+        const baselineVer = baselineState?.state_version;
+        const isStaleVersion = baselineVer && parsed?.state_version !== baselineVer;
+        const isOldPrebirthDob = parsed?.profile?.dob === '2026-11-15';
+
+        if (parsed && parsed.profile && !isStaleVersion && !isOldPrebirthDob) {
           parsed.profile.baby_name = 'Aiden James Vane';
           if (!Array.isArray(parsed.vault_documents)) {
             parsed.vault_documents = baselineState?.vault_documents || [];
           }
-          this.state = parsed;
+          this.state = isLocalBackend && baselineState ? baselineState : parsed;
+        } else if (baselineState) {
+          // Migrate preserved vault documents onto fresh baseline
+          if (Array.isArray(parsed?.vault_documents) && parsed.vault_documents.length > 0 && (!baselineState.vault_documents || baselineState.vault_documents.length === 0)) {
+            baselineState.vault_documents = parsed.vault_documents;
+          }
+          this.state = baselineState;
+          localStorage.setItem('nrmc_cached_state', JSON.stringify(this.state));
         }
       } catch (e) {
         console.warn('[NRMC] Invalid cached state:', e);
@@ -277,7 +288,7 @@ class NrmcDashboardApp {
       pending_actions_total: pendingCount,
       next_medical_milestone:
         this.state.command_anchors?.next_medical_milestone?.title ||
-        '2-Month Well-Child / Pentavalent (2027-01-15)',
+        'FBCH Peds Follow-Up: Dr. Saro Verghese (2026-11-20 07:50 EST)',
       financial_telemetry: this.state.financial_telemetry || {},
       system_alerts: this.state.system_alerts || []
     };
@@ -303,36 +314,37 @@ class NrmcDashboardApp {
   getAllMilestones() {
     if (!this.state) return [];
     const list = [];
-    const dob = this.state.profile?.dob || '2026-11-15';
+    const dob = this.state.profile?.dob || '2026-11-06';
     const rapidsAppt = this.state.command_anchors?.rapids_appointment?.scheduled_date;
-    const rapidsDateOnly = rapidsAppt ? rapidsAppt.slice(0, 10) : this.addDays(dob, 20);
+    const rapidsDateOnly = rapidsAppt ? rapidsAppt.slice(0, 10) : this.addDays(dob, 32);
 
     // Specification mapping: relative day offsets from Aiden's actual DOB
     const taskSpecs = {
-      'A1': { days: 0, offset: 'T-0', category: 'military', lane: 'military', isHospitalAuto: true },
-      'A2': { days: 0, offset: 'T-0', category: 'identity', lane: 'identity', isHospitalAuto: true },
-      'A3': { days: 3, offset: 'T+3d', category: 'military', lane: 'military', isHospitalAuto: false },
-      'A4': { days: 1, offset: 'T+1d', category: 'clinical', lane: 'clinical', isHospitalAuto: true },
-      'A5': { days: 1, offset: 'T+1d', category: 'clinical', lane: 'clinical', isHospitalAuto: true },
-      'A6': { days: 2, offset: 'T+2d', category: 'clinical', lane: 'clinical', isHospitalAuto: false },
-      'A7': { days: 90, offset: 'T+90d', category: 'military', lane: 'military', isDeadline: true, isHospitalAuto: false },
-      'B1': { customDate: rapidsDateOnly, days: 20, offset: 'T+20d', category: 'military', lane: 'military', isHospitalAuto: false },
-      'B2': { days: 30, offset: 'T+30d', category: 'military', lane: 'military', isHospitalAuto: false },
-      'B3': { days: 5, offset: 'T+5d', category: 'military', lane: 'military', isHospitalAuto: true },
-      'B4': { days: 25, offset: 'T+25d', category: 'military', lane: 'military', isHospitalAuto: false },
+      'A1': { days: 0, offset: 'T-0 (ATAMMC)', category: 'military', lane: 'military', isHospitalAuto: true },
+      'A2': { days: 31, offset: 'T+31d..56d', category: 'identity', lane: 'identity', isHospitalAuto: false },
+      'A3': { days: 6, offset: 'T+6d (Thu Nov 12)', category: 'military', lane: 'military', isHospitalAuto: false },
+      'A4': { days: 6, offset: 'T+6d (72h Labs)', category: 'clinical', lane: 'clinical', isHospitalAuto: false },
+      'A5': { days: 4, offset: 'T+4d (Nov 10)', category: 'clinical', lane: 'clinical', isHospitalAuto: false },
+      'A6': { days: 4, offset: 'T+4d & T+14d', category: 'clinical', lane: 'clinical', isHospitalAuto: false },
+      'A7': { days: 90, offset: 'T+90d Cutoff', category: 'military', lane: 'military', isDeadline: true, isHospitalAuto: false },
+      'B1': { customDate: rapidsDateOnly, days: 32, offset: rapidsAppt ? 'RAPIDS BOOKED' : 'T+32d (Post-SSN)', category: 'military', lane: 'military', isHospitalAuto: false },
+      'B2': { days: 35, offset: 'T+35d', category: 'military', lane: 'military', isHospitalAuto: false },
+      'B3': { days: 36, offset: 'T+36d', category: 'military', lane: 'military', isHospitalAuto: true },
+      'B4': { days: 40, offset: 'T+40d', category: 'military', lane: 'military', isHospitalAuto: false },
       'B5': { days: 50, offset: 'T+50d', category: 'military', lane: 'military', isHospitalAuto: false },
-      'C1': { days: 35, offset: 'T+35d', category: 'identity', lane: 'identity', isHospitalAuto: false },
-      'C2': { days: 35, offset: 'T+35d', category: 'identity', lane: 'identity', isHospitalAuto: false },
-      'C3': { days: 43, offset: 'T+43d', category: 'identity', lane: 'identity', isHospitalAuto: false },
-      'C4': { days: 90, offset: 'T+90d', category: 'identity', lane: 'identity', isHospitalAuto: false },
-      'C5': { days: 90, offset: 'T+90d', category: 'identity', lane: 'identity', isHospitalAuto: false },
-      'C6': { days: 90, offset: 'T+90d', category: 'identity', lane: 'identity', isHospitalAuto: false },
-      'C7': { days: 90, offset: 'T+90d', category: 'identity', lane: 'identity', isHospitalAuto: false },
-      'D1': { days: 45, offset: 'T+45d', category: 'financial', lane: 'wealth', isHospitalAuto: false },
-      'D2': { days: 60, offset: 'T+60d', category: 'financial', lane: 'wealth', isDeadline: true, isHospitalAuto: false },
-      'D3': { days: 10, offset: 'T+10d', category: 'financial', lane: 'wealth', isHospitalAuto: false },
-      'D4': { days: 90, offset: 'T+90d', category: 'financial', lane: 'wealth', isHospitalAuto: false },
-      'D5': { years: 13, offset: 'Age 13', category: 'financial', lane: 'wealth', isHospitalAuto: false }
+      'C1': { days: 42, offset: 'T+42d', category: 'identity', lane: 'identity', isHospitalAuto: false },
+      'C2': { days: 38, offset: 'T+38d', category: 'identity', lane: 'identity', isHospitalAuto: false },
+      'C3': { days: 42, offset: 'T+42d (If Needed)', category: 'identity', lane: 'identity', isHospitalAuto: false },
+      'C4': { days: 65, offset: 'T+65d', category: 'identity', lane: 'identity', isHospitalAuto: false },
+      'C5': { days: 65, offset: 'T+65d', category: 'identity', lane: 'identity', isHospitalAuto: false },
+      'C6': { days: 65, offset: 'T+65d', category: 'identity', lane: 'identity', isHospitalAuto: false },
+      'C7': { days: 65, offset: 'T+65d', category: 'identity', lane: 'identity', isHospitalAuto: false },
+      'D1': { days: 45, offset: 'T+45d (Post-SSN)', category: 'financial', lane: 'wealth', isHospitalAuto: false },
+      'D2': { days: 60, offset: 'T+60d (Jan 5)', category: 'financial', lane: 'wealth', isDeadline: true, isHospitalAuto: false },
+      'D3': { days: 45, offset: 'T+45d', category: 'financial', lane: 'wealth', isHospitalAuto: false },
+      'D4': { days: 60, offset: 'T+60d', category: 'financial', lane: 'wealth', isHospitalAuto: false },
+      'D5': { years: 13, offset: 'Age 13', category: 'financial', lane: 'wealth', isHospitalAuto: false },
+      'D6': { days: 45, offset: 'T+45d ($1k Seed)', category: 'financial', lane: 'wealth', isHospitalAuto: false }
     };
 
     // Tasks from modules A-D
@@ -371,7 +383,7 @@ class NrmcDashboardApp {
 
     // Vaccines from Module E (dynamically tied to DOB)
     const vaccineSpecs = {
-      'VAC_01': { days: 0, offset: 'T-0 (Birth)', isHospitalAuto: true },
+      'VAC_01': { days: 0, offset: 'T-0 (Declined at Birth)', isHospitalAuto: false },
       'VAC_02': { days: 30, offset: 'T+30d (1M)', isHospitalAuto: false },
       'VAC_03': { days: 60, offset: 'T+60d (2M)', isHospitalAuto: false },
       'VAC_04': { days: 120, offset: 'T+120d (4M)', isHospitalAuto: false },
@@ -463,7 +475,7 @@ class NrmcDashboardApp {
 
         // Check if documents are vaulted or prompted for this milestone
         const taskDocs = (this.state.vault_documents || []).filter((d) => d.task_id === m.id);
-        const needsDocPrompt = ['A4', 'A5', 'A6', 'B1', 'B3', 'B4', 'C2', 'D1', 'D2', 'D3', 'VAC_01', 'VAC_02', 'VAC_03', 'VAC_04', 'VAC_05'].includes(m.id);
+        const needsDocPrompt = ['A4', 'A5', 'A6', 'A7', 'B1', 'B2', 'B3', 'B4', 'C2', 'D1', 'D2', 'D3', 'D6', 'VAC_01', 'VAC_02', 'VAC_03', 'VAC_04', 'VAC_05'].includes(m.id);
         let docPromptHtml = '';
         if (taskDocs.length > 0) {
           docPromptHtml = `<button class="vault-prompt-badge has-docs open-vault-task-btn" data-task-id="${m.id}" title="${taskDocs.length} record(s) archived in local vault. Click to view.">📁 ${taskDocs.length} RECORD(S)</button>`;
@@ -503,12 +515,16 @@ class NrmcDashboardApp {
 
     // Update Current Radar Marker
     const now = new Date();
-    const dob = new Date(this.state.profile?.dob || '2026-11-15');
+    const dob = new Date((this.state.profile?.dob || '2026-11-06') + 'T00:00:00');
     const daysDiff = Math.max(0, Math.floor((now - dob) / (1000 * 60 * 60 * 24)));
     const marker = document.getElementById('glidepath-current-marker');
     if (marker) {
       const clampedOffset = Math.min(1420, Math.max(35, daysDiff * 16 + 35));
       marker.style.left = `${clampedOffset}px`;
+      const beacon = marker.querySelector('.runway-current-beacon');
+      if (beacon) {
+        beacon.innerHTML = `<span class="status-pulse-dot" style="width:6px; height:6px;"></span> DAY T+${daysDiff} / TODAY`;
+      }
     }
   }
 
@@ -699,7 +715,7 @@ class NrmcDashboardApp {
 
   // Aiden's Military Rank Progression Engine (PVT -> SFC -> 2LT Direct Commission at Age 18)
   computeAidenRank(dobStr) {
-    if (!dobStr) dobStr = '2026-11-15';
+    if (!dobStr) dobStr = '2026-11-06';
     const dob = new Date(dobStr + 'T00:00:00');
     const now = new Date();
 
@@ -823,7 +839,7 @@ class NrmcDashboardApp {
     const promoEl = document.getElementById('rank-next-promo-display');
 
     if (nameEl) nameEl.textContent = profile.baby_name || 'Aiden James Vane';
-    if (dobEl) dobEl.textContent = `DOB: ${profile.dob || '2026-11-15'}`;
+    if (dobEl) dobEl.textContent = `DOB: ${profile.dob || '2026-11-06'}${profile.time_of_birth ? ' @ ' + profile.time_of_birth : ''}`;
 
     const rankInfo = this.computeAidenRank(profile.dob);
     if (rankEl) {
@@ -876,7 +892,7 @@ class NrmcDashboardApp {
     const now = new Date();
 
     // 1. TRICARE 90-Day Grace Window
-    const tricareDeadlineStr = this.state.command_anchors?.tricare_grace?.deadline || '2027-02-13';
+    const tricareDeadlineStr = this.state.command_anchors?.tricare_grace?.deadline || '2027-02-04';
     const tricareDeadline = new Date(tricareDeadlineStr + 'T23:59:59');
     const tricareDiff = tricareDeadline - now;
 
@@ -912,28 +928,34 @@ class NrmcDashboardApp {
     }
 
     // 2. RAPIDS Appointment Delta
-    const rapidsScheduledStr = this.state.command_anchors?.rapids_appointment?.scheduled_date || '2026-12-05T10:00:00';
-    const rapidsDate = new Date(rapidsScheduledStr);
-    const rapidsDiff = rapidsDate - now;
-
+    const rapidsScheduledStr = this.state.command_anchors?.rapids_appointment?.scheduled_date;
     const rapidsDaysEl = document.getElementById('rapids-countdown-days');
     const rapidsSubEl = document.getElementById('rapids-countdown-sub');
 
     if (rapidsDaysEl) {
-      if (rapidsDiff <= 0) {
-        rapidsDaysEl.textContent = 'COMPLETE';
-      } else {
-        const rDays = Math.floor(rapidsDiff / (1000 * 60 * 60 * 24));
-        const rHours = Math.floor((rapidsDiff / (1000 * 60 * 60)) % 24);
-        rapidsDaysEl.textContent = `${rDays}d ${rHours}h`;
+      if (!rapidsScheduledStr) {
+        rapidsDaysEl.textContent = 'NEEDS BOOKING';
         if (rapidsSubEl) {
-          rapidsSubEl.textContent = `Waller Hall | Confirmation: ${this.state.command_anchors.rapids_appointment.confirmation_code || 'CONFIRMED'}`;
+          rapidsSubEl.textContent = 'Req: Certified Birth Cert + SSN | Fort Belvoir / NCR DEERS';
+        }
+      } else {
+        const rapidsDate = new Date(rapidsScheduledStr);
+        const rapidsDiff = rapidsDate - now;
+        if (rapidsDiff <= 0) {
+          rapidsDaysEl.textContent = 'PAST / VERIFY';
+        } else {
+          const rDays = Math.floor(rapidsDiff / (1000 * 60 * 60 * 24));
+          const rHours = Math.floor((rapidsDiff / (1000 * 60 * 60)) % 24);
+          rapidsDaysEl.textContent = `${rDays}d ${rHours}h`;
+          if (rapidsSubEl) {
+            rapidsSubEl.textContent = `${this.state.command_anchors.rapids_appointment.location || 'NCR DEERS'} | ${this.state.command_anchors.rapids_appointment.confirmation_code || 'BOOKED'}`;
+          }
         }
       }
     }
 
     // 3. Next Pediatric Sortie
-    const nextPediatricStr = this.state.command_anchors?.next_medical_milestone?.target_date || '2027-01-15T09:30:00';
+    const nextPediatricStr = this.state.command_anchors?.next_medical_milestone?.target_date || '2026-11-20T07:50:00';
     const pedDate = new Date(nextPediatricStr);
     const pedDiff = pedDate - now;
 
@@ -944,17 +966,17 @@ class NrmcDashboardApp {
       if (pedDiff <= 0) {
         pedDaysEl.textContent = 'TODAY';
       } else {
-        const pDays = Math.floor(pedDiff / (1000 * 60 * 60 * 24));
+        const pDays = Math.ceil(pedDiff / (1000 * 60 * 60 * 24));
         pedDaysEl.textContent = `${pDays} Days`;
-        if (pedSubEl) {
-          pedSubEl.textContent = this.state.command_anchors.next_medical_milestone.title;
-        }
+      }
+      if (pedSubEl) {
+        pedSubEl.textContent = this.state.command_anchors?.next_medical_milestone?.title || 'FBCH Team Pink Follow-Up';
       }
     }
 
     // 4. Baby Aiden Age / T-Sortie Days
-    const dobStr = this.state.profile?.dob || '2026-11-15';
-    const dob = new Date(dobStr);
+    const dobStr = this.state.profile?.dob || '2026-11-06';
+    const dob = new Date(dobStr + 'T12:38:00');
     const ageDiff = now - dob;
     const ageDaysEl = document.getElementById('infant-days-counter');
     if (ageDaysEl) {
@@ -997,7 +1019,7 @@ class NrmcDashboardApp {
 
         // Check if documents are vaulted or prompted for this task
         const taskDocs = (this.state.vault_documents || []).filter((d) => d.task_id === t.id);
-        const needsDocPrompt = ['A4', 'A5', 'A6', 'B1', 'B3', 'B4', 'C2', 'D1', 'D2', 'D3'].includes(t.id);
+        const needsDocPrompt = ['A4', 'A5', 'A6', 'A7', 'B1', 'B2', 'B3', 'B4', 'C2', 'D1', 'D2', 'D3', 'D6'].includes(t.id);
         let docPromptHtml = '';
         if (taskDocs.length > 0) {
           docPromptHtml = `<button class="vault-prompt-badge has-docs open-vault-task-btn" data-task-id="${t.id}" title="${taskDocs.length} record(s) filed. Click to view.">📁 ${taskDocs.length} RECORD(S)</button>`;
@@ -1155,7 +1177,7 @@ class NrmcDashboardApp {
             <td style="vertical-align:top; font-family:var(--font-mono); font-size:0.78rem;">
               <div style="color:var(--cyan-telemetry); font-weight:700;">${v.target_date || 'TBD'}</div>
               ${v.date_administered ? `<div style="color:var(--emerald-nominal); font-size:0.7rem; margin-top:3px;">Administered: ${v.date_administered}</div>` : ''}
-              <div style="color:var(--text-muted); font-size:0.7rem; margin-top:2px;">${v.clinic || 'Madigan AMC'}</div>
+              <div style="color:var(--text-muted); font-size:0.7rem; margin-top:2px;">${v.clinic || 'FBCH Pediatrics'}</div>
             </td>
             <td style="vertical-align:top;">
               <span class="countdown-pill ${statusClass}">${v.status}</span>
@@ -1201,7 +1223,7 @@ class NrmcDashboardApp {
       const todayMinsEl = document.getElementById('tummy-today-mins');
       const targetMinsEl = document.getElementById('tummy-target-mins');
       if (todayMinsEl) todayMinsEl.textContent = `${tt.today_completed_minutes || 0}m`;
-      if (targetMinsEl) targetMinsEl.textContent = `Target: ${tt.daily_target_minutes || 25}m/day`;
+      if (targetMinsEl) targetMinsEl.textContent = `Target: ${tt.daily_target_minutes || 10}m/day`;
     }
 
     // 4. Update Growth Chart
@@ -1764,7 +1786,8 @@ class NrmcDashboardApp {
           checklists_completed: vac.status === 'COMPLETE' ? (vac.components ? vac.components.map(c => `${c.name}: ${c.disease} [${c.tier === 'MANDATORY' ? '🛡️ MANDATORY' : c.tier === 'RECOMMENDED_STANDARD' ? '⭐ RECOMMENDED STANDARD' : '📋 ELECTIVE'}] (${c.route || 'IM'})`) : []) : [],
           portals: [
             { name: "CDC ACIP Child Immunization Schedule", url: "https://www.cdc.gov/vaccines/schedules/hcp/imz/child-adolescent.html" },
-            { name: "WA State Child Care Immunization Requirements", url: "https://doh.wa.gov/you-and-your-family/immunization/childcare-and-school" },
+            { name: "DC Health Immunization Requirements", url: "https://dchealth.dc.gov/immunization" },
+            { name: "Virginia VDH Childcare & School Requirements", url: "https://www.vdh.virginia.gov/immunization/requirements/" },
             { name: "DoD Instruction 6060.02 (Child Development Programs)", url: "https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/606002p.pdf" }
           ],
           form_downloads: vac.components ? vac.components.filter(c => c.vis_url).map(c => ({
@@ -2529,7 +2552,7 @@ class NrmcDashboardApp {
     const dobTextInput = document.getElementById('cfg-baby-dob-text');
     const rapidsInput = document.getElementById('cfg-rapids-date');
 
-    const currentDob = profile.dob || '2026-11-15';
+    const currentDob = profile.dob || '2026-11-06';
     if (nameInput) nameInput.value = profile.baby_name || 'Aiden James Vane';
     if (dobInput) dobInput.value = currentDob;
     if (dobTextInput) dobTextInput.value = currentDob;
@@ -2680,9 +2703,6 @@ class NrmcDashboardApp {
     this.playTacticalFeedback('seal');
     this.closeProfileConfigModal();
     this.render();
-    this.broadcastFleetTelemetry();
-    this.showToast(`Timeline calibrated to DOB: ${dobVal} | Rank: ${rankInfo.code} (${rankInfo.grade})!`);
-  }
     this.broadcastFleetTelemetry();
     this.showToast(`Timeline calibrated to DOB: ${dobVal} | Rank: ${rankInfo.code} (${rankInfo.grade})!`);
   }

@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700;800&family=Orbitron:wght@600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet" />
 
   <!-- NRMC HUD Styling -->
-  <link rel="stylesheet" href="./css/nrmc-hud.css?v=2.7.0" />
+  <link rel="stylesheet" href="./css/nrmc-hud.css?v=2.8.0" />
 </head>
 <body>
   <div id="app-root">
@@ -35,7 +35,7 @@
             </span>
           </h1>
           <div class="brand-subtitle">
-            <span id="baby-dob-display">DOB: 2026-11-15</span>
+            <span id="baby-dob-display">DOB: 2026-11-06 @ 12:38 EST</span>
             <span>•</span>
             <span id="military-station-display" class="countdown-pill pill-cyan" style="font-weight:700;">RANK: PVT (E-1)</span>
             <span>•</span>
@@ -89,7 +89,7 @@
           <button id="import-state-btn" class="hud-btn hud-btn-sm" title="Import JSON State">
             IMPORT
           </button>
-          <a href="http://localhost:4000/" target="_blank" class="hud-btn hud-btn-sm hud-btn-primary" title="Launch Central Command Hub">
+          <a href="https://mikewvane-hub.github.io/central-command-hub/" target="_blank" class="hud-btn hud-btn-sm hud-btn-primary" title="Launch Central Command Hub">
             CENTRAL HUB
           </a>
         </div>
@@ -119,7 +119,7 @@
           <div id="tricare-progress-fill" class="countdown-progress-fill" style="width: 10%;"></div>
         </div>
         <div class="countdown-sub-meta">
-          <span id="tricare-countdown-sub">Hard Deadline: 2027-02-13</span>
+          <span id="tricare-countdown-sub">Hard Deadline: 2027-02-04</span>
           <span style="color:var(--cyan-telemetry);">Prime Transition</span>
         </div>
       </div>
@@ -136,17 +136,17 @@
             </svg>
             RAPIDS / DEERS Appointment
           </span>
-          <span class="countdown-pill pill-amber">SCHEDULED</span>
+          <span id="rapids-status-badge" class="countdown-pill pill-amber">NEEDS BOOKING</span>
         </div>
         <div class="countdown-digits-wrapper">
-          <span class="countdown-main-num" id="rapids-countdown-days">--d --h</span>
-          <span class="countdown-unit">Delta</span>
+          <span class="countdown-main-num" id="rapids-countdown-days">NEEDS BOOKING</span>
+          <span class="countdown-unit">Status</span>
         </div>
         <div class="countdown-progress-bar">
-          <div class="countdown-progress-fill" style="width: 35%; background:var(--amber-warning);"></div>
+          <div class="countdown-progress-fill" style="width: 15%; background:var(--amber-warning);"></div>
         </div>
         <div class="countdown-sub-meta">
-          <span id="rapids-countdown-sub">Waller Hall DEERS Center</span>
+          <span id="rapids-countdown-sub">Req: Certified BC + SSN | Fort Belvoir / NCR DEERS</span>
           <span style="color:var(--amber-warning);">DD-1172-2 Pre-Check</span>
         </div>
       </div>
@@ -160,7 +160,7 @@
             </svg>
             Next Pediatric Sortie
           </span>
-          <span class="countdown-pill pill-emerald">AAP CLINICAL</span>
+          <span class="countdown-pill pill-emerald">ATAMMC / FBCH</span>
         </div>
         <div class="countdown-digits-wrapper">
           <span class="countdown-main-num" id="pediatric-countdown-days">-- Days</span>
@@ -170,8 +170,8 @@
           <div class="countdown-progress-fill" style="width: 60%; background:var(--emerald-nominal);"></div>
         </div>
         <div class="countdown-sub-meta">
-          <span id="pediatric-countdown-sub">2-Month Well-Child / Pentavalent</span>
-          <span style="color:var(--emerald-nominal);">Madigan AMC</span>
+          <span id="pediatric-countdown-sub">FBCH Team Blue (11/10) -> Dr. Verghese Team Pink (11/20)</span>
+          <span style="color:var(--emerald-nominal);">ATAMMC / FBCH</span>
         </div>
       </div>
 
@@ -188,15 +188,15 @@
           <span class="countdown-pill pill-violet">INFANT AGE</span>
         </div>
         <div class="countdown-digits-wrapper">
-          <span class="countdown-main-num" id="infant-days-counter">T+0 Days</span>
+          <span class="countdown-main-num" id="infant-days-counter">T+4 Days</span>
           <span class="countdown-unit">Life Stage</span>
         </div>
         <div class="countdown-progress-bar">
           <div class="countdown-progress-fill" style="width: 100%; background:var(--violet-quantum);"></div>
         </div>
         <div class="countdown-sub-meta">
-          <span>Weight: 7.8 lbs | Length: 20.2 in</span>
-          <span style="color:var(--violet-quantum);">APGAR: 9/9</span>
+          <span id="infant-vitals-sub">Discharge Weight: 7.10 lbs (3.22 kg)</span>
+          <span style="color:var(--violet-quantum);">Born 12:38 EST @ ATAMMC</span>
         </div>
       </div>
     </div>
@@ -314,7 +314,7 @@
           </div>
           <div class="glidepath-phase-zone phase-active-crimson">
             <span class="phase-zone-title"><span style="color:var(--crimson-alert);">⚠️</span> PHASE 3: TRICARE DEADLINE &amp; FREEZES</span>
-            <span class="phase-zone-window">T+60 to T+90 Days • 90-Day Grace Closes (2027-02-13)</span>
+            <span class="phase-zone-window">T+60 to T+90 Days • 90-Day Grace Closes (2027-02-04)</span>
           </div>
           <div class="glidepath-phase-zone phase-active-emerald">
             <span class="phase-zone-title"><span style="color:var(--emerald-nominal);">●</span> PHASE 4: PEDIATRIC FLIGHT PATH</span>
@@ -330,7 +330,7 @@
           <div class="runway-current-marker" id="glidepath-current-marker">
             <div class="runway-current-beacon">
               <span class="status-pulse-dot" style="width:6px; height:6px;"></span>
-              DAY T+0 / TODAY
+              DAY T+4 / TODAY
             </div>
           </div>
 
@@ -521,19 +521,15 @@
       <div id="grid-module-b" class="task-grid-matrix">
         <!-- Rendered dynamically -->
       </div>
-    </section>
 
-    <!-- ================================================================= -->
-    <!-- TAB 2: LEGAL, IDENTITY & CREDIT (MODULE C)                        -->
-    <!-- ================================================================= -->
-    <section id="tab-legal-identity" class="tab-content-panel">
-      <div class="module-section-banner" style="border-left-color: var(--violet-quantum);">
+      <!-- Module C: Civil & Identity Hardening (T+14 to T+90 Days) -->
+      <div class="module-section-banner" style="border-left-color: var(--violet-quantum); margin-top:24px;">
         <div class="module-section-title">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
             <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
           </svg>
-          MODULE C: CIVIL & IDENTITY HARDENING (T+14 TO T+90 DAYS)
+          MODULE C: CIVIL &amp; IDENTITY HARDENING (T+14 TO T+90 DAYS)
         </div>
         <span class="countdown-pill pill-violet">PASSPORT DS-11 • PHOTO SPEC • 3-BUREAU FREEZE</span>
       </div>
@@ -548,7 +544,7 @@
             </svg>
             INFANT PASSPORT PHOTO COMPLIANCE GUIDE (DS-11 SPECIFICATION)
           </span>
-          <a href="/forms/infant_photo_specs.txt" download="infant_photo_specs.txt" class="hud-btn hud-btn-sm hud-btn-primary">DOWNLOAD PHOTO SOP</a>
+          <a href="./forms/infant_photo_specs.txt" download="infant_photo_specs.txt" class="hud-btn hud-btn-sm hud-btn-primary">DOWNLOAD PHOTO SOP</a>
         </div>
         <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:14px; font-size:0.85rem;">
           <div style="background:rgba(0,0,0,0.3); padding:12px; border-radius:6px; border:1px solid var(--border-subtle);">
@@ -569,39 +565,40 @@
       <div id="grid-module-c" class="task-grid-matrix">
         <!-- Rendered dynamically -->
       </div>
-    </section>
 
-    <!-- ================================================================= -->
-    <!-- TAB 3: FINANCIAL TELEMETRY (MODULE D)                             -->
-    <!-- ================================================================= -->
-    <section id="tab-financial-wealth" class="tab-content-panel">
-      <div class="module-section-banner" style="border-left-color: var(--emerald-nominal);">
+      <!-- Module D: Financial Architecture & Wealth Seeding -->
+      <div class="module-section-banner" style="border-left-color: var(--emerald-nominal); margin-top:24px;">
         <div class="module-section-title">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="12" y1="1" x2="12" y2="23"></line>
             <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
           </svg>
-          MODULE D: FINANCIAL ARCHITECTURE & WEALTH SEEDING
+          MODULE D: FINANCIAL ARCHITECTURE &amp; WEALTH SEEDING (INCLUDES TRUMP ACCOUNT)
         </div>
-        <span class="countdown-pill pill-emerald">IRS CTC • DCFSA • 529 PLAN • UTMA/UGMA BROKERAGE</span>
+        <span class="countdown-pill pill-emerald">IRS FORM 4547 • CTC • DCFSA • 529 PLAN • UTMA</span>
       </div>
 
       <!-- Financial Architecture KPI Grid -->
-      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin-bottom:20px;">
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:16px; margin-bottom:20px;">
+        <div class="hud-panel" style="border-top:2px solid var(--crimson-alert);">
+          <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Trump Account (IRC § 530A)</div>
+          <div style="font-family:var(--font-mono); font-size:1.8rem; font-weight:800; color:var(--ghost-white);">$1,000 <span style="font-size:0.9rem; color:var(--emerald-nominal);">U.S. Treasury Pilot</span></div>
+          <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">2025-2028 Births • Requires SSN + IRS Form 4547</div>
+        </div>
         <div class="hud-panel" style="border-top:2px solid var(--emerald-nominal);">
-          <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">529 College Savings Seed</div>
-          <div style="font-family:var(--font-mono); font-size:1.8rem; font-weight:800; color:var(--ghost-white);">$2,500 <span style="font-size:0.9rem; color:var(--emerald-nominal);">+ $500/mo DCA</span></div>
-          <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">WA GET / Utah my529 • 100% Global Index</div>
+          <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">529 College Savings Target</div>
+          <div style="font-family:var(--font-mono); font-size:1.8rem; font-weight:800; color:var(--ghost-white);">$500/mo <span style="font-size:0.9rem; color:var(--amber-warning);">Pending SSN</span></div>
+          <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">DC College Savings / VA Invest529 / Utah my529</div>
         </div>
         <div class="hud-panel" style="border-top:2px solid var(--cyan-telemetry);">
           <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Child Tax Credit (CTC) Delta</div>
-          <div style="font-family:var(--font-mono); font-size:1.8rem; font-weight:800; color:var(--ghost-white);">$2,000 / Yr</div>
-          <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">IRS Form W-4 Step 3 • myPay Withholding Adjusted</div>
+          <div style="font-family:var(--font-mono); font-size:1.8rem; font-weight:800; color:var(--ghost-white);">W-4 Step 3</div>
+          <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">Update via DFAS myPay Once Physical SSN Arrives</div>
         </div>
         <div class="hud-panel" style="border-top:2px solid var(--amber-warning);">
           <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">DCFSA Pre-Tax Target</div>
           <div style="font-family:var(--font-mono); font-size:1.8rem; font-weight:800; color:var(--ghost-white);">$5,000 Max</div>
-          <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">60-Day Qualifying Life Event Special Window</div>
+          <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">60-Day QLE Window Closes 2027-01-05</div>
         </div>
       </div>
 
@@ -631,7 +628,7 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
             </svg>
-            U.S. PEDIATRIC IMMUNIZATION REGULATORY &amp; CLINICAL DELINEATION (CDC ACIP / AAP / WA DOH / DOD)
+            U.S. PEDIATRIC IMMUNIZATION REGULATORY &amp; CLINICAL DELINEATION (CDC ACIP / AAP / DC HEALTH / VA VDH / DOD)
           </div>
           <a href="https://www.cdc.gov/vaccines/schedules/hcp/imz/child-adolescent.html" target="_blank" rel="noopener noreferrer" class="hud-btn hud-btn-sm" style="color:var(--cyan-telemetry); border-color:var(--cyan-telemetry);">
             OFFICIAL CDC ACIP SCHEDULE ↗
@@ -645,7 +642,7 @@
               TIER 1: MANDATORY (DAYCARE, DOD CDC &amp; SCHOOL)
             </div>
             <div class="mandate-box-desc">
-              Legally mandated by Washington State (WAC 246-105) and DoD Child Development Centers (DoDI 6060.02 / Waller Hall CDC). Enforces herd immunity against life-threatening transmissible pathogens.
+              Legally mandated by DC Health, Virginia VDH, and DoD Child Development Centers (DoDI 6060.02 / Fort Belvoir CDC) unless formal exemption is approved. Note: HepB #1 deferred at ATAMMC per Parental Decision.
             </div>
             <div class="mandate-box-applies">
               <strong>Vaccines:</strong> HepB, DTaP, Polio (IPV), Hib, Pneumococcal (PCV15/20)
@@ -673,7 +670,7 @@
               TIER 3: PARENT ELECTIVE &amp; SEASONAL DISCRETION
             </div>
             <div class="mandate-box-desc">
-              Strongly recommended clinical options governed by seasonal birth timing and parental consent. Not mandated by civilian law or military child development centers.
+              Optional seasonal/shared-decision prophylaxes (November birth falls inside Oct-Mar RSV window; ask FBCH Team Blue/Pink regarding Nirsevimab). Flu &amp; COVID-19 unlock at 6M+.
             </div>
             <div class="mandate-box-applies">
               <strong>Sorties:</strong> RSV Passive Antibody (Nirsevimab at birth in-season), Annual Influenza (6M+), COVID-19 (6M+)
@@ -754,7 +751,7 @@
               </svg>
               TUMMY TIME SORTIE STOPWATCH
             </span>
-            <span class="countdown-pill pill-cyan" id="tummy-target-mins">Target: 25m/day</span>
+            <span class="countdown-pill pill-cyan" id="tummy-target-mins">Target: 10m/day</span>
           </div>
           <div class="tummy-time-box">
             <div>
@@ -769,7 +766,7 @@
             </div>
             <div style="text-align:right;">
               <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Today's Completed</div>
-              <div id="tummy-today-mins" style="font-family:var(--font-mono); font-size:1.6rem; font-weight:700; color:var(--emerald-nominal);">15m</div>
+              <div id="tummy-today-mins" style="font-family:var(--font-mono); font-size:1.6rem; font-weight:700; color:var(--emerald-nominal);">0m</div>
             </div>
           </div>
         </div>
@@ -846,7 +843,7 @@
           <div style="display:flex; flex-direction:column; gap:12px;">
             <div>
               <label style="font-family:var(--font-mono); font-size:0.72rem; color:var(--text-muted); text-transform:uppercase;">Document Title / Label:</label>
-              <input type="text" id="vault-doc-name-input" placeholder="e.g., Madigan AMC HepB #1 Clinic Card" style="width:100%; background:rgba(0,0,0,0.5); border:1px solid var(--border-subtle); color:var(--ghost-white); font-family:var(--font-tech); font-size:0.9rem; padding:8px 12px; border-radius:4px; margin-top:4px;" />
+              <input type="text" id="vault-doc-name-input" placeholder="e.g., ATAMMC / FBCH Discharge Summary or Team Pink Visit" style="width:100%; background:rgba(0,0,0,0.5); border:1px solid var(--border-subtle); color:var(--ghost-white); font-family:var(--font-tech); font-size:0.9rem; padding:8px 12px; border-radius:4px; margin-top:4px;" />
             </div>
 
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
@@ -865,17 +862,21 @@
                 <label style="font-family:var(--font-mono); font-size:0.72rem; color:var(--text-muted); text-transform:uppercase;">Link to Sortie / Milestone:</label>
                 <select id="vault-doc-task-select" style="width:100%; background:var(--bg-carbon); border:1px solid var(--border-subtle); color:var(--ghost-white); font-family:var(--font-mono); font-size:0.78rem; padding:8px; border-radius:4px; margin-top:4px;">
                   <option value="">(None / General Archive)</option>
-                  <option value="A4">A4: Metabolic Screening Card</option>
+                  <option value="A3">A3: VA DMV Birth Cert Receipt (OPSEC)</option>
+                  <option value="A4">A4: Metabolic Screening / Bilirubin Lab</option>
                   <option value="A5">A5: Hearing Screening Clearance</option>
                   <option value="A6">A6: Physician Discharge Summary</option>
+                  <option value="A7">A7: TRICARE 90d Enrollment Confirmation</option>
                   <option value="B1">B1: DD Form 1172-2 / RAPIDS</option>
+                  <option value="B2">B2: TRICARE Prime PCM Confirmation</option>
                   <option value="B3">B3: SGLI / SOES Coverage</option>
                   <option value="B4">B4: DD Form 93 Record</option>
                   <option value="C2">C2: Infant Passport Photo</option>
                   <option value="D1">D1: W-4 CTC Withholding</option>
                   <option value="D2">D2: DCFSA QLE Enrollment</option>
                   <option value="D3">D3: 529 College Plan</option>
-                  <option value="VAC_01">VAC_01: HepB #1 Record</option>
+                  <option value="D6">D6: Trump Account (IRS Form 4547)</option>
+                  <option value="VAC_01">VAC_01: HepB #1 Record / Decision</option>
                   <option value="VAC_02">VAC_02: HepB #2 Record</option>
                   <option value="VAC_03">VAC_03: 2-Month Pentavalent Slip</option>
                   <option value="VAC_04">VAC_04: 4-Month Vaccines</option>
@@ -1189,14 +1190,13 @@
               <button type="button" id="btn-pick-dob" class="hud-btn hud-btn-sm" style="padding:2px 8px; font-size:0.68rem; border-color:var(--cyan-telemetry); color:var(--cyan-telemetry);" title="Open Calendar">📅 PICK</button>
             </div>
             <div style="display:flex; gap:6px;">
-              <input type="date" id="cfg-baby-dob" style="flex:1; background:rgba(0,0,0,0.6); border:1px solid var(--border-cyan); color:var(--ghost-white); font-family:var(--font-mono); font-size:0.85rem; padding:7px 10px; border-radius:4px; color-scheme:dark;" value="2026-11-15" />
-              <input type="text" id="cfg-baby-dob-text" placeholder="YYYY-MM-DD" style="width:110px; background:rgba(0,0,0,0.6); border:1px solid var(--border-cyan); color:var(--ghost-white); font-family:var(--font-mono); font-size:0.85rem; padding:7px 8px; border-radius:4px; text-align:center;" value="2026-11-15" />
+              <input type="date" id="cfg-baby-dob" style="flex:1; background:rgba(0,0,0,0.6); border:1px solid var(--border-cyan); color:var(--ghost-white); font-family:var(--font-mono); font-size:0.85rem; padding:7px 10px; border-radius:4px; color-scheme:dark;" value="2026-11-06" />
+              <input type="text" id="cfg-baby-dob-text" placeholder="YYYY-MM-DD" style="width:110px; background:rgba(0,0,0,0.6); border:1px solid var(--border-cyan); color:var(--ghost-white); font-family:var(--font-mono); font-size:0.85rem; padding:7px 8px; border-radius:4px; text-align:center;" value="2026-11-06" />
             </div>
             <!-- Quick preset chips -->
             <div style="display:flex; gap:5px; margin-top:6px;">
+              <button type="button" class="hud-btn hud-btn-sm btn-quick-dob" data-val="2026-11-06" style="font-size:0.65rem; padding:2px 6px;">Nov 6 (Actual)</button>
               <button type="button" class="hud-btn hud-btn-sm btn-quick-dob" data-val="today" style="font-size:0.65rem; padding:2px 6px;">Today</button>
-              <button type="button" class="hud-btn hud-btn-sm btn-quick-dob" data-val="2026-11-15" style="font-size:0.65rem; padding:2px 6px;">Nov 15</button>
-              <button type="button" class="hud-btn hud-btn-sm btn-quick-dob" data-val="2026-11-18" style="font-size:0.65rem; padding:2px 6px;">Nov 18</button>
               <button type="button" class="hud-btn hud-btn-sm btn-quick-dob" data-val="2026-12-01" style="font-size:0.65rem; padding:2px 6px;">Dec 1</button>
             </div>
           </div>
@@ -1223,7 +1223,7 @@
           </div>
           <div style="display:flex; gap:8px;">
             <input type="datetime-local" id="cfg-rapids-date" style="flex:1; background:rgba(0,0,0,0.6); border:1px solid var(--border-subtle); color:var(--ghost-white); font-family:var(--font-mono); font-size:0.85rem; padding:7px 10px; border-radius:4px; color-scheme:dark;" />
-            <button type="button" class="hud-btn hud-btn-sm btn-quick-rapids" data-val="2026-12-05T10:00" style="font-size:0.68rem; padding:2px 8px; white-space:nowrap;">Dec 5 (10am)</button>
+            <button type="button" class="hud-btn hud-btn-sm btn-quick-rapids" data-val="2026-12-08T10:00" style="font-size:0.68rem; padding:2px 8px; white-space:nowrap;">Dec 8 (10am)</button>
           </div>
         </div>
 
@@ -1233,15 +1233,15 @@
           <div style="display:flex; flex-direction:column; gap:6px; font-family:var(--font-mono); font-size:0.78rem;">
             <div style="display:flex; justify-content:space-between;">
               <span style="color:var(--text-muted);">Current Sortie Status:</span>
-              <span id="cfg-preview-delta" style="color:var(--ghost-white); font-weight:700;">T-12 Days</span>
+              <span id="cfg-preview-delta" style="color:var(--ghost-white); font-weight:700;">T+4 Days Post-Birth</span>
             </div>
             <div style="display:flex; justify-content:space-between;">
               <span style="color:var(--text-muted);">TRICARE 90-Day Grace Expiration:</span>
-              <span id="cfg-preview-tricare" style="color:var(--amber-warning); font-weight:700;">2027-02-13</span>
+              <span id="cfg-preview-tricare" style="color:var(--amber-warning); font-weight:700;">2027-02-04</span>
             </div>
             <div style="display:flex; justify-content:space-between;">
               <span style="color:var(--text-muted);">2-Month Pentavalent #1 Sortie:</span>
-              <span id="cfg-preview-pentavalent" style="color:#6ee7b7; font-weight:700;">2027-01-14</span>
+              <span id="cfg-preview-pentavalent" style="color:#6ee7b7; font-weight:700;">2027-01-05</span>
             </div>
           </div>
         </div>
@@ -1262,6 +1262,6 @@
   <div id="toast-container" class="toast-container"></div>
 
   <!-- Application Bootstrap -->
-  <script type="module" src="./js/nrmc-app.js?v=2.7.0"></script>
+  <script type="module" src="./js/nrmc-app.js?v=2.8.0"></script>
 </body>
 </html>

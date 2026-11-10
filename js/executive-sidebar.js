@@ -85,11 +85,11 @@ export const PLATFORM_DIAGNOSTICS_DATA = [
     categoryClass: 'cat-regression',
     origin: 'NRMC Vital Records & DEERS Hub',
     deckId: 'aiden',
-    timestamp: '2026-11-04 08:00 UTC',
-    title: 'DEERS & Certified Birth Certificates Intake',
-    technicalTitle: 'Vital Records Raised-Seal Processing & RAPIDS Intake',
-    description: 'Order 6 certified copies of birth certificate upon delivery and confirm physical delivery before Dec 5 RAPIDS appointment.',
-    technicalDescription: 'Automate certified birth certificate courier order (Task A3) and sync vital record physical delivery tracking with DMDC-AIDEN-7749 RAPIDS appointment scheduled at JBLM Waller Hall.',
+    timestamp: '2026-11-10 17:30 UTC',
+    title: 'VA DMV Birth Cert Pickup & RAPIDS DEERS Booking',
+    technicalTitle: 'Vital Records Raised-Seal Pickup & NCR RAPIDS Intake',
+    description: 'Pick up 5-6 certified copies at VA DMV ($17/ea, opens Thu Nov 12 after Veterans Day) and book RAPIDS/DEERS once SSN card arrives.',
+    technicalDescription: 'Execute VA DMV / OVR certified birth certificate pickup (Task A3) and schedule NCR RAPIDS DEERS appointment (Fort Belvoir Bldg 1189 / NCR) upon physical SSN card delivery (EAB 4-8 wks).',
     status: 'ACTION_MANDATORY',
     assignedAgent: 'pediatric-admin-sentinel'
   },
@@ -99,11 +99,11 @@ export const PLATFORM_DIAGNOSTICS_DATA = [
     categoryClass: 'cat-fix',
     origin: 'TRICARE Ops & Clinical C2',
     deckId: 'aiden',
-    timestamp: '2026-11-04 08:00 UTC',
-    title: 'TRICARE 90-Day Newborn Grace Window',
-    technicalTitle: 'TRICARE Prime Provisional Enrollment & PCM Alignment',
-    description: 'Initialize 90-day TRICARE Prime grace clock at birth to ensure newborn medical coverage at Madigan AMC.',
-    technicalDescription: 'Establish UTC countdown anchor for TRICARE 90-day grace period (2026-11-15 to 2027-02-13). Prevent point-of-service cost shares via automated DD Form 2876 enrollment pipeline.',
+    timestamp: '2026-11-10 17:30 UTC',
+    title: 'TRICARE 90-Day Grace Cutoff (Feb 4, 2027)',
+    technicalTitle: 'TRICARE Prime Provisional Enrollment & FBCH PCM Alignment',
+    description: 'Enroll Aiden in TRICARE Prime (FBCH Team Pink / Dr. Saro Verghese) before hard 90-day cutoff on 2027-02-04.',
+    technicalDescription: 'Track 90-day TRICARE grace period from birth (2026-11-06 to 2027-02-04). Enroll via TRICARE.mil / Humana Military (1-800-444-5445) immediately after DEERS completes.',
     status: 'ACTIVE_INVESTIGATION',
     assignedAgent: 'tricare-ops-sentinel'
   },
@@ -113,11 +113,11 @@ export const PLATFORM_DIAGNOSTICS_DATA = [
     categoryClass: 'cat-feature',
     origin: 'Wealth Seeding & Pediatric Telemetry',
     deckId: 'aiden',
-    timestamp: '2026-11-04 08:00 UTC',
-    title: '529 College Savings Auto-DCA & Growth Tracker',
-    technicalTitle: 'Automated 529 Monthly DCA & WHO Growth Telemetry Ingest',
-    description: 'Set up recurring $500/month 529 college savings auto-draft and integrate WHO growth centile tracking.',
-    technicalDescription: 'Ingest automated $500/mo DCA into WA GET/DreamAhead 529 portfolio and bind pediatric weight/length WHO percentile growth chart visualizer in NRMC Module E.',
+    timestamp: '2026-11-10 17:30 UTC',
+    title: 'Trump Account ($1k Pilot / Form 4547) & 529 Setup',
+    technicalTitle: 'IRC 530A Trump Account Election & DC/VA 529 Onboarding',
+    description: 'Elect $1,000 U.S. Treasury Trump Account pilot (Form 4547) and open 529 college plan once physical SSN arrives.',
+    technicalDescription: 'Upon SSA Enumeration at Birth card delivery (Dec 7 - Jan 4), submit IRS Form 4547 / TrumpAccounts.gov election ($1,000 Treasury pilot for 2025-2028 births) and seed DC/VA/my529 plan.',
     status: 'BACKLOG_PRIORITY',
     assignedAgent: 'wealth-pediatric-agent'
   }
@@ -724,10 +724,10 @@ export class ExecutiveSidebarManager {
       'HRV_BELOW_BASELINE': 'HRV Readiness Alert: 46 ms (Below 65 ms Baseline)',
       'CHEVY_COLORADO_ZR2_OIL_DECAY': '2021 Chevy Colorado ZR2 Oil Life at 18%',
       'COLORADO_ZR2_OIL_18PCT': 'Colorado ZR2 Oil Life at 18% (Service Due Soon)',
-      'AIDEN_TRICARE_GRACE_ACTIVE': 'TRICARE 90-Day Newborn Grace Window Active',
-      'AIDEN_IMMEDIATE_SORTIE_QUEUE': 'Baby Aiden Immediate Sortie Queue (Hospital & T-0 to T+72h)',
-      'AIDEN_RAPIDS_APPOINTMENT_STANDBY': 'RAPIDS Appointment Booked (2026-12-05 - JBLM Waller Hall)',
-      'AIDEN_529_CONTRIBUTION_SCHEDULED': '529 College Savings Auto-DCA Active ($500/mo)'
+      'AIDEN_TRICARE_GRACE_ACTIVE': 'TRICARE 90-Day Newborn Grace Window Active (Cutoff Feb 4, 2027)',
+      'AIDEN_IMMEDIATE_SORTIE_QUEUE': 'VA DMV Birth Cert Pickup (Opens Thu Nov 12) & 72h ATAMMC Labs',
+      'AIDEN_RAPIDS_APPOINTMENT_STANDBY': 'RAPIDS / DEERS Appointment Needs Scheduling (Post BC + SSN)',
+      'AIDEN_529_CONTRIBUTION_SCHEDULED': 'Trump Account ($1,000 Treasury Pilot / Form 4547) & 529 Queued'
     };
 
     const domainKeys = ['rental', 'garage', 'fleet', 'executive', 'trip', 'mackie', 'financial', 'health', 'aiden'];

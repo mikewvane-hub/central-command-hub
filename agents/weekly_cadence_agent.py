@@ -89,12 +89,14 @@ def generate_executive_weekly_briefing():
     # Baby Aiden 14-day upcoming sortie tasks & clinical milestones
     aiden_tasks = aiden_rep.get("upcoming_14d_tasks", [])
     for t in aiden_tasks:
+        d_rem = t.get("days_remaining", 0)
+        d_str = f"T-{d_rem}d" if d_rem > 0 else ("TODAY" if d_rem == 0 else f"DUE NOW (+{abs(d_rem)}d)")
         entry = {
             "category": "Baby Aiden",
             "priority": t.get("priority", "HIGH"),
             "due_date": t.get("due_date"),
-            "days_remaining": t.get("days_remaining"),
-            "detail": f"[{t.get('priority', 'HIGH')}] {t['title']} (Target {t['due_date']} • T-{t['days_remaining']}d)"
+            "days_remaining": d_rem,
+            "detail": f"[{t.get('priority', 'HIGH')}] {t['title']} (Target {t['due_date']} • {d_str})"
         }
         upcoming_14d.append(entry)
         # Include in executive upcoming view
@@ -102,8 +104,14 @@ def generate_executive_weekly_briefing():
 
     # 5. Build structured highlights
     aiden_profile = aiden_rep.get("profile", {})
+    aiden_days_dob = aiden_rep.get("days_until_dob")
+    if aiden_days_dob is not None and aiden_days_dob <= 0:
+        aiden_dob_hl = f"Born {aiden_profile.get('dob', '2026-11-06')} (T+{abs(aiden_days_dob)}d Post-Birth @ ATAMMC, 7.10 lbs). {len(aiden_tasks)} active sortie & clinical items queued for next 14 days. TRICARE 90d cutoff: 2027-02-04."
+    else:
+        aiden_dob_hl = f"DOB in {aiden_days_dob} days ({aiden_profile.get('dob', '2026-11-06')}). Immediate Sortie armed ({len(aiden_tasks)} tasks & vaccines queued for next 14 days)."
+
     highlights = [
-        f"BABY AIDEN // NRMC: DOB in {aiden_rep.get('days_until_dob', 11)} days ({aiden_profile.get('dob', '2026-11-15')}). Immediate Sortie armed ({len(aiden_tasks)} tasks & vaccines queued for next 14 days). TRICARE 90-day grace clock stands by.",
+        f"BABY AIDEN // NRMC: {aiden_dob_hl}",
         f"FAMILY: User Birthday (29 Mar 1993, in {family_rep['milestones'][0]['days_until']}d), Wife Birthday (23 Apr 1996, in {family_rep['milestones'][1]['days_until']}d), Anniversary (23 Sep).",
         f"PROPERTY: Sierra Pines cash flow at +${financials.get('monthly_net', 1120):,}/mo Net (${financials.get('monthly_gross', 2450):,} Gross). Priority ticket: '{critical_ticket}'.",
         f"ATHLETIC: Readiness Score {health_rep['readiness_score']}/100. HRV at {health_rep['hrv']['current']} ms ({health_rep['hrv']['status']}). Directive: {health_rep['recovery_recommendation']}.",
@@ -162,6 +170,19 @@ def generate_executive_weekly_briefing():
     anchors = aiden_rep.get("command_anchors", {})
     tricare = anchors.get("tricare_grace", {})
     rapids = anchors.get("rapids_appointment", {})
+    rapids_date_val = rapids.get("scheduled_date")
+    rapids_line = (
+        f"{rapids_date_val[:10]} @ {rapids.get('location', 'Fort Belvoir DEERS/RAPIDS')} (Confirmation: `{rapids.get('confirmation_code', 'CONFIRMED')}`)"
+        if rapids_date_val
+        else f"NEEDS BOOKING @ {rapids.get('location', 'Fort Belvoir Bldg 1189 / NCR DEERS')} (requires Certified Birth Cert + SSN card)"
+    )
+    if aiden_days_dob is not None and aiden_days_dob <= 0:
+        aiden_status_line = f"Born **{aiden_profile.get('dob', '2026-11-06')} 12:38 EST @ ATAMMC** (**T+{abs(aiden_days_dob)} Days Post-Birth**, 7.10 lbs)"
+    else:
+        aiden_status_line = f"Expected Delivery in **{aiden_days_dob} Days** ({aiden_profile.get('dob', '2026-11-06')})"
+
+    def _fmt_days(d_rem):
+        return f"T-{d_rem}d" if d_rem > 0 else ("TODAY" if d_rem == 0 else f"DUE +{abs(d_rem)}d")
 
     md_content = f"""# EXECUTIVE WEEKLY BRIEFING // {week_label.upper()}
 *Generated on {now.strftime('%A, %B %d, %Y at %H:%M UTC')} | Cadence: Sunday 18:00*
@@ -174,15 +195,15 @@ def generate_executive_weekly_briefing():
 ---
 
 ## 👶 Baby Aiden // Newborn Readiness & Milestone Command (NRMC)
-- **Status:** Expected Delivery in **{aiden_rep.get('days_until_dob', 11)} Days** ({aiden_profile.get('dob', '2026-11-15')})
-- **Pediatric PCM Alignment:** {aiden_profile.get('pediatrician', 'Dr. Sarah Vance, MD')} @ {aiden_profile.get('pcm_clinic', 'Madigan AMC Pediatric Clinic')}
-- **TRICARE 90-Day Grace Clock:** Target Delivery ({aiden_profile.get('dob')}) &rarr; Hard Cutoff: {tricare.get('deadline', '2027-02-13')}
-- **RAPIDS Appointment:** {rapids.get('scheduled_date', '2026-12-05')[:10]} @ {rapids.get('location', 'JBLM Waller Hall')} (Confirmation: `{rapids.get('confirmation_code', 'DMDC-AIDEN-7749')}`)
+- **Status:** {aiden_status_line}
+- **Pediatric PCM Alignment:** {aiden_profile.get('pediatrician', 'Dr. Saro Verghese, MD (Team Pink) / NP Meagan Van Assche (Team Blue)')} @ {aiden_profile.get('pcm_clinic', 'FBCH Pediatric Medicine Team Pink / Team Blue')}
+- **TRICARE 90-Day Grace Clock:** Birth ({aiden_profile.get('dob', '2026-11-06')}) &rarr; Hard Cutoff: {tricare.get('deadline', '2027-02-04')}
+- **RAPIDS Appointment:** {rapids_line}
 - **Upcoming 14-Day Sortie & Clinical Tasks ({len(aiden_tasks)} items):**
 
 | Priority | Task / Milestone | Due Date | SLA / Timeframe |
 | :--- | :--- | :--- | :--- |
-{chr(10).join(f"| **{t.get('priority', 'HIGH')}** | {t['title']} | {t['due_date']} (T-{t['days_remaining']}d) | {t.get('timeframe', 'At Birth')} |" for t in aiden_tasks)}
+{chr(10).join(f"| **{t.get('priority', 'HIGH')}** | {t['title']} | {t['due_date']} ({_fmt_days(t['days_remaining'])}) | {t.get('timeframe', 'At Birth')} |" for t in aiden_tasks)}
 
 ---
 

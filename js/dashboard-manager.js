@@ -237,39 +237,39 @@ export const DEFAULT_HUB_ALERTS = {
     deckIcon: '👶',
     count: 4,
     severity: 'critical',
-    title: 'TRICARE 90-Day Grace & Immediate Sortie Queue',
+    title: 'VA DMV Birth Cert, 72h ATAMMC Labs & TRICARE 90d Window',
     items: [
       {
         severity: 'CRITICAL',
         code: 'AIDEN_TRICARE_GRACE_ACTIVE',
         statute: 'TRICARE Prime Enrollment',
-        title: 'TRICARE 90-Day Newborn Grace Window Active',
-        dueDate: '2027-02-13',
-        message: 'TRICARE 90-day grace clock running. DEERS enrollment required to finalize PCM assignment.'
+        title: 'TRICARE 90-Day Newborn Grace Window Active (Cutoff Feb 4, 2027)',
+        dueDate: '2027-02-04',
+        message: 'TRICARE 90-day grace clock running since birth (2026-11-06). Enroll DEERS (Cert BC + SSN) & TRICARE Prime before Feb 4, 2027.'
       },
       {
         severity: 'CRITICAL',
         code: 'AIDEN_IMMEDIATE_SORTIE_QUEUE',
         statute: 'Immediate Sortie / Vital Records',
-        title: 'Baby Aiden Immediate Sortie Queue (Hospital & T-0 to T+72h)',
-        dueDate: '2026-11-15',
-        message: 'Newborn delivery in 11 days (Nov 15, 2026). Immediate clinical, vital records, and immunization sortie tasks armed.'
+        title: 'VA DMV Birth Cert Pickup (Opens Thu Nov 12) & 72h ATAMMC Labs',
+        dueDate: '2026-11-12',
+        message: 'Veterans Day Nov 11 closed -> VA DMV opens Thu Nov 12 ($17/ea, 5-6 copies); confirm 72h Newborn Screen, Bilirubin lab & Hearing clearance.'
       },
       {
         severity: 'WARNING',
         code: 'AIDEN_RAPIDS_APPOINTMENT_STANDBY',
         statute: 'DEERS / DD Form 1172-2',
-        title: 'RAPIDS Appointment Booked (2026-12-05)',
-        dueDate: '2026-12-05',
-        message: 'RAPIDS appointment booked. Verify physical certified birth certificate arrives prior to appointment.'
+        title: 'RAPIDS / DEERS Appointment Needs Scheduling (Post BC + SSN)',
+        dueDate: '2026-12-07',
+        message: 'Book at Fort Belvoir Bldg 1189 / NCR RAPIDS once VA Certified Birth Cert & SSN Card arrive.'
       },
       {
         severity: 'INFO',
         code: 'AIDEN_529_CONTRIBUTION_SCHEDULED',
         statute: 'Generational Wealth Architecture',
-        title: '529 College Savings Auto-DCA Active ($500/mo)',
-        dueDate: '2026-11-30',
-        message: 'Automatic contribution scheduled. Generational wealth compounding nominal.'
+        title: 'Trump Account ($1,000 Treasury Pilot / Form 4547) & 529 Queued',
+        dueDate: '2026-12-07',
+        message: 'Upon SSN arrival: elect $1,000 U.S. Treasury Trump Account (IRS Form 4547) and open DC/VA/my529 plan.'
       }
     ]
   }
@@ -325,7 +325,7 @@ export class DashboardManager {
       trip: localStorage.getItem('hub_url_trip') || 'https://daily-executive-dashboard.onrender.com/trip-planner/',
       mackie: localStorage.getItem('hub_url_mackie') || 'https://daily-executive-dashboard.onrender.com/mackie/',
       garage: sanitizeGarageUrl(),
-      aiden: sanitizeCloudUrl('hub_url_aiden', './dashboards/aiden/index.html?v=2.6.0')
+      aiden: sanitizeCloudUrl('hub_url_aiden', './dashboards/aiden/index.html?v=2.8.0')
     };
 
     this.statusMap = {
@@ -1360,7 +1360,7 @@ export class DashboardManager {
     const iframe = document.getElementById(`iframe-${deckId}`);
     if (iframe) {
       sfx.playClick();
-      const targetUrl = this.urls[deckId] || (deckId === 'garage' ? './dashboards/garage/index.html?v=40.0' : deckId === 'aiden' ? './dashboards/aiden/index.html?v=2.6.0' : '');
+      const targetUrl = this.urls[deckId] || (deckId === 'garage' ? './dashboards/garage/index.html?v=40.0' : deckId === 'aiden' ? './dashboards/aiden/index.html?v=2.8.0' : '');
       if (targetUrl) {
         iframe.src = targetUrl;
       }
@@ -1386,7 +1386,7 @@ export class DashboardManager {
         if (deckId === 'garage') finalUrl = './dashboards/garage/index.html?v=40.0';
         else if (deckId === 'rental') finalUrl = './dashboards/rental/index.html';
         else if (deckId === 'financial') finalUrl = './dashboards/financial/index.html';
-        else if (deckId === 'aiden') finalUrl = './dashboards/aiden/index.html?v=2.6.0';
+        else if (deckId === 'aiden') finalUrl = './dashboards/aiden/index.html?v=2.8.0';
       }
     }
     this.urls[deckId] = finalUrl;

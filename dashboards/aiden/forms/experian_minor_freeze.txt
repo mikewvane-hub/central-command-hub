@@ -17,7 +17,7 @@ Experian allows parents/legal guardians to request a security freeze for minors 
 3. REQUIRED ENCLOSURES CHECKLIST:
 [ ] Experian Minor Child Security Freeze Request Form or written request letter.
 [ ] Minor's Full Legal Name: Aiden James Vane
-[ ] Minor's Date of Birth: 2026-11-15
+[ ] Minor's Date of Birth: 2026-11-06
 [ ] Copy of Minor's Birth Certificate showing parent's name.
 [ ] Copy of Minor's Social Security Card.
 [ ] Copy of Parent's Government-Issued ID (Military ID or Driver's License).

@@ -1,26 +1,25 @@
 ================================================================================
-HOSPITAL VITAL RECORDS & BIRTH REGISTRATION GUIDANCE
-In-Hospital Vital Statistics Intake for Aiden James Vane
+ATAMMC VITAL RECORDS & SOCIAL SECURITY ENUMERATION AT BIRTH (EAB) GUIDANCE
+Aiden James Vane — Born Nov 6, 2026 (12:38 PM EST) at Fort Belvoir Community Hospital
 ================================================================================
 
-1. HOSPITAL BIRTH REGISTRATION PACKET:
-- Hospital birth registration clerk will visit the postpartum room within 24 hours of delivery.
-- Key Data Elements to Confirm:
-  * Child's Full Legal Name: Aiden James Vane
-  * Date and Time of Birth: Exact military timestamp recorded by labor & delivery
-  * Delivery Hospital & County of Birth
-  * Mother's Full Maiden Legal Name, Date of Birth, State/Country of Birth, SSN
-  * Father's Full Legal Name, Rank, Service Branch, Date of Birth, State/Country of Birth, SSN
+1. CERTIFICATE OF LIVE BIRTH (VA FORM VS 1 06/16):
+- Birth Registration Office: ATAMMC Oaks Pavilion 1st Floor, Rm O1.600 | (571) 231-3325 / 3326 (24/7).
+- Signed & Certified at Hospital: 2026-11-09 (Attendant: Jesse Grossman, D.O.).
+- Virginia law requires OVR receipt within 7 days of birth (2026-11-13).
 
-2. PATERNITY & MARRIAGE VERIFICATION:
-- If married: Bring state marriage certificate to hospital intake to ensure automatic paternal listing on birth certificate.
-- Active Duty Military: Provide Sponsor DoD ID / CAC and Unit details if requested for birth records.
+2. SOCIAL SECURITY NUMBER (ENUMERATION AT BIRTH - EAB):
+- EAB request was signed on VA VS 1 06/16 on 2026-11-09.
+- VA Office of Vital Records forwards the data to SSA.
+- Expected Delivery: 4 to 8 weeks (Dec 7, 2026 - Jan 4, 2027) to the mailing address on the worksheet.
+- Tracking Note: Per ATAMMC handout, ATAMMC and VA OVR cannot track SSA EAB status.
+- If NOT received after 8 weeks (after Jan 4, 2027):
+  Contact SSA directly at (800) 772-1213 or https://www.ssa.gov/number-card
+  (Bring Child's Certified Birth Certificate + parent identification / Form SS-5).
 
-3. SOCIAL SECURITY NUMBER (SSN) ELECTION:
-- Check "YES" on the state birth registration worksheet authorizing the State Registrar to share birth data with the Social Security Administration (SSA).
-- This triggers automated issuance of Form SS-5 and mailing of the official SSN card directly to the home address within 2-4 weeks.
-
-4. HOSPITAL RECORD RETENTION:
-- Obtain signed copy of Hospital Verification of Birth (mother's copy) and attending physician's signed clinical summary upon discharge.
-- Retain the official hospital discharge folder in master travel binder for immediate TRICARE temporary coverage prior to certified state certificates.
+3. CERTIFIED BIRTH CERTIFICATES & NEXT STEPS:
+- Obtain 5-6 certified copies at VA DMV (24-72h post-discharge, $17/ea, closed Wed 11/11 Veterans Day)
+  or VA OVR Richmond (~$15/ea).
+- BOTH Certified Birth Certificate AND Social Security Card are required to enroll Aiden into DEERS,
+  then immediately select TRICARE Prime prior to Day 90 hard cutoff (2027-02-04).
 ================================================================================
