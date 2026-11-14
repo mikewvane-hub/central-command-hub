@@ -89,7 +89,7 @@
           <button id="import-state-btn" class="hud-btn hud-btn-sm" title="Import JSON State">
             IMPORT
           </button>
-          <a href="https://mikewvane-hub.github.io/central-command-hub/" target="_blank" class="hud-btn hud-btn-sm hud-btn-primary" title="Launch Central Command Hub">
+          <a id="central-hub-link" href="https://mikewvane-hub.github.io/central-command-hub/" target="_blank" rel="noopener noreferrer" class="hud-btn hud-btn-sm hud-btn-primary" title="Launch Central Command Hub">
             CENTRAL HUB
           </a>
         </div>
@@ -204,8 +204,8 @@
     <!-- ================================================================= -->
     <!-- INTERACTIVE MATRIX NAVIGATION TABS                                -->
     <!-- ================================================================= -->
-    <nav class="matrix-nav-bar">
-      <button class="matrix-tab-btn active" data-tab="mission-glidepath">
+    <nav class="matrix-nav-bar" focusgroup="tablist nomemory" role="tablist" aria-label="Readiness Command Sections">
+      <button type="button" role="tab" id="tab-btn-mission-glidepath" class="matrix-tab-btn active" data-tab="mission-glidepath" aria-selected="true" focusgroupstart>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
           <polyline points="2 17 12 22 22 17"></polyline>
@@ -215,7 +215,7 @@
         <span class="tab-badge" style="background:rgba(0,229,255,0.25); color:var(--cyan-telemetry);">TIMELINE</span>
       </button>
 
-      <button class="matrix-tab-btn" data-tab="tactical-calendar">
+      <button type="button" role="tab" id="tab-btn-tactical-calendar" class="matrix-tab-btn" data-tab="tactical-calendar" aria-selected="false">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
           <line x1="16" y1="2" x2="16" y2="6"></line>
@@ -226,7 +226,7 @@
         <span class="tab-badge">MONTHLY HUD</span>
       </button>
 
-      <button class="matrix-tab-btn" data-tab="flight-lanes">
+      <button type="button" role="tab" id="tab-btn-flight-lanes" class="matrix-tab-btn" data-tab="flight-lanes" aria-selected="false">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="6" y1="3" x2="6" y2="15"></line>
           <circle cx="18" cy="6" r="3"></circle>
@@ -237,7 +237,7 @@
         <span class="tab-badge">DEPENDENCIES</span>
       </button>
 
-      <button class="matrix-tab-btn" data-tab="admin-military">
+      <button type="button" role="tab" id="tab-btn-admin-military" class="matrix-tab-btn" data-tab="admin-military" aria-selected="false">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
         </svg>
@@ -245,7 +245,7 @@
         <span class="tab-badge">MOD A-D</span>
       </button>
 
-      <button class="matrix-tab-btn" data-tab="clinical-pediatric">
+      <button type="button" role="tab" id="tab-btn-clinical-pediatric" class="matrix-tab-btn" data-tab="clinical-pediatric" aria-selected="false">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
         </svg>
@@ -253,7 +253,7 @@
         <span class="tab-badge">MOD E</span>
       </button>
 
-      <button class="matrix-tab-btn" data-tab="document-vault">
+      <button type="button" role="tab" id="tab-btn-document-vault" class="matrix-tab-btn" data-tab="document-vault" aria-selected="false">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
         </svg>
@@ -261,7 +261,7 @@
         <span class="tab-badge" id="nav-vault-count">0 FILES</span>
       </button>
 
-      <button class="matrix-tab-btn" data-tab="telemetry-audit">
+      <button type="button" role="tab" id="tab-btn-telemetry-audit" class="matrix-tab-btn" data-tab="telemetry-audit" aria-selected="false">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <polyline points="4 17 10 11 4 5"></polyline>
           <line x1="12" y1="19" x2="20" y2="19"></line>
@@ -274,7 +274,7 @@
     <!-- ================================================================= -->
     <!-- VIEW 1: MASTER MISSION GLIDEPATH (HORIZONTAL CHRONOMETRY)         -->
     <!-- ================================================================= -->
-    <section id="tab-mission-glidepath" class="tab-content-panel active">
+    <section id="tab-mission-glidepath" class="tab-content-panel active" role="tabpanel" aria-labelledby="tab-btn-mission-glidepath" tabindex="0">
       <div class="glidepath-controls-bar">
         <div style="display:flex; align-items:center; gap:12px;">
           <div style="font-family:var(--font-display); font-size:0.95rem; font-weight:800; color:var(--ghost-white); letter-spacing:0.06em; text-transform:uppercase;">
@@ -345,7 +345,7 @@
     <!-- ================================================================= -->
     <!-- VIEW 2: TACTICAL CALENDAR (MONTHLY HUD VIEW)                      -->
     <!-- ================================================================= -->
-    <section id="tab-tactical-calendar" class="tab-content-panel">
+    <section id="tab-tactical-calendar" class="tab-content-panel" role="tabpanel" aria-labelledby="tab-btn-tactical-calendar" hidden>
       <div class="tactical-calendar-wrapper">
         <div class="calendar-top-nav">
           <div class="calendar-month-title">
@@ -407,7 +407,7 @@
     <!-- ================================================================= -->
     <!-- VIEW 3: FLIGHT LANES & DEPENDENCY PIPELINE                        -->
     <!-- ================================================================= -->
-    <section id="tab-flight-lanes" class="tab-content-panel">
+    <section id="tab-flight-lanes" class="tab-content-panel" role="tabpanel" aria-labelledby="tab-btn-flight-lanes" hidden>
       <div class="module-section-banner" style="border-left-color: var(--cyan-telemetry);">
         <div class="module-section-title">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -493,7 +493,7 @@
     <!-- ================================================================= -->
     <!-- VIEW 4: SORTIE MATRICES (MODULES A, B, C, D)                      -->
     <!-- ================================================================= -->
-    <section id="tab-admin-military" class="tab-content-panel">
+    <section id="tab-admin-military" class="tab-content-panel" role="tabpanel" aria-labelledby="tab-btn-admin-military" hidden>
       <!-- Module A: Immediate Sortie (T-0 to T+72h) -->
       <div class="module-section-banner">
         <div class="module-section-title">
@@ -610,7 +610,7 @@
     <!-- ================================================================= -->
     <!-- TAB 4: CLINICAL & PEDIATRIC (MODULE E)                            -->
     <!-- ================================================================= -->
-    <section id="tab-clinical-pediatric" class="tab-content-panel">
+    <section id="tab-clinical-pediatric" class="tab-content-panel" role="tabpanel" aria-labelledby="tab-btn-clinical-pediatric" hidden>
       <div class="module-section-banner" style="border-left-color: var(--cyan-telemetry);">
         <div class="module-section-title">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -630,7 +630,7 @@
             </svg>
             U.S. PEDIATRIC IMMUNIZATION REGULATORY &amp; CLINICAL DELINEATION (CDC ACIP / AAP / DC HEALTH / VA VDH / DOD)
           </div>
-          <a href="https://www.cdc.gov/vaccines/schedules/hcp/imz/child-adolescent.html" target="_blank" rel="noopener noreferrer" class="hud-btn hud-btn-sm" style="color:var(--cyan-telemetry); border-color:var(--cyan-telemetry);">
+          <a href="https://www.cdc.gov/vaccines/imz-schedules/child-easyread.html" target="_blank" rel="noopener noreferrer" class="hud-btn hud-btn-sm" style="color:var(--cyan-telemetry); border-color:var(--cyan-telemetry);">
             OFFICIAL CDC ACIP SCHEDULE ↗
           </a>
         </div>
@@ -792,7 +792,7 @@
     <!-- ================================================================= -->
     <!-- VIEW: SECURE DOCUMENT VAULT & ATTACHMENT REPOSITORY               -->
     <!-- ================================================================= -->
-    <section id="tab-document-vault" class="tab-content-panel">
+    <section id="tab-document-vault" class="tab-content-panel" role="tabpanel" aria-labelledby="tab-btn-document-vault" hidden>
       <!-- OPSEC High-Sensitivity PII Safeguard Directive Banner -->
       <div class="vault-opsec-banner">
         <div class="opsec-icon">🛑</div>
@@ -939,7 +939,7 @@
     <!-- TAB 5: LIVE TELEMETRY FEED & AUDIT LOG                            -->
     <!-- ================================================================= -->
     <!-- ================================================================= -->
-    <section id="tab-telemetry-audit" class="tab-content-panel">
+    <section id="tab-telemetry-audit" class="tab-content-panel" role="tabpanel" aria-labelledby="tab-btn-telemetry-audit" hidden>
       <div class="module-section-banner" style="border-left-color: var(--cyan-telemetry);">
         <div class="module-section-title">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1258,10 +1258,62 @@
     </div>
   </div>
 
+  <!-- =================================================================== -->
+  <!-- NATIVE MODAL DIALOGS (TOP-LAYER DELETE CONFIRM & GROWTH TELEMETRY) -->
+  <!-- =================================================================== -->
+  <dialog id="dialog-confirm-delete-doc" class="nrmc-native-dialog" closedby="any" aria-labelledby="delete-doc-dialog-title">
+    <form method="dialog">
+      <div class="nrmc-dialog-header">
+        <h2 id="delete-doc-dialog-title" class="nrmc-dialog-title">Remove Document From Local Vault?</h2>
+        <button type="submit" value="cancel" class="hud-modal-close-btn" aria-label="Close confirmation dialog">&times;</button>
+      </div>
+      <div class="nrmc-dialog-body">
+        <p id="delete-doc-dialog-desc" style="font-size:0.85rem; color:#cbd5e1; line-height:1.5;">
+          Are you sure you want to remove this document from the local vault?
+        </p>
+      </div>
+      <div class="nrmc-dialog-actions">
+        <button type="submit" value="cancel" class="hud-btn" autofocus>Cancel</button>
+        <button type="submit" value="delete" class="hud-btn" style="background:rgba(239,68,68,0.2); border-color:var(--crimson-alert); color:#fca5a5;">Remove Document</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="dialog-log-growth" class="nrmc-native-dialog" closedby="any" aria-labelledby="log-growth-dialog-title">
+    <form id="form-log-growth" method="dialog">
+      <div class="nrmc-dialog-header">
+        <h2 id="log-growth-dialog-title" class="nrmc-dialog-title">Log Pediatric Growth Measurement</h2>
+        <button type="submit" value="cancel" formnovalidate class="hud-modal-close-btn" aria-label="Close growth form">&times;</button>
+      </div>
+      <div class="nrmc-dialog-body">
+        <div class="nrmc-dialog-field">
+          <label for="growth-weight-input">Weight (lbs)</label>
+          <input id="growth-weight-input" name="weight_lbs" type="number" step="0.01" min="1" max="50" value="8.2" required autofocus />
+        </div>
+        <div class="nrmc-dialog-field">
+          <label for="growth-length-input">Length (inches)</label>
+          <input id="growth-length-input" name="length_in" type="number" step="0.1" min="10" max="45" value="20.8" />
+        </div>
+        <div class="nrmc-dialog-field">
+          <label for="growth-head-input">Head Circumference (inches)</label>
+          <input id="growth-head-input" name="head_circ_in" type="number" step="0.1" min="8" max="28" value="14.5" />
+        </div>
+        <div class="nrmc-dialog-field">
+          <label for="growth-notes-input">Clinical Notes (optional)</label>
+          <input id="growth-notes-input" name="notes" type="text" value="Pediatric clinic measurement" placeholder="Pediatric clinic measurement" />
+        </div>
+      </div>
+      <div class="nrmc-dialog-actions">
+        <button type="submit" value="cancel" formnovalidate class="hud-btn">Cancel</button>
+        <button type="submit" value="save" class="hud-btn hud-btn-primary hud-btn-emerald">Save Measurement</button>
+      </div>
+    </form>
+  </dialog>
+
   <!-- Toast Notification Container -->
   <div id="toast-container" class="toast-container"></div>
 
   <!-- Application Bootstrap -->
-  <script type="module" src="./js/nrmc-app.js?v=2.8.0"></script>
+  <script type="module" src="./js/nrmc-app.js?v=2.9.0"></script>
 </body>
 </html>

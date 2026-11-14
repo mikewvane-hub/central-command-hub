@@ -33,8 +33,8 @@ class CentralCommandHubApp {
     // Auto-cleanse any legacy localhost:3012 setting or stale version for aiden
     try {
       const storedAiden = localStorage.getItem('hub_url_aiden');
-      if (!storedAiden || storedAiden.includes('localhost') || storedAiden.includes('127.0.0.1') || storedAiden.includes(':3012') || !storedAiden.includes('v=2.8.0')) {
-        localStorage.setItem('hub_url_aiden', './dashboards/aiden/index.html?v=2.8.0');
+      if (!storedAiden || storedAiden.includes('localhost') || storedAiden.includes('127.0.0.1') || storedAiden.includes(':3012') || !storedAiden.includes('v=2.9.0')) {
+        localStorage.setItem('hub_url_aiden', './dashboards/aiden/index.html?v=2.9.0');
       }
     } catch (e) {}
 
@@ -211,12 +211,6 @@ class CentralCommandHubApp {
           this.voiceEngine.toggleListening();
           break;
         case 'Escape': {
-          const briefingModal = document.getElementById('modal-executive-briefing');
-          if (briefingModal && briefingModal.classList.contains('open')) {
-            this.dashboardMgr.closeExecutiveBriefing();
-            sfx.playClick();
-            break;
-          }
           const settingsModal = document.getElementById('modal-hub-settings');
           if (settingsModal && settingsModal.classList.contains('open')) {
             settingsModal.classList.remove('open');
@@ -408,9 +402,11 @@ class CentralCommandHubApp {
     const finStatus = this.dashboardMgr.statusMap.financial || 'ONLINE';
     const tripStatus = this.dashboardMgr.statusMap.trip || 'ONLINE';
     const mackieStatus = this.dashboardMgr.statusMap.mackie || 'ONLINE';
+    const garageStatus = this.dashboardMgr.statusMap.garage || 'ONLINE';
+    const aidenStatus = this.dashboardMgr.statusMap.aiden || 'ONLINE';
 
     this.voiceEngine.speak(
-      `Central Command Hub operational status: Executive Briefing is ${execStatus}. Rental Operations is ${rentStatus}. Wealth console is ${finStatus}. Rainier Basecamp is ${tripStatus}. Mackie's Daily Board is ${mackieStatus}. Display ratio calibrated.`
+      `Central Command Hub operational status: Executive Briefing is ${execStatus}. Rental Operations is ${rentStatus}. Wealth console is ${finStatus}. Rainier Basecamp is ${tripStatus}. Mackie's Daily Board is ${mackieStatus}. Garage Fleet is ${garageStatus}. Baby Aiden NRMC is ${aidenStatus}. Display ratio calibrated.`
     );
   }
 }

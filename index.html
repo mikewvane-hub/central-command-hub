@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>ANTIGRAVITY // CENTRAL COMMAND HUB</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%23040d18' stroke='%2300f0ff' stroke-width='4'/%3E%3Ccircle cx='32' cy='32' r='8' fill='%2300f0ff'/%3E%3C/svg%3E" />
   
   <!-- Futuristic Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -374,7 +375,7 @@
             </div>
           </div>
           <div class="dashboard-iframe-container">
-            <iframe id="iframe-aiden" class="dashboard-iframe" src="about:blank" data-src="./dashboards/aiden/index.html?v=2.8.0" title="Baby Aiden Dashboard" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals"></iframe>
+            <iframe id="iframe-aiden" class="dashboard-iframe" src="about:blank" data-src="./dashboards/aiden/index.html?v=2.9.0" title="Baby Aiden Dashboard" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
           </div>
         </div>
       </section>
@@ -838,6 +839,19 @@
     </div>
 
   </div>
+
+  <!-- Native Top-Layer Voice Simulator Dialog -->
+  <dialog id="dialog-voice-command" class="hub-native-dialog" closedby="any" aria-labelledby="voice-dialog-title">
+    <form method="dialog" class="hub-dialog-form">
+      <h2 id="voice-dialog-title" class="hub-dialog-title">VOICE COMMAND SIMULATOR</h2>
+      <p class="hub-dialog-desc">Enter a verbal command (e.g., "open executive dashboard", "open rental ops", "open baby aiden", "open wealth console").</p>
+      <input type="text" id="voice-command-input" class="hub-dialog-input" placeholder='e.g. "open baby aiden"' autocomplete="off" autofocus />
+      <div class="hub-dialog-actions">
+        <button type="submit" value="cancel" class="launch-btn" formnovalidate>CANCEL</button>
+        <button type="submit" value="submit" class="launch-btn" style="border-color:#00f0ff;color:#00f0ff;">EXECUTE COMMAND</button>
+      </div>
+    </form>
+  </dialog>
 
   <!-- Boot Module Script -->
   <script type="module" src="js/app.js?v=45.0"></script>

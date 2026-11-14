@@ -281,21 +281,25 @@ export class DashboardManager {
     this.activeDeck = 'core';
     this.glassMode = 'glass'; // 'glass' (82%) | 'ghost' (58%) | 'solid' (98%)
 
-    // 24/7 Cloud Endpoints with automatic migration from legacy local ports
-    const sanitizeCloudUrl = (key, defaultCloud) => {
+    // 24/7 Cloud Endpoints with automatic migration from legacy local ports & URL validation
+    const sanitizeCloudUrl = (key, defaultCloud, allowLocalhost = false) => {
       try {
         const stored = localStorage.getItem(key);
         if (!stored) return defaultCloud;
+        const validation = validateDashboardUrl(stored);
+        if (!validation.valid) {
+          localStorage.setItem(key, defaultCloud);
+          return defaultCloud;
+        }
+        const sanitized = validation.sanitized || stored;
         if (
-          stored.includes('127.0.0.1') ||
-          stored.includes('localhost') ||
-          stored === 'about:blank' ||
-          stored === ''
+          !allowLocalhost &&
+          (sanitized.includes('127.0.0.1') || sanitized.includes('localhost') || sanitized === 'about:blank' || sanitized === '')
         ) {
           localStorage.setItem(key, defaultCloud);
           return defaultCloud;
         }
-        return stored;
+        return sanitized;
       } catch (e) {
         return defaultCloud;
       }
@@ -305,27 +309,29 @@ export class DashboardManager {
       const LATEST_GARAGE_URL = './dashboards/garage/index.html?v=40.0';
       try {
         const stored = localStorage.getItem('hub_url_garage');
+        const validation = stored ? validateDashboardUrl(stored) : { valid: false };
         // If stored URL points to localhost/127.0.0.1 (which breaks on mobile/GitHub Pages),
-        // or has old version, or is empty: ALWAYS reset to reliable relative path!
-        if (!stored || stored.includes('localhost') || stored.includes('127.0.0.1') || !stored.includes('v=40.0')) {
+        // fails validation, or has old version, ALWAYS reset to reliable relative path!
+        if (!validation.valid || !stored || stored.includes('localhost') || stored.includes('127.0.0.1') || !stored.includes('v=40.0')) {
           localStorage.setItem('hub_url_garage', LATEST_GARAGE_URL);
           return LATEST_GARAGE_URL;
         }
-        return stored;
+        return validation.sanitized || stored;
       } catch (e) {
         return LATEST_GARAGE_URL;
       }
     };
 
-    // Configurable URLs with localStorage persistence (All 100% 24/7 Cloud Active)
+    // Configurable URLs with localStorage persistence & scheme validation
+    const isLocalHostPage = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
     this.urls = {
-      executive: localStorage.getItem('hub_url_executive') || 'https://daily-executive-dashboard.onrender.com/',
+      executive: sanitizeCloudUrl('hub_url_executive', 'https://daily-executive-dashboard.onrender.com/', isLocalHostPage),
       rental: sanitizeCloudUrl('hub_url_rental', './dashboards/rental/index.html'),
       financial: sanitizeCloudUrl('hub_url_financial', './dashboards/financial/index.html'),
-      trip: localStorage.getItem('hub_url_trip') || 'https://daily-executive-dashboard.onrender.com/trip-planner/',
-      mackie: localStorage.getItem('hub_url_mackie') || 'https://daily-executive-dashboard.onrender.com/mackie/',
+      trip: sanitizeCloudUrl('hub_url_trip', 'https://daily-executive-dashboard.onrender.com/trip-planner/', isLocalHostPage),
+      mackie: sanitizeCloudUrl('hub_url_mackie', 'https://daily-executive-dashboard.onrender.com/mackie/', isLocalHostPage),
       garage: sanitizeGarageUrl(),
-      aiden: sanitizeCloudUrl('hub_url_aiden', './dashboards/aiden/index.html?v=2.8.0')
+      aiden: sanitizeCloudUrl('hub_url_aiden', './dashboards/aiden/index.html?v=2.9.0')
     };
 
     this.statusMap = {
@@ -431,7 +437,6 @@ export class DashboardManager {
     this.setupSubnavActions();
     this.setupCrossFrameAlertListener();
     this.setupAlertCenter();
-    this.setupBriefingModal();
     this.loadExecutiveBriefing();
     this.syncUnifiedAlerts();
     this.checkAllTelemetry();
@@ -444,8 +449,57 @@ export class DashboardManager {
     setInterval(() => this.syncUnifiedAlerts(), 45000);
   }
 
+  isTrustedCrossFrameMessage(event) {
+    const allowedOriginUrls = [
+      'https://daily-executive-dashboard.onrender.com',
+      'http://localhost:4000',
+      'http://127.0.0.1:4000',
+      'http://localhost:3001',
+      'http://127.0.0.1:3001',
+      'http://localhost:3005',
+      'http://127.0.0.1:3005',
+      'http://localhost:3008',
+      'http://127.0.0.1:3008',
+      'http://localhost:3009',
+      'http://127.0.0.1:3009',
+      'http://localhost:3012',
+      'http://127.0.0.1:3012'
+    ];
+
+    try {
+      if ('Origin' in globalThis) {
+        let senderOrigin;
+        try {
+          senderOrigin = Origin.from(event);
+        } catch (err) {
+          if (typeof MessageEvent !== 'undefined' && event instanceof MessageEvent) {
+            senderOrigin = Origin.from(event.origin);
+          } else {
+            throw err;
+          }
+        }
+        if (senderOrigin.opaque) return false;
+        const selfOrigin = Origin.from(self);
+        if (senderOrigin.isSameOrigin(selfOrigin)) return true;
+        return allowedOriginUrls.some((url) => senderOrigin.isSameOrigin(Origin.from(url)));
+      }
+
+      const rawOrigin = event?.origin;
+      if (!rawOrigin || rawOrigin === 'null') return false;
+      const candidateUrl = new URL(rawOrigin);
+      if (candidateUrl.origin === 'null') return false;
+      if (window.location?.origin && window.location.origin !== 'null' && candidateUrl.origin === window.location.origin) {
+        return true;
+      }
+      return allowedOriginUrls.some((url) => candidateUrl.origin === new URL(url).origin);
+    } catch {
+      return false;
+    }
+  }
+
   setupCrossFrameAlertListener() {
     window.addEventListener('message', (event) => {
+      if (!this.isTrustedCrossFrameMessage(event)) return;
       if (event.data) {
         if (event.data.type === 'FLEET_ALERTS_UPDATED' && event.data.payload) {
           const p = event.data.payload;
@@ -1345,7 +1399,7 @@ export class DashboardManager {
       iframe.src = targetUrl;
     } else if (deckId === 'garage') {
       const hasLocalhostMismatch = iframe.src.includes('localhost') && window.location.hostname !== 'localhost';
-      if (!iframe.src.includes('v=35.0') || hasLocalhostMismatch) {
+      if (!iframe.src.includes('v=40.0') || hasLocalhostMismatch) {
         iframe.src = targetUrl;
       }
     } else if (deckId === 'aiden') {
@@ -1360,7 +1414,7 @@ export class DashboardManager {
     const iframe = document.getElementById(`iframe-${deckId}`);
     if (iframe) {
       sfx.playClick();
-      const targetUrl = this.urls[deckId] || (deckId === 'garage' ? './dashboards/garage/index.html?v=40.0' : deckId === 'aiden' ? './dashboards/aiden/index.html?v=2.8.0' : '');
+      const targetUrl = this.urls[deckId] || (deckId === 'garage' ? './dashboards/garage/index.html?v=40.0' : deckId === 'aiden' ? './dashboards/aiden/index.html?v=2.9.0' : '');
       if (targetUrl) {
         iframe.src = targetUrl;
       }
@@ -1386,7 +1440,7 @@ export class DashboardManager {
         if (deckId === 'garage') finalUrl = './dashboards/garage/index.html?v=40.0';
         else if (deckId === 'rental') finalUrl = './dashboards/rental/index.html';
         else if (deckId === 'financial') finalUrl = './dashboards/financial/index.html';
-        else if (deckId === 'aiden') finalUrl = './dashboards/aiden/index.html?v=2.8.0';
+        else if (deckId === 'aiden') finalUrl = './dashboards/aiden/index.html?v=2.9.0';
       }
     }
     this.urls[deckId] = finalUrl;
@@ -1404,20 +1458,24 @@ export class DashboardManager {
   }
 
   async checkAllTelemetry() {
+    const isStaticHost = window.location.protocol === 'file:' || window.location.hostname.endsWith('.github.io');
+
     // 1. Check local server telemetry endpoint first if available
-    try {
-      const resp = await fetch('/api/telemetry', { cache: 'no-store' });
-      if (resp.ok) {
-        const data = await resp.json();
-        if (data.results && Array.isArray(data.results)) {
-          data.results.forEach(res => {
-            this.updateStatusBadge(res.id, res.status, res.statusCode);
-          });
-          return;
+    if (!isStaticHost) {
+      try {
+        const resp = await fetch('/api/telemetry', { cache: 'no-store' });
+        if (resp.ok) {
+          const data = await resp.json();
+          if (data.results && Array.isArray(data.results)) {
+            data.results.forEach(res => {
+              this.updateStatusBadge(res.id, res.status, res.statusCode);
+            });
+            return;
+          }
         }
+      } catch (e) {
+        // Fallback to direct probes when Express proxy is unavailable
       }
-    } catch (e) {
-      // Running standalone / GitHub Pages without local express telemetry proxy
     }
 
     // 2. Fallback: Direct ping probes
@@ -1433,115 +1491,78 @@ export class DashboardManager {
 
     probes.forEach(async (probe) => {
       try {
+        if (!probe.url) {
+          this.updateStatusBadge(probe.id, 'OFFLINE', 0);
+          return;
+        }
         if (probe.url.startsWith('./') || probe.url.startsWith('/dashboards')) {
-          this.updateStatusBadge(probe.id, 'CLOUD 24/7', 200);
+          if (window.location.protocol === 'file:') {
+            this.updateStatusBadge(probe.id, 'CLOUD 24/7', 200);
+            return;
+          }
+          const localRes = await fetch(probe.url, {
+            method: 'HEAD',
+            cache: 'no-store',
+            signal: AbortSignal.timeout(4000)
+          });
+          this.updateStatusBadge(
+            probe.id,
+            localRes.ok ? 'CLOUD 24/7' : 'OFFLINE',
+            localRes.status || 0
+          );
           return;
         }
 
-        const res = await fetch(probe.url, { mode: 'no-cors', cache: 'no-store' });
+        await fetch(probe.url, {
+          mode: 'no-cors',
+          cache: 'no-store',
+          signal: AbortSignal.timeout(4000)
+        });
         this.updateStatusBadge(probe.id, 'ONLINE', 200);
       } catch (err) {
-        this.updateStatusBadge(probe.id, 'ONLINE', 200);
+        this.updateStatusBadge(probe.id, 'OFFLINE', 0);
       }
     });
   }
 
   updateStatusBadge(deckId, statusText, statusCode) {
     this.statusMap[deckId] = statusText;
+    const isOffline =
+      !statusText ||
+      statusText.includes('OFFLINE') ||
+      statusText.includes('ERROR') ||
+      statusText.includes('UNREACHABLE') ||
+      statusCode === 0 ||
+      (typeof statusCode === 'number' && statusCode >= 400);
 
     // Update Tab Badges
     const tabBadge = document.querySelector(`[data-status-badge="${deckId}"]`);
     if (tabBadge) {
-      tabBadge.innerHTML = `<span class="status-beacon"></span> ${statusText.includes('CLOUD') ? 'CLOUD' : 'LIVE'}`;
-      tabBadge.style.color = 'var(--emerald-core)';
+      if (isOffline) {
+        tabBadge.innerHTML = `<span class="status-beacon" style="background:#ef4444;"></span> OFFLINE`;
+        tabBadge.style.color = '#f87171';
+      } else {
+        tabBadge.innerHTML = `<span class="status-beacon"></span> ${statusText.includes('CLOUD') ? 'CLOUD' : 'LIVE'}`;
+        tabBadge.style.color = 'var(--emerald-core)';
+      }
     }
 
     // Update Telemetry Matrix Page Items
     const matrixItem = document.getElementById(`telemetry-status-${deckId}`);
     if (matrixItem) {
-      matrixItem.textContent = `${statusText} (${statusCode ? statusCode + ' OK' : 'LIVE'})`;
-      matrixItem.className = 'matrix-value live';
+      if (isOffline) {
+        matrixItem.textContent = `${statusText || 'OFFLINE'} (${statusCode ? 'HTTP ' + statusCode : 'UNREACHABLE'})`;
+        matrixItem.className = 'matrix-value offline';
+      } else {
+        matrixItem.textContent = `${statusText} (${statusCode ? statusCode + ' OK' : 'LIVE'})`;
+        matrixItem.className = 'matrix-value live';
+      }
     }
   }
 
   // ==========================================
   // EXECUTIVE WEEKLY BRIEFING // CADENCE HUD
   // ==========================================
-  setupBriefingModal() {
-    // 1. Open briefing modal button in Executive Cadence Banner
-    const openBtn = document.getElementById('btn-open-executive-briefing');
-    if (openBtn) {
-      openBtn.addEventListener('click', () => {
-        sfx.playClick();
-        this.openExecutiveBriefing();
-      });
-    }
-
-    // 2. Close modal buttons
-    const closeBtn = document.getElementById('btn-close-briefing');
-    if (closeBtn) {
-      closeBtn.addEventListener('click', () => {
-        sfx.playClick();
-        this.closeExecutiveBriefing();
-      });
-    }
-
-    const dismissBtn = document.getElementById('btn-dismiss-briefing-modal');
-    if (dismissBtn) {
-      dismissBtn.addEventListener('click', () => {
-        sfx.playClick();
-        this.closeExecutiveBriefing();
-      });
-    }
-
-    // 3. Modal backdrop click
-    const modal = document.getElementById('modal-executive-briefing');
-    if (modal) {
-      modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-          sfx.playClick();
-          this.closeExecutiveBriefing();
-        }
-      });
-    }
-
-    // 4. Re-run Cadence buttons (banner + modal footer)
-    const runBtnBanner = document.getElementById('btn-trigger-cadence-run');
-    if (runBtnBanner) {
-      runBtnBanner.addEventListener('click', () => this.runCadenceAgent(runBtnBanner));
-    }
-
-    const runBtnModal = document.getElementById('btn-modal-rerun-cadence');
-    if (runBtnModal) {
-      runBtnModal.addEventListener('click', () => this.runCadenceAgent(runBtnModal));
-    }
-
-    // 5. Escape key handling
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        const briefingModal = document.getElementById('modal-executive-briefing');
-        if (briefingModal && briefingModal.classList.contains('open')) {
-          this.closeExecutiveBriefing();
-        }
-      }
-    });
-  }
-
-  openExecutiveBriefing() {
-    const modal = document.getElementById('modal-executive-briefing');
-    if (!modal) return;
-    modal.classList.add('open');
-    if (!this.executiveBriefing) {
-      this.loadExecutiveBriefing();
-    } else {
-      this.renderExecutiveBriefingModal(this.executiveBriefing);
-    }
-  }
-
-  closeExecutiveBriefing() {
-    const modal = document.getElementById('modal-executive-briefing');
-    if (modal) modal.classList.remove('open');
-  }
 
   async runCadenceAgent(triggerBtn = null) {
     sfx.playClick();

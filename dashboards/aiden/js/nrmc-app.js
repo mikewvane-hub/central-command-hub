@@ -31,10 +31,25 @@ class NrmcDashboardApp {
     this.initBroadcastChannel();
     this.initClock();
     this.attachDomEvents();
+
+    // 1. Instant paint from cached state so UI is interactive immediately
+    const cached = localStorage.getItem('nrmc_cached_state');
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached);
+        if (parsed && parsed.profile) {
+          this.state = parsed;
+          this.initSubsystems();
+          this.render();
+        }
+      } catch (e) {}
+    }
+
+    // 2. Fetch live or baseline state with tight timeout and re-render
     await this.loadInitialState();
-    this.initWebSocket();
     this.initSubsystems();
     this.render();
+    this.initWebSocket();
   }
 
   // 1. Inter-Dashboard Fleet Telemetry Bus (Central Command Hub integration)
@@ -117,7 +132,9 @@ class NrmcDashboardApp {
 
     // 1. Query live API state from local backend or cloud backend (Daily Dashboard on Render)
     try {
-      const res = await fetch(this.apiUrl('/api/v1/nrmc/state'));
+      const res = await fetch(this.apiUrl('/api/v1/nrmc/state'), {
+        signal: AbortSignal.timeout ? AbortSignal.timeout(3000) : undefined
+      });
       if (res.ok) {
         baselineState = await res.json();
       }
@@ -207,7 +224,6 @@ class NrmcDashboardApp {
     if (!this.state && baselineState) {
       this.state = baselineState;
       localStorage.setItem('nrmc_cached_state', JSON.stringify(this.state));
-    }
     }
   }
 
