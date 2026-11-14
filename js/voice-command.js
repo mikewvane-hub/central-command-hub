@@ -177,7 +177,7 @@ export const VOICE_TARGETS = {
   alerts: {
     category: 'alerts',
     target: 'alerts',
-    speech: "Opening Tactical Alert and Action Registry. 18 active items across dashboards.",
+    speech: "Opening Tactical Alert and Action Registry.",
     keywords: ['alerts', 'alert', 'notifications', 'show alerts', 'open alerts', 'what are the alerts', 'action items', 'compliance alerts', 'warnings'],
     phonetic: ['alerts', 'notifikashons', 'akshon items', 'warning']
   },
@@ -525,8 +525,15 @@ export class VoiceCommandEngine {
     const cmd = this.classifyCommand(originalText);
 
     if (cmd) {
-      if (cmd.speech && cmd.speech.trim() !== '') {
-        this.speak(cmd.speech);
+      let speechText = cmd.speech;
+      if (cmd.category === 'alerts') {
+        const badgeText = document.getElementById('global-alerts-badge')?.textContent || '0 ALERTS';
+        const match = badgeText.match(/\d+/);
+        const count = match ? parseInt(match[0], 10) : 0;
+        speechText = `Opening Tactical Alert and Action Registry. ${count} active ${count === 1 ? 'item' : 'items'} across dashboards.`;
+      }
+      if (speechText && speechText.trim() !== '') {
+        this.speak(speechText);
       }
 
       if (cmd.category === 'deck' && this.handlers.onSelectDeck) {
@@ -547,9 +554,34 @@ export class VoiceCommandEngine {
 
   // Voice Command Simulator dialog if mic is disabled or unsupported
   promptManualCommand() {
-    const command = prompt('Enter Voice Command (e.g. "open executive dashboard", "open rental ops", "open wealth console"):');
-    if (command) {
-      this.processCommand(command);
+    const dialog = document.getElementById('dialog-voice-command');
+    const input = document.getElementById('voice-command-input');
+    if (!dialog || !input || typeof dialog.showModal !== 'function') return;
+
+    if (!dialog.dataset.bound) {
+      dialog.dataset.bound = 'true';
+      if (!('closedBy' in HTMLDialogElement.prototype)) {
+        const outside = (e) => {
+          const r = dialog.getBoundingClientRect();
+          return e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom;
+        };
+        let pressedOutside = false;
+        dialog.addEventListener('pointerdown', (e) => { pressedOutside = outside(e); });
+        dialog.addEventListener('pointerup', (e) => { if (pressedOutside && outside(e)) dialog.close(); });
+      }
+      dialog.addEventListener('close', () => {
+        const action = dialog.returnValue;
+        dialog.returnValue = '';
+        if (action === 'submit') {
+          const command = input.value.trim();
+          if (command) {
+            this.processCommand(command);
+          }
+        }
+      });
     }
+
+    input.value = '';
+    dialog.showModal();
   }
 }

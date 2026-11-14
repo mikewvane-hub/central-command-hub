@@ -1303,6 +1303,7 @@ body::after {
   opacity: 1;
   visibility: visible;
   transform: scale(1);
+  pointer-events: auto;
 }
 
 /* Deck 0: Atomic Orbital HUD Overlay (Launchpad & Telemetry rows) */
@@ -2033,6 +2034,10 @@ body::after {
 
 .matrix-value.pending {
   color: #f59e0b;
+}
+
+.matrix-value.offline {
+  color: #f87171;
 }
 
 .qr-code-box {
@@ -4390,6 +4395,74 @@ body::after {
   font-size: 1.8rem;
 }
 
+/* ========================================== */
+/* NATIVE TOP-LAYER DIALOGS & SCROLL LOCK     */
+/* ========================================== */
 
+dialog:modal {
+  overscroll-behavior: contain;
+}
 
+dialog::backdrop {
+  overflow: hidden;
+  overscroll-behavior: contain;
+  background: rgba(2, 6, 17, 0.78);
+  backdrop-filter: blur(4px);
+}
+
+.hub-native-dialog {
+  margin: auto;
+  padding: 0;
+  width: min(460px, calc(100vw - 2rem));
+  border: 1px solid rgba(0, 240, 255, 0.45);
+  border-radius: 12px;
+  background: linear-gradient(160deg, rgba(7, 16, 38, 0.98) 0%, rgba(15, 23, 42, 0.98) 100%);
+  color: #f8fafc;
+  box-shadow: 0 0 40px rgba(0, 240, 255, 0.25);
+}
+
+.hub-native-dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.hub-dialog-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px 22px;
+}
+
+.hub-dialog-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #00f0ff;
+}
+
+.hub-dialog-desc {
+  margin: 0;
+  font-size: 0.84rem;
+  color: #cbd5e1;
+  line-height: 1.45;
+}
+
+.hub-dialog-input {
+  width: 100%;
+  background: rgba(2, 6, 17, 0.7);
+  border: 1px solid rgba(0, 240, 255, 0.35);
+  border-radius: 6px;
+  padding: 9px 12px;
+  color: #f8fafc;
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+}
+
+.hub-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
 

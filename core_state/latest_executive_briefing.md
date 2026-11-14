@@ -1,5 +1,5 @@
 # EXECUTIVE WEEKLY BRIEFING // WEEK OF NOVEMBER 10 – NOVEMBER 17, 2026
-*Generated on Tuesday, November 10, 2026 at 22:54 UTC | Cadence: Sunday 18:00*
+*Generated on Tuesday, November 10, 2026 at 23:11 UTC | Cadence: Sunday 18:00*
 
 ---
 

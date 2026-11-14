@@ -8,7 +8,7 @@ Sponsor: CPT Vane | Beneficiary: Aiden James Vane
 - Audit Basic Allowance for Housing (BAH) status: Confirm 'With Dependents' BAH entitlement is active and disbursed without gap.
 
 2. IPPS-A DEPENDENT PROFILE WORKFLOW:
-- Portal: https://hr.ippsa.army.mil
+- Portal: https://ipps-a.army.mil/
 - Action: Initiate a Personnel Action Request (PAR) for "Add Dependent".
 - Required Attachments:
   * Official State Certified Birth Certificate

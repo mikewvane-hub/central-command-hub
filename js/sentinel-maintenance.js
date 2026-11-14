@@ -78,13 +78,16 @@ export class SentinelMaintenanceEngine {
       this.remediationsCount++;
     }
 
-    // Sync to server backend audit log if possible
-    if (this.isBrowser && typeof fetch === 'function') {
+    // Sync to server backend audit log when running on local Express host
+    if (this.isBrowser && typeof fetch === 'function' &&
+        window.location.protocol !== 'file:' &&
+        !window.location.hostname.endsWith('.github.io')) {
       try {
         fetch('/api/sentinel/log', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(record)
+          body: JSON.stringify(record),
+          priority: 'low'
         }).catch(() => {});
       } catch (e) {}
     }
@@ -370,19 +373,18 @@ export class SentinelMaintenanceEngine {
 
     // Remediation C: Auto-remedy tunnel drop by issuing reconnect telemetry ping (bounded to 3 attempts)
     if (endpointResults) {
+      let needsReconnectProbe = false;
       Object.entries(endpointResults).forEach(([projectId, report]) => {
         if (report.status === 'DOWN') {
           const attempts = this.reconnectAttempts.get(projectId) || 0;
           if (attempts < 3) {
             this.reconnectAttempts.set(projectId, attempts + 1);
-            if (this.dashboardMgr && typeof this.dashboardMgr.checkAllTelemetry === 'function') {
-              this.dashboardMgr.checkAllTelemetry();
-              applied.push({
-                type: 'RECONNECT_PROBE',
-                details: `Issued reconnect probe attempt #${attempts + 1}/3 for ${FLEET_PROJECTS[projectId]?.name || projectId}.`
-              });
-              this.logAudit('RECONNECT_PROBE', { projectId, attempt: attempts + 1 }, 'REMEDIATED');
-            }
+            needsReconnectProbe = true;
+            applied.push({
+              type: 'RECONNECT_PROBE',
+              details: `Scheduled reconnect probe attempt #${attempts + 1}/3 for ${FLEET_PROJECTS[projectId]?.name || projectId}.`
+            });
+            this.logAudit('RECONNECT_PROBE', { projectId, attempt: attempts + 1 }, 'REMEDIATED');
           } else {
             // Retries bounded; avoid unbounded retry loop
             this.logAudit('RECONNECT_RETRIES_EXHAUSTED', { projectId, attempts }, 'NOMINATED');
@@ -392,6 +394,10 @@ export class SentinelMaintenanceEngine {
           this.reconnectAttempts.delete(projectId);
         }
       });
+
+      if (needsReconnectProbe && this.dashboardMgr && typeof this.dashboardMgr.checkAllTelemetry === 'function') {
+        this.dashboardMgr.checkAllTelemetry();
+      }
     }
 
     return { applied };
@@ -485,7 +491,7 @@ export class SentinelMaintenanceEngine {
     md += `---\n\n`;
     md += `## 🎯 PROMPT & INSTRUCTIONS FOR EXTERNAL AI REVIEWER (CLAUDE / CHATGPT)\n\n`;
     md += `You are an expert Systems Architect, Security Auditor, and Principal Full-Stack Engineer. Review this audit dossier for the **Antigravity Central Command Hub** multi-project fleet. Scrub and scrutinize the architecture, configurations, and state below to verify that there are no hidden flaws, vulnerabilities, or regressions:\n\n`;
-    md += `1. **Endpoint & Tunnel Resilience:** Verify that the 6 fleet projects have well-defined, non-conflicting port routes and graceful offline fallback mechanisms.\n`;
+    md += `1. **Endpoint & Tunnel Resilience:** Verify that the 7 fleet projects have well-defined, non-conflicting port routes and graceful offline fallback mechanisms.\n`;
     md += `2. **DOM & Self-Healing Integrity:** Validate that the autonomous watchdog mechanisms properly handle 3D orbit freezing, orphaned CSS pulse classes, and dangling listeners without main-thread locks.\n`;
     md += `3. **Memory & Cache Safety:** Verify that telemetry queues, localStorage keys, and log files are strictly bounded with zero memory leak or disk exhaustion risks.\n`;
     md += `4. **CORS & Iframe Isolation:** Confirm that header configurations allow secure responsive framing while preventing cross-origin clickjacking.\n`;

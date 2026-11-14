@@ -50,6 +50,10 @@ class NrmcDashboardApp {
     this.initSubsystems();
     this.render();
     this.initWebSocket();
+
+    // 3. Start background sync queue flush for offline / sleeping Render server resilience
+    this.flushPendingSyncQueue();
+    setInterval(() => this.flushPendingSyncQueue(), 12000);
   }
 
   // 1. Inter-Dashboard Fleet Telemetry Bus (Central Command Hub integration)
@@ -224,6 +228,37 @@ class NrmcDashboardApp {
     if (!this.state && baselineState) {
       this.state = baselineState;
       localStorage.setItem('nrmc_cached_state', JSON.stringify(this.state));
+    }
+
+    // Guarantee Zero-Hallucination & Permanent Checkoff Persistence:
+    // Reapply explicitly completed task IDs from the local completed index
+    try {
+      const explicitCompletedIds = JSON.parse(localStorage.getItem('nrmc_completed_task_ids') || '[]');
+      if (Array.isArray(explicitCompletedIds) && explicitCompletedIds.length > 0 && this.state) {
+        const idSet = new Set(explicitCompletedIds.map(x => String(x).toUpperCase()));
+        Object.values(this.state.modules || {}).forEach(mod => {
+          if (Array.isArray(mod.tasks)) {
+            mod.tasks.forEach(t => {
+              if (idSet.has(t.id.toUpperCase())) {
+                t.status = 'COMPLETE';
+                if (!Array.isArray(t.checklists_completed) || t.checklists_completed.length === 0) {
+                  t.checklists_completed = Array.isArray(t.checklists) ? [...t.checklists] : [];
+                }
+              }
+            });
+          }
+          if (Array.isArray(mod.vaccine_glidepath)) {
+            mod.vaccine_glidepath.forEach(v => {
+              if (idSet.has(v.id.toUpperCase())) {
+                v.status = 'COMPLETE';
+              }
+            });
+          }
+        });
+        localStorage.setItem('nrmc_cached_state', JSON.stringify(this.state));
+      }
+    } catch (e) {
+      console.warn('[NRMC] Failed to rehydrate completed tasks index:', e);
     }
   }
 
@@ -559,7 +594,7 @@ class NrmcDashboardApp {
           : `<span class="pill-parent-action" title="Requires direct parent action and intervention">⚡ DIRECT PARENT ACTION</span>`;
 
         return `
-        <div class="glidepath-milestone-card ${isComplete ? 'milestone-card-complete' : ''}" data-task-id="${m.id}" data-category="${m.category}">
+        <div class="glidepath-milestone-card ${isComplete ? 'milestone-card-complete' : ''} ${m.isHospitalAuto ? 'card-hospital-auto' : 'card-parent-action'}" data-task-id="${m.id}" data-category="${m.category}">
           <div class="milestone-node-connector ${connectorClass}"></div>
           <div class="milestone-header-row" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
             <span class="milestone-time-badge">${m.offset}</span>
@@ -2210,6 +2245,17 @@ class NrmcDashboardApp {
     }
     target.last_updated = new Date().toISOString();
 
+    // Persist to immutable completed task IDs index
+    try {
+      const storedIds = new Set(JSON.parse(localStorage.getItem('nrmc_completed_task_ids') || '[]'));
+      if (willComplete) {
+        storedIds.add(target.id.toUpperCase());
+      } else {
+        storedIds.delete(target.id.toUpperCase());
+      }
+      localStorage.setItem('nrmc_completed_task_ids', JSON.stringify(Array.from(storedIds)));
+    } catch (e) {}
+
     // Trigger audio feedback & notification
     this.playTacticalFeedback(willComplete ? 'seal' : 'unseal');
     this.showToast(willComplete ? `✓ Task ${target.id} sealed as COMPLETE!` : `↺ Task ${target.id} reopened to PENDING.`);
@@ -2250,22 +2296,49 @@ class NrmcDashboardApp {
     v.status = willComplete ? 'COMPLETE' : 'SCHEDULED';
     v.date_administered = willComplete ? new Date().toISOString().split('T')[0] : null;
 
+    // Persist to immutable completed task IDs index
+    try {
+      const storedIds = new Set(JSON.parse(localStorage.getItem('nrmc_completed_task_ids') || '[]'));
+      if (willComplete) {
+        storedIds.add(v.id.toUpperCase());
+      } else {
+        storedIds.delete(v.id.toUpperCase());
+      }
+      localStorage.setItem('nrmc_completed_task_ids', JSON.stringify(Array.from(storedIds)));
+    } catch (e) {}
+
     this.playTacticalFeedback(willComplete ? 'seal' : 'unseal');
     this.showToast(willComplete ? `✓ Vaccine ${v.vaccine} recorded as GIVEN on ${v.date_administered}!` : `Vaccine ${v.vaccine} reverted to scheduled.`);
     this.render();
 
     try {
-      await fetch(this.apiUrl(`/api/v1/nrmc/vaccine/${v.id}`), {
+      const res = await fetch(this.apiUrl(`/api/v1/nrmc/vaccine/${v.id}`), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           status: v.status,
           date_administered: v.date_administered
-        })
+        }),
+        signal: AbortSignal.timeout ? AbortSignal.timeout(8000) : undefined
       });
-      this.broadcastFleetTelemetry();
+      if (res.ok) {
+        this.broadcastFleetTelemetry();
+      } else {
+        this.enqueuePendingSync({
+          type: 'vaccine',
+          id: v.id,
+          payload: { status: v.status, date_administered: v.date_administered },
+          timestamp: Date.now()
+        });
+      }
     } catch (err) {
-      console.warn('[NRMC] Vaccine update saved locally:', err.message);
+      console.warn('[NRMC] Vaccine update queued for background retry:', err.message);
+      this.enqueuePendingSync({
+        type: 'vaccine',
+        id: v.id,
+        payload: { status: v.status, date_administered: v.date_administered },
+        timestamp: Date.now()
+      });
     }
     localStorage.setItem('nrmc_cached_state', JSON.stringify(this.state));
   }
@@ -2651,16 +2724,71 @@ class NrmcDashboardApp {
       const res = await fetch(this.apiUrl(`/api/v1/nrmc/task/${taskId}`), {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
+        signal: AbortSignal.timeout ? AbortSignal.timeout(8000) : undefined
       });
       if (res.ok) {
-        const data = await res.json();
         this.broadcastFleetTelemetry();
+        localStorage.setItem('nrmc_cached_state', JSON.stringify(this.state));
+        return;
+      } else {
+        this.enqueuePendingSync({
+          type: 'task',
+          id: taskId,
+          payload,
+          timestamp: Date.now()
+        });
       }
     } catch (err) {
-      console.warn('[NRMC] Task update saved locally only:', err.message);
+      console.warn('[NRMC] Task update queued for background retry:', err.message);
+      this.enqueuePendingSync({
+        type: 'task',
+        id: taskId,
+        payload,
+        timestamp: Date.now()
+      });
     }
     localStorage.setItem('nrmc_cached_state', JSON.stringify(this.state));
+  }
+
+  enqueuePendingSync(item) {
+    try {
+      const queue = JSON.parse(localStorage.getItem('nrmc_pending_sync_queue') || '[]');
+      const filtered = queue.filter(q => !(q.type === item.type && q.id.toUpperCase() === item.id.toUpperCase()));
+      filtered.push(item);
+      localStorage.setItem('nrmc_pending_sync_queue', JSON.stringify(filtered));
+    } catch (e) {}
+  }
+
+  async flushPendingSyncQueue() {
+    try {
+      const queue = JSON.parse(localStorage.getItem('nrmc_pending_sync_queue') || '[]');
+      if (!Array.isArray(queue) || queue.length === 0) return;
+
+      const remaining = [];
+      for (const item of queue) {
+        try {
+          const url = item.type === 'vaccine'
+            ? this.apiUrl(`/api/v1/nrmc/vaccine/${item.id}`)
+            : this.apiUrl(`/api/v1/nrmc/task/${item.id}`);
+          const method = item.type === 'vaccine' ? 'POST' : 'PATCH';
+          const res = await fetch(url, {
+            method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(item.payload),
+            signal: AbortSignal.timeout ? AbortSignal.timeout(6000) : undefined
+          });
+          if (!res.ok) remaining.push(item);
+        } catch (e) {
+          remaining.push(item);
+        }
+      }
+      localStorage.setItem('nrmc_pending_sync_queue', JSON.stringify(remaining));
+      if (remaining.length < queue.length) {
+        console.log(`[NRMC Sync] Flushed ${queue.length - remaining.length} queued action(s) to server.`);
+        this.broadcastFleetTelemetry();
+      }
+    } catch (e) {}
   }
 
   // Update Milestone status

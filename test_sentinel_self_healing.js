@@ -246,7 +246,7 @@ async function runSentinelTestSuite() {
   assert.strictEqual(healthRes.status, 200, 'GET /api/sentinel/health must return 200');
   assert.strictEqual(healthRes.body.status, 'ONLINE');
   assert.strictEqual(healthRes.body.agent, 'Sentinel-Daemon');
-  assert.strictEqual(healthRes.body.monitoredFleetProjects.length, 6);
+  assert.strictEqual(healthRes.body.monitoredFleetProjects.length, 7);
   console.log(`  ✓ GET /api/sentinel/health: 200 OK (Agent: ${healthRes.body.agent}, Uptime: ${Math.round(healthRes.body.uptimeSeconds)}s)`);
 
   // 6B: POST /api/sentinel/log

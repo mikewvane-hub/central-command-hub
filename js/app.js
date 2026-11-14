@@ -33,8 +33,8 @@ class CentralCommandHubApp {
     // Auto-cleanse any legacy localhost:3012 setting or stale version for aiden
     try {
       const storedAiden = localStorage.getItem('hub_url_aiden');
-      if (!storedAiden || storedAiden.includes('localhost') || storedAiden.includes('127.0.0.1') || storedAiden.includes(':3012') || !storedAiden.includes('v=2.9.0')) {
-        localStorage.setItem('hub_url_aiden', './dashboards/aiden/index.html?v=2.9.0');
+      if (!storedAiden || storedAiden.includes('localhost') || storedAiden.includes('127.0.0.1') || storedAiden.includes(':3012') || !storedAiden.includes('v=2.9.2')) {
+        localStorage.setItem('hub_url_aiden', './dashboards/aiden/index.html?v=2.9.2');
       }
     } catch (e) {}
 

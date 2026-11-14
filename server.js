@@ -94,7 +94,9 @@ app.get('/api/network-info', (req, res) => {
   });
 });
 
-// Telemetry endpoint to test reachability of the 3 dashboards
+app.get('/favicon.ico', (req, res) => res.sendStatus(204));
+
+// Telemetry endpoint to test reachability of the 7 dashboards
 app.get('/api/telemetry', async (req, res) => {
   const dashboards = [
     {
@@ -113,6 +115,7 @@ app.get('/api/telemetry', async (req, res) => {
       id: 'financial',
       name: 'Financial Wealth Console',
       url: 'http://localhost:3008/',
+      fallbackUrl: `http://127.0.0.1:${PORT}/dashboards/financial/index.html`,
       type: 'local'
     },
     {
@@ -130,38 +133,79 @@ app.get('/api/telemetry', async (req, res) => {
     {
       id: 'garage',
       name: 'Garage & Fleet Asset Command',
-      url: `http://localhost:${PORT}/dashboards/garage/index.html`,
+      url: `http://127.0.0.1:${PORT}/dashboards/garage/index.html`,
       type: 'local'
     },
     {
       id: 'aiden',
       name: 'Newborn Readiness & Milestone Command (Baby Aiden)',
-      url: `http://localhost:${PORT}/dashboards/aiden/index.html`,
+      url: `http://127.0.0.1:${PORT}/dashboards/aiden/index.html`,
       type: 'local'
     }
   ];
+
+  const probeUrl = async (targetUrl, timeoutMs = 3500) => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      const response = await fetch(targetUrl, {
+        method: 'GET',
+        signal: controller.signal,
+        headers: { 'User-Agent': 'CentralCommandHub-Pinger/1.0' }
+      });
+      return response;
+    } finally {
+      clearTimeout(timeoutId);
+    }
+  };
 
   const results = await Promise.all(
     dashboards.map(async (dash) => {
       const startTime = Date.now();
       try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 3500);
-
-        const response = await fetch(dash.url, {
-          method: 'GET',
-          signal: controller.signal,
-          headers: { 'User-Agent': 'CentralCommandHub-Pinger/1.0' }
-        });
-        clearTimeout(timeoutId);
-
+        const response = await probeUrl(dash.url);
+        if (response.status >= 200 && response.status < 400) {
+          return {
+            ...dash,
+            status: 'ONLINE',
+            statusCode: response.status,
+            mode: dash.type,
+            latencyMs: Date.now() - startTime
+          };
+        }
+        if (dash.fallbackUrl) {
+          const fallbackRes = await probeUrl(dash.fallbackUrl, 1500);
+          return {
+            ...dash,
+            status: fallbackRes.status >= 200 && fallbackRes.status < 400 ? 'ONLINE' : 'ERROR',
+            statusCode: fallbackRes.status,
+            mode: 'static-fallback',
+            latencyMs: Date.now() - startTime
+          };
+        }
         return {
           ...dash,
-          status: response.status >= 200 && response.status < 500 ? 'ONLINE' : 'ERROR',
+          status: 'ERROR',
           statusCode: response.status,
           latencyMs: Date.now() - startTime
         };
       } catch (err) {
+        if (dash.fallbackUrl) {
+          try {
+            const fallbackRes = await probeUrl(dash.fallbackUrl, 1500);
+            if (fallbackRes.status >= 200 && fallbackRes.status < 400) {
+              return {
+                ...dash,
+                status: 'ONLINE',
+                statusCode: fallbackRes.status,
+                mode: 'static-fallback',
+                latencyMs: Date.now() - startTime
+              };
+            }
+          } catch (fallbackErr) {
+            // Static fallback also unreachable
+          }
+        }
         return {
           ...dash,
           status: 'OFFLINE_OR_LOCAL_RESTRICTED',
@@ -349,12 +393,28 @@ app.get('/api/v1/nrmc/export', (req, res) => {
   res.status(404).json({ error: 'NRMC state not found' });
 });
 
+// Probe whether dedicated Baby Aiden WS backend (:3012) is active without failing browser fetches
+app.get('/api/v1/nrmc/health', async (req, res) => {
+  try {
+    const res3012 = await fetch('http://127.0.0.1:3012/api/v1/nrmc/telemetry', {
+      signal: AbortSignal.timeout(400)
+    });
+    return res.json({ ok: true, mode: 'hub-proxy', wsAvailable: res3012.ok });
+  } catch (e) {
+    return res.json({ ok: true, mode: 'hub-proxy', wsAvailable: false });
+  }
+});
+
 // Vault file stream route
 app.get('/api/v1/nrmc/vault/file/:filename', (req, res) => {
   const safeFilename = path.basename(req.params.filename);
-  const vaultPath = path.resolve(__dirname, '..', 'Baby Aiden Tracker', 'data', 'vault', safeFilename);
-  if (fs.existsSync(vaultPath)) {
-    return res.sendFile(vaultPath);
+  const externalVaultPath = path.resolve(__dirname, '..', 'Baby Aiden Tracker', 'data', 'vault', safeFilename);
+  if (fs.existsSync(externalVaultPath)) {
+    return res.sendFile(externalVaultPath);
+  }
+  const localVaultPath = path.resolve(__dirname, 'dashboards', 'aiden', 'data', 'vault', safeFilename);
+  if (fs.existsSync(localVaultPath)) {
+    return res.sendFile(localVaultPath);
   }
   res.status(404).send('Vault document not found');
 });
@@ -680,7 +740,8 @@ app.get('/api/sentinel/health', (req, res) => {
         'financial-command-center',
         'mackie-mom-board',
         'daily-executive-briefing',
-        'family-road-trip-planner'
+        'family-road-trip-planner',
+        'baby-aiden-nrmc'
       ]
     });
   } catch (err) {

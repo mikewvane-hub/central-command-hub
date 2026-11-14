@@ -1,0 +1,46 @@
+ANTIGRAVITY NRMC // PEDIATRIC IMMUNIZATION & CDC VIS REFERENCE RECORD
+Patient: Aiden James Vane | DOB: 2026-11-06 | Facility: ATAMMC / Fort Belvoir Community Hospital (FBCH)
+Clinic Teams: FBCH Pediatric Medicine Team Blue & Team Pink ((571) 231-3224)
+
+================================================================================
+VERIFIED OFFICIAL CDC & PUBLIC HEALTH REFERENCE LINKS
+================================================================================
+* Official CDC Child & Adolescent Immunization Schedule:
+  https://www.cdc.gov/vaccines/imz-schedules/child-easyread.html
+
+* Verified CDC Vaccine Information Statements (VIS):
+  - Hepatitis B (HepB): https://www.cdc.gov/vaccines/hcp/current-vis/hepatitis-b.html
+  - RSV Immunization (Nirsevimab / Beyfortus): https://www.cdc.gov/vaccines/hcp/current-vis/rsv-iis.html
+  - DTaP (Diphtheria, Tetanus, Pertussis): https://www.cdc.gov/vaccines/hcp/current-vis/dtap.html
+  - Polio (IPV): https://www.cdc.gov/vaccines/hcp/current-vis/polio.html
+  - Haemophilus influenzae type b (Hib): https://www.cdc.gov/vaccines/hcp/current-vis/hib.html
+  - Pneumococcal Conjugate (PCV15 / PCV20): https://www.cdc.gov/vaccines/hcp/current-vis/pneumococcal-conjugate.html
+  - Rotavirus (RV - Oral Drops): https://www.cdc.gov/vaccines/hcp/current-vis/rotavirus.html
+  - Influenza Inactivated (Flu - 6M+ Elective): https://www.cdc.gov/vaccines/hcp/current-vis/influenza-inactivated.html
+  - COVID-19 Pediatric (6M+ Elective): https://www.cdc.gov/vaccines/hcp/current-vis/covid-19.html
+
+* Jurisdictional Requirements:
+  - DC Health Immunization Requirements: https://dchealth.dc.gov/immunization
+  - Virginia VDH Childcare & School Requirements: https://www.vdh.virginia.gov/immunization/requirements/
+  - DoD Instruction 6060.02 (Child Development Programs): https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/606002p.pdf
+
+================================================================================
+DOSE ADMINISTRATION LOG (RECORD LOT NUMBERS & VIS EDITION DATES AT FBCH VISITS)
+================================================================================
+[ ] VAC_01 | Birth Window      | HepB #1 (Deferred at ATAMMC) / Nirsevimab Seasonal Review
+    Date Administered: ____________  Lot #: ____________  Mfr: ________  Site: ________
+
+[ ] VAC_02 | 1 Month (12/06)   | HepB #1/#2 Review — FBCH Team Pink (Dr. Verghese)
+    Date Administered: ____________  Lot #: ____________  Mfr: ________  Site: ________
+
+[ ] VAC_03 | 2 Months (01/05)  | DTaP #1, IPV #1, Hib #1, PCV15/20 #1 + Rotavirus #1 (Oral)
+    DTaP Lot: __________  IPV Lot: __________  Hib Lot: __________
+    PCV Lot:  __________  RV Oral Lot: __________
+
+[ ] VAC_04 | 4 Months (03/06)  | DTaP #2, IPV #2, Hib #2, PCV #2 + Rotavirus #2 (Oral)
+    DTaP Lot: __________  IPV Lot: __________  Hib Lot: __________
+    PCV Lot:  __________  RV Oral Lot: __________
+
+[ ] VAC_05 | 6 Months (05/05)  | DTaP #3, IPV #3, Hib #3, PCV #3, HepB #3 (+ Optional Flu/COVID-19)
+    DTaP Lot: __________  IPV Lot: __________  Hib Lot: __________
+    PCV Lot:  __________  HepB Lot: _________  Optional: __________

@@ -341,6 +341,9 @@ export class ExecutiveSidebarManager {
   }
 
   async syncPendingActions() {
+    if (window.location.protocol === 'file:' || window.location.hostname.endsWith('.github.io')) {
+      return;
+    }
     try {
       const pendingStr = localStorage.getItem('hub_pending_antigravity_sync');
       if (!pendingStr) return;
@@ -354,7 +357,8 @@ export class ExecutiveSidebarManager {
           const res = await fetch(item.endpoint, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(item.payload)
+            body: JSON.stringify(item.payload),
+            priority: 'low'
           });
           if (!res.ok) {
             remaining.push(item);
@@ -372,40 +376,66 @@ export class ExecutiveSidebarManager {
     } catch (e) {}
   }
 
-  async postToAntigravityServer(endpoint, payload) {
-    // 1. Try direct relative fetch (works seamlessly when running on local server)
+  async queryLnaPermissionSafe(permissionName) {
+    if (!navigator.permissions?.query) {
+      return 'prompt';
+    }
     try {
-      const res = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      if (res.ok) {
-        return await res.json();
-      }
-    } catch (e) {}
+      const status = await navigator.permissions.query({ name: permissionName });
+      return status.state;
+    } catch {
+      return 'prompt';
+    }
+  }
 
-    // 2. If relative fetch fails (e.g. browsing on GitHub Pages), attempt local LAN server endpoints
-    const fallbackHosts = [
-      'http://localhost:4000',
-      'http://192.168.1.154:4000'
-    ];
-    for (const host of fallbackHosts) {
+  async postToAntigravityServer(endpoint, payload, fromUserGesture = false) {
+    // 1. Try direct relative fetch (works seamlessly when running on local server)
+    if (window.location.protocol !== 'file:' && !window.location.hostname.endsWith('.github.io')) {
       try {
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 1200);
-        const res = await fetch(`${host}${endpoint}`, {
+        const res = await fetch(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-          signal: controller.signal
+          body: JSON.stringify(payload)
         });
-        clearTimeout(timeout);
         if (res.ok) {
-          console.log(`[Antigravity Remote Sync] Dispatched to ${host}${endpoint}`);
           return await res.json();
         }
-      } catch (err) {}
+      } catch (e) {}
+    }
+
+    // 2. Cross-space fallback to loopback/local Antigravity Hub only on localhost or explicit user gesture
+    const isLoopbackPage = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const isSecureOrigin = window.location.protocol === 'https:';
+    if (isLoopbackPage || (fromUserGesture && isSecureOrigin)) {
+      const fallbackTargets = [
+        { host: 'http://localhost:4000', space: 'loopback', permission: 'loopback-network' },
+        { host: 'http://192.168.1.154:4000', space: 'local', permission: 'local-network' }
+      ];
+      for (const target of fallbackTargets) {
+        if (!isLoopbackPage) {
+          const permState = await this.queryLnaPermissionSafe(target.permission);
+          if (permState === 'denied') continue;
+        }
+        try {
+          const controller = new AbortController();
+          const timeout = setTimeout(() => controller.abort(), 1200);
+          const init = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+            signal: controller.signal
+          };
+          if (isSecureOrigin) {
+            init.targetAddressSpace = target.space;
+          }
+          const res = await fetch(`${target.host}${endpoint}`, init);
+          clearTimeout(timeout);
+          if (res.ok) {
+            console.log(`[Antigravity Remote Sync] Dispatched to ${target.host}${endpoint}`);
+            return await res.json();
+          }
+        } catch (err) {}
+      }
     }
 
     // 3. Fallback: Queue in localStorage so it synchronizes automatically when connected
@@ -426,7 +456,7 @@ export class ExecutiveSidebarManager {
       const isInsideSidebar = e.target.closest('#executive-sidebar');
       const isToggleBtn = e.target.closest('#sidebar-toggle-btn');
       const isGlobalAlerts = e.target.closest('#btn-global-alerts');
-      const isRailBtn = e.target.closest('.rail-action-btn');
+      const isRailBtn = e.target.closest('.rail-icon-btn');
 
       if (!isInsideSidebar && !isToggleBtn && !isGlobalAlerts && !isRailBtn) {
         this.collapse();
@@ -516,23 +546,7 @@ export class ExecutiveSidebarManager {
       });
     }
 
-    // Global Header Alerts Pill (⚠️ 18 ALERTS) -> toggles sidebar
-    const globalAlertsBtn = document.getElementById('btn-global-alerts');
-    if (globalAlertsBtn) {
-      globalAlertsBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        sfx.playClick();
-        if (this.isExpanded) {
-          this.collapse();
-        } else {
-          this.expand();
-          this.setStream('directives');
-        }
-      });
-    }
-
-    // Sidebar footer actions
+    // Sidebar footer actions (header #btn-global-alerts is handled exclusively by DashboardManager.setupAlertCenter)
     const btnCadence = document.getElementById('btn-sidebar-rerun-cadence');
     if (btnCadence && this.dashboardMgr) {
       btnCadence.addEventListener('click', () => {
@@ -951,11 +965,14 @@ export class ExecutiveSidebarManager {
   }
 
   bindDirectiveCardEvents(container) {
-    container.addEventListener('mouseleave', () => {
-      if (this.visualizer && typeof this.visualizer.clearAllPulseSpheres === 'function') {
-        this.visualizer.clearAllPulseSpheres();
-      }
-    });
+    if (!container.dataset.mouseleaveBound) {
+      container.dataset.mouseleaveBound = 'true';
+      container.addEventListener('mouseleave', () => {
+        if (this.visualizer && typeof this.visualizer.clearAllPulseSpheres === 'function') {
+          this.visualizer.clearAllPulseSpheres();
+        }
+      });
+    }
 
     const cards = container.querySelectorAll('.stream-card');
 
@@ -1207,11 +1224,14 @@ export class ExecutiveSidebarManager {
   }
 
   bindDiagnosticCardEvents(container) {
-    container.addEventListener('mouseleave', () => {
-      if (this.visualizer && typeof this.visualizer.clearAllPulseSpheres === 'function') {
-        this.visualizer.clearAllPulseSpheres();
-      }
-    });
+    if (!container.dataset.mouseleaveBound) {
+      container.dataset.mouseleaveBound = 'true';
+      container.addEventListener('mouseleave', () => {
+        if (this.visualizer && typeof this.visualizer.clearAllPulseSpheres === 'function') {
+          this.visualizer.clearAllPulseSpheres();
+        }
+      });
+    }
 
     const cards = container.querySelectorAll('.stream-card');
 
@@ -1331,7 +1351,7 @@ export class ExecutiveSidebarManager {
       } catch (e) {}
 
       // POST to server (writes markdown task file into /tasks/active/ in project folder)
-      this.postToAntigravityServer('/api/tasks', payload);
+      this.postToAntigravityServer('/api/tasks', payload, true);
 
       try {
         if (this.broadcastChannel) {
@@ -1428,7 +1448,7 @@ export class ExecutiveSidebarManager {
       } catch (e) {}
 
       // POST to server (appends to /tasks/backlog/BACKLOG.md in project folder)
-      this.postToAntigravityServer('/api/backlog', backlogItem);
+      this.postToAntigravityServer('/api/backlog', backlogItem, true);
 
       sfx.playSuccess();
 
@@ -1500,7 +1520,7 @@ export class ExecutiveSidebarManager {
 
     setTimeout(() => {
       // POST to server (appends to /tasks/dismissed/DISMISSED.md in project folder)
-      this.postToAntigravityServer('/api/diagnostics/deny', { id: diagId, title: item.title });
+      this.postToAntigravityServer('/api/diagnostics/deny', { id: diagId, title: item.title }, true);
 
       this.showToast(
         'RECOMMENDATION DENIED',
