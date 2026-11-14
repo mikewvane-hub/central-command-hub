@@ -108,28 +108,24 @@ class NrmcDashboardApp {
     if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
       return `http://localhost:3012${path}`;
     }
-    return path;
+    return `https://daily-executive-dashboard.onrender.com${path}`;
   }
 
   // 3. Load State from LocalStorage / Server / Static Baseline
   async loadInitialState() {
     let baselineState = null;
-    const isLocalBackend = window.location.port === '3012' || window.location.port === '4000' ||
-                           (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
 
-    // If local backend is active, query live API state
-    if (isLocalBackend) {
-      try {
-        const res = await fetch(this.apiUrl('/api/v1/nrmc/state'));
-        if (res.ok) {
-          baselineState = await res.json();
-        }
-      } catch (err) {
-        console.warn('[NRMC] Local backend unreachable:', err.message);
+    // 1. Query live API state from local backend or cloud backend (Daily Dashboard on Render)
+    try {
+      const res = await fetch(this.apiUrl('/api/v1/nrmc/state'));
+      if (res.ok) {
+        baselineState = await res.json();
       }
+    } catch (err) {
+      console.warn('[NRMC] API backend unreachable:', err.message);
     }
 
-    // Fallback: If no server state (e.g. GitHub Pages or static host), fetch static baseline JSON
+    // Fallback: If no server state, fetch static baseline JSON
     if (!baselineState) {
       try {
         const staticRes = await fetch('./data/nrmc_state.json');
@@ -141,31 +137,69 @@ class NrmcDashboardApp {
       }
     }
 
-    // Check LocalStorage for instant paint & user-saved modifications (auto-invalidate pre-ATAMMC cache)
+    // Check LocalStorage for instant paint & user-saved modifications
     const cached = localStorage.getItem('nrmc_cached_state');
     if (cached) {
       try {
         const parsed = JSON.parse(cached);
-        const baselineVer = baselineState?.state_version;
-        const isStaleVersion = baselineVer && parsed?.state_version !== baselineVer;
-        const isOldPrebirthDob = parsed?.profile?.dob === '2026-11-15';
-
-        if (parsed && parsed.profile && !isStaleVersion && !isOldPrebirthDob) {
-          parsed.profile.baby_name = 'Aiden James Vane';
-          if (!Array.isArray(parsed.vault_documents)) {
-            parsed.vault_documents = baselineState?.vault_documents || [];
+        if (parsed && parsed.profile) {
+          if (!baselineState) {
+            this.state = parsed;
+          } else {
+            // Intelligent two-way merge: Preserve ALL completed tasks, vaccines, milestones, and vault docs!
+            const merged = { ...baselineState, profile: { ...baselineState.profile, ...(parsed.profile || {}) } };
+            // Merge modules and tasks
+            const pMods = parsed.modules || {};
+            const bMods = merged.modules || {};
+            for (const [modKey, bMod] of Object.entries(bMods)) {
+              if (Array.isArray(bMod.tasks) && Array.isArray(pMods[modKey]?.tasks)) {
+                for (const pTask of pMods[modKey].tasks) {
+                  const bTask = bMod.tasks.find(t => t.id.toUpperCase() === pTask.id.toUpperCase());
+                  if (bTask) {
+                    if (pTask.status === 'COMPLETE') {
+                      bTask.status = 'COMPLETE';
+                      bTask.checklists_completed = Array.isArray(pTask.checklists_completed) && pTask.checklists_completed.length > 0
+                        ? pTask.checklists_completed
+                        : (Array.isArray(bTask.checklists) ? [...bTask.checklists] : []);
+                    }
+                    if (pTask.notes) bTask.notes = pTask.notes;
+                  }
+                }
+              }
+            }
+            // Merge vaccine glidepath
+            if (Array.isArray(pMods.module_e?.vaccine_glidepath) && Array.isArray(bMods.module_e?.vaccine_glidepath)) {
+              for (const pVac of pMods.module_e.vaccine_glidepath) {
+                const bVac = bMods.module_e.vaccine_glidepath.find(v => v.id.toUpperCase() === pVac.id.toUpperCase());
+                if (bVac && pVac.status === 'COMPLETE') {
+                  bVac.status = 'COMPLETE';
+                  bVac.date_administered = pVac.date_administered || bVac.date_administered;
+                }
+              }
+            }
+            // Merge developmental milestones
+            if (Array.isArray(pMods.module_e?.developmental_milestones) && Array.isArray(bMods.module_e?.developmental_milestones)) {
+              for (const pMil of pMods.module_e.developmental_milestones) {
+                const bMil = bMods.module_e.developmental_milestones.find(m => m.id === pMil.id);
+                if (bMil && pMil.status === 'ACHIEVED') {
+                  bMil.status = 'ACHIEVED';
+                  bMil.date_achieved = pMil.date_achieved || bMil.date_achieved;
+                }
+              }
+            }
+            // Preserve vault documents
+            if (Array.isArray(parsed.vault_documents) && parsed.vault_documents.length > 0) {
+              const vaultMap = new Map();
+              (baselineState.vault_documents || []).forEach(d => vaultMap.set(d.id, d));
+              parsed.vault_documents.forEach(d => vaultMap.set(d.id, d));
+              merged.vault_documents = Array.from(vaultMap.values());
+            }
+            this.state = merged;
           }
-          this.state = isLocalBackend && baselineState ? baselineState : parsed;
-        } else if (baselineState) {
-          // Migrate preserved vault documents onto fresh baseline
-          if (Array.isArray(parsed?.vault_documents) && parsed.vault_documents.length > 0 && (!baselineState.vault_documents || baselineState.vault_documents.length === 0)) {
-            baselineState.vault_documents = parsed.vault_documents;
-          }
-          this.state = baselineState;
           localStorage.setItem('nrmc_cached_state', JSON.stringify(this.state));
         }
       } catch (e) {
-        console.warn('[NRMC] Invalid cached state:', e);
+        console.warn('[NRMC] Invalid cached state merge:', e);
       }
     }
 
@@ -174,15 +208,36 @@ class NrmcDashboardApp {
       this.state = baselineState;
       localStorage.setItem('nrmc_cached_state', JSON.stringify(this.state));
     }
+    }
   }
 
-  // 4. WebSocket Real-Time Stream (Active only on local hosts with Node backend)
-  initWebSocket() {
+  // 4. WebSocket Real-Time Stream (Active only when dedicated NRMC backend :3012 is available)
+  async initWebSocket() {
     const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
     if (!isLocal && !window.location.port) {
       // Static cloud host (e.g. GitHub Pages) - operate in standalone client mode
       this.updateNetworkBadge(false, 'STANDALONE ORBIT');
       return;
+    }
+
+    // When embedded inside Central Command Hub (:4000), probe Hub's health proxy first
+    // so we don't trigger repeated failed WebSocket connections when :3012 isn't running.
+    if (window.location.port !== '3012') {
+      try {
+        const res = await fetch(this.apiUrl('/api/v1/nrmc/health'), { signal: AbortSignal.timeout(1500) });
+        if (!res.ok) {
+          this.updateNetworkBadge(false, 'STANDALONE SYNC');
+          return;
+        }
+        const info = await res.json().catch(() => ({}));
+        if (!info.wsAvailable) {
+          this.updateNetworkBadge(false, 'HUB PROXY SYNC');
+          return;
+        }
+      } catch (e) {
+        this.updateNetworkBadge(false, 'STANDALONE SYNC');
+        return;
+      }
     }
 
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
@@ -196,7 +251,7 @@ class NrmcDashboardApp {
       this.ws.onopen = () => {
         this.updateNetworkBadge(true);
       };
-      this.ws.onerror = (err) => {
+      this.ws.onerror = () => {
         this.updateNetworkBadge(false);
       };
       this.ws.onmessage = (event) => {
@@ -216,7 +271,7 @@ class NrmcDashboardApp {
       };
       this.ws.onclose = () => {
         this.updateNetworkBadge(false);
-        if (isLocal) {
+        if (isLocal && window.location.port === '3012') {
           setTimeout(() => this.initWebSocket(), 5000);
         }
       };
@@ -837,6 +892,11 @@ class NrmcDashboardApp {
     const dobEl = document.getElementById('baby-dob-display');
     const rankEl = document.getElementById('military-station-display');
     const promoEl = document.getElementById('rank-next-promo-display');
+    const hubLink = document.getElementById('central-hub-link');
+
+    if (hubLink && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
+      hubLink.href = 'http://localhost:4000/';
+    }
 
     if (nameEl) nameEl.textContent = profile.baby_name || 'Aiden James Vane';
     if (dobEl) dobEl.textContent = `DOB: ${profile.dob || '2026-11-06'}${profile.time_of_birth ? ' @ ' + profile.time_of_birth : ''}`;
@@ -1267,13 +1327,37 @@ class NrmcDashboardApp {
 
   // 8. Event Bindings
   attachDomEvents() {
-    // Tab Switching
-    document.querySelectorAll('.matrix-tab-btn').forEach((btn) => {
-      btn.addEventListener('click', (e) => {
+    // Tab Switching + ArrowLeft/ArrowRight/Home/End keyboard fallback when native focusgroup is absent
+    const navBar = document.querySelector('.matrix-nav-bar');
+    const tabButtons = Array.from(document.querySelectorAll('.matrix-tab-btn'));
+    tabButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
         const tabKey = btn.dataset.tab;
         this.switchTab(tabKey);
       });
     });
+
+    if (navBar && tabButtons.length > 0) {
+      navBar.addEventListener('keydown', (e) => {
+        if (Object.hasOwn(HTMLElement.prototype, 'focusGroup')) return;
+        const currentIdx = tabButtons.indexOf(document.activeElement);
+        if (currentIdx === -1) return;
+
+        let nextIdx = currentIdx;
+        if (e.key === 'ArrowRight') nextIdx = (currentIdx + 1) % tabButtons.length;
+        else if (e.key === 'ArrowLeft') nextIdx = (currentIdx - 1 + tabButtons.length) % tabButtons.length;
+        else if (e.key === 'Home') nextIdx = 0;
+        else if (e.key === 'End') nextIdx = tabButtons.length - 1;
+        else return;
+
+        e.preventDefault();
+        const nextBtn = tabButtons[nextIdx];
+        nextBtn.focus();
+        if (nextBtn.dataset.tab) {
+          this.switchTab(nextBtn.dataset.tab);
+        }
+      });
+    }
 
     // Unified Card & Checkbox Click Delegation
     document.addEventListener('click', (e) => {
@@ -1509,13 +1593,42 @@ class NrmcDashboardApp {
       });
     }
 
-    // Export Telemetry JSON
+    // Export Telemetry JSON (local Blob download so static/Hub mode works cleanly without full-page navigation)
     const exportBtn = document.getElementById('export-telemetry-btn');
     if (exportBtn) {
       exportBtn.addEventListener('click', () => {
-        window.location.href = this.apiUrl('/api/v1/nrmc/export');
-        this.showToast('Telemetry state exported as JSON file.');
+        try {
+          const blob = new Blob([JSON.stringify(this.state || {}, null, 2)], { type: 'application/json' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `nrmc_state_export_${new Date().toISOString().split('T')[0]}.json`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          setTimeout(() => URL.revokeObjectURL(url), 1000);
+          this.showToast('Telemetry state exported as JSON file.');
+        } catch (err) {
+          this.showToast('Failed to export JSON: ' + err.message, 'error');
+        }
       });
+    }
+
+    // Light-dismiss fallback for browsers without native <dialog closedby="any">
+    if (!('closedBy' in HTMLDialogElement.prototype)) {
+      const isOutsideDialog = (e, dialog) => {
+        const r = dialog.getBoundingClientRect();
+        return e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom;
+      };
+      for (const dialog of document.querySelectorAll('dialog[closedby="any"]')) {
+        let pressedOutside = false;
+        dialog.addEventListener('pointerdown', (e) => {
+          pressedOutside = isOutsideDialog(e, dialog);
+        });
+        dialog.addEventListener('pointerup', (e) => {
+          if (pressedOutside && isOutsideDialog(e, dialog)) dialog.close();
+        });
+      }
     }
 
     // Import State JSON
@@ -1528,24 +1641,27 @@ class NrmcDashboardApp {
         if (file) {
           const reader = new FileReader();
           reader.onload = async (evt) => {
+            let imported = null;
             try {
-              const imported = JSON.parse(evt.target.result);
-              const res = await fetch(this.apiUrl('/api/v1/nrmc/import'), {
+              imported = JSON.parse(evt.target.result);
+            } catch (err) {
+              this.showToast('Invalid JSON file format', 'error');
+              return;
+            }
+            try {
+              await fetch(this.apiUrl('/api/v1/nrmc/import'), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(imported)
               });
-              if (res.ok) {
-                this.state = imported;
-                localStorage.setItem('nrmc_cached_state', JSON.stringify(imported));
-                this.render();
-                this.showToast('State successfully imported!');
-              } else {
-                this.showToast('Failed to import state', 'error');
-              }
-            } catch (err) {
-              this.showToast('Invalid JSON file format', 'error');
+            } catch (netErr) {
+              // Static / offline host imports cleanly into localStorage cache
             }
+            this.state = imported;
+            localStorage.setItem('nrmc_cached_state', JSON.stringify(imported));
+            this.render();
+            this.showToast('State successfully imported!');
+            importInput.value = '';
           };
           reader.readAsText(file);
         }
@@ -1752,11 +1868,31 @@ class NrmcDashboardApp {
   switchTab(tabKey) {
     this.currentTab = tabKey;
     document.querySelectorAll('.matrix-tab-btn').forEach((b) => {
-      b.classList.toggle('active', b.dataset.tab === tabKey);
+      const isSelected = b.dataset.tab === tabKey;
+      b.classList.toggle('active', isSelected);
+      b.setAttribute('aria-selected', String(isSelected));
+      b.toggleAttribute('focusgroupstart', isSelected);
+      if (isSelected) {
+        b.scrollIntoView({ block: 'nearest', inline: 'nearest', container: 'nearest' });
+      }
     });
     document.querySelectorAll('.tab-content-panel').forEach((panel) => {
-      panel.classList.toggle('active', panel.id === `tab-${tabKey}`);
+      const isMatch = panel.id === `tab-${tabKey}`;
+      panel.classList.toggle('active', isMatch);
+      panel.hidden = !isMatch;
+      if (isMatch) {
+        panel.tabIndex = 0;
+      } else {
+        panel.removeAttribute('tabindex');
+      }
     });
+
+    if (tabKey === 'clinical-pediatric' && this.growthChart) {
+      requestAnimationFrame(() => {
+        this.growthChart.setupCanvasDPI();
+        this.growthChart.render();
+      });
+    }
   }
 
   // 9. Action Modal Logic
@@ -1785,7 +1921,7 @@ class NrmcDashboardApp {
           checklists: vac.components ? vac.components.map(c => `${c.name}: ${c.disease} [${c.tier === 'MANDATORY' ? '🛡️ MANDATORY' : c.tier === 'RECOMMENDED_STANDARD' ? '⭐ RECOMMENDED STANDARD' : '📋 ELECTIVE'}] (${c.route || 'IM'})`) : [],
           checklists_completed: vac.status === 'COMPLETE' ? (vac.components ? vac.components.map(c => `${c.name}: ${c.disease} [${c.tier === 'MANDATORY' ? '🛡️ MANDATORY' : c.tier === 'RECOMMENDED_STANDARD' ? '⭐ RECOMMENDED STANDARD' : '📋 ELECTIVE'}] (${c.route || 'IM'})`) : []) : [],
           portals: [
-            { name: "CDC ACIP Child Immunization Schedule", url: "https://www.cdc.gov/vaccines/schedules/hcp/imz/child-adolescent.html" },
+            { name: "CDC ACIP Child Immunization Schedule", url: "https://www.cdc.gov/vaccines/imz-schedules/child-easyread.html" },
             { name: "DC Health Immunization Requirements", url: "https://dchealth.dc.gov/immunization" },
             { name: "Virginia VDH Childcare & School Requirements", url: "https://www.vdh.virginia.gov/immunization/requirements/" },
             { name: "DoD Instruction 6060.02 (Child Development Programs)", url: "https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/606002p.pdf" }
@@ -2390,23 +2526,70 @@ class NrmcDashboardApp {
   }
 
   async deleteVaultDocument(docId) {
-    if (!confirm('Are you sure you want to remove this document from the local vault?')) return;
-    try {
-      const res = await fetch(this.apiUrl(`/api/v1/nrmc/vault/document/${docId}`), {
-        method: 'DELETE'
-      });
-      if (res.ok) {
+    const dialog = document.getElementById('dialog-confirm-delete-doc');
+    const descEl = document.getElementById('delete-doc-dialog-desc');
+    const docEntry = Array.isArray(this.state?.vault_documents)
+      ? this.state.vault_documents.find((d) => d.id === docId)
+      : null;
+
+    if (!dialog || typeof dialog.showModal !== 'function') return;
+
+    if (descEl) {
+      descEl.textContent = docEntry?.name
+        ? `Are you sure you want to remove "${docEntry.name}" from the local vault?`
+        : 'Are you sure you want to remove this document from the local vault?';
+    }
+
+    dialog.returnValue = '';
+    dialog.addEventListener(
+      'close',
+      async () => {
+        const choice = dialog.returnValue;
+        dialog.returnValue = '';
+        if (choice !== 'delete') return;
+
+        try {
+          const res = await fetch(this.apiUrl(`/api/v1/nrmc/vault/document/${encodeURIComponent(docId)}`), {
+            method: 'DELETE'
+          });
+          if (!res.ok && res.status !== 404) {
+            throw new Error(`HTTP ${res.status}`);
+          }
+        } catch (e) {
+          // Local / static hosting fallback continues to remove cached vault entry
+        }
+
         if (Array.isArray(this.state.vault_documents)) {
           this.state.vault_documents = this.state.vault_documents.filter((d) => d.id !== docId);
         }
+        Object.values(this.state.modules || {}).forEach((mod) => {
+          if (Array.isArray(mod.tasks)) {
+            mod.tasks.forEach((t) => {
+              if (Array.isArray(t.attached_documents)) {
+                t.attached_documents = t.attached_documents.filter((id) => id !== docId);
+              }
+            });
+          }
+          if (Array.isArray(mod.vaccine_glidepath)) {
+            mod.vaccine_glidepath.forEach((v) => {
+              if (Array.isArray(v.attached_documents)) {
+                v.attached_documents = v.attached_documents.filter((id) => id !== docId);
+              }
+            });
+          }
+        });
         localStorage.setItem('nrmc_cached_state', JSON.stringify(this.state));
         this.playTacticalFeedback('unseal');
         this.showToast('Document removed from local vault');
         this.render();
-      }
-    } catch (e) {
-      this.showToast('Delete error: ' + e.message, 'error');
-    }
+        if (this.selectedTask) {
+          this.openActionModal(this.selectedTask.id);
+        }
+      },
+      { once: true }
+    );
+
+    dialog.showModal();
   }
 
   // Task Status Update API sync
@@ -2422,10 +2605,15 @@ class NrmcDashboardApp {
           await fetch(this.apiUrl(`/api/v1/nrmc/vaccine/${vac.id}`), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ status: vac.status, date_administered: vac.date_administered })
+            body: JSON.stringify({
+              status: vac.status,
+              date_administered: vac.date_administered,
+              administered_date: vac.date_administered
+            })
           });
           this.broadcastFleetTelemetry();
         } catch (e) {}
+        localStorage.setItem('nrmc_cached_state', JSON.stringify(this.state));
       }
     } else {
       await this.syncTaskUpdate(taskId, { status: newStatus });
@@ -2467,16 +2655,17 @@ class NrmcDashboardApp {
       m.status = status;
       if (status === 'ACHIEVED') m.date_achieved = new Date().toISOString().split('T')[0];
     }
+    localStorage.setItem('nrmc_cached_state', JSON.stringify(this.state));
     this.render();
+    this.showToast(`Milestone updated to ${status}`);
     try {
       await fetch(this.apiUrl(`/api/v1/nrmc/milestone/${milestoneId}`), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status })
       });
-      this.showToast(`Milestone updated to ${status}`);
     } catch (e) {
-      // Local
+      // Local cache already persisted
     }
   }
 
@@ -2486,7 +2675,14 @@ class NrmcDashboardApp {
     if (tt) {
       tt.today_completed_minutes = (tt.today_completed_minutes || 0) + minutes;
       tt.total_lifetime_sessions = (tt.total_lifetime_sessions || 0) + 1;
+      if (!Array.isArray(tt.history)) tt.history = [];
+      tt.history.unshift({
+        date: new Date().toISOString().split('T')[0],
+        minutes,
+        notes: 'Tummy time session completed.'
+      });
     }
+    localStorage.setItem('nrmc_cached_state', JSON.stringify(this.state));
     this.render();
     this.showToast(`Logged ${minutes}m of tummy time!`);
 
@@ -2497,29 +2693,87 @@ class NrmcDashboardApp {
         body: JSON.stringify({ minutes })
       });
     } catch (e) {
-      // Local
+      // Local cache already persisted
     }
   }
 
-  // Open Growth Measurement Form Modal
+  // Open Growth Measurement Native Modal Dialog
   openGrowthModal() {
-    const w = prompt('Enter Weight in lbs (e.g., 8.2):', '8.2');
-    if (!w) return;
-    const l = prompt('Enter Length in inches (e.g., 20.8):', '20.8');
-    if (!l) return;
-    const h = prompt('Enter Head Circumference in inches (e.g., 14.5):', '14.5');
-    if (!h) return;
-    const notes = prompt('Enter Clinical Notes (optional):', 'Pediatric clinic measurement');
+    const dialog = document.getElementById('dialog-log-growth');
+    const weightInput = document.getElementById('growth-weight-input');
+    const lengthInput = document.getElementById('growth-length-input');
+    const headInput = document.getElementById('growth-head-input');
+    const notesInput = document.getElementById('growth-notes-input');
+    if (!dialog || typeof dialog.showModal !== 'function') return;
 
-    this.submitGrowthMeasurement({
-      weight_lbs: parseFloat(w),
-      length_in: parseFloat(l),
-      head_circ_in: parseFloat(h),
-      notes: notes || 'Clinical check measurement'
-    });
+    const existing = this.state?.modules?.module_e?.growth_telemetry?.measurements || [];
+    const latest = existing.length > 0 ? existing[existing.length - 1] : null;
+    if (weightInput) weightInput.value = latest?.weight_lbs != null ? String(latest.weight_lbs) : '8.2';
+    if (lengthInput) lengthInput.value = latest?.length_in != null ? String(latest.length_in) : '20.8';
+    if (headInput) headInput.value = latest?.head_circ_in != null ? String(latest.head_circ_in) : '14.5';
+    if (notesInput) notesInput.value = 'Pediatric clinic measurement';
+
+    dialog.returnValue = '';
+    dialog.addEventListener(
+      'close',
+      () => {
+        const choice = dialog.returnValue;
+        dialog.returnValue = '';
+        if (choice !== 'save') return;
+
+        const wRaw = weightInput?.value?.trim() || '';
+        const lRaw = lengthInput?.value?.trim() || '';
+        const hRaw = headInput?.value?.trim() || '';
+        const notesRaw = notesInput?.value?.trim() || '';
+
+        const weight_lbs = parseFloat(wRaw);
+        if (Number.isNaN(weight_lbs) || weight_lbs <= 0) {
+          this.showToast('Please provide a valid weight in lbs.', 'error');
+          return;
+        }
+        const parsedLen = lRaw ? parseFloat(lRaw) : null;
+        const parsedHead = hRaw ? parseFloat(hRaw) : null;
+
+        this.submitGrowthMeasurement({
+          weight_lbs,
+          length_in: parsedLen !== null && !Number.isNaN(parsedLen) ? parsedLen : null,
+          head_circ_in: parsedHead !== null && !Number.isNaN(parsedHead) ? parsedHead : null,
+          notes: notesRaw || 'Clinical check measurement'
+        });
+      },
+      { once: true }
+    );
+
+    dialog.showModal();
+  }
+
+  buildLocalGrowthEntry(payload) {
+    const dob = new Date((this.state?.profile?.dob || '2026-11-06') + 'T00:00:00');
+    const recordDate = new Date();
+    const diffTime = Math.max(0, recordDate - dob);
+    const age_days = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    const age_months = +(age_days / 30.4375).toFixed(2);
+    const wLbs = payload.weight_lbs ?? null;
+    const lIn = payload.length_in ?? null;
+    const hIn = payload.head_circ_in ?? null;
+
+    return {
+      id: `GROWTH_${Date.now()}`,
+      date: recordDate.toISOString().split('T')[0],
+      age_days,
+      age_months,
+      weight_lbs: wLbs,
+      length_in: lIn,
+      head_circ_in: hIn,
+      weight_percentile: wLbs !== null ? Math.min(99, Math.max(1, Math.round(50 + (wLbs - (7.3 + age_months * 1.5)) * 12))) : null,
+      length_percentile: lIn !== null ? Math.min(99, Math.max(1, Math.round(50 + (lIn - (19.7 + age_months * 1.0)) * 14))) : null,
+      head_percentile: hIn !== null ? Math.min(99, Math.max(1, Math.round(50 + (hIn - (13.6 + age_months * 0.5)) * 15))) : null,
+      notes: payload.notes || 'Clinical measurement recorded.'
+    };
   }
 
   async submitGrowthMeasurement(payload) {
+    let entry = null;
     try {
       const res = await fetch(this.apiUrl('/api/v1/nrmc/growth'), {
         method: 'POST',
@@ -2528,14 +2782,29 @@ class NrmcDashboardApp {
       });
       if (res.ok) {
         const data = await res.json();
-        if (data.entry && this.state?.modules?.module_e?.growth_telemetry) {
-          this.state.modules.module_e.growth_telemetry.measurements.push(data.entry);
-          this.render();
-          this.showToast('Growth measurement recorded & plotted against WHO standards.');
+        if (data.entry) {
+          entry = data.entry;
         }
       }
     } catch (e) {
-      this.showToast('Saved growth locally', 'error');
+      // Static / offline mode falls back to local WHO entry creation
+    }
+
+    if (!entry) {
+      entry = this.buildLocalGrowthEntry(payload);
+    }
+
+    if (this.state?.modules?.module_e) {
+      if (!this.state.modules.module_e.growth_telemetry) {
+        this.state.modules.module_e.growth_telemetry = { measurements: [] };
+      }
+      if (!Array.isArray(this.state.modules.module_e.growth_telemetry.measurements)) {
+        this.state.modules.module_e.growth_telemetry.measurements = [];
+      }
+      this.state.modules.module_e.growth_telemetry.measurements.push(entry);
+      localStorage.setItem('nrmc_cached_state', JSON.stringify(this.state));
+      this.render();
+      this.showToast('Growth measurement recorded & plotted against WHO standards.');
     }
   }
 

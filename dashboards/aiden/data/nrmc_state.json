@@ -33,7 +33,7 @@
       "location": "Fort Belvoir DEERS/RAPIDS (9625 Middleton Rd Bldg 1189, 703-805-5578) or NCR Center",
       "confirmation_code": "NEEDS BOOKING (AFTER BC + SSN)",
       "status": "NEEDS_SCHEDULING",
-      "url": "https://rapids-appointments.dmdc.osd.mil/"
+      "url": "https://idco.dmdc.osd.mil/idco/"
     },
     "next_medical_milestone": {
       "title": "FBCH Peds Follow-Up: NP Van Assche (11/10 09:50) -> Dr. Saro Verghese (2026-11-20 07:50 EST)",
@@ -360,25 +360,21 @@
             },
             {
               "name": "DD Form 1172-2 (Official DoD PDF)",
-              "file": "rapids_deers_sop.txt",
+              "file": "dd-1172-2.pdf",
               "official_url": "https://www.esd.whs.mil/Portals/54/Documents/DD/forms/dd/dd1172-2.pdf"
             }
           ],
           "checklists": [
             "Prerequisite: VA Certified Birth Certificate with raised seal in hand (A3)",
             "Prerequisite: Physical Social Security Card in hand (A2 — both required per ATAMMC DEERS handout)",
-            "Book slot at https://rapids-appointments.dmdc.osd.mil/ (Fort Belvoir Bldg 1189 [703-805-5578] or NCR center)",
+            "Book slot at https://idco.dmdc.osd.mil/idco/ (Fort Belvoir Bldg 1189 [703-805-5578] or NCR center)",
             "Gather Sponsor & Spouse 2 forms unexpired Gov ID + Marriage Certificate",
             "Complete / pre-sign DD Form 1172-2 (ID Card Office Online or in person; POA if sponsor absent)",
             "Attend RAPIDS appointment, verify DEERS entry & DoD ID/BEN number generated, and retain signed DD 1172-2"
           ],
           "portals": [
             {
-              "name": "RAPIDS Appointment Scheduler",
-              "url": "https://rapids-appointments.dmdc.osd.mil/"
-            },
-            {
-              "name": "ID Card Office Online (Pre-sign DD 1172-2)",
+              "name": "ID Card Office Online (RAPIDS Scheduler & Pre-sign DD 1172-2)",
               "url": "https://idco.dmdc.osd.mil/idco/"
             }
           ],
@@ -476,11 +472,11 @@
           "portals": [
             {
               "name": "IPPS-A Self-Service Portal",
-              "url": "https://hr.ippsa.army.mil"
+              "url": "https://ipps-a.army.mil/"
             },
             {
-              "name": "iPERMS Record Repository",
-              "url": "https://iperms.hrc.army.mil"
+              "name": "Army HRC / iPERMS Record Repository",
+              "url": "https://www.hrc.army.mil/"
             }
           ],
           "notes": "Complete after Aiden's DEERS & SSN data are available so all dependent identifiers populate cleanly.",
@@ -656,7 +652,7 @@
           "portals": [
             {
               "name": "Equifax Child Credit Freeze",
-              "url": "https://www.equifax.com/personal/education/credit/report/how-to-protect-your-child-from-credit-fraud/"
+              "url": "https://www.equifax.com/personal/credit-report-services/credit-freeze/"
             }
           ],
           "notes": "Locks protected child credit file once SSN arrives.",
@@ -998,7 +994,7 @@
               "isMandatory": true,
               "authority": "CDC ACIP / DC Health / VA VDH / DoDI 6060.02 (Mandated for Daycare & K-12 Entry unless formal exemption)",
               "route": "Intramuscular injection (Anterolateral thigh)",
-              "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/hep-b.html"
+              "vis_url": "https://www.cdc.gov/vaccines/hcp/current-vis/hepatitis-b.html"
             }
           ],
           "seasonal_prophylaxis": {
@@ -1006,7 +1002,7 @@
             "status": "CLINICAL_ELECTIVE",
             "badge": "📋 SEASONAL PROPHYLAXIS (NOV BIRTH WINDOW)",
             "note": "Born Nov 6 (RSV season Oct-Mar): ask FBCH Pediatrics (NP Van Assche / Dr. Verghese) whether Nirsevimab is indicated if maternal RSV vaccine wasn't received >=14 days before birth.",
-            "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/rsv-infant.html"
+            "vis_url": "https://www.cdc.gov/vaccines/hcp/current-vis/rsv-iis.html"
           }
         },
         {
@@ -1034,7 +1030,7 @@
               "isMandatory": true,
               "authority": "CDC ACIP / DC Health / VA VDH / DoDI 6060.02",
               "route": "Intramuscular injection",
-              "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/hep-b.html"
+              "vis_url": "https://www.cdc.gov/vaccines/hcp/current-vis/hepatitis-b.html"
             }
           ]
         },
@@ -1063,7 +1059,7 @@
               "isMandatory": true,
               "authority": "Mandatory for Daycare / DoD CDC / K-12 Entry (DC & VA)",
               "route": "Intramuscular injection",
-              "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/dtap.html"
+              "vis_url": "https://www.cdc.gov/vaccines/hcp/current-vis/dtap.html"
             },
             {
               "name": "IPV #1",
@@ -1072,7 +1068,7 @@
               "isMandatory": true,
               "authority": "Mandatory for Daycare / DoD CDC / K-12 Entry (DC & VA)",
               "route": "Intramuscular injection",
-              "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/ipv.html"
+              "vis_url": "https://www.cdc.gov/vaccines/hcp/current-vis/polio.html"
             },
             {
               "name": "Hib #1",
@@ -1081,7 +1077,7 @@
               "isMandatory": true,
               "authority": "Mandatory for Daycare / DoD CDC / Preschool (DC & VA)",
               "route": "Intramuscular injection",
-              "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/hib.html"
+              "vis_url": "https://www.cdc.gov/vaccines/hcp/current-vis/hib.html"
             },
             {
               "name": "PCV15/20 #1",
@@ -1090,7 +1086,7 @@
               "isMandatory": true,
               "authority": "Mandatory for Daycare / DoD CDC / Preschool (DC & VA)",
               "route": "Intramuscular injection",
-              "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/pcv.html"
+              "vis_url": "https://www.cdc.gov/vaccines/hcp/current-vis/pneumococcal-conjugate.html"
             },
             {
               "name": "Rotavirus (RV) #1",
@@ -1099,7 +1095,7 @@
               "isMandatory": false,
               "authority": "CDC/AAP Infant Standard (Not mandated for DC/VA daycare entry)",
               "route": "Oral liquid drops (Needle-free)",
-              "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/rotavirus.html"
+              "vis_url": "https://www.cdc.gov/vaccines/hcp/current-vis/rotavirus.html"
             }
           ]
         },
@@ -1128,7 +1124,7 @@
               "isMandatory": true,
               "authority": "Mandatory for Daycare / DoD CDC / School Entry",
               "route": "Intramuscular injection",
-              "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/dtap.html"
+              "vis_url": "https://www.cdc.gov/vaccines/hcp/current-vis/dtap.html"
             },
             {
               "name": "IPV #2",
@@ -1137,7 +1133,7 @@
               "isMandatory": true,
               "authority": "Mandatory for Daycare / DoD CDC / School Entry",
               "route": "Intramuscular injection",
-              "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/ipv.html"
+              "vis_url": "https://www.cdc.gov/vaccines/hcp/current-vis/polio.html"
             },
             {
               "name": "Hib #2",
@@ -1146,7 +1142,7 @@
               "isMandatory": true,
               "authority": "Mandatory for Daycare / DoD CDC / School Entry",
               "route": "Intramuscular injection",
-              "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/hib.html"
+              "vis_url": "https://www.cdc.gov/vaccines/hcp/current-vis/hib.html"
             },
             {
               "name": "PCV #2",
@@ -1155,7 +1151,7 @@
               "isMandatory": true,
               "authority": "Mandatory for Daycare / DoD CDC / School Entry",
               "route": "Intramuscular injection",
-              "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/pcv.html"
+              "vis_url": "https://www.cdc.gov/vaccines/hcp/current-vis/pneumococcal-conjugate.html"
             },
             {
               "name": "Rotavirus (RV) #2",
@@ -1164,7 +1160,7 @@
               "isMandatory": false,
               "authority": "CDC/AAP Infant Recommendation (Non-mandated)",
               "route": "Oral liquid drops",
-              "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/rotavirus.html"
+              "vis_url": "https://www.cdc.gov/vaccines/hcp/current-vis/rotavirus.html"
             }
           ]
         },
@@ -1193,7 +1189,7 @@
               "isMandatory": true,
               "authority": "Mandatory for Daycare / DoD CDC / School Entry",
               "route": "Intramuscular injection",
-              "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/dtap.html"
+              "vis_url": "https://www.cdc.gov/vaccines/hcp/current-vis/dtap.html"
             },
             {
               "name": "IPV #3",
@@ -1202,7 +1198,7 @@
               "isMandatory": true,
               "authority": "Mandatory for Daycare / DoD CDC / School Entry",
               "route": "Intramuscular injection",
-              "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/ipv.html"
+              "vis_url": "https://www.cdc.gov/vaccines/hcp/current-vis/polio.html"
             },
             {
               "name": "Hib #3",
@@ -1211,7 +1207,7 @@
               "isMandatory": true,
               "authority": "Mandatory for Daycare / DoD CDC (if 4-dose brand)",
               "route": "Intramuscular injection",
-              "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/hib.html"
+              "vis_url": "https://www.cdc.gov/vaccines/hcp/current-vis/hib.html"
             },
             {
               "name": "PCV #3",
@@ -1220,7 +1216,7 @@
               "isMandatory": true,
               "authority": "Mandatory for Daycare / DoD CDC / School Entry",
               "route": "Intramuscular injection",
-              "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/pcv.html"
+              "vis_url": "https://www.cdc.gov/vaccines/hcp/current-vis/pneumococcal-conjugate.html"
             },
             {
               "name": "HepB #3",
@@ -1229,7 +1225,7 @@
               "isMandatory": true,
               "authority": "Mandatory for Daycare / DoD CDC / School Entry",
               "route": "Intramuscular injection",
-              "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/hep-b.html"
+              "vis_url": "https://www.cdc.gov/vaccines/hcp/current-vis/hepatitis-b.html"
             },
             {
               "name": "Rotavirus (RV) #3",
@@ -1238,7 +1234,7 @@
               "isMandatory": false,
               "authority": "CDC/AAP Standard (If 3-dose RotaTeq)",
               "route": "Oral liquid drops",
-              "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/rotavirus.html"
+              "vis_url": "https://www.cdc.gov/vaccines/hcp/current-vis/rotavirus.html"
             },
             {
               "name": "Annual Influenza (Flu)",
@@ -1247,7 +1243,7 @@
               "isMandatory": false,
               "authority": "Parent Elective (Recommended by AAP/CDC for 6M+; seasonal DoD CDC rules vary)",
               "route": "Intramuscular injection",
-              "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/flu.html"
+              "vis_url": "https://www.cdc.gov/vaccines/hcp/current-vis/influenza-inactivated.html"
             },
             {
               "name": "COVID-19 Pediatric",
@@ -1256,7 +1252,7 @@
               "isMandatory": false,
               "authority": "Parent Elective / Shared Clinical Decision-Making",
               "route": "Intramuscular injection",
-              "vis_url": "https://www.cdc.gov/vaccines/hcp/vis/vis-statements/covid-19.html"
+              "vis_url": "https://www.cdc.gov/vaccines/hcp/current-vis/covid-19.html"
             }
           ]
         }
