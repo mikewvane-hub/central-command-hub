@@ -324,10 +324,27 @@ export class DashboardManager {
 
     // Configurable URLs with localStorage persistence & scheme validation
     const isLocalHostPage = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+    const sanitizeFinancialUrl = () => {
+      const LOCAL_DEV_URL = 'http://localhost:3008/';
+      const FALLBACK_STATIC_URL = './dashboards/financial/index.html?v=3.0.0';
+      // When accessed on local machine, always connect directly to the live 24/7 Financial Command Center server
+      if (isLocalHostPage) {
+        return LOCAL_DEV_URL;
+      }
+      try {
+        const stored = localStorage.getItem('hub_url_financial');
+        if (stored) {
+          const validation = validateDashboardUrl(stored);
+          if (validation.valid) return validation.sanitized || stored;
+        }
+      } catch (e) {}
+      return FALLBACK_STATIC_URL;
+    };
     this.urls = {
       executive: sanitizeCloudUrl('hub_url_executive', 'https://daily-executive-dashboard.onrender.com/', isLocalHostPage),
       rental: sanitizeCloudUrl('hub_url_rental', './dashboards/rental/index.html'),
-      financial: sanitizeCloudUrl('hub_url_financial', './dashboards/financial/index.html'),
+      financial: sanitizeFinancialUrl(),
       trip: sanitizeCloudUrl('hub_url_trip', 'https://daily-executive-dashboard.onrender.com/trip-planner/', isLocalHostPage),
       mackie: sanitizeCloudUrl('hub_url_mackie', 'https://daily-executive-dashboard.onrender.com/mackie/', isLocalHostPage),
       garage: sanitizeGarageUrl(),
@@ -1402,6 +1419,11 @@ export class DashboardManager {
       if (!iframe.src.includes('v=40.0') || hasLocalhostMismatch) {
         iframe.src = targetUrl;
       }
+    } else if (deckId === 'financial') {
+      const isLocalHostPage = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+      if (isLocalHostPage && !iframe.src.includes(':3008')) {
+        iframe.src = targetUrl;
+      }
     } else if (deckId === 'aiden') {
       const hasLocalhostOrPort = iframe.src.includes('localhost:3012') || iframe.src.includes(':3012');
       if (hasLocalhostOrPort || !iframe.src.includes('/dashboards/aiden')) {
@@ -1414,9 +1436,11 @@ export class DashboardManager {
     const iframe = document.getElementById(`iframe-${deckId}`);
     if (iframe) {
       sfx.playClick();
-      const targetUrl = this.urls[deckId] || (deckId === 'garage' ? './dashboards/garage/index.html?v=40.0' : deckId === 'aiden' ? './dashboards/aiden/index.html?v=2.9.2' : '');
+      let targetUrl = this.urls[deckId] || (deckId === 'garage' ? './dashboards/garage/index.html?v=40.0' : deckId === 'aiden' ? './dashboards/aiden/index.html?v=2.9.2' : deckId === 'financial' ? (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://localhost:3008/' : './dashboards/financial/index.html?v=3.0.0') : '');
       if (targetUrl) {
-        iframe.src = targetUrl;
+        const cleanBase = targetUrl.split(/[?&]_t=/)[0];
+        const separator = cleanBase.includes('?') ? '&' : '?';
+        iframe.src = `${cleanBase}${separator}_t=${Date.now()}`;
       }
     }
   }

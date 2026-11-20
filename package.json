@@ -8,7 +8,8 @@
     "start": "node server.js",
     "dev": "node server.js",
     "sync:garage": "node scripts/sync-garage.js",
-    "sync:aiden": "node ../\"Baby Aiden Tracker\"/scripts/sync-to-hub.js"
+    "sync:aiden": "node ../\"Baby Aiden Tracker\"/scripts/sync-to-hub.js",
+    "sync:financial": "node scripts/sync-financial.js"
   },
   "keywords": [
     "command-hub",

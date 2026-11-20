@@ -20,3 +20,5 @@
 - **[2026-11-04T02:16:44.945Z]** Dismissed #diag-002: Rental Fence Warranty Expiring
 - **[2026-11-04T02:23:55.680Z]** Dismissed #diag-002: Rental Fence Warranty Expiring
 - **[2026-11-04T13:03:40.619Z]** Dismissed #diag-003: Wireless Car Diagnostics (OBD-II)
+- **[2026-11-20T12:31:40.922Z]** Dismissed #diag-007: VA DMV Birth Cert Pickup & RAPIDS DEERS Booking
+- **[2026-11-20T12:31:43.339Z]** Dismissed #diag-008: TRICARE 90-Day Grace Cutoff (Feb 4, 2027)
