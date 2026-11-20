@@ -1841,49 +1841,132 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator:hover {
 }
 
 .milestone-card-complete {
-  opacity: 0.38 !important;
+  width: 58px !important;
+  min-width: 58px !important;
+  max-width: 58px !important;
+  height: 200px !important;
+  min-height: 200px !important;
+  max-height: 200px !important;
+  padding: 10px 4px !important;
+  opacity: 0.42 !important;
   filter: grayscale(0.85) !important;
-  background: rgba(10, 14, 22, 0.45) !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  padding: 6px 12px !important;
-  max-height: 72px !important;
+  background: rgba(10, 14, 24, 0.75) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5) !important;
   overflow: hidden !important;
-  transform: scale(0.98);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  flex-shrink: 0 !important;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  z-index: 5;
 }
 
-.milestone-card-complete .milestone-card-title {
-  color: #64748b !important;
-  font-size: 0.78rem !important;
-  font-weight: 500 !important;
-  text-decoration: line-through !important;
-  text-decoration-color: rgba(148, 163, 184, 0.4) !important;
+.glidepath-milestone-card.milestone-card-complete .milestone-stub-view {
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  width: 100%;
+  pointer-events: none;
 }
 
-.milestone-card-complete .milestone-card-date,
-.milestone-card-complete .pill-hospital-auto,
-.milestone-card-complete .pill-parent-action,
-.milestone-card-complete .vault-prompt-badge,
-.milestone-card-complete .countdown-pill {
+.glidepath-milestone-card.milestone-card-complete .milestone-full-view {
   display: none !important;
 }
 
-.milestone-card-complete:hover {
-  opacity: 0.98 !important;
+.glidepath-milestone-card.milestone-card-complete:hover {
+  width: 270px !important;
+  min-width: 270px !important;
+  max-width: 270px !important;
+  opacity: 1 !important;
   filter: grayscale(0) !important;
-  max-height: 340px !important;
-  background: rgba(15, 23, 42, 0.95) !important;
-  border-color: rgba(16, 185, 129, 0.6) !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
-  transform: scale(1);
+  background: #090e1a !important;
+  border-color: rgba(16, 185, 129, 0.85) !important;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.95), 0 0 20px rgba(16, 185, 129, 0.35) !important;
+  z-index: 100 !important;
+  padding: 14px !important;
 }
 
-.milestone-card-complete:hover .milestone-card-date,
-.milestone-card-complete:hover .pill-hospital-auto,
-.milestone-card-complete:hover .pill-parent-action,
-.milestone-card-complete:hover .vault-prompt-badge,
-.milestone-card-complete:hover .countdown-pill {
-  display: inline-flex !important;
+.glidepath-milestone-card.milestone-card-complete:hover .milestone-stub-view {
+  display: none !important;
+}
+
+.glidepath-milestone-card.milestone-card-complete:hover .milestone-full-view {
+  display: flex !important;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.glidepath-milestone-card:not(.milestone-card-complete) .milestone-stub-view {
+  display: none !important;
+}
+
+.glidepath-milestone-card:not(.milestone-card-complete) .milestone-full-view {
+  display: flex !important;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+/* Minimized Left-Stub Elements */
+.stub-time-badge {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: #94a3b8;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 2px 4px;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+.stub-check-circle {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(16, 185, 129, 0.2);
+  border: 1px solid rgba(16, 185, 129, 0.6);
+  color: #10b981;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 800;
+  margin: 4px 0;
+}
+
+.stub-task-id {
+  font-family: var(--font-tech);
+  font-weight: 800;
+  font-size: 0.8rem;
+  color: #cbd5e1;
+  background: rgba(0, 229, 255, 0.1);
+  border: 1px solid rgba(0, 229, 255, 0.25);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+.stub-vertical-title {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #64748b;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 85px;
+  margin: 6px 0;
+}
+
+.stub-sealed-tag {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  font-weight: 800;
+  color: #10b981;
+  letter-spacing: 0.04em;
 }
 
 .node-card-complete {

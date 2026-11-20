@@ -594,47 +594,70 @@ class NrmcDashboardApp {
           : `<span class="pill-parent-action" title="Requires direct parent action and intervention">⚡ DIRECT PARENT ACTION</span>`;
 
         return `
-        <div class="glidepath-milestone-card ${isComplete ? 'milestone-card-complete' : ''} ${m.isHospitalAuto ? 'card-hospital-auto' : 'card-parent-action'}" data-task-id="${m.id}" data-category="${m.category}">
+        <div class="glidepath-milestone-card ${isComplete ? 'milestone-card-complete' : ''} ${m.isHospitalAuto ? 'card-hospital-auto' : 'card-parent-action'}" data-task-id="${m.id}" data-category="${m.category}" title="${isComplete ? `${m.id}: ${m.title} (Sealed. Hover to inspect or click to reopen)` : ''}">
           <div class="milestone-node-connector ${connectorClass}"></div>
-          <div class="milestone-header-row" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-            <div style="display:flex; align-items:center; gap:6px;">
-              <span class="milestone-time-badge">${m.offset}</span>
-              ${isComplete ? '<span style="font-family:var(--font-mono); font-size:0.68rem; color:#10b981; font-weight:700; letter-spacing:0.04em;">✓ SEALED</span>' : ''}
-            </div>
-            <div style="display:flex; align-items:center; gap:6px;">
-              ${docPromptHtml}
-              <span class="countdown-pill ${priorityPill}">${m.isDeadline ? '🚨 DEADLINE' : m.priority}</span>
-            </div>
+          
+          <!-- Minimized Left-Stub View (Shown when complete) -->
+          <div class="milestone-stub-view">
+            <span class="stub-time-badge">${m.offset.split(' ')[0]}</span>
+            <div class="stub-check-circle">✓</div>
+            <span class="stub-task-id">${m.id}</span>
+            <div class="stub-vertical-title" title="${m.title}">${m.title}</div>
+            <span class="stub-sealed-tag">SEALED</span>
           </div>
-          <div style="margin-bottom:6px;">
-            ${autoBadge}
-          </div>
-          <div class="milestone-card-title">${m.title}</div>
-          <div class="milestone-card-date">Target: <strong>${m.dateFormatted || m.date}</strong> (${m.offset}) ${m.sla ? `• ${m.sla}` : ''}</div>
-          <div class="milestone-card-footer">
-            <button class="hud-check-toggle-sm ${isComplete ? 'is-complete' : ''}" data-task-id="${m.id}" title="${isComplete ? 'Task Sealed. Click to reopen' : 'Click to seal task as complete'}">
-              ${isComplete ? '✓ SEALED' : '◯ COMPLETE'}
-            </button>
-            <span class="countdown-pill ${statusPill}">${m.status}</span>
+
+          <!-- Normal Expanded Card Content (Shown for pending, or on hover for complete) -->
+          <div class="milestone-full-view">
+            <div class="milestone-header-row" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+              <div style="display:flex; align-items:center; gap:6px;">
+                <span class="milestone-time-badge">${m.offset}</span>
+                ${isComplete ? '<span style="font-family:var(--font-mono); font-size:0.68rem; color:#10b981; font-weight:700; letter-spacing:0.04em;">✓ SEALED</span>' : ''}
+              </div>
+              <div style="display:flex; align-items:center; gap:6px;">
+                ${docPromptHtml}
+                <span class="countdown-pill ${priorityPill}">${m.isDeadline ? '🚨 DEADLINE' : m.priority}</span>
+              </div>
+            </div>
+            <div style="margin-bottom:6px;">
+              ${autoBadge}
+            </div>
+            <div class="milestone-card-title">${m.title}</div>
+            <div class="milestone-card-date">Target: <strong>${m.dateFormatted || m.date}</strong> (${m.offset}) ${m.sla ? `• ${m.sla}` : ''}</div>
+            <div class="milestone-card-footer">
+              <button class="hud-check-toggle-sm ${isComplete ? 'is-complete' : ''}" data-task-id="${m.id}" title="${isComplete ? 'Task Sealed. Click to reopen' : 'Click to seal task as complete'}">
+                ${isComplete ? '✓ SEALED' : '◯ COMPLETE'}
+              </button>
+              <span class="countdown-pill ${statusPill}">${m.status}</span>
+            </div>
           </div>
         </div>
       `;
       })
       .join('');
 
-    // Update Current Radar Marker
-    const now = new Date();
-    const dob = new Date((this.state.profile?.dob || '2026-11-06') + 'T00:00:00');
-    const daysDiff = Math.max(0, Math.floor((now - dob) / (1000 * 60 * 60 * 24)));
+    // Update Current Radar Marker & Continuously Auto-focus Uncompleted Sorties
     const marker = document.getElementById('glidepath-current-marker');
+    const firstPending = container.querySelector('.glidepath-milestone-card:not(.milestone-card-complete)');
     if (marker) {
-      const clampedOffset = Math.min(1420, Math.max(35, daysDiff * 16 + 35));
-      marker.style.left = `${clampedOffset}px`;
+      if (firstPending) {
+        marker.style.left = `${firstPending.offsetLeft}px`;
+      } else {
+        marker.style.left = `40px`;
+      }
       const beacon = marker.querySelector('.runway-current-beacon');
       if (beacon) {
-        beacon.innerHTML = `<span class="status-pulse-dot" style="width:6px; height:6px;"></span> DAY T+${daysDiff} / TODAY`;
+        beacon.innerHTML = `<span class="status-pulse-dot" style="width:6px; height:6px;"></span> ACTIVE SORTIE FRONTIER`;
       }
     }
+
+    // Auto-scroll runway so uncompleted tasks start immediately in view without right-scrolling!
+    requestAnimationFrame(() => {
+      const scrollArea = document.getElementById('glidepath-scroll-area');
+      if (firstPending && scrollArea) {
+        const targetScroll = Math.max(0, firstPending.offsetLeft - 30);
+        scrollArea.scrollTo({ left: targetScroll, behavior: 'smooth' });
+      }
+    });
   }
 
   // View 2: Render Tactical Calendar (Monthly HUD Grid)
@@ -996,6 +1019,23 @@ class NrmcDashboardApp {
     }
   }
 
+  // Helper: Check if task or vaccine is sealed/completed
+  isTaskComplete(taskId) {
+    if (!this.state || !taskId) return false;
+    const tid = taskId.toUpperCase();
+    for (const mod of Object.values(this.state.modules || {})) {
+      if (Array.isArray(mod.tasks)) {
+        const found = mod.tasks.find(t => t.id && t.id.toUpperCase() === tid);
+        if (found) return found.status === 'COMPLETE';
+      }
+      if (Array.isArray(mod.vaccine_glidepath)) {
+        const found = mod.vaccine_glidepath.find(v => v.id && v.id.toUpperCase() === tid);
+        if (found) return found.status === 'COMPLETE';
+      }
+    }
+    return false;
+  }
+
   // Dynamic Countdown Calculation (Timezone Safe UTC & Accurate Day Delta)
   renderCountdowns() {
     this.updateDynamicCountdowns();
@@ -1005,90 +1045,149 @@ class NrmcDashboardApp {
     if (!this.state) return;
     const now = new Date();
 
-    // 1. TRICARE 90-Day Grace Window
-    const tricareDeadlineStr = this.state.command_anchors?.tricare_grace?.deadline || '2027-02-04';
-    const tricareDeadline = new Date(tricareDeadlineStr + 'T23:59:59');
-    const tricareDiff = tricareDeadline - now;
+    // 1. TRICARE 90-Day Grace Window (Auto-remove when TRICARE Prime complete)
+    const isTricareComplete =
+      this.state.financial_telemetry?.tricare_status === 'PRIME_ACTIVE' ||
+      this.state.financial_telemetry?.tricare_status === 'ENROLLED' ||
+      this.isTaskComplete('A7') ||
+      this.isTaskComplete('B2');
 
-    const tricareDaysEl = document.getElementById('tricare-countdown-days');
-    const tricareSubEl = document.getElementById('tricare-countdown-sub');
-    const tricareProgressEl = document.getElementById('tricare-progress-fill');
     const tricareCard = document.getElementById('tricare-card');
-
-    if (tricareDaysEl) {
-      if (tricareDiff <= 0) {
-        tricareDaysEl.textContent = 'EXPIRED';
-        if (tricareCard) tricareCard.className = 'telemetry-countdown-card card-crimson';
+    if (tricareCard) {
+      if (isTricareComplete) {
+        tricareCard.style.display = 'none';
       } else {
-        const days = Math.floor(tricareDiff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((tricareDiff / (1000 * 60 * 60)) % 24);
-        tricareDaysEl.textContent = `${days}d ${hours}h`;
+        tricareCard.style.display = 'flex';
+        const tricareDeadlineStr = this.state.command_anchors?.tricare_grace?.deadline || '2027-02-04';
+        const tricareDeadline = new Date(tricareDeadlineStr + 'T23:59:59');
+        const tricareDiff = tricareDeadline - now;
+        const tricareDaysEl = document.getElementById('tricare-countdown-days');
+        const tricareSubEl = document.getElementById('tricare-countdown-sub');
+        const tricareProgressEl = document.getElementById('tricare-progress-fill');
 
-        const totalWindow = 90 * 24 * 60 * 60 * 1000;
-        const elapsed = totalWindow - tricareDiff;
-        const pct = Math.min(100, Math.max(0, Math.round((elapsed / totalWindow) * 100)));
-        if (tricareProgressEl) tricareProgressEl.style.width = `${pct}%`;
+        if (tricareDaysEl) {
+          if (tricareDiff <= 0) {
+            tricareDaysEl.textContent = 'EXPIRED';
+            tricareCard.className = 'telemetry-countdown-card card-crimson';
+          } else {
+            const days = Math.floor(tricareDiff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((tricareDiff / (1000 * 60 * 60)) % 24);
+            tricareDaysEl.textContent = `${days}d ${hours}h`;
 
-        if (tricareSubEl) {
-          tricareSubEl.textContent = `Hard Deadline: ${tricareDeadlineStr} (${pct}% elapsed)`;
-        }
+            const totalWindow = 90 * 24 * 60 * 60 * 1000;
+            const elapsed = totalWindow - tricareDiff;
+            const pct = Math.min(100, Math.max(0, Math.round((elapsed / totalWindow) * 100)));
+            if (tricareProgressEl) tricareProgressEl.style.width = `${pct}%`;
 
-        if (tricareCard) {
-          if (days > 45) tricareCard.className = 'telemetry-countdown-card card-emerald';
-          else if (days > 15) tricareCard.className = 'telemetry-countdown-card card-amber';
-          else tricareCard.className = 'telemetry-countdown-card card-crimson';
-        }
-      }
-    }
+            if (tricareSubEl) {
+              tricareSubEl.textContent = `Hard Deadline: ${tricareDeadlineStr} (${pct}% elapsed)`;
+            }
 
-    // 2. RAPIDS Appointment Delta
-    const rapidsScheduledStr = this.state.command_anchors?.rapids_appointment?.scheduled_date;
-    const rapidsDaysEl = document.getElementById('rapids-countdown-days');
-    const rapidsSubEl = document.getElementById('rapids-countdown-sub');
-
-    if (rapidsDaysEl) {
-      if (!rapidsScheduledStr) {
-        rapidsDaysEl.textContent = 'NEEDS BOOKING';
-        if (rapidsSubEl) {
-          rapidsSubEl.textContent = 'Req: Certified Birth Cert + SSN | Fort Belvoir / NCR DEERS';
-        }
-      } else {
-        const rapidsDate = new Date(rapidsScheduledStr);
-        const rapidsDiff = rapidsDate - now;
-        if (rapidsDiff <= 0) {
-          rapidsDaysEl.textContent = 'PAST / VERIFY';
-        } else {
-          const rDays = Math.floor(rapidsDiff / (1000 * 60 * 60 * 24));
-          const rHours = Math.floor((rapidsDiff / (1000 * 60 * 60)) % 24);
-          rapidsDaysEl.textContent = `${rDays}d ${rHours}h`;
-          if (rapidsSubEl) {
-            rapidsSubEl.textContent = `${this.state.command_anchors.rapids_appointment.location || 'NCR DEERS'} | ${this.state.command_anchors.rapids_appointment.confirmation_code || 'BOOKED'}`;
+            if (days > 45) tricareCard.className = 'telemetry-countdown-card card-emerald';
+            else if (days > 15) tricareCard.className = 'telemetry-countdown-card card-amber';
+            else tricareCard.className = 'telemetry-countdown-card card-crimson';
           }
         }
       }
     }
 
-    // 3. Next Pediatric Sortie
-    const nextPediatricStr = this.state.command_anchors?.next_medical_milestone?.target_date || '2026-11-20T07:50:00';
+    // 2. RAPIDS Appointment Delta (Auto-remove when DEERS enrolled)
+    const isDeersComplete =
+      this.state.financial_telemetry?.deers_enrolled === true ||
+      this.state.command_anchors?.rapids_appointment?.status === 'COMPLETED' ||
+      this.isTaskComplete('B1');
+
+    const rapidsCard = document.getElementById('rapids-card');
+    if (rapidsCard) {
+      if (isDeersComplete) {
+        rapidsCard.style.display = 'none';
+      } else {
+        rapidsCard.style.display = 'flex';
+        const rapidsScheduledStr = this.state.command_anchors?.rapids_appointment?.scheduled_date;
+        const rapidsDaysEl = document.getElementById('rapids-countdown-days');
+        const rapidsSubEl = document.getElementById('rapids-countdown-sub');
+
+        if (rapidsDaysEl) {
+          if (!rapidsScheduledStr) {
+            rapidsDaysEl.textContent = 'NEEDS BOOKING';
+            if (rapidsSubEl) {
+              rapidsSubEl.textContent = 'Req: Certified Birth Cert + SSN | Fort Belvoir / NCR DEERS';
+            }
+          } else {
+            const rapidsDate = new Date(rapidsScheduledStr);
+            const rapidsDiff = rapidsDate - now;
+            if (rapidsDiff <= 0) {
+              rapidsDaysEl.textContent = 'PAST / VERIFY';
+            } else {
+              const rDays = Math.floor(rapidsDiff / (1000 * 60 * 60 * 24));
+              const rHours = Math.floor((rapidsDiff / (1000 * 60 * 60)) % 24);
+              rapidsDaysEl.textContent = `${rDays}d ${rHours}h`;
+              if (rapidsSubEl) {
+                rapidsSubEl.textContent = `${this.state.command_anchors.rapids_appointment.location || 'NCR DEERS'} | ${this.state.command_anchors.rapids_appointment.confirmation_code || 'BOOKED'}`;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // 3. DCFSA 60-Day QLE Window (Active Financial Mission Timer)
+    const isDcfsaComplete = this.isTaskComplete('D2');
+    const dcfsaCard = document.getElementById('dcfsa-card');
+    if (dcfsaCard) {
+      if (isDcfsaComplete) {
+        dcfsaCard.style.display = 'none';
+      } else {
+        dcfsaCard.style.display = 'flex';
+        const dcfsaDeadline = new Date('2027-01-05T23:59:59');
+        const dcfsaDiff = dcfsaDeadline - now;
+        const dcfsaDaysEl = document.getElementById('dcfsa-countdown-days');
+        const dcfsaProgressEl = document.getElementById('dcfsa-progress-fill');
+
+        if (dcfsaDaysEl) {
+          if (dcfsaDiff <= 0) {
+            dcfsaDaysEl.textContent = 'EXPIRED';
+          } else {
+            const days = Math.floor(dcfsaDiff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((dcfsaDiff / (1000 * 60 * 60)) % 24);
+            dcfsaDaysEl.textContent = `${days}d ${hours}h`;
+
+            const totalWindow = 60 * 24 * 60 * 60 * 1000;
+            const elapsed = totalWindow - dcfsaDiff;
+            const pct = Math.min(100, Math.max(0, Math.round((elapsed / totalWindow) * 100)));
+            if (dcfsaProgressEl) dcfsaProgressEl.style.width = `${pct}%`;
+          }
+        }
+      }
+    }
+
+    // 4. Next Pediatric Sortie
+    const nextPediatricStr = this.state.command_anchors?.next_medical_milestone?.target_date || '2027-01-05T08:30:00';
     const pedDate = new Date(nextPediatricStr);
     const pedDiff = pedDate - now;
 
     const pedDaysEl = document.getElementById('pediatric-countdown-days');
     const pedSubEl = document.getElementById('pediatric-countdown-sub');
+    const pedProgressEl = document.getElementById('pediatric-progress-fill');
 
     if (pedDaysEl) {
       if (pedDiff <= 0) {
         pedDaysEl.textContent = 'TODAY';
+        if (pedProgressEl) pedProgressEl.style.width = '100%';
       } else {
         const pDays = Math.ceil(pedDiff / (1000 * 60 * 60 * 24));
         pedDaysEl.textContent = `${pDays} Days`;
+        const totalInterval = 46 * 24 * 60 * 60 * 1000;
+        const elapsed = totalInterval - pedDiff;
+        const pct = Math.min(100, Math.max(5, Math.round((elapsed / totalInterval) * 100)));
+        if (pedProgressEl) pedProgressEl.style.width = `${pct}%`;
       }
       if (pedSubEl) {
-        pedSubEl.textContent = this.state.command_anchors?.next_medical_milestone?.title || 'FBCH Team Pink Follow-Up';
+        pedSubEl.textContent = this.state.command_anchors?.next_medical_milestone?.title || '2-Month Well-Child / Pentavalent #1';
       }
     }
 
-    // 4. Baby Aiden Age / T-Sortie Days
+    // 5. Baby Aiden Age / T-Sortie Days
     const dobStr = this.state.profile?.dob || '2026-11-06';
     const dob = new Date(dobStr + 'T12:38:00');
     const ageDiff = now - dob;

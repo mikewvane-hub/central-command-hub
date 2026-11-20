@@ -100,7 +100,7 @@
     <!-- DYNAMIC COUNTDOWN STRIP // THREE-PILLAR COMMAND TELEMETRY         -->
     <!-- ================================================================= -->
     <div class="countdown-telemetry-grid">
-      <!-- 1. TRICARE 90-Day Newborn Grace Window -->
+      <!-- 1. TRICARE 90-Day Newborn Grace Window (Auto-hidden when TRICARE Prime complete) -->
       <div id="tricare-card" class="telemetry-countdown-card card-cyan">
         <div class="countdown-card-header">
           <span class="countdown-card-title">
@@ -124,8 +124,8 @@
         </div>
       </div>
 
-      <!-- 2. RAPIDS Appointment Delta -->
-      <div class="telemetry-countdown-card card-amber">
+      <!-- 2. RAPIDS Appointment Delta (Auto-hidden when DEERS enrolled) -->
+      <div id="rapids-card" class="telemetry-countdown-card card-amber">
         <div class="countdown-card-header">
           <span class="countdown-card-title">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -151,8 +151,34 @@
         </div>
       </div>
 
-      <!-- 3. Next Pediatric Sortie -->
-      <div class="telemetry-countdown-card card-emerald">
+      <!-- 3. Active Urgent Deadline: Dependent Care FSA (DCFSA) 60-Day QLE Window -->
+      <div id="dcfsa-card" class="telemetry-countdown-card card-crimson" style="display:none;">
+        <div class="countdown-card-header">
+          <span class="countdown-card-title">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            DCFSA 60-Day QLE Window
+          </span>
+          <span class="countdown-pill pill-crimson">CRITICAL SORTIE</span>
+        </div>
+        <div class="countdown-digits-wrapper">
+          <span class="countdown-main-num" id="dcfsa-countdown-days">--d --h</span>
+          <span class="countdown-unit">Remaining</span>
+        </div>
+        <div class="countdown-progress-bar">
+          <div id="dcfsa-progress-fill" class="countdown-progress-fill" style="width: 25%; background:var(--crimson-alert);"></div>
+        </div>
+        <div class="countdown-sub-meta">
+          <span id="dcfsa-countdown-sub">Hard Cutoff: 2027-01-05 (FSAFEDS.gov)</span>
+          <span style="color:var(--emerald-nominal);">Save ~$2,000 Pre-Tax</span>
+        </div>
+      </div>
+
+      <!-- 4. Next Pediatric Sortie -->
+      <div id="pediatric-card" class="telemetry-countdown-card card-emerald">
         <div class="countdown-card-header">
           <span class="countdown-card-title">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -167,16 +193,16 @@
           <span class="countdown-unit">Target</span>
         </div>
         <div class="countdown-progress-bar">
-          <div class="countdown-progress-fill" style="width: 60%; background:var(--emerald-nominal);"></div>
+          <div id="pediatric-progress-fill" class="countdown-progress-fill" style="width: 60%; background:var(--emerald-nominal);"></div>
         </div>
         <div class="countdown-sub-meta">
-          <span id="pediatric-countdown-sub">FBCH Team Blue (11/10) -> Dr. Verghese Team Pink (11/20)</span>
-          <span style="color:var(--emerald-nominal);">ATAMMC / FBCH</span>
+          <span id="pediatric-countdown-sub">2-Month Well-Child / Pentavalent #1</span>
+          <span style="color:var(--emerald-nominal);">Dr. Saro Verghese (Team Pink)</span>
         </div>
       </div>
 
-      <!-- 4. Newborn Age & Sortie Tracker -->
-      <div class="telemetry-countdown-card card-cyan">
+      <!-- 5. Newborn Age & Sortie Tracker -->
+      <div id="chronometry-card" class="telemetry-countdown-card card-cyan">
         <div class="countdown-card-header">
           <span class="countdown-card-title">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
