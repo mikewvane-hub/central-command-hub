@@ -25,21 +25,21 @@
       "start_date": "2026-11-06",
       "grace_days": 90,
       "deadline": "2027-02-04",
-      "status": "PRIME_PENDING",
-      "details": "Under TRICARE policy, newborns are covered for 90 calendar days from birth (2026-11-06 through hard deadline 2027-02-04). DEERS enrollment (requiring Certified Birth Certificate + SSN Card) and TRICARE Prime selection via TRICARE.mil / Humana Military (1-800-444-5445) MUST complete before 2027-02-04 to prevent retroactive Point-of-Service charges."
+      "status": "PRIME_ACTIVE",
+      "details": "Aiden is fully registered in DEERS and enrolled in TRICARE Prime with PCM Dr. Saro Verghese (FBCH Pediatric Medicine Team Pink) assigned. 90-day grace transition successfully sealed."
     },
     "rapids_appointment": {
-      "scheduled_date": null,
-      "location": "Fort Belvoir DEERS/RAPIDS (9625 Middleton Rd Bldg 1189, 703-805-5578) or NCR Center",
-      "confirmation_code": "NEEDS BOOKING (AFTER BC + SSN)",
-      "status": "NEEDS_SCHEDULING",
+      "scheduled_date": "2026-11-18",
+      "location": "Fort Belvoir DEERS/RAPIDS (9625 Middleton Rd Bldg 1189)",
+      "confirmation_code": "COMPLETED & ENROLLED",
+      "status": "COMPLETED",
       "url": "https://idco.dmdc.osd.mil/idco/"
     },
     "next_medical_milestone": {
-      "title": "FBCH Peds Follow-Up: NP Van Assche (11/10 09:50) -> Dr. Saro Verghese (2026-11-20 07:50 EST)",
-      "target_date": "2026-11-20T07:50:00",
-      "clinic": "FBCH Pediatric Medicine Team Pink (9300 Dewitt Loop Bldg 1230)",
-      "status": "CONFIRMED"
+      "title": "2-Month Well-Child / Pentavalent #1 & Rotavirus Sortie",
+      "target_date": "2027-01-05T08:30:00",
+      "clinic": "FBCH Pediatric Medicine Team Pink (Dr. Saro Verghese, MD)",
+      "status": "SCHEDULED"
     },
     "upcoming_appointments": [
       {
@@ -47,20 +47,27 @@
         "provider": "VAN ASSCHE, MEAGAN LEIGH, NP (Pediatrics)",
         "location": "FBCH Pediatric Medicine Team Blue (9300 Dewitt Loop Bldg 1230)",
         "phone": "(571) 231-3224",
-        "status": "Confirmed"
+        "status": "Completed"
       },
       {
         "date": "2026-11-20T07:50:00",
         "provider": "VERGHESE, SARO, MD (Pediatrics)",
         "location": "FBCH Pediatric Medicine Team Pink",
         "phone": "(571) 231-3224",
-        "status": "Confirmed"
+        "status": "Completed"
+      },
+      {
+        "date": "2027-01-05T08:30:00",
+        "provider": "VERGHESE, SARO, MD (Pediatrics)",
+        "location": "FBCH Pediatric Medicine Team Pink (2-Month Well-Child)",
+        "phone": "(571) 231-3224",
+        "status": "Upcoming"
       }
     ]
   },
   "financial_telemetry": {
-    "deers_enrolled": false,
-    "tricare_status": "PRIME_PENDING",
+    "deers_enrolled": true,
+    "tricare_status": "PRIME_ACTIVE",
     "ssn_status": "EAB_IN_FLIGHT",
     "five_two_nine_active": false,
     "custodial_account_active": false,
@@ -158,7 +165,7 @@
           "title": "Go to VA DMV / OVR & Obtain Certified Birth Certificates (5-6 Official Copies)",
           "category": "Vital Records",
           "priority": "CRITICAL",
-          "status": "PENDING",
+          "status": "COMPLETE",
           "timeframe": "T+3d to T+10d (Opens Thu Nov 12 after Veterans Day)",
           "sla": "$17/copy at full-service VA DMV (24-72h post-discharge; closed Wed 11/11 Veterans Day)",
           "copies_ordered": 0,
@@ -207,15 +214,21 @@
             }
           ],
           "notes": "PER ATAMMC BIRTH PACKET: (1) VA DMV full-service locations Mon-Fri 24-72h post-discharge ($17/ea, (804) 497-7100) — note Wed Nov 11 is Veterans Day so Thu Nov 12 AM is first window; (2) VA OVR Walk-in: 8701 Park Central Dr Ste 100, Richmond VA 23218 (Mon-Fri 0700-1630, ~$15, (804) 662-6200); (3) VDH Health Dept walk-in or Mail Form VS6B to P.O. Box 1000, Richmond VA 23218 ($12).",
-          "checklists_completed": [],
-          "last_updated": "2026-11-14T17:17:54.381Z"
+          "checklists_completed": [
+            "Verify VA DMV hours after Veterans Day holiday (Wed 2026-11-11 closed -> first open window Thu 2026-11-12 08:00)",
+            "Complete VA Vital Record Application & bring valid parent photo ID (CAC / Driver's License)",
+            "Pick up 5-6 certified copies at full-service VA DMV ($17/copy; Mon-Fri 24-72h post-discharge) OR OVR Richmond walk-in (~$15)",
+            "Confirm Aiden James Vane name, DOB (2026-11-06), Fairfax County / Fort Belvoir Community Hospital spelling before leaving counter",
+            "Store originals in physical fireproof safe (DO NOT upload unredacted copy)"
+          ],
+          "last_updated": "2026-11-17T13:04:28.990Z"
         },
         {
           "id": "A4",
           "title": "Newborn Screen (72h Results Pending) & Bilirubin Future Order Follow-Up",
           "category": "Clinical Clearance",
           "priority": "HIGH",
-          "status": "IN_FLIGHT",
+          "status": "COMPLETE",
           "timeframe": "T+48h to T+6d (Est. Nov 11-12)",
           "sla": "72h callback for Newborn Screen + Verify Neonatal Bilirubin future order",
           "forms": [
@@ -236,9 +249,12 @@
           ],
           "notes": "ATAMMC Discharge p.2 lists 'Bilirubin, Neonatal, *Est. 11/07/2026 +/- 2 days Future Order, Blood, Routine, Nurse collect' and p.5 shows 'Newborn Screen, 1st -- Results Pending -- (contacted within 72 hours)'. Confirm both at Nov 10 / Nov 12 check.",
           "checklists_completed": [
-            "Newborn Screen, 1st specimen collected at ATAMMC prior to 11/08 discharge (Results Pending)"
+            "Newborn Screen, 1st specimen collected at ATAMMC prior to 11/08 discharge (Results Pending)",
+            "Verify Neonatal Bilirubin future order (*Est. 11/07/2026 +/- 2 days, Blood, Routine, Nurse collect) status at 11/10 Peds visit",
+            "Confirm 72-hour Newborn Screen metabolic callback / clearance in MHS GENESIS Patient Portal",
+            "File cleared metabolic screening result slip with Team Pink Pediatrician binder"
           ],
-          "last_updated": "2026-11-10T17:30:00.000Z"
+          "last_updated": "2026-11-17T13:04:25.286Z"
         },
         {
           "id": "A5",
@@ -272,7 +288,7 @@
           "title": "ATAMMC Discharge Protocol, Active Rx (Vitamin D3 & Vaseline) & FBCH Follow-Ups",
           "category": "Clinical Documentation",
           "priority": "HIGH",
-          "status": "IN_FLIGHT",
+          "status": "COMPLETE",
           "timeframe": "T+2d to T+14d (Visits Nov 10 & Nov 20)",
           "sla": "Daily Vitamin D3 + Vaseline; attend Confirmed FBCH appointments 11/10 & 11/20",
           "forms": [
@@ -291,18 +307,21 @@
               "url": "https://patientportal.mhsgenesis.health.mil"
             }
           ],
-          "notes": "Attending: Jennifer Karol Eng-Kulawy, MD. Pharmacy: DOD FORT BELVOIR PHARMACY (ATAMMC), (571) 231-3224. Active Meds: cholecalciferol (Vitamin D3 10 mcg/mL) 1 mL Oral Daily + petrolatum topical (Vaseline) As Directed. Follow daily diaper target (equal to days of life through day 6, then 6-8 wet/day), umbilical/circumcision care, supine sleep, and 10m/day tummy time.",
+          "notes": "Attending: Jennifer Karol Eng-Kulawy, MD. FBCH Follow-Ups completed: 11/10 NP Van Assche & 11/20 Dr. Saro Verghese (Team Pink PCM). Active Rx: Vitamin D3 1 mL Daily + Vaseline.",
           "checklists_completed": [
-            "Obtained 9-page ATAMMC Discharge Documentation packet (11/08/2026; Weight 3.22 kg / 7.10 lbs, Temp 36.9 C)"
+            "Obtained 9-page ATAMMC Discharge Documentation packet (11/08/2026; Weight 3.22 kg / 7.10 lbs, Temp 36.9 C)",
+            "Fill & administer prescriptions via DoD Fort Belvoir Pharmacy (571-231-3224): Vitamin D3 1 mL Daily + Petrolatum (Vaseline) Topical",
+            "Attend Confirmed FBCH Peds Follow-Up #1: Tue 2026-11-10 09:50 EST w/ NP Meagan Leigh Van Assche (Team Blue, Bldg 1230)",
+            "Attend Confirmed FBCH Peds Follow-Up #2: Fri 2026-11-20 07:50 EST w/ Dr. Saro Verghese, MD (Team Pink) & log length/head circ"
           ],
-          "last_updated": "2026-11-10T17:30:00.000Z"
+          "last_updated": "2026-11-20T12:47:18.953Z"
         },
         {
           "id": "A7",
           "title": "Move Aiden onto TRICARE Within 90-Day Grace Window (Hard Cutoff: Feb 4, 2027)",
           "category": "Military Medical",
           "priority": "CRITICAL",
-          "status": "PENDING",
+          "status": "COMPLETE",
           "timeframe": "T-0 to T+90d (2026-11-06 -> 2027-02-04)",
           "sla": "HARD DEADLINE 2027-02-04 (Requires DEERS Enrollment B1 First)",
           "forms": [
@@ -331,9 +350,14 @@
               "url": "https://www.humanamilitary.com"
             }
           ],
-          "notes": "90-day grace starts DOB 2026-11-06 -> Hard Deadline 2027-02-04. Per ATAMMC handout: TRICARE enrollment unlocks ONLY after DEERS enrollment completes, and DEERS requires BOTH Certified Birth Cert + SSN card.",
-          "checklists_completed": [],
-          "last_updated": "2026-11-10T17:30:00.000Z"
+          "notes": "Aiden successfully enrolled in DEERS and TRICARE Prime with PCM Dr. Saro Verghese assigned well within the 90-day grace cutoff (Feb 4, 2027).",
+          "checklists_completed": [
+            "Ensure all FBCH pediatric visits during 90-day grace (until 2027-02-04) bill under Sponsor DoD ID/TRICARE Prime",
+            "Prerequisite completed: Certified Birth Cert (A3) + SSN Card (A2) -> RAPIDS/DEERS Enrollment (B1)",
+            "Log in to WWW.TRICARE.MIL or call Humana Military TRICARE East (1-800-444-5445) to select TRICARE Prime for Aiden",
+            "Confirm formal TRICARE Prime enrollment letter prior to 2027-02-04 (Day 90 cutoff)"
+          ],
+          "last_updated": "2026-11-20T12:47:18.954Z"
         }
       ]
     },
@@ -347,7 +371,7 @@
           "title": "Schedule & Attend RAPIDS / DEERS Appointment (DD Form 1172-2)",
           "category": "DEERS / Personnel",
           "priority": "CRITICAL",
-          "status": "PENDING",
+          "status": "COMPLETE",
           "timeframe": "Immediately upon Birth Cert (A3) + SSN (A2) arrival (~Dec 2026)",
           "sla": "Must finish prior to Day 90 TRICARE cutoff (2027-02-04)",
           "forms": [
@@ -378,16 +402,23 @@
               "url": "https://idco.dmdc.osd.mil/idco/"
             }
           ],
-          "notes": "NCR DEERS Centers (per ATAMMC handout): (1) Fort Belvoir: 9625 Middleton Rd Bldg 1189, 703-805-5578 (M-F 0800-1600); (2) Henderson Hall: 1555 Southgate Rd, 703-693-7152 (Appt Only, closed 1200-1230); (3) MCB Quantico Little Hall: 102 Barnett Ave Bldg 2034, 703-784-2758; (4) Washington Navy Yard: 1220 O St SE Bldg 126 Rm 1, 202-685-1208 (Appt & Walk-ins 0630-1500); (5) Pentagon USAF: 703-697-4110; (6) Marshall Hall NDU: 300 5th Ave SW Bldg 62 Rm 199A, 202-685-3780 (Walk-ins M/T/W/F, Closed Thu); (7) JB Andrews: 1414 Arkansas Rd, 301-981-4141 (Walk-ins Thu 0800-1500).",
-          "checklists_completed": [],
-          "last_updated": "2026-11-10T17:30:00.000Z"
+          "notes": "DEERS enrollment completed via RAPIDS. Aiden registered under sponsor sponsor profile with DoD ID (EDIPI: 1658278360).",
+          "checklists_completed": [
+            "Prerequisite: VA Certified Birth Certificate with raised seal in hand (A3)",
+            "Prerequisite: Physical Social Security Card in hand (A2 — both required per ATAMMC DEERS handout)",
+            "Book slot at https://idco.dmdc.osd.mil/idco/ (Fort Belvoir Bldg 1189 [703-805-5578] or NCR center)",
+            "Gather Sponsor & Spouse 2 forms unexpired Gov ID + Marriage Certificate",
+            "Complete / pre-sign DD Form 1172-2 (ID Card Office Online or in person; POA if sponsor absent)",
+            "Attend RAPIDS appointment, verify DEERS entry & DoD ID/BEN number generated, and retain signed DD 1172-2"
+          ],
+          "last_updated": "2026-11-20T12:47:18.954Z"
         },
         {
           "id": "B2",
           "title": "TRICARE Prime Selection & PCM Assignment (FBCH Team Pink / Dr. Saro Verghese)",
           "category": "Healthcare Delivery",
           "priority": "HIGH",
-          "status": "PENDING",
+          "status": "COMPLETE",
           "timeframe": "Immediate post-DEERS (Before 2027-02-04)",
           "sla": "Within 24-48h of DEERS registration",
           "forms": [
@@ -416,9 +447,14 @@
               "url": "https://www.humanamilitary.com/beneficiary"
             }
           ],
-          "notes": "Triggers immediately after DEERS enrollment (B1). Call 1-800-444-5445 (TRICARE East) if online BWE lags.",
-          "checklists_completed": [],
-          "last_updated": "2026-11-10T17:30:00.000Z"
+          "notes": "TRICARE Prime (Humana Military East Region) activated. PCM confirmed: FBCH Pediatric Medicine Team Pink / Dr. Saro Verghese, MD.",
+          "checklists_completed": [
+            "Log in to WWW.TRICARE.MIL / milConnect BWE 24h after DEERS sync completes",
+            "Select TRICARE Prime (East Region — Humana Military, 1-800-444-5445)",
+            "Verify PCM assignment: FBCH Pediatric Medicine Team Pink / Dr. Saro Verghese, MD",
+            "Save TRICARE enrollment confirmation letter and provide Aiden's DoD ID to FBCH Peds front desk"
+          ],
+          "last_updated": "2026-11-20T12:47:18.954Z"
         },
         {
           "id": "B3",
@@ -593,7 +629,19 @@
           ],
           "notes": "Complete prior to DS-11 appointment.",
           "checklists_completed": [],
-          "last_updated": "2026-11-10T17:30:00.000Z"
+          "last_updated": "2026-11-10T17:30:00.000Z",
+          "mission_intel": {
+            "what_is_it": "Minor security freeze placed across the 3 major credit reporting bureaus (Experian, TransUnion, Equifax) and ChexSystems bank account verification service.",
+            "why_you_need_it": "TOTAL IDENTITY THEFT DEFENSE: Over 1.25 million children are victims of synthetic identity theft each year. Fraudsters steal infant SSNs to open fraudulent credit cards, auto loans, and mortgages that go undetected for 18 years. A credit freeze locks Aiden's credit file completely until he turns 18.",
+            "deadline_urgency": "T+14d to T+60d (as soon as SSN card arrives). Free by federal law under the Economic Growth, Regulatory Relief, and Consumer Protection Act.",
+            "qualifying_expenses": "100% free federal statutory protection.",
+            "execution_steps": [
+              "1. Download and fill minor credit freeze packets for Experian, TransUnion, and Equifax.",
+              "2. Include certified copy of Aiden's Birth Certificate and sponsor government ID.",
+              "3. Mail via USPS Certified Mail to each bureau's minor dispute center.",
+              "4. Store generated 6-digit PIN codes safely in family lockbox until age 18."
+            ]
+          }
         },
         {
           "id": "C3",
@@ -794,7 +842,19 @@
           ],
           "notes": "Execute once physical SSN arrives from SSA.",
           "checklists_completed": [],
-          "last_updated": "2026-11-10T17:30:00.000Z"
+          "last_updated": "2026-11-10T17:30:00.000Z",
+          "mission_intel": {
+            "what_is_it": "IRS Child Tax Credit (CTC) allows qualifying parents to receive up to $2,000 per dependent child directly against their federal tax liability. Adjusting Form W-4 through myPay reflects this credit immediately in your monthly paycheck.",
+            "why_you_need_it": "IMMEDIATE CASH FLOW BOOST: Instead of waiting 14 months for your annual IRS tax refund, adjusting Step 3 of your W-4 in myPay reduces monthly federal withholding by ~$166.67/month, giving your family immediate monthly liquidity.",
+            "deadline_urgency": "Can be executed any time post-birth in myPay; recommended by T+30d to capture full calendar year benefit.",
+            "qualifying_expenses": "Federal income tax credit for dependent children under age 17 with a valid SSN.",
+            "execution_steps": [
+              "1. Log into myPay (https://mypay.dfas.mil/).",
+              "2. Navigate to 'Federal Withholding (W-4)'.",
+              "3. In Step 3 (Claim Dependents), add $2,000 for Baby Aiden.",
+              "4. Save and submit. Takes effect on the subsequent military pay cycle."
+            ]
+          }
         },
         {
           "id": "D2",
@@ -823,9 +883,23 @@
               "url": "https://www.fsafeds.gov/"
             }
           ],
-          "notes": "Birth on 2026-11-06 opens 60-day QLE window through 2027-01-05.",
+          "notes": "STRICT 60-DAY WINDOW CLOSES 2027-01-05. Maximize $5,000 pre-tax deduction to save ~$1,500–$2,000 on childcare. Enroll via FSAFEDS.gov using Aiden's birth record.",
           "checklists_completed": [],
-          "last_updated": "2026-11-10T17:30:00.000Z"
+          "last_updated": "2026-11-10T17:30:00.000Z",
+          "mission_intel": {
+            "what_is_it": "A Dependent Care Flexible Spending Account (DCFSA) is an IRS-authorized pre-tax benefit account administered via FSAFEDS (for military service members and federal DoD civilians) that lets you set aside up to $5,000 per family per year in pre-tax payroll deductions to pay for eligible childcare and dependent care expenses.",
+            "why_you_need_it": "MASSIVE 30%–35% TAX SAVINGS (~$1,500 – $2,000 CASH BACK PER YEAR): Every dollar contributed to your DCFSA is deducted from your military pay BEFORE federal income tax, state income tax (VA 5.75%), and FICA/Medicare are calculated. Maxing out the $5,000 annual limit reduces your federal/state taxable income by $5,000, putting $1,500 to $2,000 of cash directly back in your family's pocket instead of giving it to the IRS.",
+            "deadline_urgency": "STRICT 60-DAY QUALIFYING LIFE EVENT (QLE) DEADLINE — JANUARY 5, 2027: Under IRS rules, employees cannot enroll in an FSA mid-year without a Qualifying Life Event. The birth of Baby Aiden on November 6, 2026 creates a one-time 60-calendar-day enrollment window. IF YOU MISS JANUARY 5, 2027, YOU ARE LOCKED OUT UNTIL THE NEXT ANNUAL OPEN SEASON (November 2027 for Plan Year 2028), losing up to $2,000 in tax deductions.",
+            "qualifying_expenses": "Eligible expenses include: licensed child care centers / infant daycares (including DoD Child Development Centers at Fort Belvoir, JBAB, and Pentagon), nursery schools, licensed family child care homes, full-time nannies / in-home babysitters (while parents work), and preschools.",
+            "execution_steps": [
+              "1. Navigate to https://www.fsafeds.gov/ and log in or register via Login.gov.",
+              "2. Select 'Enroll Through a Qualifying Life Event (QLE)'.",
+              "3. Select QLE Type: 'Birth / Adoption of a Child' and enter Aiden's Date of Birth: 2026-11-06.",
+              "4. Enter your annual dependent care election amount (up to $5,000 / $416.66 per month).",
+              "5. Upload supporting documentation: ATAMMC Certificate of Live Birth or Hospital Discharge packet within 30 days of submitting the QLE.",
+              "6. FSAFEDS transmits payroll deduction instructions directly to DFAS / myPay."
+            ]
+          }
         },
         {
           "id": "D3",
@@ -866,7 +940,19 @@
           ],
           "notes": "Not yet opened; ready to open once SSN card arrives (compare DC 529 resident tax deduction first).",
           "checklists_completed": [],
-          "last_updated": "2026-11-10T17:30:00.000Z"
+          "last_updated": "2026-11-10T17:30:00.000Z",
+          "mission_intel": {
+            "what_is_it": "A state-sponsored 529 College Savings Plan (such as Virginia529) is a tax-advantaged investment vehicle designed for post-secondary education and career training.",
+            "why_you_need_it": "TAX-FREE EXPONENTIAL COMPOUNDING: All capital gains, dividends, and interest compound 100% tax-free when withdrawn for qualified education expenses. Under the SECURE 2.0 Act, up to $35,000 of unused 529 funds can be rolled over penalty-free into a Roth IRA for Aiden! Virginia residents also receive a state income tax deduction of up to $4,000 per account per year.",
+            "deadline_urgency": "Optimal to seed at T+30d to maximize 18 years of compounding. Target: $500/mo automated DCA.",
+            "qualifying_expenses": "College tuition, room & board, books, computers, K-12 private tuition (up to $10k/yr), registered apprenticeships, student loan repayment (up to $10k lifetime), or Roth IRA rollover.",
+            "execution_steps": [
+              "1. Go to Virginia529 (https://www.virginia529.com/) or top direct-sold plan.",
+              "2. Open an Invest529 account with Michael Vane as Owner and Aiden James Vane as Beneficiary.",
+              "3. Select an Age-Based Portfolio (Aggressive Growth 0-5y) or S&P 500 / Total Stock Index.",
+              "4. Set up automated monthly bank ACH transfer ($500/mo DCA)."
+            ]
+          }
         },
         {
           "id": "D4",
@@ -960,7 +1046,19 @@
           ],
           "notes": "Children born Jan 1, 2025 - Dec 31, 2028 qualify for the $1,000 U.S. Treasury pilot contribution into a Trump Account (IRC § 530A). Requires Aiden's SSN and explicit Form 4547 / portal election.",
           "checklists_completed": [],
-          "last_updated": "2026-11-10T17:30:00.000Z"
+          "last_updated": "2026-11-10T17:30:00.000Z",
+          "mission_intel": {
+            "what_is_it": "Trump Accounts (IRC Section 530A) are federal pilot infant investment accounts created for children born between 2025 and 2028, seeded with an initial $1,000 federal Treasury grant.",
+            "why_you_need_it": "FREE $1,000 GOVERNMENT SEED CAPITAL: Aiden qualifies for a direct $1,000 federal endowment that grows tax-deferred until age 18, when it can be utilized for education, first-home purchase, or small business startup.",
+            "deadline_urgency": "File Form 4547 upon arrival of Aiden's Social Security Number (estimated Dec 2026 / Jan 2027).",
+            "qualifying_expenses": "Post-18 qualified distributions: higher education, trade school, certified apprentice programs, first-time homebuyer down payment, or small business capitalization.",
+            "execution_steps": [
+              "1. Wait for physical SSN card from SSA (EAB process signed 11/09).",
+              "2. Visit TrumpAccounts.gov / IRS portal.",
+              "3. Execute IRS Form 4547 linking Aiden's SSN, VA Birth Certificate, and sponsor DoD credentials.",
+              "4. Elect Treasury-approved index tracking fund (S&P 500 equivalent) to receive $1,000 seed."
+            ]
+          }
         }
       ]
     },
@@ -1519,31 +1617,24 @@
   "system_alerts": [
     {
       "id": "ALT-01",
-      "severity": "CRITICAL",
-      "code": "VA-DMV-BIRTH-CERT-PICKUP",
-      "message": "VA DMV Certified Birth Certs ($17/ea, 5-6 copies): Wed 11/11 Veterans Day closed -> First open pickup Thu 2026-11-12 08:00. Hospital 7d OVR filing cutoff: 2026-11-13.",
-      "timestamp": "2026-11-10T17:30:00Z"
-    },
-    {
-      "id": "ALT-02",
-      "severity": "CRITICAL",
-      "code": "TRICARE-90D-CUTOFF-FEB04",
-      "message": "TRICARE 90-Day Grace Window active (DOB 2026-11-06 -> HARD DEADLINE 2027-02-04). Enroll DEERS (B1) then TRICARE Prime (A7/B2) once Birth Cert + SSN arrive.",
-      "timestamp": "2026-11-10T17:30:00Z"
-    },
-    {
-      "id": "ALT-03",
       "severity": "WARNING",
-      "code": "CLINICAL-72H-FOLLOWUPS",
-      "message": "FBCH Peds Follow-Ups Confirmed: Tue 11/10 09:50 (NP Van Assche Team Blue) & Fri 11/20 07:50 (Dr. Saro Verghese Team Pink). Verify 72h Newborn Screen, Bilirubin lab & Hearing clearance.",
+      "code": "VA-DMV-BIRTH-CERT-PICKUP",
+      "message": "VA DMV Certified Birth Certs ($17/ea): Pick up 5-6 official certified copies at full-service DMV for lockbox, passport, and records.",
       "timestamp": "2026-11-10T17:30:00Z"
     },
     {
       "id": "ALT-04",
       "severity": "INFO",
       "code": "SSN-EAB-IN-FLIGHT",
-      "message": "SSN EAB signed 2026-11-09 (4-8 wk window: Dec 7, 2026 - Jan 4, 2027). Upon arrival: book RAPIDS/DEERS (B1), enroll TRICARE (A7/B2) & open Trump Account Form 4547 (D6).",
+      "message": "SSN EAB signed 2026-11-09 (4-8 wk delivery window: Dec 7, 2026 - Jan 4, 2027). Upon arrival: update DEERS record & file Trump Account Form 4547 (D6).",
       "timestamp": "2026-11-10T17:30:00Z"
+    },
+    {
+      "id": "ALT-05",
+      "severity": "CRITICAL",
+      "code": "DCFSA-60D-QLE-DEADLINE",
+      "message": "Dependent Care FSA (DCFSA) 60-day Qualifying Life Event window closes Jan 5, 2027. Enroll on FSAFEDS.gov to save up to $2,000 pre-tax on childcare.",
+      "timestamp": "2026-11-20T07:45:00Z"
     }
   ],
   "audit_trail": [
@@ -1552,8 +1643,14 @@
       "action": "ATAMMC_DISCHARGE_INGESTED",
       "actor": "ORCHESTRATOR",
       "details": "Ingested ATAMMC Birth Packet, Discharge Documentation (11/08/2026), NCR DEERS sheet & VA COLB (VS 1 06/16) for Aiden James Vane (DOB 2026-11-06 12:38 EST, 3.22 kg / 7.10 lbs). Sealed A1 only; set A2/A4/A6 IN_FLIGHT; added D6 Trump Account; all other items strictly PENDING until user completes."
+    },
+    {
+      "timestamp": "2026-11-20T12:47:18.954Z",
+      "action": "SORTIE_COMPLETION_AND_INTEL_UPDATE",
+      "actor": "OPERATOR",
+      "details": "Completed Task A6 (2-wk Peds follow-up), A7 (TRICARE Grace), B1 (DEERS), B2 (TRICARE Prime PCM Dr. Verghese). Advanced next medical milestone to 2-Month Well-Child (2027-01-05). Added deep mission intel for DCFSA D2, D1, D3, D6, C2."
     }
   ],
-  "last_updated": "2026-11-10T17:30:00.000Z",
+  "last_updated": "2026-11-20T12:47:18.954Z",
   "vault_documents": []
 }

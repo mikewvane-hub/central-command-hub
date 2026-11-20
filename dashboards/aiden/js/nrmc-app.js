@@ -597,7 +597,10 @@ class NrmcDashboardApp {
         <div class="glidepath-milestone-card ${isComplete ? 'milestone-card-complete' : ''} ${m.isHospitalAuto ? 'card-hospital-auto' : 'card-parent-action'}" data-task-id="${m.id}" data-category="${m.category}">
           <div class="milestone-node-connector ${connectorClass}"></div>
           <div class="milestone-header-row" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-            <span class="milestone-time-badge">${m.offset}</span>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span class="milestone-time-badge">${m.offset}</span>
+              ${isComplete ? '<span style="font-family:var(--font-mono); font-size:0.68rem; color:#10b981; font-weight:700; letter-spacing:0.04em;">✓ SEALED</span>' : ''}
+            </div>
             <div style="display:flex; align-items:center; gap:6px;">
               ${docPromptHtml}
               <span class="countdown-pill ${priorityPill}">${m.isDeadline ? '🚨 DEADLINE' : m.priority}</span>
@@ -1144,6 +1147,7 @@ class NrmcDashboardApp {
             <div style="display:flex; align-items:center; gap:8px;">
               <span class="task-id-badge">${t.id}</span>
               <span class="task-category-tag">${t.category || 'General'}</span>
+              ${isComplete ? '<span style="font-family:var(--font-mono); font-size:0.68rem; color:#10b981; font-weight:700; letter-spacing:0.04em;">✓ SEALED</span>' : ''}
             </div>
             <div style="display:flex; align-items:center; gap:6px;">
               ${docPromptHtml}
@@ -1999,6 +2003,59 @@ class NrmcDashboardApp {
     document.getElementById('modal-timeframe').textContent = task.timeframe || 'Immediate';
     document.getElementById('modal-status-select').value = task.status;
     document.getElementById('modal-notes-input').value = task.notes || '';
+
+    // Mission Intelligence & Strategic Briefing Dossier
+    const intelContainer = document.getElementById('modal-mission-intel');
+    const intelContent = document.getElementById('modal-intel-content');
+    if (intelContainer && intelContent) {
+      if (task.mission_intel) {
+        const mi = task.mission_intel;
+        let stepsHtml = '';
+        if (Array.isArray(mi.execution_steps) && mi.execution_steps.length > 0) {
+          stepsHtml = `
+            <div class="intel-block">
+              <div class="intel-label">⚡ STEP-BY-STEP EXECUTION PLAYBOOK:</div>
+              <div class="intel-text" style="font-family:var(--font-mono); font-size:0.78rem; background:rgba(0,0,0,0.3); padding:8px 10px; border-radius:4px; border:1px solid rgba(255,255,255,0.06);">
+                ${mi.execution_steps.map((s) => `<div style="margin-bottom:5px; line-height:1.4;">${s}</div>`).join('')}
+              </div>
+            </div>
+          `;
+        }
+        intelContent.innerHTML = `
+          <div class="intel-block">
+            <div class="intel-label">💡 WHAT IS THIS?</div>
+            <div class="intel-text">${mi.what_is_it}</div>
+          </div>
+          <div class="intel-block">
+            <div class="intel-label">🎯 WHY YOU NEED TO DO IT (BENEFIT &amp; VALUE):</div>
+            <div class="intel-text">${mi.why_you_need_it}</div>
+          </div>
+          <div class="intel-block">
+            <div class="intel-label">⏱️ CRITICAL DEADLINE &amp; CONSEQUENCE:</div>
+            <div class="intel-text" style="color:#f87171; font-weight:700;">${mi.deadline_urgency}</div>
+          </div>
+          ${mi.qualifying_expenses ? `
+          <div class="intel-block">
+            <div class="intel-label">📋 QUALIFYING EXPENSES / COVERAGE:</div>
+            <div class="intel-text">${mi.qualifying_expenses}</div>
+          </div>` : ''}
+          ${stepsHtml}
+        `;
+        intelContainer.style.display = 'block';
+      } else {
+        intelContent.innerHTML = `
+          <div class="intel-block">
+            <div class="intel-label">💡 SORTIE OPERATIONAL OBJECTIVE:</div>
+            <div class="intel-text">${task.notes || 'Standard operational newborn readiness milestone.'}</div>
+          </div>
+          <div class="intel-block">
+            <div class="intel-label">🎯 TARGET TIMEFRAME &amp; SLA:</div>
+            <div class="intel-text">Target: <strong>${task.timeframe || 'Immediate'}</strong> • SLA: <strong>${task.sla || 'Standard Protocol'}</strong></div>
+          </div>
+        `;
+        intelContainer.style.display = 'block';
+      }
+    }
 
     // Documentation Checklist with stateful checkboxes
     const checklistContainer = document.getElementById('modal-checklists');
