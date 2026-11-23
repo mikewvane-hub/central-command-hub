@@ -446,7 +446,6 @@ class NrmcDashboardApp {
       'C6': { days: 65, offset: 'T+65d', category: 'identity', lane: 'identity', isHospitalAuto: false },
       'C7': { days: 65, offset: 'T+65d', category: 'identity', lane: 'identity', isHospitalAuto: false },
       'D1': { days: 45, offset: 'T+45d (Post-SSN)', category: 'financial', lane: 'wealth', isHospitalAuto: false },
-      'D2': { days: 60, offset: 'T+60d (Jan 5)', category: 'financial', lane: 'wealth', isDeadline: true, isHospitalAuto: false },
       'D4': { days: 60, offset: 'T+60d', category: 'financial', lane: 'wealth', isHospitalAuto: false },
       'D5': { years: 13, offset: 'Age 13', category: 'financial', lane: 'wealth', isHospitalAuto: false },
       'D6': { days: 45, offset: 'T+45d ($1k Seed)', category: 'financial', lane: 'wealth', isHospitalAuto: false }
@@ -580,7 +579,7 @@ class NrmcDashboardApp {
 
         // Check if documents are vaulted or prompted for this milestone
         const taskDocs = (this.state.vault_documents || []).filter((d) => d.task_id === m.id);
-        const needsDocPrompt = ['A4', 'A5', 'A6', 'A7', 'B1', 'B2', 'B3', 'B4', 'C2', 'D1', 'D2', 'D6', 'VAC_01', 'VAC_02', 'VAC_03', 'VAC_04', 'VAC_05'].includes(m.id);
+        const needsDocPrompt = ['A4', 'A5', 'A6', 'A7', 'B1', 'B2', 'B3', 'B4', 'C2', 'D1', 'D6', 'VAC_01', 'VAC_02', 'VAC_03', 'VAC_04', 'VAC_05'].includes(m.id);
         let docPromptHtml = '';
         if (taskDocs.length > 0) {
           docPromptHtml = `<button class="vault-prompt-badge has-docs open-vault-task-btn" data-task-id="${m.id}" title="${taskDocs.length} record(s) archived in local vault. Click to view.">📁 ${taskDocs.length} RECORD(S)</button>`;
@@ -1130,36 +1129,6 @@ class NrmcDashboardApp {
       }
     }
 
-    // 3. DCFSA 60-Day QLE Window (Active Financial Mission Timer)
-    const isDcfsaComplete = this.isTaskComplete('D2');
-    const dcfsaCard = document.getElementById('dcfsa-card');
-    if (dcfsaCard) {
-      if (isDcfsaComplete) {
-        dcfsaCard.style.display = 'none';
-      } else {
-        dcfsaCard.style.display = 'flex';
-        const dcfsaDeadline = new Date('2027-01-05T23:59:59');
-        const dcfsaDiff = dcfsaDeadline - now;
-        const dcfsaDaysEl = document.getElementById('dcfsa-countdown-days');
-        const dcfsaProgressEl = document.getElementById('dcfsa-progress-fill');
-
-        if (dcfsaDaysEl) {
-          if (dcfsaDiff <= 0) {
-            dcfsaDaysEl.textContent = 'EXPIRED';
-          } else {
-            const days = Math.floor(dcfsaDiff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((dcfsaDiff / (1000 * 60 * 60)) % 24);
-            dcfsaDaysEl.textContent = `${days}d ${hours}h`;
-
-            const totalWindow = 60 * 24 * 60 * 60 * 1000;
-            const elapsed = totalWindow - dcfsaDiff;
-            const pct = Math.min(100, Math.max(0, Math.round((elapsed / totalWindow) * 100)));
-            if (dcfsaProgressEl) dcfsaProgressEl.style.width = `${pct}%`;
-          }
-        }
-      }
-    }
-
     // 4. Next Pediatric Sortie
     const nextPediatricStr = this.state.command_anchors?.next_medical_milestone?.target_date || '2027-01-05T08:30:00';
     const pedDate = new Date(nextPediatricStr);
@@ -1231,7 +1200,7 @@ class NrmcDashboardApp {
 
         // Check if documents are vaulted or prompted for this task
         const taskDocs = (this.state.vault_documents || []).filter((d) => d.task_id === t.id);
-        const needsDocPrompt = ['A4', 'A5', 'A6', 'A7', 'B1', 'B2', 'B3', 'B4', 'C2', 'D1', 'D2', 'D6'].includes(t.id);
+        const needsDocPrompt = ['A4', 'A5', 'A6', 'A7', 'B1', 'B2', 'B3', 'B4', 'C2', 'D1', 'D6'].includes(t.id);
         let docPromptHtml = '';
         if (taskDocs.length > 0) {
           docPromptHtml = `<button class="vault-prompt-badge has-docs open-vault-task-btn" data-task-id="${t.id}" title="${taskDocs.length} record(s) filed. Click to view.">📁 ${taskDocs.length} RECORD(S)</button>`;

@@ -173,7 +173,7 @@
             "Copy 1: DEERS / RAPIDS enrollment (certified raised seal inspected & returned)",
             "Copy 2: U.S. Passport Agency Form DS-11 (submitted with application, returned separately)",
             "Copy 3: Family Fireproof Safe / Master Permanent Copy",
-            "Copy 4: DCFSA / QLE / Trump Account / Financial / Tax Verification",
+            "Copy 4: Trump Account / Financial / Tax Verification",
             "Copy 5: Child Care / CDC / Future School Enrollment",
             "Copy 6: Emergency Travel / Secondary Backup"
           ],
@@ -856,51 +856,6 @@
           }
         },
         {
-          "id": "D2",
-          "title": "Dependent Care FSA (DCFSA) 60-Day QLE Enrollment (Deadline: Jan 5, 2027)",
-          "category": "Tax Advantage",
-          "priority": "HIGH",
-          "status": "PENDING",
-          "timeframe": "T-0 to T+60d (2026-11-06 -> 2027-01-05)",
-          "sla": "HARD 60-DAY WINDOW CLOSES 2027-01-05",
-          "forms": [
-            "FSAFEDS Qualifying Life Event (QLE) Enrollment"
-          ],
-          "form_downloads": [
-            {
-              "name": "FSAFEDS QLE Guide",
-              "file": "fsafeds_qle_guide.txt"
-            }
-          ],
-          "checklists": [
-            "Evaluate 2026/2027 childcare need & open QLE on https://www.fsafeds.gov/ before 2027-01-05",
-            "Upload proof of birth (Hospital record / Certified BC) within 30 days of QLE submission"
-          ],
-          "portals": [
-            {
-              "name": "FSAFEDS Government Portal",
-              "url": "https://www.fsafeds.gov/"
-            }
-          ],
-          "notes": "STRICT 60-DAY WINDOW CLOSES 2027-01-05. Maximize $5,000 pre-tax deduction to save ~$1,500–$2,000 on childcare. Enroll via FSAFEDS.gov using Aiden's birth record.",
-          "checklists_completed": [],
-          "last_updated": "2026-11-10T17:30:00.000Z",
-          "mission_intel": {
-            "what_is_it": "A Dependent Care Flexible Spending Account (DCFSA) is an IRS-authorized pre-tax benefit account administered via FSAFEDS (for military service members and federal DoD civilians) that lets you set aside up to $5,000 per family per year in pre-tax payroll deductions to pay for eligible childcare and dependent care expenses.",
-            "why_you_need_it": "MASSIVE 30%–35% TAX SAVINGS (~$1,500 – $2,000 CASH BACK PER YEAR): Every dollar contributed to your DCFSA is deducted from your military pay BEFORE federal income tax, state income tax (VA 5.75%), and FICA/Medicare are calculated. Maxing out the $5,000 annual limit reduces your federal/state taxable income by $5,000, putting $1,500 to $2,000 of cash directly back in your family's pocket instead of giving it to the IRS.",
-            "deadline_urgency": "STRICT 60-DAY QUALIFYING LIFE EVENT (QLE) DEADLINE — JANUARY 5, 2027: Under IRS rules, employees cannot enroll in an FSA mid-year without a Qualifying Life Event. The birth of Baby Aiden on November 6, 2026 creates a one-time 60-calendar-day enrollment window. IF YOU MISS JANUARY 5, 2027, YOU ARE LOCKED OUT UNTIL THE NEXT ANNUAL OPEN SEASON (November 2027 for Plan Year 2028), losing up to $2,000 in tax deductions.",
-            "qualifying_expenses": "Eligible expenses include: licensed child care centers / infant daycares (including DoD Child Development Centers at Fort Belvoir, JBAB, and Pentagon), nursery schools, licensed family child care homes, full-time nannies / in-home babysitters (while parents work), and preschools.",
-            "execution_steps": [
-              "1. Navigate to https://www.fsafeds.gov/ and log in or register via Login.gov.",
-              "2. Select 'Enroll Through a Qualifying Life Event (QLE)'.",
-              "3. Select QLE Type: 'Birth / Adoption of a Child' and enter Aiden's Date of Birth: 2026-11-06.",
-              "4. Enter your annual dependent care election amount (up to $5,000 / $416.66 per month).",
-              "5. Upload supporting documentation: ATAMMC Certificate of Live Birth or Hospital Discharge packet within 30 days of submitting the QLE.",
-              "6. FSAFEDS transmits payroll deduction instructions directly to DFAS / myPay."
-            ]
-          }
-        },
-        {
           "id": "D4",
           "title": "Custodial Brokerage Account (UTMA/UGMA) Opening & Seed Funding",
           "category": "Generational Wealth",
@@ -1574,13 +1529,6 @@
       "code": "SSN-EAB-IN-FLIGHT",
       "message": "SSN EAB signed 2026-11-09 (4-8 wk delivery window: Dec 7, 2026 - Jan 4, 2027). Upon arrival: update DEERS record & file Trump Account Form 4547 (D6).",
       "timestamp": "2026-11-10T17:30:00Z"
-    },
-    {
-      "id": "ALT-05",
-      "severity": "CRITICAL",
-      "code": "DCFSA-60D-QLE-DEADLINE",
-      "message": "Dependent Care FSA (DCFSA) 60-day Qualifying Life Event window closes Jan 5, 2027. Enroll on FSAFEDS.gov to save up to $2,000 pre-tax on childcare.",
-      "timestamp": "2026-11-20T07:45:00Z"
     }
   ],
   "audit_trail": [
@@ -1601,8 +1549,20 @@
       "action": "PURGE_529_PLAN",
       "actor": "OPERATOR",
       "details": "Permanently purged 529 College Savings Plan (Task D3) from all trackers, flight schedules, and telemetry per operator directive."
+    },
+    {
+      "timestamp": "2026-11-23T21:27:58.642Z",
+      "action": "PURGE_DCFSA_PLAN",
+      "actor": "OPERATOR",
+      "details": "Permanently purged Dependent Care FSA (DCFSA) 60-Day QLE Enrollment (Task D2) and associated countdown timers and alerts per operator directive."
+    },
+    {
+      "timestamp": "2026-11-23T21:28:08.517Z",
+      "action": "PURGE_DCFSA_PLAN",
+      "actor": "OPERATOR",
+      "details": "Permanently purged Dependent Care FSA (DCFSA) 60-Day QLE Enrollment (Task D2) and associated countdown timers and alerts per operator directive."
     }
   ],
-  "last_updated": "2026-11-23T21:18:39.188Z",
+  "last_updated": "2026-11-23T21:28:08.518Z",
   "vault_documents": []
 }
