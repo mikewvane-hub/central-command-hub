@@ -69,7 +69,6 @@
     "deers_enrolled": true,
     "tricare_status": "PRIME_ACTIVE",
     "ssn_status": "EAB_IN_FLIGHT",
-    "five_two_nine_active": false,
     "custodial_account_active": false,
     "trump_account_active": false
   },
@@ -174,7 +173,7 @@
             "Copy 1: DEERS / RAPIDS enrollment (certified raised seal inspected & returned)",
             "Copy 2: U.S. Passport Agency Form DS-11 (submitted with application, returned separately)",
             "Copy 3: Family Fireproof Safe / Master Permanent Copy",
-            "Copy 4: DCFSA / QLE / Trump Account / Financial / 529 / Tax Verification",
+            "Copy 4: DCFSA / QLE / Trump Account / Financial / Tax Verification",
             "Copy 5: Child Care / CDC / Future School Enrollment",
             "Copy 6: Emergency Travel / Secondary Backup"
           ],
@@ -902,59 +901,6 @@
           }
         },
         {
-          "id": "D3",
-          "title": "529 College Savings Plan Setup & Automated DCA",
-          "category": "Education Wealth",
-          "priority": "HIGH",
-          "status": "PENDING",
-          "timeframe": "T+30d to T+65d (Upon SSN Arrival)",
-          "sla": "Requires Baby SSN to designate beneficiary",
-          "plan_details": {
-            "plan_name": "DC College Savings Plan (or VA Invest529 / Utah my529)",
-            "initial_seed": 0,
-            "monthly_dca": 500,
-            "asset_allocation": "Broad Low-Cost Equity Index Portfolio"
-          },
-          "forms": [
-            "529 Plan Beneficiary Application"
-          ],
-          "form_downloads": [],
-          "checklists": [
-            "Compare DC College Savings Plan (DC resident tax deduction) vs Utah my529 / VA Invest529",
-            "Open account naming Aiden James Vane as beneficiary once SSN arrives",
-            "Configure automated monthly contribution & family gifting link"
-          ],
-          "portals": [
-            {
-              "name": "DC College Savings Plan",
-              "url": "https://www.dccollegesavings.com/"
-            },
-            {
-              "name": "Virginia Invest529",
-              "url": "https://www.invest529.com/"
-            },
-            {
-              "name": "my529 Official Portal",
-              "url": "https://my529.org"
-            }
-          ],
-          "notes": "Not yet opened; ready to open once SSN card arrives (compare DC 529 resident tax deduction first).",
-          "checklists_completed": [],
-          "last_updated": "2026-11-10T17:30:00.000Z",
-          "mission_intel": {
-            "what_is_it": "A state-sponsored 529 College Savings Plan (such as Virginia529) is a tax-advantaged investment vehicle designed for post-secondary education and career training.",
-            "why_you_need_it": "TAX-FREE EXPONENTIAL COMPOUNDING: All capital gains, dividends, and interest compound 100% tax-free when withdrawn for qualified education expenses. Under the SECURE 2.0 Act, up to $35,000 of unused 529 funds can be rolled over penalty-free into a Roth IRA for Aiden! Virginia residents also receive a state income tax deduction of up to $4,000 per account per year.",
-            "deadline_urgency": "Optimal to seed at T+30d to maximize 18 years of compounding. Target: $500/mo automated DCA.",
-            "qualifying_expenses": "College tuition, room & board, books, computers, K-12 private tuition (up to $10k/yr), registered apprenticeships, student loan repayment (up to $10k lifetime), or Roth IRA rollover.",
-            "execution_steps": [
-              "1. Go to Virginia529 (https://www.virginia529.com/) or top direct-sold plan.",
-              "2. Open an Invest529 account with Michael Vane as Owner and Aiden James Vane as Beneficiary.",
-              "3. Select an Age-Based Portfolio (Aggressive Growth 0-5y) or S&P 500 / Total Stock Index.",
-              "4. Set up automated monthly bank ACH transfer ($500/mo DCA)."
-            ]
-          }
-        },
-        {
           "id": "D4",
           "title": "Custodial Brokerage Account (UTMA/UGMA) Opening & Seed Funding",
           "category": "Generational Wealth",
@@ -1649,8 +1595,14 @@
       "action": "SORTIE_COMPLETION_AND_INTEL_UPDATE",
       "actor": "OPERATOR",
       "details": "Completed Task A6 (2-wk Peds follow-up), A7 (TRICARE Grace), B1 (DEERS), B2 (TRICARE Prime PCM Dr. Verghese). Advanced next medical milestone to 2-Month Well-Child (2027-01-05). Added deep mission intel for DCFSA D2, D1, D3, D6, C2."
+    },
+    {
+      "timestamp": "2026-11-23T21:18:39.186Z",
+      "action": "PURGE_529_PLAN",
+      "actor": "OPERATOR",
+      "details": "Permanently purged 529 College Savings Plan (Task D3) from all trackers, flight schedules, and telemetry per operator directive."
     }
   ],
-  "last_updated": "2026-11-20T12:47:18.954Z",
+  "last_updated": "2026-11-23T21:18:39.188Z",
   "vault_documents": []
 }

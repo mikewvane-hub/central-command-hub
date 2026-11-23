@@ -15,7 +15,7 @@ DCFSA QLE, Vital Records Ordering, and BAH DA Form 5960 Checklist
 - Allocation Matrix:
   * Copy 1: DEERS & Military Dependent Enrollment (Physical original inspected by RAPIDS clerk).
   * Copy 2: U.S. Department of State Passport Application (Form DS-11; original is mailed and returned).
-  * Copy 3: Financial Institutions (529 Plan, UTMA/UGMA brokerage account opening).
+  * Copy 3: Financial Institutions (UTMA/UGMA brokerage account opening).
   * Copy 4: Defense Enrollment / Tricare Backup & Medical Records archive.
   * Copy 5: Daycare / Elementary School / DoD Education Activity (DoDEA) registration.
   * Copy 6: Master Family Safe / Hardened Lockbox Archive.
