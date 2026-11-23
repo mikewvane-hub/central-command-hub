@@ -585,10 +585,13 @@
           <div style="font-family:var(--font-mono); font-size:1.8rem; font-weight:800; color:var(--ghost-white);">$1,000 <span style="font-size:0.9rem; color:var(--emerald-nominal);">U.S. Treasury Pilot</span></div>
           <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">2025-2028 Births • Requires SSN + IRS Form 4547</div>
         </div>
-        <div class="hud-panel" style="border-top:2px solid var(--emerald-nominal);">
-          <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Custodial Brokerage (UTMA/UGMA) Target</div>
-          <div style="font-family:var(--font-mono); font-size:1.8rem; font-weight:800; color:var(--ghost-white);">$500/mo <span style="font-size:0.9rem; color:var(--amber-warning);">Pending SSN</span></div>
-          <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">Fidelity / Charles Schwab Custodial Account</div>
+        <div class="hud-panel" style="border-top:2px solid var(--emerald-nominal); cursor:pointer;" id="kpi-custodial-card" onclick="document.getElementById('custodial-portfolio-section')?.scrollIntoView({behavior:'smooth'});" title="Click to inspect live positions and compounding runway">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Custodial Brokerage (WA UTMA)</div>
+            <span class="countdown-pill pill-emerald" style="padding:2px 6px; font-size:0.65rem;">ACTIVE · AGE 25</span>
+          </div>
+          <div style="font-family:var(--font-mono); font-size:1.8rem; font-weight:800; color:#34d399;" id="custodial-kpi-val">$10,000.00</div>
+          <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;" id="custodial-kpi-sub">Acct ...646 • $10k Cash Seed • Age 25 (2051)</div>
         </div>
         <div class="hud-panel" style="border-top:2px solid var(--cyan-telemetry);">
           <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Child Tax Credit (CTC) Delta</div>
@@ -600,6 +603,11 @@
           <div style="font-family:var(--font-mono); font-size:1.8rem; font-weight:800; color:var(--ghost-white);">750+ FICO <span style="font-size:0.9rem; color:var(--cyan-telemetry);">Target</span></div>
           <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">Amex / Chase Primary Cardholder Booster at Age 13-16</div>
         </div>
+      </div>
+
+      <!-- Custodial Brokerage Performance & Asset Tracking Center -->
+      <div id="custodial-portfolio-section" style="margin-bottom:24px;">
+        <!-- Rendered dynamically via renderCustodialPortfolio() -->
       </div>
 
       <div id="grid-module-d" class="task-grid-matrix">

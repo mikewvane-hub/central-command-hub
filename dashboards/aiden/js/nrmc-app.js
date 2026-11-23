@@ -1177,6 +1177,320 @@ class NrmcDashboardApp {
     this.renderModuleTaskList('module_b', 'grid-module-b');
     this.renderModuleTaskList('module_c', 'grid-module-c');
     this.renderModuleTaskList('module_d', 'grid-module-d');
+    this.renderCustodialPortfolio();
+  }
+
+  // Render Custodial Brokerage Performance & 25-Year Wealth Telemetry
+  renderCustodialPortfolio() {
+    const container = document.getElementById('custodial-portfolio-section');
+    if (!container) return;
+
+    const portfolio = this.state.custodial_portfolio;
+    if (!portfolio) {
+      container.innerHTML = '';
+      return;
+    }
+
+    const totalVal = portfolio.total_market_value || 10000;
+    const cashVal = portfolio.cash_balance !== undefined ? portfolio.cash_balance : totalVal;
+    const investedVal = portfolio.invested_balance || 0;
+    const costBasis = portfolio.cost_basis || totalVal;
+    const gainDollars = portfolio.unrealized_gain_dollars || 0;
+    const gainPct = portfolio.unrealized_gain_percent || 0;
+    const dayChange = portfolio.day_change_dollars !== undefined ? portfolio.day_change_dollars : totalVal;
+
+    if (!this.selectedCompoundingScenario) {
+      this.selectedCompoundingScenario = 'moderate';
+    }
+
+    const scenarioData = {
+      conservative: {
+        label: 'Conservative (6% CAGR)',
+        rate: 0.06,
+        age5: { lump: 13382, dca100: 20188, dca250: 30398 },
+        age16: { lump: 25404, dca100: 57929, dca250: 106718 },
+        age18: { lump: 28543, dca100: 69199, dca250: 130182 },
+        age21: { lump: 33996, dca100: 89088, dca250: 171725 },
+        age25: { lump: 42919, dca100: 112118, dca250: 215917, dca500: 388915 }
+      },
+      moderate: {
+        label: 'Moderate Growth (8% CAGR)',
+        rate: 0.08,
+        age5: { lump: 14693, dca100: 22091, dca250: 33189 },
+        age16: { lump: 34259, dca100: 70812, dca250: 125640 },
+        age18: { lump: 39960, dca100: 87422, dca250: 158615 },
+        age21: { lump: 50338, dca100: 116339, dca250: 215340 },
+        age25: { lump: 68485, dca100: 164198, dca250: 307767, dca500: 547050 }
+      },
+      sp500: {
+        label: 'S&P 500 Historical (10% CAGR)',
+        rate: 0.10,
+        age5: { lump: 16105, dca100: 24159, dca250: 36240 },
+        age16: { lump: 45950, dca100: 86831, dca250: 148153 },
+        age18: { lump: 55599, dca100: 110991, dca250: 194079 },
+        age21: { lump: 74002, dca100: 157297, dca250: 282240 },
+        age25: { lump: 108347, dca100: 240975, dca250: 439916, dca500: 771486 }
+      }
+    };
+
+    const currentScenario = scenarioData[this.selectedCompoundingScenario] || scenarioData.moderate;
+
+    const positionsRows = (portfolio.positions || []).map(p => {
+      const pVal = p.market_value || 0;
+      const pCost = p.cost_basis || pVal;
+      const pDay = p.day_change_dollars || 0;
+      const pGain = p.gain_loss_dollars || 0;
+      const pAlloc = totalVal > 0 ? ((pVal / totalVal) * 100).toFixed(1) : '100.0';
+
+      return `
+        <tr>
+          <td><strong style="color:var(--emerald-nominal); font-family:var(--font-mono);">${p.symbol}</strong></td>
+          <td>${p.description}</td>
+          <td><span class="countdown-pill pill-cyan" style="font-size:0.68rem; padding:2px 6px;">${p.asset_type || 'Cash/MM'}</span></td>
+          <td style="font-family:var(--font-mono);">${p.quantity ? p.quantity.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2}) : '--'}</td>
+          <td style="font-family:var(--font-mono);">${p.price ? '$' + p.price.toFixed(2) : '--'}</td>
+          <td style="font-family:var(--font-mono); font-weight:700; color:#34d399;">$${pVal.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}</td>
+          <td style="font-family:var(--font-mono);">$${pCost.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}</td>
+          <td style="font-family:var(--font-mono); color:${pDay >= 0 ? '#34d399' : '#f87171'};">${pDay >= 0 ? '+' : ''}$${pDay.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}</td>
+          <td style="font-family:var(--font-mono); color:${pGain >= 0 ? '#34d399' : '#f87171'};">${pGain >= 0 ? '+' : ''}$${pGain.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}</td>
+          <td>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span style="font-family:var(--font-mono); font-size:0.72rem; color:#34d399;">${pAlloc}%</span>
+              <div style="flex:1; height:6px; background:rgba(255,255,255,0.1); border-radius:3px; overflow:hidden; min-width:40px;">
+                <div style="width:${pAlloc}%; height:100%; background:#34d399;"></div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    container.innerHTML = `
+      <div class="hud-panel" style="border: 1px solid rgba(52, 211, 153, 0.4); background: rgba(6, 18, 14, 0.9); box-shadow: 0 0 30px rgba(16, 185, 129, 0.12); border-radius: 8px; padding: 20px; margin-bottom: 24px;">
+        <!-- Banner -->
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:18px; border-bottom:1px solid rgba(52,211,153,0.25); padding-bottom:14px;">
+          <div>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span style="font-size:1.4rem;">📈</span>
+              <h3 style="margin:0; font-family:var(--font-tech); font-size:1.15rem; color:var(--ghost-white); letter-spacing:0.05em; text-transform:uppercase;">
+                FIDELITY CUSTODIAL BROKERAGE // WEALTH TELEMETRY &amp; ASSET INTELLIGENCE
+              </h3>
+              <span class="countdown-pill pill-emerald">ACTIVE · FUNDED</span>
+            </div>
+            <div style="font-family:var(--font-mono); font-size:0.78rem; color:var(--text-muted); margin-top:4px;">
+              Beneficiary: <strong style="color:var(--ghost-white);">Aiden James Vane</strong> (DOB 2026-11-06) • Custodian: <strong style="color:var(--ghost-white);">Michael Walter Vane</strong> • Acct: <strong style="color:var(--emerald-nominal);">${portfolio.account_number || '...646'}</strong>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span class="countdown-pill pill-cyan" title="Governed by Washington State UTMA RCW 11.114">🏛️ WASHINGTON UTMA</span>
+            <span class="countdown-pill pill-amber" title="Custodianship terminates on 25th birthday: Nov 6, 2051">🎯 AGE 25 TRANSFER (2051)</span>
+            <button type="button" id="custodial-refresh-btn" class="hud-btn hud-btn-primary" style="padding:4px 10px; font-size:0.75rem; display:flex; align-items:center; gap:6px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+              REFRESH CSV
+            </button>
+            <input type="file" id="custodial-file-picker" accept=".csv" style="display:none;" />
+          </div>
+        </div>
+
+        <!-- 4 Key Metrics -->
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap:14px; margin-bottom:20px;">
+          <div style="background:rgba(0,0,0,0.45); border:1px solid rgba(52,211,153,0.3); padding:12px 14px; border-radius:6px;">
+            <div style="font-family:var(--font-mono); font-size:0.7rem; color:var(--text-muted); text-transform:uppercase;">TOTAL PORTFOLIO VALUE</div>
+            <div style="font-family:var(--font-mono); font-size:1.75rem; font-weight:800; color:#34d399; margin-top:2px;">$${totalVal.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}</div>
+            <div style="font-size:0.72rem; color:var(--text-muted); margin-top:2px;">As of ${new Date(portfolio.as_of || '2026-11-23').toLocaleDateString(undefined, {month:'short', day:'numeric', year:'numeric'})}</div>
+          </div>
+          <div style="background:rgba(0,0,0,0.45); border:1px solid rgba(0,229,255,0.3); padding:12px 14px; border-radius:6px;">
+            <div style="font-family:var(--font-mono); font-size:0.7rem; color:var(--text-muted); text-transform:uppercase;">LIQUID CASH / SPAXX</div>
+            <div style="font-family:var(--font-mono); font-size:1.75rem; font-weight:800; color:var(--cyan-telemetry); margin-top:2px;">$${cashVal.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}</div>
+            <div style="font-size:0.72rem; color:#67e8f9; margin-top:2px;">100.0% Allocation (Ready to Deploy)</div>
+          </div>
+          <div style="background:rgba(0,0,0,0.45); border:1px solid rgba(251,191,36,0.3); padding:12px 14px; border-radius:6px;">
+            <div style="font-family:var(--font-mono); font-size:0.7rem; color:var(--text-muted); text-transform:uppercase;">INITIAL SEED / BASIS</div>
+            <div style="font-family:var(--font-mono); font-size:1.75rem; font-weight:800; color:var(--ghost-white); margin-top:2px;">$${costBasis.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}</div>
+            <div style="font-size:0.72rem; color:var(--text-muted); margin-top:2px;">Funded Day 17 of Life</div>
+          </div>
+          <div style="background:rgba(0,0,0,0.45); border:1px solid rgba(168,85,247,0.3); padding:12px 14px; border-radius:6px;">
+            <div style="font-family:var(--font-mono); font-size:0.7rem; color:var(--text-muted); text-transform:uppercase;">COMPOUNDING RUNWAY</div>
+            <div style="font-family:var(--font-mono); font-size:1.75rem; font-weight:800; color:#c084fc; margin-top:2px;">24.9 Years</div>
+            <div style="font-size:0.72rem; color:#d8b4fe; margin-top:2px;">To Age 25 Transfer (Nov 6, 2051)</div>
+          </div>
+        </div>
+
+        <!-- Holdings Table -->
+        <div style="margin-bottom:20px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <span style="font-family:var(--font-mono); font-size:0.78rem; font-weight:700; color:var(--cyan-telemetry); letter-spacing:0.05em; text-transform:uppercase;">
+              CURRENT HOLDINGS &amp; ASSET POSITIONS (FROM STATEMENT)
+            </span>
+            <a href="/forms/custodial_brokerage_positions_20261123.csv" download class="hud-link" style="font-family:var(--font-mono); font-size:0.72rem; display:flex; align-items:center; gap:4px;">
+              📥 Download Statement (.csv)
+            </a>
+          </div>
+          <div class="tactical-table-wrapper" style="overflow-x:auto;">
+            <table class="tactical-table" style="width:100%; font-size:0.8rem;">
+              <thead>
+                <tr>
+                  <th>Symbol</th>
+                  <th>Description</th>
+                  <th>Asset Type</th>
+                  <th>Qty</th>
+                  <th>Price</th>
+                  <th>Market Value</th>
+                  <th>Cost Basis</th>
+                  <th>Day Change</th>
+                  <th>Gain / Loss</th>
+                  <th>Allocation</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${positionsRows}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Strategic Deployment Directive -->
+        <div style="background:rgba(15,23,42,0.65); border:1px solid rgba(0,229,255,0.25); border-radius:6px; padding:14px; margin-bottom:20px; display:flex; gap:14px; align-items:flex-start;">
+          <div style="font-size:1.5rem;">💡</div>
+          <div style="flex:1;">
+            <div style="font-family:var(--font-tech); font-size:0.85rem; font-weight:700; color:var(--cyan-telemetry); text-transform:uppercase; margin-bottom:4px;">
+              TACTICAL WEALTH DIRECTIVE: 25-YEAR COMPOUNDING DEPLOYMENT
+            </div>
+            <div style="font-size:0.8rem; color:var(--text-secondary); line-height:1.45;">
+              Account is currently <strong>100% liquid cash ($10,000.00)</strong> in the core Money Market position. With a 25-year investment runway to Aiden's age of majority transfer on <strong>November 6, 2051</strong>, deploying this capital into broad-market index ETFs (such as <strong>VTI</strong> or <strong>VOO</strong>) with automatic dividend reinvestment (DRIP) maximizes total return and historical compounding.
+            </div>
+          </div>
+        </div>
+
+        <!-- 25-Year Projections -->
+        <div style="background:rgba(0,0,0,0.35); border:1px solid rgba(52,211,153,0.25); border-radius:6px; padding:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:14px;">
+            <div>
+              <div style="font-family:var(--font-tech); font-size:0.95rem; font-weight:700; color:var(--ghost-white); text-transform:uppercase;">
+                25-YEAR WEALTH COMPOUNDING PROJECTION (TO AGE 25 · NOV 6, 2051)
+              </div>
+              <div style="font-family:var(--font-mono); font-size:0.72rem; color:var(--text-muted); margin-top:2px;">
+                Initial Seed: $10,000.00 • Compounded Annually to Washington UTMA Maturity
+              </div>
+            </div>
+            <div class="compounding-scenario-toggles" style="display:flex; gap:6px;">
+              <button type="button" class="scenario-btn ${this.selectedCompoundingScenario === 'moderate' ? 'active' : ''}" data-scenario="moderate" style="padding:4px 8px; font-family:var(--font-mono); font-size:0.72rem; background:${this.selectedCompoundingScenario === 'moderate' ? 'rgba(52,211,153,0.25)' : 'rgba(255,255,255,0.05)'}; border:1px solid ${this.selectedCompoundingScenario === 'moderate' ? '#34d399' : 'var(--border-subtle)'}; color:${this.selectedCompoundingScenario === 'moderate' ? '#34d399' : 'var(--text-muted)'}; border-radius:4px; cursor:pointer;">
+                Moderate (8% CAGR)
+              </button>
+              <button type="button" class="scenario-btn ${this.selectedCompoundingScenario === 'sp500' ? 'active' : ''}" data-scenario="sp500" style="padding:4px 8px; font-family:var(--font-mono); font-size:0.72rem; background:${this.selectedCompoundingScenario === 'sp500' ? 'rgba(0,229,255,0.25)' : 'rgba(255,255,255,0.05)'}; border:1px solid ${this.selectedCompoundingScenario === 'sp500' ? 'var(--cyan-telemetry)' : 'var(--border-subtle)'}; color:${this.selectedCompoundingScenario === 'sp500' ? 'var(--cyan-telemetry)' : 'var(--text-muted)'}; border-radius:4px; cursor:pointer;">
+                S&P 500 Historical (10% CAGR)
+              </button>
+              <button type="button" class="scenario-btn ${this.selectedCompoundingScenario === 'conservative' ? 'active' : ''}" data-scenario="conservative" style="padding:4px 8px; font-family:var(--font-mono); font-size:0.72rem; background:${this.selectedCompoundingScenario === 'conservative' ? 'rgba(251,191,36,0.25)' : 'rgba(255,255,255,0.05)'}; border:1px solid ${this.selectedCompoundingScenario === 'conservative' ? 'var(--amber-warning)' : 'var(--border-subtle)'}; color:${this.selectedCompoundingScenario === 'conservative' ? 'var(--amber-warning)' : 'var(--text-muted)'}; border-radius:4px; cursor:pointer;">
+                Conservative (6% CAGR)
+              </button>
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:12px;">
+            <div style="background:rgba(0,0,0,0.5); border:1px solid var(--border-subtle); padding:10px 12px; border-radius:6px;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-family:var(--font-mono); font-size:0.68rem; color:var(--text-muted); text-transform:uppercase;">AGE 5 (2031)</span>
+                <span class="countdown-pill pill-cyan" style="font-size:0.6rem; padding:1px 5px;">KINDERGARTEN</span>
+              </div>
+              <div style="font-family:var(--font-mono); font-size:1.25rem; font-weight:700; color:var(--ghost-white); margin-top:4px;">
+                $${currentScenario.age5.lump.toLocaleString()}
+              </div>
+              <div style="font-size:0.7rem; color:var(--text-muted); margin-top:2px;">
+                w/ $100/mo: <strong style="color:#67e8f9;">$${currentScenario.age5.dca100.toLocaleString()}</strong>
+              </div>
+            </div>
+
+            <div style="background:rgba(0,0,0,0.5); border:1px solid var(--border-subtle); padding:10px 12px; border-radius:6px;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-family:var(--font-mono); font-size:0.68rem; color:var(--text-muted); text-transform:uppercase;">AGE 16 (2042)</span>
+                <span class="countdown-pill pill-cyan" style="font-size:0.6rem; padding:1px 5px;">HIGH SCHOOL</span>
+              </div>
+              <div style="font-family:var(--font-mono); font-size:1.25rem; font-weight:700; color:var(--ghost-white); margin-top:4px;">
+                $${currentScenario.age16.lump.toLocaleString()}
+              </div>
+              <div style="font-size:0.7rem; color:var(--text-muted); margin-top:2px;">
+                w/ $100/mo: <strong style="color:#67e8f9;">$${currentScenario.age16.dca100.toLocaleString()}</strong>
+              </div>
+            </div>
+
+            <div style="background:rgba(0,0,0,0.5); border:1px solid var(--border-subtle); padding:10px 12px; border-radius:6px;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-family:var(--font-mono); font-size:0.68rem; color:var(--text-muted); text-transform:uppercase;">AGE 18 (2044)</span>
+                <span class="countdown-pill pill-amber" style="font-size:0.6rem; padding:1px 5px;">ADULT / COLLEGE</span>
+              </div>
+              <div style="font-family:var(--font-mono); font-size:1.25rem; font-weight:700; color:var(--ghost-white); margin-top:4px;">
+                $${currentScenario.age18.lump.toLocaleString()}
+              </div>
+              <div style="font-size:0.7rem; color:var(--text-muted); margin-top:2px;">
+                w/ $100/mo: <strong style="color:#67e8f9;">$${currentScenario.age18.dca100.toLocaleString()}</strong>
+              </div>
+            </div>
+
+            <div style="background:rgba(6,78,59,0.3); border:1px solid #10b981; padding:10px 12px; border-radius:6px;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-family:var(--font-mono); font-size:0.68rem; color:#a7f3d0; text-transform:uppercase; font-weight:700;">AGE 25 (NOV 6, 2051)</span>
+                <span class="countdown-pill pill-emerald" style="font-size:0.6rem; padding:1px 5px;">FULL TRANSFER</span>
+              </div>
+              <div style="font-family:var(--font-mono); font-size:1.4rem; font-weight:800; color:#34d399; margin-top:4px;">
+                $${currentScenario.age25.lump.toLocaleString()}
+              </div>
+              <div style="font-size:0.72rem; color:#a7f3d0; margin-top:2px;">
+                w/ $100/mo: <strong>$${currentScenario.age25.dca100.toLocaleString()}</strong><br/>
+                w/ $250/mo: <strong>$${currentScenario.age25.dca250.toLocaleString()}</strong><br/>
+                w/ $500/mo: <strong>$${currentScenario.age25.dca500.toLocaleString()}</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Hook up refresh button and scenario toggles
+    const refreshBtn = container.querySelector('#custodial-refresh-btn');
+    const filePicker = container.querySelector('#custodial-file-picker');
+    if (refreshBtn && filePicker) {
+      refreshBtn.onclick = () => filePicker.click();
+      filePicker.onchange = (e) => this.handleCustodialCsvUpload(e);
+    }
+
+    container.querySelectorAll('.scenario-btn').forEach(btn => {
+      btn.onclick = () => {
+        this.selectedCompoundingScenario = btn.dataset.scenario;
+        this.renderCustodialPortfolio();
+      };
+    });
+  }
+
+  async handleCustodialCsvUpload(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const reader = new FileReader();
+      reader.onload = async (event) => {
+        const csvText = event.target.result;
+        const res = await fetch('/api/v1/nrmc/custodial/upload', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            csvText,
+            filename: file.name,
+            notes: `Uploaded via NRMC dashboard on ${new Date().toLocaleString()}`
+          })
+        });
+        const result = await res.json();
+        if (result.success) {
+          this.state.custodial_portfolio = result.portfolio;
+          this.render();
+        } else {
+          alert('Failed to upload positions: ' + (result.error || 'Unknown error'));
+        }
+      };
+      reader.readAsText(file);
+    } catch (err) {
+      console.error('[NRMC] Failed to handle custodial CSV upload:', err);
+      alert('Error reading CSV file: ' + err.message);
+    }
   }
 
   renderModuleTaskList(moduleId, containerId) {

@@ -69,7 +69,7 @@
     "deers_enrolled": true,
     "tricare_status": "PRIME_ACTIVE",
     "ssn_status": "EAB_IN_FLIGHT",
-    "custodial_account_active": false,
+    "custodial_account_active": true,
     "trump_account_active": false
   },
   "modules": {
@@ -859,15 +859,21 @@
           "id": "D4",
           "title": "Custodial Brokerage Account (UTMA/UGMA) Opening & Seed Funding",
           "category": "Generational Wealth",
-          "priority": "MEDIUM",
-          "status": "PENDING",
-          "timeframe": "T+30d to T+90d (Upon SSN Arrival)",
-          "sla": "Requires Child SSN",
+          "priority": "HIGH",
+          "status": "COMPLETE",
+          "timeframe": "Seeded Nov 23, 2026 ($10,000 Cash Deposit)",
+          "sla": "Washington UTMA · Custodianship terminates at Age 25 (Nov 6, 2051)",
           "custodial_details": {
-            "brokerage": "Fidelity / Schwab Custodial",
+            "brokerage": "Fidelity Investments",
+            "account_number": "...646",
             "type": "Uniform Transfers to Minors Act (UTMA)",
-            "target_allocation": "100% VTI / VOO (Broad US Equities)",
-            "initial_target_seed": 1000
+            "state_jurisdiction": "Washington (RCW 11.114)",
+            "termination_age": 25,
+            "termination_date": "2051-11-06",
+            "funded_date": "2026-11-23",
+            "initial_seed_amount": 10000,
+            "current_balance": 10000,
+            "target_allocation": "100% VTI / VOO (Broad US Equities)"
           },
           "forms": [
             "Fidelity/Schwab Custodial Account Agreement"
@@ -883,9 +889,15 @@
               "url": "https://www.fidelity.com/open-account/custodial-account"
             }
           ],
-          "notes": "Awaiting Aiden's SSN card before opening.",
-          "checklists_completed": [],
-          "last_updated": "2026-11-10T17:30:00.000Z"
+          "notes": "Fidelity Custodial Brokerage Account (...646) officially opened and funded with $10,000.00 initial cash seed under Washington State UTMA (RCW 11.114). Custodianship elected to age 25 (termination date: Nov 6, 2051). Performance tracking active.",
+          "checklists_completed": [
+            "Open UTMA custodial account with parent as custodian once SSN arrives",
+            "Fund initial seed & enable dividend reinvestment (DRIP)"
+          ],
+          "last_updated": "2026-11-23T22:46:01.955Z",
+          "attached_documents": [
+            "DOC_CUSTODIAL_20261123"
+          ]
         },
         {
           "id": "D5",
@@ -1561,8 +1573,114 @@
       "action": "PURGE_DCFSA_PLAN",
       "actor": "OPERATOR",
       "details": "Permanently purged Dependent Care FSA (DCFSA) 60-Day QLE Enrollment (Task D2) and associated countdown timers and alerts per operator directive."
+    },
+    {
+      "timestamp": "2026-11-23T22:46:01.957Z",
+      "action": "CUSTODIAL_ACCOUNT_SEEDED",
+      "actor": "OPERATOR",
+      "details": "Ingested Fidelity Custodial Brokerage positions statement (...646) with $10,000.00 cash deposit. Configured Washington State UTMA parameters (Age 25 termination: 2051-11-06). Sealed Task D4."
     }
   ],
-  "last_updated": "2026-11-23T21:28:08.518Z",
-  "vault_documents": []
+  "last_updated": "2026-11-23T22:46:01.957Z",
+  "vault_documents": [
+    {
+      "id": "DOC_CUSTODIAL_20261123",
+      "name": "Fidelity Custodial Brokerage Statement (...646)",
+      "original_filename": "Custodial Brokerage-Positions-2026-11-23-174026.csv",
+      "safe_filename": "custodial_brokerage_positions_20261123.csv",
+      "file_size": 631,
+      "mime_type": "text/csv",
+      "category": "FINANCIAL_BENEFITS",
+      "task_id": "D4",
+      "notes": "Fidelity Custodial Brokerage (...646) Initial Position Statement: $10,000.00 Cash Seed Deposit. Washington UTMA (Termination at Age 25: Nov 6, 2051).",
+      "uploaded_at": "2026-11-23T17:40:26.000Z",
+      "opsec_flag": "STANDARD"
+    }
+  ],
+  "custodial_portfolio": {
+    "account_name": "Custodial Brokerage",
+    "account_number": "...646",
+    "institution": "Fidelity Investments",
+    "custodian": "Michael Walter Vane",
+    "beneficiary": "Aiden James Vane (DOB 2026-11-06)",
+    "state_governance": "Washington State Uniform Transfers to Minors Act (RCW 11.114)",
+    "termination_age": 25,
+    "termination_date": "2051-11-06",
+    "inception_date": "2026-11-23",
+    "as_of": "2026-11-23T17:40:26-05:00",
+    "total_market_value": 10000,
+    "cash_balance": 10000,
+    "invested_balance": 0,
+    "cost_basis": 10000,
+    "unrealized_gain_dollars": 0,
+    "unrealized_gain_percent": 0,
+    "day_change_dollars": 10000,
+    "day_change_percent": 100,
+    "asset_allocation": {
+      "cash_and_money_market": 100,
+      "equities_and_etfs": 0,
+      "fixed_income": 0
+    },
+    "positions": [
+      {
+        "symbol": "Cash & Cash Investments",
+        "description": "SPAXX / Fidelity Government Money Market (FDIC Insured)",
+        "asset_type": "Cash and Money Market",
+        "quantity": 10000,
+        "price": 1,
+        "market_value": 10000,
+        "cost_basis": 10000,
+        "gain_loss_dollars": 0,
+        "gain_loss_percent": 0,
+        "day_change_dollars": 10000,
+        "day_change_percent": 100,
+        "reinvest_dividends": true,
+        "reinvest_capital_gains": true
+      }
+    ],
+    "snapshots": [
+      {
+        "date": "2026-11-23",
+        "timestamp": "2026-11-23T17:40:26-05:00",
+        "market_value": 10000,
+        "cost_basis": 10000,
+        "cash": 10000,
+        "invested": 0,
+        "source_file": "Custodial Brokerage-Positions-2026-11-23-174026.csv",
+        "note": "Initial account opening & $10,000 cash funding"
+      }
+    ],
+    "projections_to_age_25": {
+      "years_to_maturity": 25,
+      "target_year": 2051,
+      "target_date": "2051-11-06",
+      "initial_seed": 10000,
+      "models": {
+        "conservative_6pct": {
+          "label": "Conservative (6% CAGR)",
+          "cagr": 0.06,
+          "lump_sum_at_25": 42918.71,
+          "with_100_mo": 112117.89,
+          "with_250_mo": 215916.66,
+          "with_500_mo": 388914.61
+        },
+        "moderate_8pct": {
+          "label": "Moderate Growth (8% CAGR)",
+          "cagr": 0.08,
+          "lump_sum_at_25": 68484.75,
+          "with_100_mo": 164197.8,
+          "with_250_mo": 307767.37,
+          "with_500_mo": 547050
+        },
+        "historical_sp500_10pct": {
+          "label": "S&P 500 Historical (10% CAGR)",
+          "cagr": 0.1,
+          "lump_sum_at_25": 108347.06,
+          "with_100_mo": 240974.75,
+          "with_250_mo": 439916.29,
+          "with_500_mo": 771485.52
+        }
+      }
+    }
+  }
 }
